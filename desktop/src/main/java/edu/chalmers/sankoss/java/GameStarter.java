@@ -20,6 +20,6 @@ public class GameStarter {
         cfg.useGL20 = true;
         cfg.width = 800;
         cfg.height = 600;
-        LwjglApplication application = new LwjglApplication(new StateController(), cfg);
+        LwjglApplication application = new LwjglApplication(new SankossGame(), cfg);
     }
 }
