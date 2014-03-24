@@ -1,4 +1,4 @@
-package edu.chalmers.sankoss.java;
+package edu.chalmers.sankoss.core.protocol;
 
 import com.esotericsoftware.kryonet.Connection;
 
