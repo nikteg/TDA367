@@ -3,6 +3,8 @@ package edu.chalmers.sankoss.java.screens;
 import com.badlogic.gdx.Screen;
 import edu.chalmers.sankoss.java.Models.Placement;
 import edu.chalmers.sankoss.java.Renderers.PlacementRenderer;
+import edu.chalmers.sankoss.java.SankossController;
+import edu.chalmers.sankoss.java.SankossGame;
 
 /**
  * Description of class.
@@ -15,10 +17,27 @@ public class PlacementScreen implements Screen {
 
     private Placement placement;
     private PlacementRenderer placementRenderer;
+    private SankossGame game;
+    private SankossController controller;
 
+    /**
+     * This will keep a reference of the main game.
+     * @param game reference to the SankossGame class
+     * @param controller reference to the SankossController class
+     */
+    public PlacementScreen(SankossController controller, SankossGame game) {
+        this.controller = controller;
+        this.game = game;
+    }
+
+    /**
+     * This method gets called when controller decides
+     * it's time to update.
+     * @param delta
+     */
     @Override
     public void render(float delta) {
-
+        game.setScreen(controller.getNextScreen(SankossController.CurrentScreen.PLACEMENT));
     }
 
     @Override
