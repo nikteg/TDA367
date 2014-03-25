@@ -22,12 +22,6 @@
 			<artifactId>sankoss-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
-		<dependency>
-			<groupId>org.clojars.miguno</groupId>
-			<artifactId>kryonet-all</artifactId>
-			<version>2.18</version>
-		</dependency>
 	</dependencies>
 
 	<build>

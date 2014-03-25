@@ -92,7 +92,7 @@ public class SankossClient {
         }));
 
         try {
-            client.connect(5000, "localhost", Network.port);
+            client.connect(5000, "sodapop.se", Network.port);
         } catch (IOException e) {
             System.out.println("Could not connect to remote server...");
         }
