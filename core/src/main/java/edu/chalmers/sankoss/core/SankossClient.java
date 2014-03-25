@@ -1,6 +1,7 @@
 package edu.chalmers.sankoss.core;
 
 import java.io.IOException;
+import java.util.Random;
 
 import javax.swing.JOptionPane;
 
@@ -82,7 +83,39 @@ public class SankossClient {
                     CreateGame msg = (CreateGame) object;
                     
                     System.out.println(String.format("Inside game '#%d'...", msg.getGame().getId()));
+                    
+                    boolean[][] grid = new boolean[10][10];
+                    Random r  = new Random();
+                    for (int i=0; i < grid.length; i++) {
+                    	for (int j = 0; j < grid[0].length ; j++) {
+							grid[i][j] = r.nextBoolean();
+						}
+                    }
+                    int choice;
+                    do {
+                    	choice = JOptionPane.showOptionDialog(null, "Are you ready for halo reach?", "Ready", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+                       	
+                    } while(choice != 0);
+                    
+                   	client.sendTCP(new PlayerReady(grid));
+                   
+                    return;
                 }
+                
+                if (object instanceof GameReady) {
+                	System.out.println("Nu startar spelet");
+                	return;
+                }
+                
+                if (object instanceof Turn) {
+                	String input = (String) JOptionPane.showInputDialog(null, "Skjut:", "Skjut", JOptionPane.QUESTION_MESSAGE, null, null, "1,1");
+                    String coord = input.trim();
+                    String[] coords = coord.split(",");
+                    client.sendTCP(new Fire(Integer.parseInt(coords[0]), Integer.parseInt(coords[1])));
+                    return;
+                }
+                
+                
             }
 
             public void disconnected(Connection connection) {
@@ -92,7 +125,7 @@ public class SankossClient {
         }));
 
         try {
-            client.connect(5000, "sodapop.se", Network.port);
+            client.connect(5000, "localhost", Network.port);
         } catch (IOException e) {
             System.out.println("Could not connect to remote server...");
         }

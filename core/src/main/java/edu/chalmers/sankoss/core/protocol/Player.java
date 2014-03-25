@@ -4,6 +4,7 @@ public class Player {
     private int id;
     private String name;
     private boolean[][] grid = new boolean[10][10];
+    private boolean ready;
     
     public Player() {
         
@@ -37,4 +38,25 @@ public class Player {
     public void setGrid(boolean[][] grid) {
         this.grid = grid;
     }
+
+	public boolean isReady() {
+		return ready;
+	}
+
+	public void setReady(boolean ready) {
+		this.ready = ready;
+	}
+	
+	public boolean equals(Object o) {
+		if (o instanceof Player) {
+			return (getId() == ((Player) o).getId());
+		} else {
+			return false;
+		}
+		
+			
+	}
+	public boolean isHit(int x, int y) {
+		return grid[x][y];
+	}
 }
