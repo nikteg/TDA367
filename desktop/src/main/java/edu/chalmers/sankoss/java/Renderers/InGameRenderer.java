@@ -10,7 +10,19 @@ import edu.chalmers.sankoss.java.Models.ScreenModel;
  * @date 3/24/14
  */
 public class InGameRenderer extends Renderer {
-    public InGameRenderer(ScreenModel mdl) {
-        super(mdl);
+
+    /**
+     * @inheritdoc
+     */
+    public InGameRenderer(ScreenModel currentModel) {
+        super(currentModel);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    @Override
+    public void render() {
+
     }
 }

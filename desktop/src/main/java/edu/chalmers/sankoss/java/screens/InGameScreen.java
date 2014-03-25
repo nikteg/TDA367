@@ -2,6 +2,7 @@ package edu.chalmers.sankoss.java.screens;
 
 import com.badlogic.gdx.Screen;
 import edu.chalmers.sankoss.java.Models.InGame;
+import edu.chalmers.sankoss.java.MyInputProcessor;
 import edu.chalmers.sankoss.java.Renderers.InGameRenderer;
 import edu.chalmers.sankoss.java.SankossController;
 import edu.chalmers.sankoss.java.SankossGame;
@@ -13,7 +14,7 @@ import edu.chalmers.sankoss.java.SankossGame;
  * @author Mikael Malmqvist
  * @date 3/24/14
  */
-public class InGameScreen implements Screen{
+public class InGameScreen implements Screen {
 
     private InGame inGame;
     private InGameRenderer inGameRenderer;
@@ -30,9 +31,15 @@ public class InGameScreen implements Screen{
         this.game = game;
     }
 
+    /**
+     * Game loop for the current Screen.
+     * This method loops as long this Screen is active.
+     * @param delta
+     */
     @Override
     public void render(float delta) {
         game.setScreen(controller.getNextScreen(SankossController.CurrentScreen.INGAME));
+
     }
 
     @Override
