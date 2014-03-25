@@ -30,9 +30,15 @@ public class LobbyScreen implements Screen {
         this.game = game;
     }
 
+    /**
+     * Game loop for the current Screen.
+     * This method loops as long this Screen is active.
+     * @param delta
+     */
     @Override
     public void render(float delta) {
-        game.setScreen(controller.getNextScreen(SankossController.CurrentScreen.LOBBY));
+        //game.setScreen(controller.getNextScreen(SankossController.CurrentScreen.LOBBY));
+        lobbyRenderer.render();
     }
 
     @Override

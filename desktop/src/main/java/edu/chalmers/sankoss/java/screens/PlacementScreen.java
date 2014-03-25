@@ -31,8 +31,8 @@ public class PlacementScreen implements Screen {
     }
 
     /**
-     * This method gets called when controller decides
-     * it's time to update.
+     * Game loop for the current Screen.
+     * This method loops as long this Screen is active.
      * @param delta
      */
     @Override
