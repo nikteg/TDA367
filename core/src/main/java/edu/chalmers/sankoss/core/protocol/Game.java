@@ -1,5 +1,10 @@
 package edu.chalmers.sankoss.core.protocol;
-
+/**
+ * 
+ * @author Niklas Tegnander
+ * @modified Fredrik Thune
+ * 
+ */
 public class Game {
     private int id;
     private Player[] players = new Player[2];

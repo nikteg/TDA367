@@ -1,7 +1,11 @@
 package edu.chalmers.sankoss.core.protocol;
 
 import com.esotericsoftware.kryonet.Connection;
-
+/**
+ * 
+ * @author Niklas Tegnander
+ * 
+ */
 public class PlayerConnection extends Connection {
     private Player player;
 

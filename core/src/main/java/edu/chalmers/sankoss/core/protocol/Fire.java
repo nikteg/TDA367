@@ -1,5 +1,9 @@
 package edu.chalmers.sankoss.core.protocol;
-
+/**
+ * 
+ * @author Fredrik Thune
+ * 
+ */
 public class Fire {
 	private int x;
 	private int y;

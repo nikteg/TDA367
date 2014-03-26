@@ -2,7 +2,12 @@ package edu.chalmers.sankoss.core.protocol;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
-
+/**
+ * 
+ * @author Niklas Tegnander
+ * @modified Fredrik Thune
+ * 
+ */
 public class Network {
     public static final int port = 30401;
     

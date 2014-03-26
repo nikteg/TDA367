@@ -1,5 +1,9 @@
 package edu.chalmers.sankoss.core.protocol;
-
+/**
+ * 
+ * @author Niklas Tegnander
+ * 
+ */
 public class CreateRoom {
     private String name;
     private String password;

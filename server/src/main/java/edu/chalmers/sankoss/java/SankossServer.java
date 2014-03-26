@@ -11,6 +11,13 @@ import com.esotericsoftware.kryonet.Server;
 
 import edu.chalmers.sankoss.core.protocol.*;
 
+
+/**
+ * 
+ * @author Niklas Tegnander
+ * @modified Fredrik Thune
+ * 
+ */
 public class SankossServer {
 	private Server server;
 	private HashMap<Player, PlayerConnection> playerConnections = new HashMap<Player, PlayerConnection>();
