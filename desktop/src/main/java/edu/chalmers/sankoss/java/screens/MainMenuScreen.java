@@ -10,8 +10,8 @@ import edu.chalmers.sankoss.java.SankossController;
 import edu.chalmers.sankoss.java.SankossGame;
 
 /**
- * Description of class.
- * More detailed description.
+ * Screen used at the main menu.
+ * Handles game logic at the main menu, almost like a controller.
  *
  * @author Mikael Malmqvist
  * @date 3/24/14
@@ -57,6 +57,7 @@ public class MainMenuScreen implements Screen, ApplicationListener {
      */
     @Override
     public void show() {
+        System.out.println("Welcome to the MainMenu!");
         mainMenu = new MainMenu();
         mainMenuRenderer = new MainMenuRenderer(mainMenu);
     }

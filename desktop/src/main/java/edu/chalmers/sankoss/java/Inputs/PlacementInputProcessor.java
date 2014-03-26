@@ -1,25 +1,19 @@
-package edu.chalmers.sankoss.java;
+package edu.chalmers.sankoss.java.Inputs;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 
 /**
- * Handles user input.
- * Registers and handles input from the user.
+ * Handles input for the Placement Screen.
+ * The SankossController will switch to this InputProcessor
+ * when the PlacementScreen to set to its active Screen.
  *
  * @author Mikael Malmqvist
- * @date 3/25/14
+ * @date 3/26/14
  */
-public class MyInputProcessor implements InputProcessor {
+public class PlacementInputProcessor implements InputProcessor {
 
     @Override
     public boolean keyDown(int i) {
-        if(Gdx.input.isKeyPressed(Input.Keys.F5)) {
-            System.out.println("Refresh!");
-            return true;
-        }
-
         return false;
     }
 

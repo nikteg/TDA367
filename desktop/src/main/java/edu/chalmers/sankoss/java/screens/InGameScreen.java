@@ -2,14 +2,13 @@ package edu.chalmers.sankoss.java.screens;
 
 import com.badlogic.gdx.Screen;
 import edu.chalmers.sankoss.java.Models.InGame;
-import edu.chalmers.sankoss.java.MyInputProcessor;
 import edu.chalmers.sankoss.java.Renderers.InGameRenderer;
 import edu.chalmers.sankoss.java.SankossController;
 import edu.chalmers.sankoss.java.SankossGame;
 
 /**
- * Description of class.
- * More detailed description.
+ * Screen used ingame when actually playing!
+ * Handles game logic ingame, almost like a controller.
  *
  * @author Mikael Malmqvist
  * @date 3/24/14

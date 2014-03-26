@@ -7,8 +7,8 @@ import edu.chalmers.sankoss.java.SankossController;
 import edu.chalmers.sankoss.java.SankossGame;
 
 /**
- * Description of class.
- * More detailed description.
+ * Screen used at the game lobby when finding a game/room to join.
+ * Handles game logic in lobby, almost like a controller.
  *
  * @author Mikael Malmqvist
  * @date 3/24/14
@@ -48,6 +48,7 @@ public class LobbyScreen implements Screen {
 
     @Override
     public void show() {
+        System.out.println("Welcome to the Lobby!");
         lobby = new Lobby();
         lobbyRenderer = new LobbyRenderer(lobby);
     }
