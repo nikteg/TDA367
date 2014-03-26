@@ -5,7 +5,7 @@ import java.util.LinkedList;
 /**
  * Class representing a ship
  * @author Daniel Eineving
- *
+ * @modified Niklas Tegnander
  */
 
 public class Ship {
@@ -23,6 +23,7 @@ public class Ship {
 	public Ship(int size, Coordinate start, Coordinate end){
 		this.size=size;
 		
+		// TODO No real need to swap start with end? Should be able to rotate ship 180 degrees?
 		//Makes sure start is either above or to the left of the end coordinate
 		if(start.getX()+start.getY() > end.getX() + end.getY()){
 			this.start=end;
@@ -40,7 +41,7 @@ public class Ship {
 	 * @return The coordinates of the boat.
 	 */
 	public LinkedList<Coordinate> getCoordinates(){
-		LinkedList<Coordinate> coordinates = new LinkedList<>();
+		LinkedList<Coordinate> coordinates = new LinkedList<Coordinate>();
 		
 		coordinates.add(start);
 		if(start.getX()==end.getX()){
