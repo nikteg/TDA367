@@ -4,6 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import edu.chalmers.sankoss.java.Inputs.InGameInputProcessor;
 import edu.chalmers.sankoss.java.Inputs.LobbyInputProcessor;
 import edu.chalmers.sankoss.java.Inputs.MainMenuInputProcessor;
@@ -35,7 +42,7 @@ public class SankossController{
     private LobbyScreen lobbyScreen;
 
     // ENUMS to keep track of the current Screen
-    public enum CurrentScreen {
+    public enum ScreenState {
         MAINMENU, LOBBY, PLACEMENT, INGAME
     }
 
@@ -56,9 +63,8 @@ public class SankossController{
         lobbyScreen = new LobbyScreen(this, sankossGame);
         activeInputProcessor = new MainMenuInputProcessor();
 
-
         // Sets the input processor and the main menu screen
-        Gdx.input.setInputProcessor(activeInputProcessor);
+        // Gdx.input.setInputProcessor(activeInputProcessor);
         this.sankossGame.setScreen(mainMenuScreen);
     }
 
@@ -69,12 +75,14 @@ public class SankossController{
      * and uses an Enum of the type CurrentScreen to decide this.
      * The method does also set the InputProcessor depending on
      * the new Screen.
-     * @param screen Enum representation of what screen
-     *               is active at the moment.
+     * @param fromScreen Enum representation of what screen
+     *                   is active at the moment.
+     * @param toScreen Enum representation of what screen
+     *                 that should be switched to.
      * @return Will return the instance of the needed Screen.
      */
-    public Screen getNextScreen(CurrentScreen screen) {
-        switch (screen) {
+    public Screen getNextScreen(ScreenState fromScreen, ScreenState toScreen) {
+        switch (fromScreen) {
             case MAINMENU:
                 changeInput(new LobbyInputProcessor());
                 return lobbyScreen;

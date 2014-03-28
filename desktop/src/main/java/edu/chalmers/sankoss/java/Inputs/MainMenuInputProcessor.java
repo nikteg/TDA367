@@ -18,6 +18,7 @@ public class MainMenuInputProcessor implements InputProcessor {
     public boolean keyDown(int i) {
         if(Gdx.input.isKeyPressed(Input.Keys.F5)) {
             System.out.println("Refresh from MainMenuInputProcessor!");
+
             return true;
         }
 
@@ -51,6 +52,7 @@ public class MainMenuInputProcessor implements InputProcessor {
 
     @Override
     public boolean mouseMoved(int i, int i2) {
+
         return false;
     }
 

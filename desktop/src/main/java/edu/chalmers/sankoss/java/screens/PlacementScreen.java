@@ -37,7 +37,6 @@ public class PlacementScreen implements Screen {
      */
     @Override
     public void render(float delta) {
-        game.setScreen(controller.getNextScreen(SankossController.CurrentScreen.PLACEMENT));
     }
 
     @Override

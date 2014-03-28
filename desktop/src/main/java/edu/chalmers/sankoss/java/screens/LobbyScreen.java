@@ -37,7 +37,6 @@ public class LobbyScreen implements Screen {
      */
     @Override
     public void render(float delta) {
-        //game.setScreen(controller.getNextScreen(SankossController.CurrentScreen.LOBBY));
         lobbyRenderer.render();
     }
 
