@@ -1,6 +1,7 @@
 package edu.chalmers.sankoss.java.gamelogic;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 
 /**
  * Class representing a fleet of ships
@@ -30,6 +31,34 @@ public class Fleet{
 	public Ship[] getShips(){
 		//TODO Not safe
 		return ship;
+	}
+	
+	/**
+	 * Checks if the fleet i destroyed
+	 * @return true if the fleet is destroyed
+	 */
+	public boolean isDestroyed(){
+		for(int i=0; i<ship.length;i++){
+			if(!ship[i].isDestroyed()){
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	/**
+	 * A list containing all the ships that have not been destroyed
+	 * @return remaining ships
+	 */
+	public LinkedList<Ship> getRemainingShips(){
+		LinkedList<Ship> temp= new LinkedList<Ship>();
+		
+		for(int i=0;i<ship.length;i++){
+			if(!ship[i].isDestroyed()){
+				temp.add(ship[i]);
+			}
+		}
+		return temp;
 	}
 
 	@Override
