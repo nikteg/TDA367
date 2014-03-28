@@ -1,4 +1,4 @@
-package edu.chalmers.sankoss.java.gamelogic;
+package edu.chalmers.sankoss.core.protocol;
 
 /**
  * Represents a coordinate in the game grid

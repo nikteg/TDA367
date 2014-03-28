@@ -5,39 +5,30 @@ package edu.chalmers.sankoss.core.protocol;
  * 
  */
 public class Miss {
-	private int x;
-	private int y;
-	private boolean you;
-	public Miss() {
-		
-	}
-	public Miss(int x, int y, boolean you) {
-		this.x = x;
-		this.y = y;
-		this.you = you;
-	}
+    private Coordinate coordinate;
+    private boolean you;
 
-	public int getX() {
-		return x;
-	}
+    public Miss() {
 
-	public int getY() {
-		return y;
-	}
+    }
 
-	public boolean isYou() {
-		return you;
-	}
+    public Miss(Coordinate coordinate, boolean you) {
+        this.coordinate = coordinate;
+        this.you = you;
+    }
 
-	public void setX(int x) {
-		this.x = x;
-	}
+    public Coordinate getCoordinate() {
+        return coordinate;
+    }
 
-	public void setY(int y) {
-		this.y = y;
-	}
+    public void setCoordinate(Coordinate coordinate) {
+        this.coordinate = coordinate;
+    }
 
-	public void setYou(boolean you) {
-		this.you = you;
-	}
+    public boolean isYou() {
+        return you;
+    }
+    public void setYou(boolean you) {
+        this.you = you;
+    }
 }

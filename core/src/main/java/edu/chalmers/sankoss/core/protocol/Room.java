@@ -1,5 +1,8 @@
 package edu.chalmers.sankoss.core.protocol;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 
  * @author Niklas Tegnander
@@ -7,27 +10,28 @@ package edu.chalmers.sankoss.core.protocol;
  * 
  */
 public class Room {
-    private int id;
+    private Long id;
     private String name;
     private String password;
-    private Player player;
+    private List<Player> players = new ArrayList<Player>();
     
     public Room() {
         
     }
     
-    public Room(int id, String name, String password, Player player) {
+    public Room(Long id, String name, String password, Player player) {
         this.id = id;
         this.name = name;
         this.password = password;
-        this.player = player;
+
+        players.add(player);
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -47,11 +51,11 @@ public class Room {
         this.password = password;
     }
 
-    public Player getPlayer() {
-        return player;
+    public List<Player> getPlayers() {
+        return players;
     }
 
-    public void setPlayer(Player player) {
-        this.player = player;
+    public void addPlayer(Player player) {
+        players.add(player);
     }
 }

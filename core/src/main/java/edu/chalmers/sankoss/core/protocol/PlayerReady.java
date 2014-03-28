@@ -1,24 +1,39 @@
 package edu.chalmers.sankoss.core.protocol;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 
  * @author Niklas Tegnander
  * 
  */
 public class PlayerReady {
-	private boolean[][] grid = new boolean[10][10];
+    private Long gameID;
+    private List<Ship> fleet = new ArrayList<Ship>();
 	
 	public PlayerReady() {
 		
 	}
-	public PlayerReady(boolean[][] grid) {
-		this.grid = grid;
-	}
 
-	public boolean[][] getGrid() {
-		return grid;
-	}
+    public PlayerReady(Long gameID, List<Ship> fleet) {
+        this.gameID = gameID;
+        this.fleet = fleet;
+    }
 
-	public void setGrid(boolean[][] grid) {
-		this.grid = grid;
-	}
+    public Long getGameID() {
+        return gameID;
+    }
+
+    public void setGameID(Long id) {
+        this.gameID = id;
+    }
+
+    public List<Ship> getFleet() {
+        return fleet;
+    }
+
+    public void setFleet(List<Ship> fleet) {
+        this.fleet = fleet;
+    }
 }

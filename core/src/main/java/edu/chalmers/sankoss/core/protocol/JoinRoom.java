@@ -5,22 +5,22 @@ package edu.chalmers.sankoss.core.protocol;
  * 
  */
 public class JoinRoom {
-    private int id;
+    private Long id;
     private Player player;
     
     public JoinRoom() {
         
     }
     
-    public JoinRoom(int id) {
+    public JoinRoom(Long id) {
         this.id = id;
     }
 
-    public int getId() {
+    public Long getID() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setID(Long id) {
         this.id = id;
     }
 

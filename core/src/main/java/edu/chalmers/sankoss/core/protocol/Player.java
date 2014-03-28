@@ -1,4 +1,8 @@
 package edu.chalmers.sankoss.core.protocol;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 
  * @author Niklas Tegnander
@@ -8,23 +12,27 @@ package edu.chalmers.sankoss.core.protocol;
 public class Player {
     private int id;
     private String name;
-    private boolean[][] grid = new boolean[10][10];
+    private List<Ship> fleet = new ArrayList<Ship>();
     private boolean ready;
     
     public Player() {
         
     }
+
+    public Player(int id) {
+        this.id = id;
+    }
     
     public Player(int id, String name) {
-        this.id = id;
+        this(id);
         this.name = name;
     }
 
-    public int getId() {
+    public int getID() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setID(int id) {
         this.id = id;
     }
 
@@ -36,15 +44,15 @@ public class Player {
         this.name = name;
     }
 
-    public boolean[][] getGrid() {
-        return grid;
+    public List<Ship> getFleet() {
+        return fleet;
     }
 
-    public void setGrid(boolean[][] grid) {
-        this.grid = grid;
+    public void setFleet(List<Ship> fleet) {
+        this.fleet = fleet;
     }
 
-	public boolean isReady() {
+    public boolean isReady() {
 		return ready;
 	}
 
@@ -54,14 +62,9 @@ public class Player {
 	
 	public boolean equals(Object o) {
 		if (o instanceof Player) {
-			return (getId() == ((Player) o).getId());
+			return (getID() == ((Player) o).getID());
 		} else {
 			return false;
 		}
-		
-			
-	}
-	public boolean isHit(int x, int y) {
-		return grid[x][y];
 	}
 }
