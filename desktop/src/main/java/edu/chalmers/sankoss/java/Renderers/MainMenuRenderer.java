@@ -3,6 +3,7 @@ package edu.chalmers.sankoss.java.Renderers;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
 import edu.chalmers.sankoss.java.Models.ScreenModel;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
 /**
  * Description of class.
@@ -22,8 +23,8 @@ public class MainMenuRenderer extends Renderer{
 
     @Override
     public void render() {
-        Gdx.gl.glClearColor(1, 1, 1, 0);
         Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClearColor(0.09f, 0.28f, 0.2f, 1);
 
     }
 }

@@ -37,7 +37,6 @@ public class InGameScreen implements Screen {
      */
     @Override
     public void render(float delta) {
-        game.setScreen(controller.getNextScreen(SankossController.CurrentScreen.INGAME));
 
     }
 
