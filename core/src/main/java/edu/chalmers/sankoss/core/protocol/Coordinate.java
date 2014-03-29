@@ -9,6 +9,10 @@ public class Coordinate {
 
 	private int x, y;
 
+    public Coordinate() {
+
+    }
+
 	/**
 	 * Creates a new coordinate
 	 * @param x 1-10

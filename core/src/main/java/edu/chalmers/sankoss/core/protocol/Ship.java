@@ -14,6 +14,10 @@ public class Ship {
 	private Coordinate start, end;
 	private int hits=0;
 
+    public Ship() {
+
+    }
+
 	/**
 	 * Creates a Ship
 	 * @param size - Grid length of the Ship

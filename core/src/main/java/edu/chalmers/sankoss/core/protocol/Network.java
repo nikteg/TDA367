@@ -29,7 +29,11 @@ public class Network {
         kryo.register(PlayerReady.class);
         kryo.register(Turn.class);
         kryo.register(Disconnect.class);
-        kryo.register(boolean[].class);
-        kryo.register(boolean[][].class);
+        kryo.register(Connect.class);
+        kryo.register(StartGame.class);
+        kryo.register(java.util.HashMap.class);
+        kryo.register(java.util.ArrayList.class);
+        kryo.register(Ship.class);
+        kryo.register(Coordinate.class);
     }
 }
