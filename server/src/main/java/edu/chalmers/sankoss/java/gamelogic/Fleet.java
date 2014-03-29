@@ -3,6 +3,8 @@ package edu.chalmers.sankoss.java.gamelogic;
 import java.util.Arrays;
 import java.util.LinkedList;
 
+import edu.chalmers.sankoss.core.protocol.Ship;
+
 /**
  * Class representing a fleet of ships
  * @author Daniel Eineving
