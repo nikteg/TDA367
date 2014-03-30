@@ -6,30 +6,80 @@ import java.util.LinkedList;
  * Class representing a ship
  * @author Daniel Eineving
  * @modified Niklas Tegnander
- * @date 2014-03-27
+ * @date 2014-03-30
  */
 
 public class Ship {
 	private int size;
 	private Coordinate start, end;
 	private int hits=0;
+	
+	/**
+	 * Creates a ship with a given size
+	 * @param size Length of the ship
+	 */
+	public Ship(int size){
+		this.size=size;
+	}
 
     public Ship() {
 
     }
 
 	/**
-	 * Creates a Ship
+	 * Creates a Ship with a given position
 	 * @param size - Grid length of the Ship
 	 * @param start - Start Coordinate
 	 * @param end - End Coordinate
 	 */
+	//TODO Do we need this constructor?
 	public Ship(int size, Coordinate start, Coordinate end){
-		this.size=size;
+		this(size);
+		setCoordinates(start, end);
+	}
+	
+	/**
+	 * Sets the coordinates of the ship
+	 * @param start Start coordinate
+	 * @param end End Coordinate
+	 */
+	public void setCoordinates(Coordinate start, Coordinate end){
+		if(start.getX() != end.getX() && start.getY() != end.getY()){
+			
+			//TODO Write our own exceptions?
+			throw new IllegalArgumentException("No valid coordinates for ship start and end");
+		}
+		//TODO Should we make copies of the coordinates instead?
 		this.start=start;
 		this.end=end;
 	}
-
+	
+	/**
+	 * Start coordinate of the ship
+	 * @return the start coordinate
+	 */
+	public Coordinate getStartCoordinate(){
+		return start;
+	}
+	
+	/**
+	 * End coordinate of the ship
+	 * @return the end coordinate
+	 */
+	public Coordinate getEndCoordinate(){
+		return end;
+	}
+	
+	/**
+	 * Gets the size of the ship
+	 * @return Size of the ship
+	 */
+	public int getSize(){
+		return size;
+	}
+	
+	
+	//TODO do we need this?
 	/**
 	 * Gets all the boats coordinates as a LinkedList
 	 * @return The coordinates of the boat.
