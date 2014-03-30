@@ -6,7 +6,7 @@ import java.util.LinkedList;
  * Class representing a ship
  * @author Daniel Eineving
  * @modified Niklas Tegnander
- * @date 2014-03-29
+ * @date 2014-03-30
  */
 
 public class Ship {
@@ -51,6 +51,22 @@ public class Ship {
 	}
 	
 	/**
+	 * Start coordinate of the ship
+	 * @return the start coordinate
+	 */
+	public Coordinate getStartCoordinate(){
+		return start;
+	}
+	
+	/**
+	 * End coordinate of the ship
+	 * @return the end coordinate
+	 */
+	public Coordinate getEndCoordinate(){
+		return end;
+	}
+	
+	/**
 	 * Gets the size of the ship
 	 * @return Size of the ship
 	 */
@@ -58,6 +74,8 @@ public class Ship {
 		return size;
 	}
 	
+	
+	//TODO do we need this?
 	/**
 	 * Gets all the boats coordinates as a LinkedList
 	 * @return The coordinates of the boat.
