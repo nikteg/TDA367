@@ -24,8 +24,8 @@ public class LobbyRenderer extends Renderer {
 
     @Override
     public void render() {
-        Gdx.gl.glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
         Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClearColor(0.09f, 0.28f, 0.2f, 1);
 
     }
 }

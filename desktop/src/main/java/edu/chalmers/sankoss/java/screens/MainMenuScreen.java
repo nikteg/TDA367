@@ -7,17 +7,19 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Cullable;
 import edu.chalmers.sankoss.java.Models.MainMenu;
 import edu.chalmers.sankoss.java.Renderers.MainMenuRenderer;
 import edu.chalmers.sankoss.java.SankossController;
 import edu.chalmers.sankoss.java.SankossGame;
+
+import java.awt.*;
 
 /**
  * Screen used at the main menu.
@@ -33,13 +35,16 @@ public class MainMenuScreen implements Screen, ApplicationListener {
     private SankossGame game;
     private SankossController controller;
 
+    private String roomName;
+
     private Stage stage;
     private Skin skin;
-    private Skin labelSkin;
     private SpriteBatch batch;
     private TextButton.TextButtonStyle btnStyle;
     private Label.LabelStyle labelStyle;
-    private String roomName;
+
+    // Containers
+    WidgetGroup pnl;
 
     // Controllers
     private TextButton joinBtn;
@@ -75,20 +80,21 @@ public class MainMenuScreen implements Screen, ApplicationListener {
      */
     @Override
     public void render(float delta) {
-        /* New stuff */
+        // Calls the renderer to render non-interactive visuals
+        mainMenuRenderer.render();
+
+        // Dependent on time, updates all actors in stage
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         Table.drawDebug(stage);
 
-        //statusLabel.act(0.5f);
         stage.draw();
 
-        // Test for changing from Main menu to Lobby
+        // Test for changing from Main menu to Lobby witn f5
         /*if(controller.updateNow()) {
             game.setScreen(controller.getNextScreen(SankossController.ScreenState.MAINMENU, SankossController.ScreenState.LOBBY));
 
         }*/
 
-        //mainMenuRenderer.render();
     }
 
     /**
@@ -99,19 +105,23 @@ public class MainMenuScreen implements Screen, ApplicationListener {
      */
     @Override
     public void show() {
-        System.out.println("Welcome to the MainMenu!");
+        // System.out.println("Welcome to the MainMenu!");
         mainMenu = new MainMenu();
         mainMenuRenderer = new MainMenuRenderer(mainMenu);
 
 
     }
+
     /**
-     * Method when this is no longer the active Screen.
-     * This method is called automatically when the game sets
-     * its active Screen to a different Screen than this.
+     * Method called when this Screen is no longer the active Screen.
+     * Removes the Stage's children (Actors ..)
+     *
      */
     @Override
     public void hide() {
+        if(stage.getRoot().hasChildren()) {
+            stage.getRoot().removeActor(pnl);
+        }
 
     }
 
@@ -132,6 +142,10 @@ public class MainMenuScreen implements Screen, ApplicationListener {
     }
 
     // Below is we implement methods for ApplicationListener interface
+    /**
+     * Method to run upon creation of instance.
+     * Configs visual controllers and sets listeners.
+     */
     @Override
     public void create() {
 
@@ -141,6 +155,7 @@ public class MainMenuScreen implements Screen, ApplicationListener {
         skin = new Skin();
         btnStyle = new TextButton.TextButtonStyle();
         labelStyle = new Label.LabelStyle();
+        pnl = new WidgetGroup(); // Panel to put actors in
 
         // Configures necessary attributes for buttons
         setButtons();
@@ -165,34 +180,38 @@ public class MainMenuScreen implements Screen, ApplicationListener {
         statusLabel.setX(0);
         statusLabel.setY(0);
 
-        setButtonPos(joinBtn, 100, 420);
-        setButtonPos(hostBtn, 100, 300);
-        setButtonPos(optionBtn, 100, 180);
-        setButtonPos(helpBtn, 100, 60);
+
+        float x = (800 - WIDTH_OF_BUTTON)/2;
+        joinBtn.setPosition(x, 600/2 + 120);
+        hostBtn.setPosition(x, 600/2);
+        optionBtn.setPosition(x, 600/2 - 120);
+        helpBtn.setPosition(x, 600/2 - 240);
 
         statusLabel.addAction(Actions.forever(
                 Actions.sequence(
                         Actions.alpha(0.1f, 0.1f),
-                        Actions.fadeOut(0.1f)
+                        Actions.fadeIn(2f), Actions.fadeOut(2f)
                 )
         ));
 
-        // Adds actors to stage
-        stage.addActor(joinBtn);
-        stage.addActor(hostBtn);
-        stage.addActor(optionBtn);
-        stage.addActor(helpBtn);
-        stage.addActor(battleLabel);
-        stage.addActor(statusLabel);
-        statusLabel.act(20f);
-        
+        // Adds actors to table
+        pnl.addActor(joinBtn);
+        pnl.addActor(hostBtn);
+        pnl.addActor(optionBtn);
+        pnl.addActor(helpBtn);
+        pnl.addActor(battleLabel);
+        pnl.addActor(statusLabel);
+
+        stage.addActor(pnl);
+
         // Adds listener to join button. When clicked Sceen will be changed to LobbyScreen.
         joinBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent evt, Actor actor) {
-               // Changes sceen from this
-               game.setScreen(controller.getNextScreen(SankossController.ScreenState.MAINMENU,
-                       SankossController.ScreenState.LOBBY));
+
+                controller.setLobbyScreen();
+               // Changes Screen from this
+               // game.setScreen(controller.getNextScreen(SankossController.ScreenState.MAINMENU, SankossController.ScreenState.LOBBY));
             }
         });
 
@@ -219,16 +238,7 @@ public class MainMenuScreen implements Screen, ApplicationListener {
             }
         });
 
-    }
 
-    /**
-     * Sets position of button.
-     * @param btn Button to place.
-     * @param x x-coordinate for button.
-     * @param y y-coordinate for button.
-     */
-    public void setButtonPos(TextButton btn, int x, int y) {
-        btn.setPosition(x, y);
     }
 
     /**
@@ -264,17 +274,29 @@ public class MainMenuScreen implements Screen, ApplicationListener {
 
     /**
      * Resizes necessary variables to fit
-     * @param width
-     * @param height
+     * @param width is the new width of the window
+     * @param height is the new height of the window
      */
     @Override
     public void resize(int width, int height) {
         stage.setViewport( width, height, true );
 
+        // Centers the controllers based on new window size
+        float x = (width - WIDTH_OF_BUTTON)/2;
+        joinBtn.setPosition(x, height/2 + 120);
+        hostBtn.setPosition(x, height/2);
+        optionBtn.setPosition(x, height/2 - 120);
+        helpBtn.setPosition(x, height/2 - 240);
+
+        battleLabel.setX((width - battleLabel.getWidth()) / 2);
+        battleLabel.setY(height/2 + 240);
+        statusLabel.setX(0);
+        statusLabel.setY(0);
+
+
     }
 
     @Override
     public void render() {
-
     }
 }

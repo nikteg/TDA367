@@ -19,6 +19,7 @@ import edu.chalmers.sankoss.java.screens.InGameScreen;
 import edu.chalmers.sankoss.java.screens.LobbyScreen;
 import edu.chalmers.sankoss.java.screens.MainMenuScreen;
 import edu.chalmers.sankoss.java.screens.PlacementScreen;
+import sun.net.www.content.text.plain;
 
 /**
  * Logical controller for the application.
@@ -57,15 +58,12 @@ public class SankossController{
      */
     public SankossController(SankossGame sankossGame) {
         this.sankossGame = sankossGame;
-        inGameScreen = new InGameScreen(this, sankossGame);
-        placementScreen = new PlacementScreen(this, sankossGame);
-        mainMenuScreen = new MainMenuScreen(this, sankossGame);
-        lobbyScreen = new LobbyScreen(this, sankossGame);
-        activeInputProcessor = new MainMenuInputProcessor();
+        setMainMenuScreen();
+        // lobbyScreen = new LobbyScreen(this, sankossGame);
+        // activeInputProcessor = new MainMenuInputProcessor();
 
         // Sets the input processor and the main menu screen
         // Gdx.input.setInputProcessor(activeInputProcessor);
-        this.sankossGame.setScreen(mainMenuScreen);
     }
 
     /**
@@ -84,19 +82,19 @@ public class SankossController{
     public Screen getNextScreen(ScreenState fromScreen, ScreenState toScreen) {
         switch (fromScreen) {
             case MAINMENU:
-                changeInput(new LobbyInputProcessor());
+                // changeInput(new LobbyInputProcessor());
                 return lobbyScreen;
 
             case LOBBY:
-                changeInput(new PlacementInputProcessor());
+                // changeInput(new PlacementInputProcessor());
                 return placementScreen;
 
             case PLACEMENT:
-                changeInput(new InGameInputProcessor());
+                // changeInput(new InGameInputProcessor());
                 return inGameScreen;
 
             case INGAME:
-                changeInput(new MainMenuInputProcessor());
+                // changeInput(new MainMenuInputProcessor());
                 return mainMenuScreen;
         }
 
@@ -111,6 +109,43 @@ public class SankossController{
     public void changeInput(InputProcessor inp) {
         activeInputProcessor = inp;
         Gdx.input.setInputProcessor(activeInputProcessor);
+    }
+
+    /**
+     * Creates instance of MainMenuScreen.
+     * This type of method needs to be available for the Screens.
+     */
+    public void setMainMenuScreen(){
+        this.mainMenuScreen = new MainMenuScreen(this, sankossGame);
+        this.sankossGame.setScreen(mainMenuScreen);
+    }
+
+    /**
+     * Creates instance of LobbyScreen.
+     * This type of method needs to be available for the Screens.
+     */
+    public void setLobbyScreen(){
+        this.lobbyScreen = new LobbyScreen(this, sankossGame);
+        this.sankossGame.setScreen(lobbyScreen);
+
+    }
+
+    /**
+     * Creates instance of PlacementScreen.
+     * This type of method needs to be available for the Screens.
+     */
+    public void setPlacementScreen(){
+        this.placementScreen = new PlacementScreen(this, sankossGame);
+        this.sankossGame.setScreen(placementScreen);
+    }
+
+    /**
+     * Creates instance of InGameScreen.
+     * This type of method needs to be available for the Screens.
+     */
+    public void setInGameScreen(){
+        this.inGameScreen = new InGameScreen(this, sankossGame);
+        this.sankossGame.setScreen(inGameScreen);
     }
 
     /**
