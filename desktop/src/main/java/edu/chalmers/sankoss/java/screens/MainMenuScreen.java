@@ -7,19 +7,15 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Cullable;
 import edu.chalmers.sankoss.java.Models.MainMenu;
 import edu.chalmers.sankoss.java.Renderers.MainMenuRenderer;
 import edu.chalmers.sankoss.java.SankossController;
 import edu.chalmers.sankoss.java.SankossGame;
-
-import java.awt.*;
 
 /**
  * Screen used at the main menu.
@@ -28,20 +24,9 @@ import java.awt.*;
  * @author Mikael Malmqvist
  * @date 3/24/14
  */
-public class MainMenuScreen implements Screen, ApplicationListener {
-
-    private MainMenu mainMenu;
-    private MainMenuRenderer mainMenuRenderer;
-    private SankossGame game;
-    private SankossController controller;
+public class MainMenuScreen extends AbstractScreen implements ApplicationListener {
 
     private String roomName;
-
-    private Stage stage;
-    private Skin skin;
-    private SpriteBatch batch;
-    private TextButton.TextButtonStyle btnStyle;
-    private Label.LabelStyle labelStyle;
 
     // Containers
     WidgetGroup pnl;
@@ -59,63 +44,27 @@ public class MainMenuScreen implements Screen, ApplicationListener {
     private static final int HEIGHT_OF_BUTTON = 100;
 
     /**
-     * This will keep a reference of the main game.
-     * @param game reference to the SankossGame class
-     * @param controller reference to the SankossController class
+     * @inheritdoc
      */
     public MainMenuScreen(SankossController controller, SankossGame game) {
-        this.controller = controller;
-        this.game = game;
+        super(controller, game);
 
         create();
 
     }
 
-
-
     /**
-     * Game loop for the current Screen.
-     * This method loops as long this Screen is active.
-     * @param delta
-     */
-    @Override
-    public void render(float delta) {
-        // Calls the renderer to render non-interactive visuals
-        mainMenuRenderer.render();
-
-        // Dependent on time, updates all actors in stage
-        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-        Table.drawDebug(stage);
-
-        stage.draw();
-
-        // Test for changing from Main menu to Lobby witn f5
-        /*if(controller.updateNow()) {
-            game.setScreen(controller.getNextScreen(SankossController.ScreenState.MAINMENU, SankossController.ScreenState.LOBBY));
-
-        }*/
-
-    }
-
-    /**
-     * Method for when this Screen is set.
-     * This method is called automatically when the game sets
-     * this Screen as its active Screen. It instantiates its
-     * MainMenu and Renderer.
+     * @inheritdoc
      */
     @Override
     public void show() {
-        // System.out.println("Welcome to the MainMenu!");
-        mainMenu = new MainMenu();
-        mainMenuRenderer = new MainMenuRenderer(mainMenu);
-
+        model = new MainMenu();
+        renderer = new MainMenuRenderer(model);
 
     }
 
     /**
-     * Method called when this Screen is no longer the active Screen.
-     * Removes the Stage's children (Actors ..)
-     *
+     * @inheritdoc
      */
     @Override
     public void hide() {
@@ -133,12 +82,6 @@ public class MainMenuScreen implements Screen, ApplicationListener {
     @Override
     public void resume() {
 
-    }
-
-    @Override
-    public void dispose() {
-        stage.dispose();
-        skin.dispose();
     }
 
     // Below is we implement methods for ApplicationListener interface
@@ -210,8 +153,7 @@ public class MainMenuScreen implements Screen, ApplicationListener {
             public void changed(ChangeEvent evt, Actor actor) {
 
                 controller.setLobbyScreen();
-               // Changes Screen from this
-               // game.setScreen(controller.getNextScreen(SankossController.ScreenState.MAINMENU, SankossController.ScreenState.LOBBY));
+
             }
         });
 
@@ -253,16 +195,12 @@ public class MainMenuScreen implements Screen, ApplicationListener {
         // Adds Texture with pixmap to skin
         skin.add("white", new Texture(pixmap));
 
-
         BitmapFont font = new BitmapFont();
         font.scale(1); // Sets font's scale relative to current scale
 
         // Adds font to skin
         skin.add("default", font);
 
-
-        // Configure a style for button and name it "default". Skin resources are stored by type,
-        // so this doesn't overwrite the font.
         btnStyle.up = skin.newDrawable("white", Color.DARK_GRAY);
         btnStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
         btnStyle.checked = skin.newDrawable("white", Color.BLUE);
@@ -273,14 +211,11 @@ public class MainMenuScreen implements Screen, ApplicationListener {
     }
 
     /**
-     * Resizes necessary variables to fit
-     * @param width is the new width of the window
-     * @param height is the new height of the window
+     * @inheritdoc
      */
     @Override
     public void resize(int width, int height) {
-        stage.setViewport( width, height, true );
-
+        super.resize(width, height);
         // Centers the controllers based on new window size
         float x = (width - WIDTH_OF_BUTTON)/2;
         joinBtn.setPosition(x, height/2 + 120);

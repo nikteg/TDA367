@@ -1,8 +1,6 @@
 package edu.chalmers.sankoss.java.screens;
 
 import com.badlogic.gdx.ApplicationListener;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -22,18 +20,7 @@ import edu.chalmers.sankoss.java.SankossGame;
  * @author Mikael Malmqvist
  * @date 3/24/14
  */
-public class LobbyScreen implements Screen, ApplicationListener {
-
-    private Lobby lobby;
-    private LobbyRenderer lobbyRenderer;
-    private SankossGame game;
-    private SankossController controller;
-
-    private Stage stage;
-    private Skin skin;
-    private SpriteBatch batch;
-    private TextButton.TextButtonStyle btnStyle;
-    private Label.LabelStyle labelStyle;
+public class LobbyScreen extends AbstractScreen implements ApplicationListener {
 
     // Controllers
     private TextButton joinBtn;
@@ -50,51 +37,28 @@ public class LobbyScreen implements Screen, ApplicationListener {
     private static final int HEIGHT_OF_BUTTON = 50;
 
     /**
-     * This will keep a reference of the main game.
-     * @param game reference to the SankossGame class
-     * @param controller reference to the SankossController class
+     * @inheritdoc
      */
     public LobbyScreen(SankossController controller, SankossGame game) {
-        this.controller = controller;
-        this.game = game;
+        super(controller, game);
 
         create();
 
     }
 
-    /**
-     * Game loop for the current Screen.
-     * This method loops as long this Screen is active.
-     * @param delta
-     */
-    @Override
-    public void render(float delta) {
-        lobbyRenderer.render();
-
-        /* New stuff */
-        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-        Table.drawDebug(stage);
-
-        stage.draw();
-    }
 
     /**
-     * Method for when this Screen is set.
-     * This method is called automatically when the game sets
-     * this Screen as its active Screen. It instantiates its
-     * MainMenu and Renderer.
+     * @inheritdoc
      */
     @Override
     public void show() {
         // System.out.println("Welcome to the Lobby!");
-        lobby = new Lobby();
-        lobbyRenderer = new LobbyRenderer(lobby);
+        model = new Lobby();
+        renderer = new LobbyRenderer(model);
     }
 
     /**
-     * Method when this is no longer the active Screen.
-     * This method is called automatically when the game sets
-     * its active Screen to a different Screen than this.
+     * @inheritdoc
      */
     @Override
     public void hide() {
@@ -111,12 +75,21 @@ public class LobbyScreen implements Screen, ApplicationListener {
 
     }
 
+    /**
+     * @inheritdoc
+     */
     @Override
-    public void dispose() {
-        stage.dispose();
-        skin.dispose();
+    public void resize(int width, int height) {
+        super.resize(width, height);
+
+        joinBtn.setPosition(width - WIDTH_OF_BUTTON, 0);
+        infoLabel.setX(width - infoLabel.getWidth() - 10);
+
+        topPanel.setX(0);
+        topPanel.setY(height - 150);
 
     }
+
 
     /**
      * Makes default configuration for a menu button.
@@ -149,6 +122,10 @@ public class LobbyScreen implements Screen, ApplicationListener {
 
     }
 
+    @Override
+    public void render() {
+
+    }
 
     // Below is we implement methods for ApplicationListener interface
     /**
@@ -208,29 +185,6 @@ public class LobbyScreen implements Screen, ApplicationListener {
         // Adds the panels to stage
         stage.addActor(topPanel);
         stage.addActor(bottomPanel);
-
-    }
-
-    /**
-     * Resizes necessary variables to fit
-     * @param width is the new width of the window
-     * @param height is the new height of the window
-     */
-    @Override
-    public void resize(int width, int height) {
-        stage.setViewport( width, height, true );
-
-        joinBtn.setPosition(width - WIDTH_OF_BUTTON, 0);
-        infoLabel.setX(width - infoLabel.getWidth() - 10);
-
-        topPanel.setX(0);
-        topPanel.setY(height - 150);
-
-
-    }
-
-    @Override
-    public void render() {
 
     }
 

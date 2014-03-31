@@ -1,6 +1,6 @@
 package edu.chalmers.sankoss.java.screens;
 
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.ApplicationListener;
 import edu.chalmers.sankoss.java.Models.InGame;
 import edu.chalmers.sankoss.java.Renderers.InGameRenderer;
 import edu.chalmers.sankoss.java.SankossController;
@@ -13,12 +13,7 @@ import edu.chalmers.sankoss.java.SankossGame;
  * @author Mikael Malmqvist
  * @date 3/24/14
  */
-public class InGameScreen implements Screen {
-
-    private InGame inGame;
-    private InGameRenderer inGameRenderer;
-    private SankossGame game;
-    private SankossController controller;
+public class InGameScreen extends AbstractScreen implements ApplicationListener {
 
     /**
      * This will keep a reference of the main game.
@@ -26,31 +21,23 @@ public class InGameScreen implements Screen {
      * @param controller reference to the SankossController class
      */
     public InGameScreen(SankossController controller, SankossGame game) {
-        this.controller = controller;
-        this.game = game;
+        super(controller, game);
+
+        create();
     }
 
     /**
-     * Game loop for the current Screen.
-     * This method loops as long this Screen is active.
-     * @param delta
+     * @inheritdoc
      */
     @Override
-    public void render(float delta) {
-
-    }
-
-    @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
     public void show() {
-        inGame = new InGame();
-        inGameRenderer = new InGameRenderer(inGame);
+        model = new InGame();
+        renderer = new InGameRenderer(model);
     }
 
+    /**
+     * @inheritdoc
+     */
     @Override
     public void hide() {
 
@@ -67,7 +54,31 @@ public class InGameScreen implements Screen {
     }
 
     @Override
-    public void dispose() {
+    public void create() {
 
     }
+
+    /**
+     * @inheritdoc
+     */
+    @Override
+    public void resize(int width, int height) {
+        super.resize(width, height);
+    }
+
+    /**
+     * Game loop for the current Screen.
+     * This method loops as long this Screen is active.
+     * @param delta
+     */
+    @Override
+    public void render(float delta) {
+
+    }
+
+    @Override
+    public void render() {
+
+    }
+
 }
