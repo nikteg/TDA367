@@ -2,16 +2,16 @@ package edu.chalmers.sankoss.core.protocol;
 
 /**
  *
- * @author Niklas Tegnander
- * @modified Fredrik Thune
+ * @author Fredrik Thune
+ *
  */
-public class StartGame {
+public class CreatedRoom {
     private Long roomID;
 
-    public StartGame() {
+    public CreatedRoom() {
     }
 
-    public StartGame(Long roomID) {
+    public CreatedRoom(Long roomID) {
         this.roomID = roomID;
     }
 

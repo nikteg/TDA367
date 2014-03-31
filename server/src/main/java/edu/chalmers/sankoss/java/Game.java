@@ -1,6 +1,9 @@
-package edu.chalmers.sankoss.core.protocol;
+package edu.chalmers.sankoss.java;
 
-import java.util.ArrayList;
+import edu.chalmers.sankoss.core.Coordinate;
+import edu.chalmers.sankoss.core.Player;
+import edu.chalmers.sankoss.core.Ship;
+
 import java.util.List;
 
 /**
@@ -13,7 +16,7 @@ public class Game {
     private Long id;
     private List<Player> players;
     private Player attacker;
-    private List<Coordinate> usedCoordinates = new ArrayList<Coordinate>();
+
     
     public Game() {
 
@@ -49,26 +52,24 @@ public class Game {
         setAttacker((players.indexOf(attacker) >= players.size() - 1) ? players.get(0) : players.get(players.indexOf(attacker) + 1));
 	}
 
-    public List<Coordinate> getUsedCoordinates() {
-        return usedCoordinates;
-    }
+    public Ship fire(Player target, Coordinate coordinate) throws UsedCoordinateException {
 
-    public void setUsedCoordinates(List<Coordinate> usedCoordinates) {
-        this.usedCoordinates = usedCoordinates;
-    }
-
-    public boolean fire(Player target, Coordinate coordinate) {
-
-        // TODO Throw exception
-        if (usedCoordinates.contains(coordinate)) {
-
+        if (getAttacker().getUsedCoordinates().contains(coordinate)) {
+            throw new UsedCoordinateException("Already fired at that coordinate");
         }
 
-        usedCoordinates.add(coordinate);
+        getAttacker().addUsedCoordiante(coordinate);
 
-        // TODO To fire
+
         System.out.println(String.format("Fire: #%d %d,%d", target.getID(), coordinate.getX(), coordinate.getY()));
 
-        return true;
+        for (Ship ship : target.getFleet()) {
+            if (ship.isShip(coordinate)) {
+                ship.shipHit();
+                return ship;
+            }
+        }
+
+        return null;
     }
 }

@@ -1,4 +1,4 @@
-package edu.chalmers.sankoss.core.protocol;
+package edu.chalmers.sankoss.core;
 
 import java.util.LinkedList;
 
@@ -6,6 +6,7 @@ import java.util.LinkedList;
  * Class representing a ship
  * @author Daniel Eineving
  * @modified Niklas Tegnander
+ * @modified Fredrik Thune
  * @date 2014-03-30
  */
 
@@ -14,13 +15,6 @@ public class Ship {
 	private Coordinate start, end;
 	private int hits=0;
 	
-	/**
-	 * Creates a ship with a given size
-	 * @param size Length of the ship
-	 */
-	public Ship(int size){
-		this.size=size;
-	}
 
     public Ship() {
 
@@ -28,13 +22,12 @@ public class Ship {
 
 	/**
 	 * Creates a Ship with a given position
-	 * @param size - Grid length of the Ship
 	 * @param start - Start Coordinate
 	 * @param end - End Coordinate
 	 */
-	//TODO Do we need this constructor?
-	public Ship(int size, Coordinate start, Coordinate end){
-		this(size);
+
+	public Ship(Coordinate start, Coordinate end){
+        size = Math.abs(start.getX() - end.getX()) + Math.abs(start.getY() - end.getY()) + 1;
 		setCoordinates(start, end);
 	}
 	
@@ -58,7 +51,7 @@ public class Ship {
 	 * Start coordinate of the ship
 	 * @return the start coordinate
 	 */
-	public Coordinate getStartCoordinate(){
+	public Coordinate getStart(){
 		return start;
 	}
 	
@@ -66,7 +59,7 @@ public class Ship {
 	 * End coordinate of the ship
 	 * @return the end coordinate
 	 */
-	public Coordinate getEndCoordinate(){
+	public Coordinate getEnd(){
 		return end;
 	}
 	
@@ -77,13 +70,17 @@ public class Ship {
 	public int getSize(){
 		return size;
 	}
-	
-	
-	//TODO do we need this?
+
+    @Override
+    public String toString() {
+        return String.format("%d:(%d, %d)(%d, %d)", size, start.getX(), start.getY(), end.getX(), end.getY());
+    }
+
 	/**
 	 * Gets all the boats coordinates as a LinkedList
 	 * @return The coordinates of the boat.
 	 */
+    //TODO Do we need this?
 	public LinkedList<Coordinate> getCoordinates(){
 		LinkedList<Coordinate> coordinates = new LinkedList<Coordinate>();
 
@@ -124,20 +121,13 @@ public class Ship {
 	 * @return True if the target coordinate is a part of the ship
 	 */
 	public boolean isShip(Coordinate target){
-		LinkedList<Coordinate> temp = getCoordinates();
-
-		for(int i=0;i<size;i++){
-			if(target.equals(temp.get(i))){
-				return true;
-			}
-		}
-		return false;
-
-		/*
-		return (start.getX()==end.getX() && target.getX()==start.getX() && start.getY() <= target.getY() && target.getY() <=end.getY()) 
-				|| (start.getY()==end.getY() && target.getY()==start.getY() && start.getX() <= target.getX() && target.getX() <=end.getX());
-		 */
+        return (distance(start, target) + distance(target, end) == distance(start, end));
 	}
+
+    private int distance(Coordinate start, Coordinate end) {
+        return (int)Math.sqrt(Math.pow((double)(start.getX() - end.getX()), 2) +
+                Math.pow((double)(start.getY() - end.getY()), 2));
+    }
 
 	/**
 	 * Adds a hit to the ship

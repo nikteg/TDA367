@@ -1,4 +1,6 @@
-package edu.chalmers.sankoss.core.protocol;
+package edu.chalmers.sankoss.core;
+
+import edu.chalmers.sankoss.core.Player;
 
 import java.util.ArrayList;
 import java.util.List;

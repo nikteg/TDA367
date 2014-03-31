@@ -1,5 +1,7 @@
 package edu.chalmers.sankoss.core.protocol;
 
+import edu.chalmers.sankoss.core.Ship;
+
 import java.util.ArrayList;
 import java.util.List;
 

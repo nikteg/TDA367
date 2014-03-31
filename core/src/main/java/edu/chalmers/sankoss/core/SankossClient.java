@@ -21,8 +21,8 @@ public class SankossClient {
     private Client client;
     private Player player;
     private List<Player> opponents = new ArrayList<Player>();
-    private boolean hosting = false;
-    private Game game;
+    private Long gameID;
+    private Long roomID;
 
     public static void main(String[] args) {
         if (args.length > 0) {
@@ -34,7 +34,7 @@ public class SankossClient {
 
     public SankossClient(String host) {
         client = new Client();
-        client.start();
+        new Thread(client).start();
 
         Network.register(client);
 
@@ -83,7 +83,6 @@ public class SankossClient {
                         String name = input.trim();
 
                         client.sendTCP(new CreateRoom(name, ""));
-                        hosting = true;
                     } else {
                         // Join room
 
@@ -106,38 +105,38 @@ public class SankossClient {
                     
                     return;
                 }
+                if (object instanceof CreatedRoom) {
+                    CreatedRoom msg = (CreatedRoom) object;
 
-                if (object instanceof JoinRoom) {
-                    if (player == null) return;
+                    roomID = msg.getRoomID();
 
-                    JoinRoom msg = (JoinRoom) object;
+                    int choice;
+                    do {
+                        choice = JOptionPane.showOptionDialog(null, "Start game?", "Start game",
+                                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+                    } while (choice != 0);
 
-                    if (player.getID() == msg.getPlayer().getID()) {
-                        System.out.println("Waiting for host to start the game #" + msg.getID());
-                    } else {
-                        System.out.println(String.format("Player #%d joined...", msg.getID()));
+                    client.sendTCP(new StartGame(roomID));
 
-                        // Stop if this player isn't the host
-                        if (!hosting) return;
-
-                        int choice;
-                        do {
-                            choice = JOptionPane.showOptionDialog(null, "Start game?", "Start game",
-                                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
-                        } while (choice != 0);
-
-                        client.sendTCP(new StartGame(msg.getID()));
-                    }
                 }
 
-                if (object instanceof StartGame) {
+                if (object instanceof JoinedRoom) {
+                    if (player == null) return;
+                    JoinedRoom msg = (JoinedRoom) object;
+                    if (msg.getPlayer().equals(player))
+                        return;
+
+                    System.out.println(String.format("Player #%d joined...", msg.getPlayer().getID()));
+                }
+
+                if (object instanceof StartedGame) {
                     if (player == null) return;
 
-                    StartGame msg = (StartGame) object;
+                    StartedGame msg = (StartedGame) object;
 
-                    game = new Game(msg.getID(), opponents);
+                    gameID = msg.getGameID();
 
-                    System.out.println(String.format("Placing ships! #%d", msg.getID()));
+                    System.out.println(String.format("Placing ships! #%d", msg.getGameID()));
 
                     int choice;
                     do {
@@ -147,12 +146,12 @@ public class SankossClient {
 
                     System.out.println("CREATING FLEET");
                     List<Ship> fleet = new ArrayList<Ship>();
-                    fleet.add(new Ship(2, new Coordinate(1,1), new Coordinate(1,3)));
-                    fleet.add(new Ship(3, new Coordinate(2,1), new Coordinate(2,4)));
+                    fleet.add(new Ship(new Coordinate(1,1), new Coordinate(1,3)));
+                    fleet.add(new Ship(new Coordinate(2,1), new Coordinate(2,4)));
 
                     System.out.println("FLEET CREATED");
 
-                   	client.sendTCP(new PlayerReady(msg.getID(), fleet));
+                   	client.sendTCP(new PlayerReady(msg.getGameID(), fleet));
 
                     System.out.println("FLEET SENT");
                    
@@ -166,33 +165,55 @@ public class SankossClient {
                 	return;
                 }
 
-                if (object instanceof Player) {
+                if (object instanceof PlayerIsReady) {
                     if (player == null) return;
 
-                    Player msg = (Player) object;
+                    PlayerIsReady msg = (PlayerIsReady) object;
 
-                    if (msg.getID() == player.getID()) return;
+                    opponents.add(msg.getPlayer());
 
-                    opponents.add(msg);
-
-                    System.out.println(String.format("#%d is ready!", msg.getID()));
+                    System.out.println(String.format("#%d is ready!", msg.getPlayer().getID()));
 
                     return;
                 }
                 
                 if (object instanceof Turn) {
-                	String input = (String) JOptionPane.showInputDialog(null, "Skjut:", "Skjut", JOptionPane.QUESTION_MESSAGE, null, null, "1,1");
+                	String input = (String) JOptionPane.showInputDialog(null, "Skjut:", "Skjuter - #" + player.getID(), JOptionPane.QUESTION_MESSAGE, null, null, "1,1");
                     String coord = input.trim();
                     String[] coords = coord.split(",");
 
-                    Player opponent = opponents.get(1);
+                    Player opponent = opponents.get(0); // Only if 2 players
                     Coordinate coordinate = new Coordinate(Integer.parseInt(coords[0]), Integer.parseInt(coords[1]));
 
-                    client.sendTCP(new Fire(game.getID(), opponent, coordinate));
+                    client.sendTCP(new Fire(gameID, opponent, coordinate));
 
                     return;
                 }
-                
+
+                if (object instanceof FireResult) {
+                    FireResult msg = (FireResult) object;
+
+                    int x =  msg.getCoordinate().getX();
+                    int y =  msg.getCoordinate().getY();
+
+                    if (msg.getTarget().equals(player)) {
+                        System.out.println("You are being fired at:" + x + "," + y + " " + (msg.isHit() ? "HIT" : "MISS"));
+                    } else {
+                        System.out.println("#" + msg.getTarget().getID() +
+                                " are being fired at:" + x + "," + y + " " + (msg.isHit() ? "HIT" : "MISS"));
+
+                    }
+                    return;
+                }
+                if (object instanceof DestroyedShip) {
+                    DestroyedShip msg = (DestroyedShip) object;
+                    if (msg.getPlayer().equals(player)) {
+                        System.out.println(String.format("Your ship %s got destroyed!", msg.getShip()));
+                    } else {
+                        System.out.println(String.format("Player #%d got their %s ship destroyed!!!", msg.getPlayer().getID(), msg.getShip()));
+                    }
+                    return;
+                }
                 
             }
 
@@ -203,7 +224,7 @@ public class SankossClient {
         }));
 
         try {
-            client.connect(5000, host, Network.port);
+            client.connect(5000, host, Network.PORT);
         } catch (IOException e) {
             System.out.println("Could not connect to remote server...");
         }

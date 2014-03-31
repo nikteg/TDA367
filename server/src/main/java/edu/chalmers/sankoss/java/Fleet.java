@@ -1,7 +1,8 @@
-package edu.chalmers.sankoss.core.protocol;
+package edu.chalmers.sankoss.java;
 
 import java.util.Arrays;
 import java.util.LinkedList;
+import edu.chalmers.sankoss.core.Ship;
 
 /**
  * Class representing a fleet of ships

@@ -7,6 +7,10 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 
+import edu.chalmers.sankoss.core.Network;
+import edu.chalmers.sankoss.core.Player;
+import edu.chalmers.sankoss.core.Room;
+import edu.chalmers.sankoss.core.Ship;
 import edu.chalmers.sankoss.core.protocol.*;
 
 
@@ -80,14 +84,14 @@ public class SankossServer {
                         room = RoomFactory.createRoom(msg.getName(), msg.getPassword(), player);
                     } catch (RoomNotFoundException e) {
                         System.out.println("Room could not be created...");
-                        connection.sendTCP(new CreateRoom());
+                        connection.sendTCP(new CreatedRoom());
 
                         return;
                     }
 
                     System.out.println(String.format("#%d created room #%d (%s with password '%s')", player.getID(), room.getID(), room.getName(), msg.getPassword()));
 
-                    connection.sendTCP(msg);
+                    connection.sendTCP(new CreatedRoom(room.getID()));
 
 					return;
 				}
@@ -100,7 +104,7 @@ public class SankossServer {
 
                     Room room;
                     try {
-                        room = RoomFactory.getRoom(msg.getID());
+                        room = RoomFactory.getRoom(msg.getRoomID());
                         room.addPlayer(player);
                     } catch (RoomNotFoundException e) {
                         connection.sendTCP(new JoinRoom());
@@ -110,10 +114,10 @@ public class SankossServer {
 
                     System.out.println(String.format("#%d joined room #%d (%s)", player.getID(), room.getID(), room.getName()));
 
-                    msg.setPlayer(player);
+                    JoinedRoom joinedRoom = new JoinedRoom(player);
 
                     for (Player roomPlayer : room.getPlayers()) {
-                        players.get(roomPlayer).sendTCP(msg);
+                        players.get(roomPlayer).sendTCP(joinedRoom);
                     }
 
 					return;
@@ -125,9 +129,9 @@ public class SankossServer {
 
                     Room room;
                     try {
-                        room = RoomFactory.getRoom(msg.getID());
+                        room = RoomFactory.getRoom(msg.getRoomID());
                     } catch (RoomNotFoundException e) {
-                        connection.sendTCP(new StartGame());
+                        connection.sendTCP(new StartedGame());
 
                         return;
                     }
@@ -139,7 +143,7 @@ public class SankossServer {
                         System.out.println(String.format("#%d started game #%d", player.getID(), game.getID()));
 
                         for (Player gamePlayer : game.getPlayers()) {
-                            players.get(gamePlayer).sendTCP(new StartGame(game.getID()));
+                            players.get(gamePlayer).sendTCP(new StartedGame(game.getID(), game.getPlayers()));
                         }
 
                         try {
@@ -183,11 +187,16 @@ public class SankossServer {
 
                     boolean allReady = true;
                     for (Player gamePlayer : game.getPlayers()) {
-                        System.out.println(String.format("#%d is %sready", gamePlayer.getID(), gamePlayer.isReady() ? "" : "not "));
                         if (!gamePlayer.isReady()) {
                             allReady = false;
                             break;
                         }
+                    }
+
+                    PlayerIsReady playerIsReady = new PlayerIsReady(player);
+                    for (Player gamePlayer : game.getPlayers()) {
+                        if (!gamePlayer.equals(player))
+                            players.get(gamePlayer).sendTCP(playerIsReady);
                     }
 
                     if (allReady) {
@@ -201,12 +210,6 @@ public class SankossServer {
                         game.setAttacker(game.getPlayers().get(starter));
                         players.get(game.getAttacker()).sendTCP(new Turn());
 
-                    } else {
-                        for (Player gamePlayer : game.getPlayers()) {
-
-                            // TODO Maybe add name?
-                            players.get(gamePlayer).sendTCP(new Player(player.getID()));
-                        }
                     }
 
                     player.setFleet(msg.getFleet());
@@ -234,18 +237,23 @@ public class SankossServer {
 					if (!game.getAttacker().equals(player))
 						return;
 
-                    boolean isHit = game.fire(msg.getTarget(), msg.getCoordinate());
 
-                    // TODO We really have to redo this part...
+                    Ship targetShip;
+                    try {
+                        targetShip = game.fire(players.get(msg.getTarget()).getPlayer(), msg.getCoordinate());
+                    } catch (UsedCoordinateException e) {
+                        System.out.println(String.format("#%s Error: %s", player.getID(), e.getMessage()));
+                        players.get(player).sendTCP(new Turn());
+                        return;
+                    }
+
+                    FireResult fireResult = new FireResult(msg, (targetShip != null));
+
                     for (Player gamePlayer : game.getPlayers()) {
-                        if (gamePlayer.equals(msg.getTarget())) {
-                            players.get(gamePlayer).sendTCP(
-                                    isHit ? new Hit(msg.getCoordinate(), true) : new Miss(msg.getCoordinate(), true)
-                            );
-                        } else {
-                            players.get(gamePlayer).sendTCP(
-                                    isHit ? new Hit(msg.getCoordinate(), true) : new Miss(msg.getCoordinate(), false)
-                            );
+                        players.get(gamePlayer).sendTCP(fireResult);
+
+                        if (targetShip !=null && targetShip.isDestroyed()) {
+                            players.get(gamePlayer).sendTCP(new DestroyedShip(msg.getTarget(), targetShip));
                         }
                     }
 
@@ -267,9 +275,9 @@ public class SankossServer {
             }
 		});
 
-		server.bind(Network.port);
+		server.bind(Network.PORT);
 		server.start();
-		System.out.println("Server started on port: " + Network.port);
+		System.out.println("Server started on port: " + Network.PORT);
 
 	}
 

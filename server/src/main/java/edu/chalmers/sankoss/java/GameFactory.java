@@ -1,7 +1,6 @@
 package edu.chalmers.sankoss.java;
 
-import edu.chalmers.sankoss.core.protocol.Game;
-import edu.chalmers.sankoss.core.protocol.Player;
+import edu.chalmers.sankoss.core.Player;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;

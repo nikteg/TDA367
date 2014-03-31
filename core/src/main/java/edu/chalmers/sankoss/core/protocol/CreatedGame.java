@@ -1,17 +1,17 @@
 package edu.chalmers.sankoss.core.protocol;
+
 /**
- * 
- * @author Niklas Tegnander
- * @modified Fredrik Thune
+ *
+ * @author Fredrik Thune
+ *
  */
-public class CreateGame {
+public class CreatedGame {
     private Long gameID;
-    
-    public CreateGame() {
-        
+
+    public CreatedGame() {
     }
 
-    public CreateGame(Long gameID) {
+    public CreatedGame(Long gameID) {
         this.gameID = gameID;
     }
 

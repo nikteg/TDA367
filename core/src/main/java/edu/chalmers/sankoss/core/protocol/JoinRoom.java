@@ -2,33 +2,24 @@ package edu.chalmers.sankoss.core.protocol;
 /**
  * 
  * @author Niklas Tegnander
- * 
+ * @modified Fredrik Thune
  */
 public class JoinRoom {
-    private Long id;
-    private Player player;
+    private Long roomID;
     
     public JoinRoom() {
         
     }
-    
-    public JoinRoom(Long id) {
-        this.id = id;
+
+    public JoinRoom(Long roomID) {
+        this.roomID = roomID;
     }
 
-    public Long getID() {
-        return id;
+    public Long getRoomID() {
+        return roomID;
     }
 
-    public void setID(Long id) {
-        this.id = id;
-    }
-
-    public Player getPlayer() {
-        return player;
-    }
-
-    public void setPlayer(Player player) {
-        this.player = player;
+    public void setRoomID(Long roomID) {
+        this.roomID = roomID;
     }
 }
