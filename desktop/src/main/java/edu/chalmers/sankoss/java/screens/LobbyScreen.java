@@ -1,12 +1,9 @@
 package edu.chalmers.sankoss.java.screens;
 
-import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import edu.chalmers.sankoss.java.Models.Lobby;
 import edu.chalmers.sankoss.java.Renderers.LobbyRenderer;
@@ -23,7 +20,7 @@ import java.util.Set;
  * @author Mikael Malmqvist
  * @date 3/24/14
  */
-public class LobbyScreen extends AbstractScreen implements ApplicationListener {
+public class LobbyScreen extends AbstractScreen {
 
     // Controllers
     private TextButton joinBtn;
@@ -67,16 +64,6 @@ public class LobbyScreen extends AbstractScreen implements ApplicationListener {
      */
     @Override
     public void hide() {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
 
     }
 
@@ -127,22 +114,15 @@ public class LobbyScreen extends AbstractScreen implements ApplicationListener {
 
     }
 
-    @Override
-    public void render() {
-
-    }
-
     // Below is we implement methods for ApplicationListener interface
     /**
-     * Method to run upon creation of instance.
-     * Configs visual controllers and sets listeners.
+     * @inheritdoc
      */
     @Override
     public void create() {
+
         // Defines variables for visuals
-        batch = new SpriteBatch();
-        stage = new Stage();
-        skin = new Skin();
+        super.create();
         bottomPanel = new WidgetGroup();
         topPanel = new WidgetGroup();
         middlePanel = new WidgetGroup();

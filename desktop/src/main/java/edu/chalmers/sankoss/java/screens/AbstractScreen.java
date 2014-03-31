@@ -1,5 +1,6 @@
 package edu.chalmers.sankoss.java.screens;
 
+import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -13,6 +14,8 @@ import edu.chalmers.sankoss.java.Renderers.Renderer;
 import edu.chalmers.sankoss.java.SankossController;
 import edu.chalmers.sankoss.java.SankossGame;
 
+import java.awt.event.ActionListener;
+
 /**
  * Abstraction of Screen implementation.
  * All
@@ -20,7 +23,7 @@ import edu.chalmers.sankoss.java.SankossGame;
  * @author Mikael Malmqvist
  * @date 3/31/14
  */
-public abstract class AbstractScreen implements Screen {
+public abstract class AbstractScreen implements Screen, ApplicationListener {
 
     protected ScreenModel model;
     protected Renderer renderer;
@@ -84,15 +87,40 @@ public abstract class AbstractScreen implements Screen {
     @Override
     public abstract void hide();
 
+
+
+    // BELOW WE DEFINE METHODS FOR APPLICATIONLISTENER
+
+    /**
+     * Method to run upon creation of instance.
+     * Configs visual controllers and sets listeners.
+     */
     @Override
-    public abstract void pause();
+    public void create() {
+        batch = new SpriteBatch();
+        stage = new Stage();
+        skin = new Skin();
+    }
 
     @Override
-    public abstract void resume();
+    public void render() {
+
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
+    }
 
     @Override
     public void dispose() {
         stage.dispose();
         skin.dispose();
     }
+
 }

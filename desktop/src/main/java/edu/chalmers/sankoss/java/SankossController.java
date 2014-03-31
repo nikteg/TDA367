@@ -122,9 +122,9 @@ public class SankossController{
      * This type of method needs to be available for the Screens.
      */
     public void setMainMenuScreen(){
+        this.model = new MainMenu();
         this.mainMenuScreen = new MainMenuScreen(this, sankossGame);
         this.sankossGame.setScreen(mainMenuScreen);
-        this.model = new MainMenu();
     }
 
     /**
@@ -132,9 +132,9 @@ public class SankossController{
      * This type of method needs to be available for the Screens.
      */
     public void setLobbyScreen(){
+        this.model = new Lobby();
         this.lobbyScreen = new LobbyScreen(this, sankossGame);
         this.sankossGame.setScreen(lobbyScreen);
-        this.model = new Lobby();
     }
 
     /**
@@ -142,9 +142,9 @@ public class SankossController{
      * This type of method needs to be available for the Screens.
      */
     public void setPlacementScreen(){
+        this.model = new Placement();
         this.placementScreen = new PlacementScreen(this, sankossGame);
         this.sankossGame.setScreen(placementScreen);
-        this.model = new Placement();
     }
 
     /**
@@ -152,9 +152,9 @@ public class SankossController{
      * This type of method needs to be available for the Screens.
      */
     public void setInGameScreen(){
+        this.model = new InGame();
         this.inGameScreen = new InGameScreen(this, sankossGame);
         this.sankossGame.setScreen(inGameScreen);
-        this.model = new InGame();
     }
 
     /**

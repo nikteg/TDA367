@@ -5,9 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -24,7 +22,7 @@ import edu.chalmers.sankoss.java.SankossGame;
  * @author Mikael Malmqvist
  * @date 3/24/14
  */
-public class MainMenuScreen extends AbstractScreen implements ApplicationListener {
+public class MainMenuScreen extends AbstractScreen {
 
     private String roomName;
 
@@ -74,28 +72,15 @@ public class MainMenuScreen extends AbstractScreen implements ApplicationListene
 
     }
 
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
     // Below is we implement methods for ApplicationListener interface
     /**
-     * Method to run upon creation of instance.
-     * Configs visual controllers and sets listeners.
+     * @inheritdoc
      */
     @Override
     public void create() {
 
         // Defines variables for visuals
-        batch = new SpriteBatch();
-        stage = new Stage();
-        skin = new Skin();
+        super.create();
         btnStyle = new TextButton.TextButtonStyle();
         labelStyle = new Label.LabelStyle();
         pnl = new WidgetGroup(); // Panel to put actors in
@@ -228,9 +213,5 @@ public class MainMenuScreen extends AbstractScreen implements ApplicationListene
         statusLabel.setY(0);
 
 
-    }
-
-    @Override
-    public void render() {
     }
 }
