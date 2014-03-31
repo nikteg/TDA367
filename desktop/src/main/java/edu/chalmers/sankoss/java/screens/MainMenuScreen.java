@@ -166,9 +166,8 @@ public class MainMenuScreen extends AbstractScreen implements ApplicationListene
                     @Override
                     public void input(String s) {
                         // TODO: Create room, disable join game
-                        roomName = s;
+                        //roomName = s;
                         statusLabel.setText("Waiting for opponent to join " + s + "..");
-
                     }
 
                     @Override

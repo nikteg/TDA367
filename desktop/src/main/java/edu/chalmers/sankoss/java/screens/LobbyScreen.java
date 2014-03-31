@@ -13,6 +13,9 @@ import edu.chalmers.sankoss.java.Renderers.LobbyRenderer;
 import edu.chalmers.sankoss.java.SankossController;
 import edu.chalmers.sankoss.java.SankossGame;
 
+import java.util.Map;
+import java.util.Set;
+
 /**
  * Screen used at the game lobby when finding a game/room to join.
  * Handles game logic in lobby, almost like a controller.
@@ -27,10 +30,12 @@ public class LobbyScreen extends AbstractScreen implements ApplicationListener {
     private TextButton cancelBtn;
     private Label lobbyLabel;
     private Label infoLabel;
+    private Table roomTable;
 
     // Containers
     private WidgetGroup topPanel;
     private WidgetGroup bottomPanel;
+    private WidgetGroup middlePanel;
 
     // Graphics of buttons
     private static final int WIDTH_OF_BUTTON = 150;
@@ -140,6 +145,7 @@ public class LobbyScreen extends AbstractScreen implements ApplicationListener {
         skin = new Skin();
         bottomPanel = new WidgetGroup();
         topPanel = new WidgetGroup();
+        middlePanel = new WidgetGroup();
 
         btnStyle = new TextButton.TextButtonStyle();
         labelStyle = new Label.LabelStyle();
@@ -182,10 +188,26 @@ public class LobbyScreen extends AbstractScreen implements ApplicationListener {
         topPanel.setY(600 - 150);
         //topPanel.setBounds();
 
+        Lobby lobby = (Lobby)controller.getModel();
+        addRoomsToTable(roomTable, lobby.getRoomMap());
+
         // Adds the panels to stage
         stage.addActor(topPanel);
         stage.addActor(bottomPanel);
 
+    }
+
+    /**
+     * Method for adding rooms to Table.
+     * @param table Controller to add rooms to.
+     * @param rooms Map with rooms sorted by longs.
+     */
+    private void addRoomsToTable(Table table, Map rooms) {
+        Set<Long> keys = rooms.keySet();
+
+        for(Long key: keys) {
+            table.addActor(new Label("Room: " + rooms.get(key), labelStyle));
+        }
     }
 
 }

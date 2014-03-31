@@ -11,10 +11,14 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
+import com.esotericsoftware.kryonet.Client;
+import edu.chalmers.sankoss.core.SankossClient;
+import edu.chalmers.sankoss.core.protocol.CreateRoom;
 import edu.chalmers.sankoss.java.Inputs.InGameInputProcessor;
 import edu.chalmers.sankoss.java.Inputs.LobbyInputProcessor;
 import edu.chalmers.sankoss.java.Inputs.MainMenuInputProcessor;
 import edu.chalmers.sankoss.java.Inputs.PlacementInputProcessor;
+import edu.chalmers.sankoss.java.Models.*;
 import edu.chalmers.sankoss.java.screens.InGameScreen;
 import edu.chalmers.sankoss.java.screens.LobbyScreen;
 import edu.chalmers.sankoss.java.screens.MainMenuScreen;
@@ -32,6 +36,8 @@ import sun.net.www.content.text.plain;
  */
 public class SankossController{
     private InputProcessor activeInputProcessor;
+    private SankossClient client;
+    private ScreenModel model;
 
     // Instance of the started game
     private SankossGame sankossGame;
@@ -118,6 +124,7 @@ public class SankossController{
     public void setMainMenuScreen(){
         this.mainMenuScreen = new MainMenuScreen(this, sankossGame);
         this.sankossGame.setScreen(mainMenuScreen);
+        this.model = new MainMenu();
     }
 
     /**
@@ -127,7 +134,7 @@ public class SankossController{
     public void setLobbyScreen(){
         this.lobbyScreen = new LobbyScreen(this, sankossGame);
         this.sankossGame.setScreen(lobbyScreen);
-
+        this.model = new Lobby();
     }
 
     /**
@@ -137,6 +144,7 @@ public class SankossController{
     public void setPlacementScreen(){
         this.placementScreen = new PlacementScreen(this, sankossGame);
         this.sankossGame.setScreen(placementScreen);
+        this.model = new Placement();
     }
 
     /**
@@ -146,6 +154,7 @@ public class SankossController{
     public void setInGameScreen(){
         this.inGameScreen = new InGameScreen(this, sankossGame);
         this.sankossGame.setScreen(inGameScreen);
+        this.model = new InGame();
     }
 
     /**
@@ -158,5 +167,9 @@ public class SankossController{
         }
 
         return false;
+    }
+
+    public ScreenModel getModel() {
+        return this.model;
     }
 }

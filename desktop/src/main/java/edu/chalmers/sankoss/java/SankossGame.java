@@ -1,6 +1,7 @@
 package edu.chalmers.sankoss.java;
 
 import com.badlogic.gdx.Game;
+import edu.chalmers.sankoss.core.SankossClient;
 
 /**
  * The Game.
