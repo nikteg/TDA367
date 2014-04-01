@@ -40,28 +40,50 @@ public class SankossServer {
      * @throws IOException
      */
 	public SankossServer() throws IOException {
+
+        /**
+         * Create KryoNet server instance and configure it to use a PlayerConnection as connection.
+         */
 		server = new Server() {
 			protected Connection newConnection() {
 				return new PlayerConnection();
 			}
 		};
 
-        // Register server for serialization
+        /**
+         * Register server for serialization (converting the objects so that they can be sent through the network).
+         */
 		Network.register(server);
 
+        /**
+         * Add listener.
+         * This is where all the network traffic gets filtered.
+         */
 		server.addListener(new Listener() {
 
-            // Got connection from client
+            /**
+             * Executed when the server receives a new client connection.
+             * @param connection client connection
+             */
 			public void connected(Connection connection) {
                 System.out.println(String.format("%s connected as #%d", connection.getRemoteAddressTCP(), connection.getID()));
             }
 
-            // Got package from client
+            /**
+             * Executed when the server receives a message.
+             * The received Object must be casted to the correct object type before using it.
+             * @param c client connection
+             * @param object sent object
+             */
 			public void received(Connection c, Object object) {
                 PlayerConnection connection = (PlayerConnection) c;
                 Player player = connection.getPlayer();
 
-                // Player connected
+                /**
+                 * Create new player instance and map it to their connection.
+                 * When the new player instance is created, its ID is sent to the client.
+                 * This package should be received as soon as the client has connected!
+                 */
                 if (object instanceof Connect) {
                     connection.setPlayer(new Player(connection.getID()));
                     System.out.println(String.format("#%d connected", connection.getID()));
@@ -73,15 +95,20 @@ public class SankossServer {
                     return;
                 }
 
-                // Room creation
+                /**
+                 * Tell the RoomFactory to create a new room with given details from the message.
+                 * Add the clients player instance to the room and send the room ID to the client.
+                 */
 				if (object instanceof CreateRoom) {
-                    if (player == null) return;
+                    if (player == null)
+                        return;
 
 					CreateRoom msg = (CreateRoom) object;
 
                     Room room;
                     try {
-                        room = RoomFactory.createRoom(msg.getName(), msg.getPassword(), player);
+                        room = RoomFactory.createRoom(msg.getName(), msg.getPassword());
+                        room.addPlayer(player);
                     } catch (RoomNotFoundException e) {
                         System.out.println("Room could not be created...");
                         connection.sendTCP(new CreatedRoom());
@@ -96,9 +123,13 @@ public class SankossServer {
 					return;
 				}
 
-                // Room joining
+                /**
+                 * Let client join room with given ID in the message.
+                 * Also tell the players already in the room that a new player has joined.
+                 */
 				if (object instanceof JoinRoom) {
-                    if (player == null) return;
+                    if (player == null)
+                        return;
 
 					JoinRoom msg = (JoinRoom) object;
 
@@ -123,7 +154,11 @@ public class SankossServer {
 					return;
 				}
 
-                // When the host wants to start the game
+                /**
+                 * The room creator wants to start the game.
+                 * Starts game with given ID and messages the players in the room that the game has started.
+                 * When this is done, the room is removed.
+                 */
                 if (object instanceof StartGame) {
                     StartGame msg = (StartGame) object;
 
@@ -136,7 +171,10 @@ public class SankossServer {
                         return;
                     }
 
-                    // If the host pressed start game
+                    /**
+                     * Security check.
+                     * Make sure that the message was sent from the creator.
+                     */
                     if (room.getPlayers().get(0).equals(player)) {
                         Game game = GameFactory.createGame(room.getPlayers());
 
@@ -158,21 +196,28 @@ public class SankossServer {
                     return;
                 }
 
-                // Fetching rooms to player
+                /**
+                 * Received when the client wants to get a list of rooms.
+                 */
 				if (object instanceof FetchRooms) {
-                    if (player == null) return;
+                    if (player == null)
+                        return;
 
 					System.out.println(String.format("#%d fetching rooms", player.getID()));
 
-					FetchRooms fetchRooms = new FetchRooms(RoomFactory.getRooms());
-					connection.sendTCP(fetchRooms);
+					FetchedRooms fetchedRooms = new FetchedRooms(RoomFactory.getRooms());
+					connection.sendTCP(fetchedRooms);
 
 					return;
 				}
 
-                // Player inside a game has placed his fleet
+                /**
+                 * The player has places their ships.
+                 * Will start the game when all the players in the game has placed their ships.
+                 */
 				if (object instanceof PlayerReady) {
-                    if (player == null) return;
+                    if (player == null)
+                        return;
 
 					PlayerReady msg = (PlayerReady) object;
 
@@ -185,10 +230,15 @@ public class SankossServer {
                         return;
                     }
 
+                    // Make sure that the game actually has players
+                    if (game.getPlayers().size() == 0)
+                        return;
+
                     boolean allReady = true;
                     for (Player gamePlayer : game.getPlayers()) {
                         if (!gamePlayer.isReady()) {
                             allReady = false;
+
                             break;
                         }
                     }
@@ -200,10 +250,11 @@ public class SankossServer {
                     }
 
                     if (allReady) {
-                        System.out.println(String.format("Everyone is ready... Start game #%d", game.getID()));
                         for (Player gamePlayer : game.getPlayers()) {
                             players.get(gamePlayer).sendTCP(new GameReady());
                         }
+
+                        System.out.println(String.format("Everyone is ready... Start game #%d", game.getID()));
 
                         // Send turn to random player
                         int starter = new Random().nextInt(game.getPlayers().size() - 1);
@@ -217,14 +268,17 @@ public class SankossServer {
                     return;
 				}
 
-                // Player fire at another player
+                /**
+                 * Player shoots at another player.
+                 */
 				if (object instanceof Fire) {
                     if (player == null) return;
 
 					Fire msg = (Fire) object;
 
-                    // A player cannot shoot at itself
-                    if (msg.getTarget().equals(player)) return;
+                    // A player can't shoot at him/herself
+                    if (msg.getTarget().equals(player))
+                        return;
 
                     Game game;
                     try {
@@ -242,17 +296,22 @@ public class SankossServer {
                     try {
                         targetShip = game.fire(players.get(msg.getTarget()).getPlayer(), msg.getCoordinate());
                     } catch (UsedCoordinateException e) {
-                        System.out.println(String.format("#%s Error: %s", player.getID(), e.getMessage()));
+                        System.out.println(String.format("#%s %s", player.getID(), e.getMessage()));
                         players.get(player).sendTCP(new Turn());
+
                         return;
                     }
 
-                    FireResult fireResult = new FireResult(msg, (targetShip != null));
+                    boolean hit = (targetShip != null);
+                    FireResult fireResult = new FireResult(msg, hit);
 
                     for (Player gamePlayer : game.getPlayers()) {
                         players.get(gamePlayer).sendTCP(fireResult);
 
-                        if (targetShip !=null && targetShip.isDestroyed()) {
+                        /**
+                         * Send message telling everyone that a ship was destroyed.
+                         */
+                        if (targetShip != null && targetShip.isDestroyed()) {
                             players.get(gamePlayer).sendTCP(new DestroyedShip(msg.getTarget(), targetShip));
                         }
                     }
@@ -265,9 +324,29 @@ public class SankossServer {
 
 			}
 
+            /**
+             * Received when the client has disconnected from the server.
+             * Will also be triggered if the keep-alive messages have not been confirmed.
+             * @param c
+             */
 			public void disconnected(Connection c) {
 				PlayerConnection connection = (PlayerConnection) c;
 				Player player = connection.getPlayer();
+
+                /**
+                 * Remove room that the player was connected to.
+                 */
+                for (Room room : RoomFactory.getRooms().values()) {
+                    if (room.getPlayers().contains(player)) {
+                        try {
+                            RoomFactory.removeRoom(room);
+                        } catch (RoomNotFoundException e) {
+                            System.out.println(e.getMessage());
+                        }
+
+                        break;
+                    }
+                }
 
                 players.remove(player);
 

@@ -21,12 +21,10 @@ public class Room {
         
     }
     
-    public Room(Long id, String name, String password, Player player) {
+    public Room(Long id, String name, String password) {
         this.id = id;
         this.name = name;
         this.password = password;
-
-        players.add(player);
     }
 
     public Long getID() {

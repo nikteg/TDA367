@@ -13,13 +13,13 @@ public class RoomFactory {
     private static Map<Long, Room> rooms = new HashMap<Long, Room>();
     private static AtomicLong counter = new AtomicLong();
 
-    public static Room createRoom(String name, String password, Player player) throws RoomNotFoundException {
+    public static Room createRoom(String name, String password) throws RoomNotFoundException {
         if (name.trim().length() == 0) {
             throw new RoomNotFoundException("Room could not be created");
         }
 
         Long roomID = counter.incrementAndGet();
-        Room room = new Room(roomID, name, password, player);
+        Room room = new Room(roomID, name, password);
         rooms.put(roomID, room);
 
         return room;

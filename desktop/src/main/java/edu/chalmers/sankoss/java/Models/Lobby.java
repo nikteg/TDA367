@@ -1,6 +1,6 @@
 package edu.chalmers.sankoss.java.Models;
 
-import edu.chalmers.sankoss.core.protocol.Room;
+import edu.chalmers.sankoss.core.Room;
 
 import java.util.HashMap;
 import java.util.Map;
