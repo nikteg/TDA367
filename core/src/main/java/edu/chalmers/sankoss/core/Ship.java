@@ -15,9 +15,12 @@ public class Ship {
 	private Coordinate start, end;
 	private int hits=0;
 	
-
+	
+	/**
+	 * Creates a ship without length and coordinates
+	 */
     public Ship() {
-
+    	//KryoNet needs an empty constructor
     }
 
 	/**
