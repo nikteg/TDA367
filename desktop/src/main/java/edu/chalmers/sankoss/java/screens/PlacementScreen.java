@@ -8,8 +8,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
 
 import edu.chalmers.sankoss.java.Models.Placement;
 import edu.chalmers.sankoss.java.Renderers.PlacementRenderer;
@@ -26,7 +30,10 @@ import edu.chalmers.sankoss.java.SankossGame;
 public class PlacementScreen extends AbstractScreen implements ApplicationListener {
 
 	private final int GRID_SIDE=10;
+	ImageButtonStyle btnStyle;
 
+	//Containers
+	private WidgetGroup gridPanel;
 	/**
 	 * This will keep a reference of the main game.
 	 * @param game reference to the SankossGame class
@@ -74,22 +81,22 @@ public class PlacementScreen extends AbstractScreen implements ApplicationListen
 		super.create();
 
 
-		//TODO Testing
-
-		final int BUTTON_SIDE=40;
-		/*
-		setButtons();
+		//TODO I am testing
+		//Image bild = new Image(drawable)
 		
-		btnStyle.font = skin.getFont("default");
+		final int BUTTON_SIDE=40;
+								
 		Stage stage = new Stage(GRID_SIDE,GRID_SIDE, false, batch);
-		TextButton[][] gridButton = new TextButton[GRID_SIDE][GRID_SIDE];
+		ImageButton[][] gridButton = new ImageButton[GRID_SIDE][GRID_SIDE];
 		for(int y = 0; y < GRID_SIDE; y++){
 			for(int x = 0; x < GRID_SIDE; x++){
 				
-				gridButton[x][y]= new TextButton("6",btnStyle);
-				stage.addActor(gridButton[x][y]); 
+				gridButton[x][y]= new ImageButton(btnStyle);
+				
+				gridPanel.addActor(gridButton[x][y]); 
 			}
-		}*/
+		}
+		stage.addActor(gridPanel);
 	}
 
 	/**
@@ -104,4 +111,5 @@ public class PlacementScreen extends AbstractScreen implements ApplicationListen
 	public void render() {
 
 	}
+	
 }
