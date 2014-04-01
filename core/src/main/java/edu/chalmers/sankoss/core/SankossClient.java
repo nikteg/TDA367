@@ -58,10 +58,10 @@ public class SankossClient {
                     return;
                 }
 
-                if (object instanceof FetchRooms) {
+                if (object instanceof FetchedRooms) {
                     if (player == null) return;
 
-                    FetchRooms msg = (FetchRooms) object;
+                    FetchedRooms msg = (FetchedRooms) object;
 
                     // Get map with rooms and their ID
                     Map<Long, Room> rooms = msg.getRooms();

@@ -1,12 +1,17 @@
 package edu.chalmers.sankoss.java;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.net.InetSocketAddress;
 import java.util.*;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
+import com.sun.net.httpserver.HttpServer;
 import edu.chalmers.sankoss.core.Network;
 import edu.chalmers.sankoss.core.Player;
 import edu.chalmers.sankoss.core.Room;
@@ -32,7 +37,8 @@ public class SankossServer {
     private Map<Player, PlayerConnection> players = new HashMap<Player, PlayerConnection>();
 
 	public static void main(String[] args) throws IOException {
-		new SankossServer();
+		SankossServer sankossServer = new SankossServer();
+        sankossServer.startHTTPServer(8080);
 	}
 
     /**
@@ -359,6 +365,48 @@ public class SankossServer {
 		System.out.println("Server started on port: " + Network.PORT);
 
 	}
+
+    public void startHTTPServer(int port) throws IOException {
+        HttpServer httpServer = HttpServer.create(new InetSocketAddress(port), 0);
+        httpServer.createContext("/", new WebHandler());
+        httpServer.setExecutor(java.util.concurrent.Executors.newCachedThreadPool()); // creates a default executor
+        httpServer.start();
+    }
+
+    private class WebHandler implements HttpHandler {
+
+        @Override
+        public void handle(HttpExchange exchange) throws IOException {
+            StringBuilder stringBuilder = new StringBuilder();
+
+            stringBuilder.append("<h1>Players</h1>\n");
+
+            for (Map.Entry pairs : players.entrySet()) {
+                Player player = (Player) pairs.getKey();
+                PlayerConnection playerConnection = (PlayerConnection) pairs.getValue();
+                stringBuilder.append(String.format("<p>#%d %s</p>\n", player.getID(), playerConnection.getRemoteAddressTCP()));
+            }
+
+            stringBuilder.append("<h1>Rooms</h1>\n");
+
+            for (Room room : RoomFactory.getRooms().values()) {
+                stringBuilder.append(String.format("<p>#%d %s</p>\n", room.getID(), room.getName()));
+
+                stringBuilder.append(String.format("<b>Players in room:</b>\n"));
+
+                for (Player player : room.getPlayers()) {
+                    stringBuilder.append(String.format("<p>#%d</p>\n", player.getID()));
+                }
+            }
+
+            String response = stringBuilder.toString();
+
+            exchange.sendResponseHeaders(200, response.length());
+            OutputStream os = exchange.getResponseBody();
+            os.write(response.getBytes());
+            os.close();
+        }
+    }
 
     /**
      * Holds the player connection

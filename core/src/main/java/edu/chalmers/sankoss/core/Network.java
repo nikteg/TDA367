@@ -23,6 +23,7 @@ public class Network {
         kryo.register(CreateRoom.class);
         kryo.register(DestroyedShip.class);
         kryo.register(Disconnect.class);
+        kryo.register(FetchedRooms.class);
         kryo.register(FetchRooms.class);
         kryo.register(Fire.class);
         kryo.register(FireResult.class);
