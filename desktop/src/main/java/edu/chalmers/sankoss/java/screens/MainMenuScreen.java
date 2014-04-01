@@ -163,8 +163,13 @@ public class MainMenuScreen extends AbstractScreen {
 
             }
         });
-
-
+        
+        helpBtn.addListener(new ChangeListener(){
+            @Override
+            public void changed(ChangeEvent evt, Actor actor) {
+                controller.setPlacementScreen();
+            }
+        });
     }
 
     /**
