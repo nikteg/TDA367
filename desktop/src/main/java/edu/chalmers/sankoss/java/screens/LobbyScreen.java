@@ -1,17 +1,23 @@
 package edu.chalmers.sankoss.java.screens;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
+import edu.chalmers.sankoss.core.Room;
 import edu.chalmers.sankoss.java.Models.Lobby;
 import edu.chalmers.sankoss.java.Renderers.LobbyRenderer;
 import edu.chalmers.sankoss.java.SankossController;
 import edu.chalmers.sankoss.java.SankossGame;
-
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Screen used at the game lobby when finding a game/room to join.
@@ -27,7 +33,9 @@ public class LobbyScreen extends AbstractScreen {
     private TextButton cancelBtn;
     private Label lobbyLabel;
     private Label infoLabel;
-    private Table roomTable;
+    private List roomList;
+
+    protected List.ListStyle listStyle;
 
     // Containers
     private WidgetGroup topPanel;
@@ -66,22 +74,6 @@ public class LobbyScreen extends AbstractScreen {
     public void hide() {
 
     }
-
-    /**
-     * @inheritdoc
-     */
-    @Override
-    public void resize(int width, int height) {
-        super.resize(width, height);
-
-        joinBtn.setPosition(width - WIDTH_OF_BUTTON, 0);
-        infoLabel.setX(width - infoLabel.getWidth() - 10);
-
-        topPanel.setX(0);
-        topPanel.setY(height - 150);
-
-    }
-
 
     /**
      * Makes default configuration for a menu button.
@@ -129,6 +121,7 @@ public class LobbyScreen extends AbstractScreen {
 
         btnStyle = new TextButton.TextButtonStyle();
         labelStyle = new Label.LabelStyle();
+        listStyle = new List.ListStyle();
 
         // Configures necessary attributes for buttons
         setButtons();
@@ -136,12 +129,12 @@ public class LobbyScreen extends AbstractScreen {
         // Sets the stage as input source
         controller.changeInput(stage);
 
-        // Sets the stage as input source
-        controller.changeInput(stage);
-
         // Makes the default styles for buttons and labels
         btnStyle.font = skin.getFont("default");
         labelStyle.font = skin.getFont("default");
+        listStyle.font = skin.getFont("default");
+        listStyle.selection = skin.newDrawable("white", Color.DARK_GRAY);
+        //listStyle.selection = skin.getDrawable("default"); // Important else nullPointerException is thrown
 
         // Makes buttons and labels with default style of button
         joinBtn = new TextButton("Join", btnStyle);
@@ -157,37 +150,104 @@ public class LobbyScreen extends AbstractScreen {
         infoLabel.setX(600 - 50);
         infoLabel.setY(110);
 
-        bottomPanel.addActor(joinBtn);
-        bottomPanel.addActor(cancelBtn);
+
+        bottomPanel.setWidth(800);
+        bottomPanel.setHeight(50);
         bottomPanel.setX(0);
         bottomPanel.setY(0);
+        bottomPanel.addActor(joinBtn);
+        bottomPanel.addActor(cancelBtn);
 
-        topPanel.addActor(infoLabel);
-        topPanel.addActor(lobbyLabel);
+        topPanel.setWidth(800);
+        topPanel.setHeight(30);
         topPanel.setX(0);
         topPanel.setY(600 - 150);
-        //topPanel.setBounds();
+        topPanel.addActor(infoLabel);
+        topPanel.addActor(lobbyLabel);
 
         Lobby lobby = (Lobby)controller.getModel();
-        addRoomsToTable(roomTable, lobby.getRoomMap());
+
+        final Object[] keys = lobby.getKeys();
+        final Room[] rooms = lobby.getRooms();
+        final String[] roomNames = lobby.getRoomNames(rooms);
+        Object[] tempRooms = {"Hubben","Laxens Hideout","Open Oed","Dracos Lair","DunderPatrullen","Johan Korv Horv"};
+
+        roomList = new List(tempRooms, listStyle);
+
+        middlePanel.setWidth(800);
+        middlePanel.setHeight(800 - topPanel.getHeight() - bottomPanel.getHeight());
+        middlePanel.setX(0);
+        middlePanel.setY(bottomPanel.getHeight());
+        middlePanel.addActor(roomList);
+
+        roomList.setX(50);
+        roomList.setY(middlePanel.getHeight() - roomList.getHeight() - 20);
 
         // Adds the panels to stage
         stage.addActor(topPanel);
         stage.addActor(bottomPanel);
+        stage.addActor(middlePanel);
+
+
+        // Adds listener to join button. When clicked Sceen will be changed back to MainMenu.
+        joinBtn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent evt, Actor actor) {
+
+                // Retrives selected name and matches with room
+                String roomName = roomList.getSelection();
+                Room roomToJoin = findRoom(rooms, roomName);
+
+                // TODO join roomToJoin
+
+                controller.setPlacementScreen();
+
+            }
+        });
+
+        // Adds listener to cancel button. When clicked Sceen will be changed back to MainMenu.
+        cancelBtn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent evt, Actor actor) {
+
+                controller.setMainMenuScreen();
+
+            }
+        });
 
     }
 
     /**
-     * Method for adding rooms to Table.
-     * @param table Controller to add rooms to.
-     * @param rooms Map with rooms sorted by longs.
+     * @inheritdoc
      */
-    private void addRoomsToTable(Table table, Map rooms) {
-        Set<Long> keys = rooms.keySet();
+    @Override
+    public void resize(int width, int height) {
+        super.resize(width, height);
 
-        for(Long key: keys) {
-            table.addActor(new Label("Room: " + rooms.get(key), labelStyle));
+        joinBtn.setPosition(width - WIDTH_OF_BUTTON, 0);
+        infoLabel.setX(width - infoLabel.getWidth() - 10);
+
+        topPanel.setY(height - 150);
+        middlePanel.setY(bottomPanel.getHeight());
+        middlePanel.setHeight(height - bottomPanel.getHeight() - topPanel.getHeight());
+        roomList.setY(middlePanel.getHeight() - roomList.getHeight() - 20);
+
+    }
+
+    /**
+     * Method for matching a Room with a name.
+     * @param rooms array of Rooms to search trough.
+     * @param roomName name of Room.
+     * @return
+     */
+    public Room findRoom(Room[] rooms, String roomName) {
+        for(Room room : rooms) {
+            if(room.getName().equals(roomName)) {
+                return room;
+            }
         }
+
+        return null;
     }
 
 }
