@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -85,26 +86,37 @@ public class PlacementScreen extends AbstractScreen implements ApplicationListen
 
 
 		//TODO I am testing
-		/*
-		Sprite painter = new Sprite();
 		
-	
-		Skin skin = new Skin(Gdx.files.internal("src/main/java/edu/chalmers/sankoss/java/texures/testSquare.png"));
-		btnStyle = new ImageButtonStyle();
-		btnStyle.imageUp = skin.
+		//SpriteBatch batch = new SpriteBatch();
+		btnStyle = new ImageButton.ImageButtonStyle();
+		//batch.begin();
+		Pixmap pixmap = new Pixmap(new FileHandle("src/main/java/edu/chalmers/sankoss/java/texures/testSquare.png"));
+		skin.add("gridTile", new Texture(pixmap));
+		
+		
+		gridPanel= new WidgetGroup();
 		
 		Stage stage = new Stage(GRID_SIDE,GRID_SIDE, false, batch);
 		ImageButton[][] gridButton = new ImageButton[GRID_SIDE][GRID_SIDE];
 		for(int y = 0; y < GRID_SIDE; y++){
 			for(int x = 0; x < GRID_SIDE; x++){
 				
-				gridButton[x][y]= new ImageButton(btnStyle);
-				
-				//gridPanel.addActor(gridButton[x][y]); 
+				gridButton[x][y]= new ImageButton(skin.getDrawable("gridTile"));
+				gridButton[x][y].setSize(40, 40);
+				gridPanel.addActor(gridButton[x][y]); 
+				gridButton[x][y].setPosition((x-1)*40, (y-1)*40);
 			}
 		}
+		
+		
+		
+
 		stage.addActor(gridPanel);
-		*/
+		
+		stage.draw();
+
+		
+		
 	}
 
 	/**
