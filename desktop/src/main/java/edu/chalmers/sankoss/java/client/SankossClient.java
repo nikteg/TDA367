@@ -179,12 +179,6 @@ public class SankossClient {
         client.sendTCP(new Connect());
     }
 
-    public void createGame(Long gameID) {
-        if (client == null) return;
-
-        client.sendTCP(new CreateGame(gameID));
-    }
-
     public void createRoom(String name, String password) {
         if (client == null) return;
 

@@ -18,9 +18,7 @@ public class Network {
         kryo.register(Connect.class);
         kryo.register(Connected.class);
         kryo.register(Coordinate.class);
-        kryo.register(CreatedGame.class);
         kryo.register(CreatedRoom.class);
-        kryo.register(CreateGame.class);
         kryo.register(CreateRoom.class);
         kryo.register(DestroyedShip.class);
         kryo.register(Disconnect.class);
