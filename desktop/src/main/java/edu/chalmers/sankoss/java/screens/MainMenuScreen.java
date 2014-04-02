@@ -144,9 +144,18 @@ public class MainMenuScreen extends AbstractScreen implements SankossClientListe
 
         joinBtn.addListener(new JoinButtonListener());
         hostBtn.addListener(new HostButtonListener());
+    
+
+
+       
+        
+        helpBtn.addListener(new ChangeListener(){
+            @Override
+            public void changed(ChangeEvent evt, Actor actor) {
+                controller.setPlacementScreen();
+            }
+        });
     }
-
-
 
 
     /**
