@@ -28,6 +28,10 @@ import edu.chalmers.sankoss.java.SankossGame;
  */
 public class LobbyScreen extends AbstractScreen {
 
+    private Object[] keys;
+    private Room[] rooms;
+    private String[] roomNames;
+
     // Controllers
     private TextButton joinBtn;
     private TextButton cancelBtn;
@@ -167,9 +171,9 @@ public class LobbyScreen extends AbstractScreen {
 
         Lobby lobby = (Lobby)controller.getModel();
 
-        final Object[] keys = lobby.getKeys();
-        final Room[] rooms = lobby.getRooms();
-        final String[] roomNames = lobby.getRoomNames(rooms);
+        keys = lobby.getKeys();
+        rooms = lobby.getRooms();
+        roomNames = lobby.getRoomNames(rooms);
         Object[] tempRooms = {"Hubben","Laxens Hideout","Open Oed","Dracos Lair","DunderPatrullen","Johan Korv Horv"};
 
         roomList = new List(tempRooms, listStyle);
@@ -188,32 +192,9 @@ public class LobbyScreen extends AbstractScreen {
         stage.addActor(bottomPanel);
         stage.addActor(middlePanel);
 
-
-        // Adds listener to join button. When clicked Sceen will be changed back to MainMenu.
-        joinBtn.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent evt, Actor actor) {
-
-                // Retrives selected name and matches with room
-                String roomName = roomList.getSelection();
-                Room roomToJoin = findRoom(rooms, roomName);
-
-                // TODO join roomToJoin
-
-                controller.setPlacementScreen();
-
-            }
-        });
-
-        // Adds listener to cancel button. When clicked Sceen will be changed back to MainMenu.
-        cancelBtn.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent evt, Actor actor) {
-
-                controller.setMainMenuScreen();
-
-            }
-        });
+        // Adds listener to buttons
+        joinBtn.addListener(new JoinButtonListener());
+        cancelBtn.addListener(new CancelButtonListener());
 
     }
 
@@ -250,4 +231,25 @@ public class LobbyScreen extends AbstractScreen {
         return null;
     }
 
+
+
+    private class JoinButtonListener extends ChangeListener{
+        @Override
+        public void changed(ChangeEvent event, Actor actor) {
+            // Retrives selected name and matches with room
+            String roomName = roomList.getSelection();
+            Room roomToJoin = findRoom(rooms, roomName);
+
+            // TODO join roomToJoin
+
+            controller.setPlacementScreen();
+        }
+    }
+
+    private class CancelButtonListener extends ChangeListener{
+        @Override
+        public void changed(ChangeEvent event, Actor actor) {
+            controller.setMainMenuScreen();
+        }
+    }
 }

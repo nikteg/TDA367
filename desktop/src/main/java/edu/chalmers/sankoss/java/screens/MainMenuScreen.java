@@ -132,40 +132,12 @@ public class MainMenuScreen extends AbstractScreen {
 
         stage.addActor(pnl);
 
-        // Adds listener to join button. When clicked Sceen will be changed to LobbyScreen.
-        joinBtn.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent evt, Actor actor) {
-
-                controller.setLobbyScreen();
-
-            }
-        });
-
-        // Adds listener to host button. When clicked an input dialog with room name will be
-        // prompted.
-        hostBtn.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent evt, Actor actor) {
-                Gdx.input.getTextInput(new Input.TextInputListener() {
-                    @Override
-                    public void input(String s) {
-                        // TODO: Create room, disable join game
-                        //roomName = s;
-                        statusLabel.setText("Waiting for opponent to join " + s + "..");
-                    }
-
-                    @Override
-                    public void canceled() {
-                        // nothing..
-                    }
-                }, "Enter room name:", "");
-
-            }
-        });
-
-
+        joinBtn.addListener(new JoinButtonListener());
+        hostBtn.addListener(new HostButtonListener());
     }
+
+
+
 
     /**
      * Makes default configuration for a menu button.
@@ -214,4 +186,34 @@ public class MainMenuScreen extends AbstractScreen {
 
 
     }
+
+
+
+    private class JoinButtonListener extends ChangeListener{
+        @Override
+        public void changed(ChangeEvent event, Actor actor) {
+            controller.setLobbyScreen();
+        }
+    }
+
+    private class HostButtonListener extends ChangeListener{
+        @Override
+        public void changed(ChangeEvent event, Actor actor) {
+            Gdx.input.getTextInput(new Input.TextInputListener() {
+                @Override
+                public void input(String s) {
+                    // TODO: Create room, disable join game
+                    //roomName = s;
+                    statusLabel.setText("Waiting for opponent to join " + s + "..");
+                }
+
+                @Override
+                public void canceled() {
+                    // nothing..
+                }
+            }, "Enter room name:", "");
+
+        }
+    }
+
 }
