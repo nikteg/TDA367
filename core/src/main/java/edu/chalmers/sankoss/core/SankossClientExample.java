@@ -183,12 +183,25 @@ public class SankossClientExample {
                 }
                 
                 if (object instanceof Turn) {
-                	String input = (String) JOptionPane.showInputDialog(null, "Skjut:", "Skjuter - #" + player.getID(), JOptionPane.QUESTION_MESSAGE, null, null, "1,1");
-                    String coord = input.trim();
-                    String[] coords = coord.split(",");
-
+                    Coordinate coordinate = null;
+                    String input = null;
                     Player opponent = opponents.get(0); // Only if 2 players
-                    Coordinate coordinate = new Coordinate(Integer.parseInt(coords[0]), Integer.parseInt(coords[1]));
+
+                    while (coordinate == null || input == null) {
+                        input = (String) JOptionPane.showInputDialog(null, "Skjut:", "Skjuter - #" + player.getID(), JOptionPane.QUESTION_MESSAGE, null, null, "1,1");
+
+                        try {
+                            String coord = input.trim();
+                            String[] coords = coord.split(",");
+                            coordinate = new Coordinate(Integer.parseInt(coords[0]), Integer.parseInt(coords[1]));
+                        } catch (IllegalArgumentException e) {
+                            System.out.println("Invalid coordinates. Turn is over, sucks to be you!");
+                            coordinate = null;
+                        } catch (NullPointerException e) {
+                            System.out.println("Invalid format on input. Turn is over, sucks to be you!");
+                            coordinate = null;
+                        }
+                    }
 
                     client.sendTCP(new Fire(gameID, opponent, coordinate));
 
@@ -232,6 +245,7 @@ public class SankossClientExample {
             client.connect(5000, host, Network.PORT);
         } catch (IOException e) {
             System.out.println("Could not connect to remote server...");
+            System.exit(0);
         }
 
         client.sendTCP(new Connect());
