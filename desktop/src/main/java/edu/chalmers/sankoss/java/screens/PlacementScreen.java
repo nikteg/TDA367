@@ -1,17 +1,20 @@
 package edu.chalmers.sankoss.java.screens;
 
 import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
 
@@ -82,10 +85,14 @@ public class PlacementScreen extends AbstractScreen implements ApplicationListen
 
 
 		//TODO I am testing
-		//Image bild = new Image(drawable)
+		/*
+		Sprite painter = new Sprite();
 		
-		final int BUTTON_SIDE=40;
-								
+	
+		Skin skin = new Skin(Gdx.files.internal("src/main/java/edu/chalmers/sankoss/java/texures/testSquare.png"));
+		btnStyle = new ImageButtonStyle();
+		btnStyle.imageUp = skin.
+		
 		Stage stage = new Stage(GRID_SIDE,GRID_SIDE, false, batch);
 		ImageButton[][] gridButton = new ImageButton[GRID_SIDE][GRID_SIDE];
 		for(int y = 0; y < GRID_SIDE; y++){
@@ -93,10 +100,11 @@ public class PlacementScreen extends AbstractScreen implements ApplicationListen
 				
 				gridButton[x][y]= new ImageButton(btnStyle);
 				
-				gridPanel.addActor(gridButton[x][y]); 
+				//gridPanel.addActor(gridButton[x][y]); 
 			}
 		}
 		stage.addActor(gridPanel);
+		*/
 	}
 
 	/**
@@ -111,5 +119,4 @@ public class PlacementScreen extends AbstractScreen implements ApplicationListen
 	public void render() {
 
 	}
-	
 }
