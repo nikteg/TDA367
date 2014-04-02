@@ -38,7 +38,12 @@ public class SankossServer {
 
 	public static void main(String[] args) throws IOException {
 		SankossServer sankossServer = new SankossServer();
-        sankossServer.startHTTPServer(8080);
+
+        if (args.length > 0) {
+            if (args[0] == "webserver") {
+                sankossServer.startHTTPServer(8080);
+            }
+        }
 	}
 
     /**
@@ -91,12 +96,12 @@ public class SankossServer {
                  * This package should be received as soon as the client has connected!
                  */
                 if (object instanceof Connect) {
-                    connection.setPlayer(new Player(connection.getID()));
+                    connection.setPlayer(new Player(new Long(connection.getID())));
                     System.out.println(String.format("#%d connected", connection.getID()));
 
                     players.put(connection.getPlayer(), connection);
 
-                    connection.sendTCP(new Connect(connection.getID()));
+                    connection.sendTCP(new Connected(new Long(connection.getID())));
 
                     return;
                 }
@@ -172,6 +177,12 @@ public class SankossServer {
                     try {
                         room = RoomFactory.getRoom(msg.getRoomID());
                     } catch (RoomNotFoundException e) {
+                        connection.sendTCP(new StartedGame());
+
+                        return;
+                    }
+
+                    if (room.getPlayers().size() <= 1) {
                         connection.sendTCP(new StartedGame());
 
                         return;
@@ -302,7 +313,7 @@ public class SankossServer {
                     try {
                         targetShip = game.fire(players.get(msg.getTarget()).getPlayer(), msg.getCoordinate());
                     } catch (UsedCoordinateException e) {
-                        System.out.println(String.format("#%s %s", player.getID(), e.getMessage()));
+                        System.out.println(String.format("#%d %s", player.getID(), e.getMessage()));
                         players.get(player).sendTCP(new Turn());
 
                         return;

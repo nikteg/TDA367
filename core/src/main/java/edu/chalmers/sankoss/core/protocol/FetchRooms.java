@@ -10,21 +10,7 @@ import java.util.Map;
  * 
  */
 public class FetchRooms {
-    private Map<Long, Room> rooms;
-
     public FetchRooms() {
         
-    }
-    
-    public FetchRooms(Map<Long, Room> rooms) {
-        this.rooms = rooms;
-    }
-
-    public Map<Long, Room> getRooms() {
-        return rooms;
-    }
-
-    public void setRooms(Map<Long, Room> rooms) {
-        this.rooms = rooms;
     }
 }

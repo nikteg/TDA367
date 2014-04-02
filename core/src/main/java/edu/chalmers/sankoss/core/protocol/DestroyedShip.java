@@ -9,8 +9,8 @@ import edu.chalmers.sankoss.core.Ship;
  *
  */
 public class DestroyedShip {
-    Player player;
-    Ship ship;
+    private Player player;
+    private Ship ship;
 
     public DestroyedShip() {
     }

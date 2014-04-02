@@ -4,26 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.NinePatch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
-import com.esotericsoftware.kryonet.Client;
-import edu.chalmers.sankoss.core.SankossClient;
-import edu.chalmers.sankoss.core.protocol.CreateRoom;
-import edu.chalmers.sankoss.java.Inputs.InGameInputProcessor;
-import edu.chalmers.sankoss.java.Inputs.LobbyInputProcessor;
+import edu.chalmers.sankoss.core.SankossClientExample;
 import edu.chalmers.sankoss.java.Inputs.MainMenuInputProcessor;
-import edu.chalmers.sankoss.java.Inputs.PlacementInputProcessor;
 import edu.chalmers.sankoss.java.Models.*;
 import edu.chalmers.sankoss.java.screens.InGameScreen;
 import edu.chalmers.sankoss.java.screens.LobbyScreen;
 import edu.chalmers.sankoss.java.screens.MainMenuScreen;
 import edu.chalmers.sankoss.java.screens.PlacementScreen;
-import sun.net.www.content.text.plain;
 
 /**
  * Logical controller for the application.
@@ -36,7 +23,7 @@ import sun.net.www.content.text.plain;
  */
 public class SankossController{
     private InputProcessor activeInputProcessor;
-    private SankossClient client;
+    private SankossClientExample client;
     private ScreenModel model;
 
     // Instance of the started game

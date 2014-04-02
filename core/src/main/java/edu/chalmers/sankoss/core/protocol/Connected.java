@@ -1,15 +1,15 @@
 package edu.chalmers.sankoss.core.protocol;
 
 /**
- * Created by nikteg on 29/03/14.
+ * @author Niklas Tegnander
  */
-public class Connect {
+public class Connected {
     private Long playerID;
 
-    public Connect() {
+    public Connected() {
     }
 
-    public Connect(Long playerID) {
+    public Connected(Long playerID) {
         this.playerID = playerID;
     }
 
@@ -21,3 +21,4 @@ public class Connect {
         this.playerID = playerID;
     }
 }
+

@@ -15,7 +15,7 @@ import java.util.List;
  * 
  */
 public class Player implements KryoSerializable {
-    private int playerID;
+    private Long playerID;
     private String name;
     private List<Ship> fleet = new ArrayList<Ship>();
     private List<Coordinate> usedCoordinates = new ArrayList<Coordinate>();
@@ -25,20 +25,20 @@ public class Player implements KryoSerializable {
         
     }
 
-    public Player(int id) {
+    public Player(Long id) {
         this.playerID = id;
     }
     
-    public Player(int id, String name) {
+    public Player(Long id, String name) {
         this(id);
         this.name = name;
     }
 
-    public int getID() {
+    public Long getID() {
         return playerID;
     }
 
-    public void setID(int id) {
+    public void setID(Long id) {
         this.playerID = id;
     }
 
@@ -81,7 +81,7 @@ public class Player implements KryoSerializable {
     @Override
 	public boolean equals(Object o) {
 		if (o instanceof Player) {
-			return (getID() == ((Player) o).getID());
+			return (getID().equals(((Player) o).getID()));
 		} else {
 			return false;
 		}
@@ -89,18 +89,18 @@ public class Player implements KryoSerializable {
 
     @Override
     public int hashCode() {
-        return playerID;
+        return playerID.hashCode();
     }
 
     @Override
     public void write(Kryo kryo, Output output) {
-        output.writeInt(playerID);
+        output.writeLong(playerID);
         output.writeString(name);
     }
 
     @Override
     public void read(Kryo kryo, Input input) {
-        this.playerID = input.readInt();
+        this.playerID = input.readLong();
         this.name = input.readString();
     }
 }

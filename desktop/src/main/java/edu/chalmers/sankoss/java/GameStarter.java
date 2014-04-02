@@ -3,6 +3,9 @@ package edu.chalmers.sankoss.java;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import edu.chalmers.sankoss.core.Room;
+
+import java.util.Map;
 
 /**
  * Class to start the application from.

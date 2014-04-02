@@ -17,7 +17,7 @@ import edu.chalmers.sankoss.core.protocol.*;
 /*
  * Temporary client
  */
-public class SankossClient {
+public class SankossClientExample {
     private Client client;
     private Player player;
     private List<Player> opponents = new ArrayList<Player>();
@@ -26,13 +26,13 @@ public class SankossClient {
 
     public static void main(String[] args) {
         if (args.length > 0) {
-            new SankossClient(args[0]);
+            new SankossClientExample(args[0]);
         } else {
-            new SankossClient("localhost");
+            new SankossClientExample("localhost");
         }
     }
 
-    public SankossClient(String host) {
+    public SankossClientExample(String host) {
         client = new Client();
         new Thread(client).start();
 
@@ -44,10 +44,8 @@ public class SankossClient {
             }
 
             public void received(Connection connection, Object object) {
-                if (object instanceof Connect) {
-                    Connect msg = (Connect) object;
-
-                    System.out.println("GOT CONNECTION");
+                if (object instanceof Connected) {
+                    Connected msg = (Connected) object;
 
                     // Create new local player with remote ID
                     player = new Player(msg.getPlayerID());
@@ -134,6 +132,18 @@ public class SankossClient {
 
                     StartedGame msg = (StartedGame) object;
 
+                    if (msg.getGameID() == null) {
+                        int choice;
+                        do {
+                            choice = JOptionPane.showOptionDialog(null, "Start game?", "Start game",
+                                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+                        } while (choice != 0);
+
+                        client.sendTCP(new StartGame(roomID));
+
+                        return;
+                    }
+
                     gameID = msg.getGameID();
 
                     System.out.println(String.format("Placing ships! #%d", msg.getGameID()));
@@ -144,17 +154,12 @@ public class SankossClient {
                        	
                     } while(choice != 0);
 
-                    System.out.println("CREATING FLEET");
                     List<Ship> fleet = new ArrayList<Ship>();
                     fleet.add(new Ship(new Coordinate(1,1), new Coordinate(1,3)));
                     fleet.add(new Ship(new Coordinate(2,1), new Coordinate(2,4)));
 
-                    System.out.println("FLEET CREATED");
-
                    	client.sendTCP(new PlayerReady(msg.getGameID(), fleet));
 
-                    System.out.println("FLEET SENT");
-                   
                     return;
                 }
                 
