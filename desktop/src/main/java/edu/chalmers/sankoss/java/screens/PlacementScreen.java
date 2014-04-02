@@ -1,24 +1,11 @@
 package edu.chalmers.sankoss.java.screens;
 
 import com.badlogic.gdx.ApplicationListener;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
-
 import edu.chalmers.sankoss.java.Models.Placement;
 import edu.chalmers.sankoss.java.Renderers.PlacementRenderer;
 import edu.chalmers.sankoss.java.SankossController;
@@ -34,7 +21,8 @@ import edu.chalmers.sankoss.java.SankossGame;
 public class PlacementScreen extends AbstractScreen implements ApplicationListener {
 
 	private final int GRID_SIDE=10;
-	ImageButtonStyle btnStyle;
+	private final int GRID_TILE_SIDE=45;
+	
 
 	//Containers
 	private WidgetGroup gridPanel;
@@ -86,33 +74,26 @@ public class PlacementScreen extends AbstractScreen implements ApplicationListen
 
 
 		//TODO I am testing
-		
-		//SpriteBatch batch = new SpriteBatch();
-		btnStyle = new ImageButton.ImageButtonStyle();
-		//batch.begin();
+				
 		Pixmap pixmap = new Pixmap(new FileHandle("src/main/java/edu/chalmers/sankoss/java/texures/testSquare.png"));
 		skin.add("gridTile", new Texture(pixmap));
 		
-		
 		gridPanel= new WidgetGroup();
 		
-		Stage stage = new Stage(GRID_SIDE,GRID_SIDE, false, batch);
+		//Stage stage = new Stage(GRID_SIDE,GRID_SIDE, false, batch);
 		ImageButton[][] gridButton = new ImageButton[GRID_SIDE][GRID_SIDE];
 		for(int y = 0; y < GRID_SIDE; y++){
 			for(int x = 0; x < GRID_SIDE; x++){
 				
+				System.out.println("Doing stuff");
 				gridButton[x][y]= new ImageButton(skin.getDrawable("gridTile"));
-				gridButton[x][y].setSize(40, 40);
+				gridButton[x][y].setSize(GRID_TILE_SIDE, GRID_TILE_SIDE);
 				gridPanel.addActor(gridButton[x][y]); 
-				gridButton[x][y].setPosition((x-1)*40, (y-1)*40);
+				gridButton[x][y].setPosition(x*GRID_TILE_SIDE, y*GRID_TILE_SIDE);
 			}
 		}
-		
-		
-		
 
 		stage.addActor(gridPanel);
-		
 		stage.draw();
 
 		
