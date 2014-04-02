@@ -38,12 +38,8 @@ public class SankossServer {
 
 	public static void main(String[] args) throws IOException {
 		SankossServer sankossServer = new SankossServer();
+        sankossServer.startHTTPServer(8080);
 
-        if (args.length > 0) {
-            if (args[0] == "webserver") {
-                sankossServer.startHTTPServer(8080);
-            }
-        }
 	}
 
     /**

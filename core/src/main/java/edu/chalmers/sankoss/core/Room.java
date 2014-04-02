@@ -58,4 +58,8 @@ public class Room {
     public void addPlayer(Player player) {
         players.add(player);
     }
+
+    public String toString() {
+        return this.getName();
+    }
 }

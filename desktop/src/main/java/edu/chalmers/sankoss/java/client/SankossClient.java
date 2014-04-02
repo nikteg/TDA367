@@ -60,6 +60,7 @@ public class SankossClient {
                 if (object instanceof FetchedRooms) {
                     FetchedRooms msg = (FetchedRooms) object;
 
+                    System.out.println(msg.getRooms().toString());
                     sankossListener.fetchedRooms(msg.getRooms());
 
                     return;

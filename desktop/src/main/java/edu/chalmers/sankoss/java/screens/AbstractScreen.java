@@ -9,12 +9,20 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import edu.chalmers.sankoss.core.Coordinate;
+import edu.chalmers.sankoss.core.Player;
+import edu.chalmers.sankoss.core.Room;
+import edu.chalmers.sankoss.core.Ship;
 import edu.chalmers.sankoss.java.Models.ScreenModel;
 import edu.chalmers.sankoss.java.Renderers.Renderer;
 import edu.chalmers.sankoss.java.SankossController;
 import edu.chalmers.sankoss.java.SankossGame;
+import edu.chalmers.sankoss.java.client.SankossClient;
+import edu.chalmers.sankoss.java.client.SankossClientListener;
 
 import java.awt.event.ActionListener;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Abstraction of Screen implementation.
@@ -25,10 +33,13 @@ import java.awt.event.ActionListener;
  */
 public abstract class AbstractScreen implements Screen, ApplicationListener {
 
+    protected Map<Long, Room> roomsToDisplay;
+
     protected ScreenModel model;
     protected Renderer renderer;
     protected SankossGame game;
     protected SankossController controller;
+    protected static SankossClient client = new SankossClient("localhost");
 
     protected Stage stage;
     protected Skin skin;
@@ -44,6 +55,16 @@ public abstract class AbstractScreen implements Screen, ApplicationListener {
     public AbstractScreen(SankossController controller, SankossGame game) {
         this.controller = controller;
         this.game = game;
+
+    }
+
+    public SankossClient getClient() {
+        return client;
+    }
+
+    public void setClient(SankossClient client) {
+        this.client = client;
+        System.out.println("Client with host " + client.getHost() + " is set!");
 
     }
 
@@ -122,5 +143,6 @@ public abstract class AbstractScreen implements Screen, ApplicationListener {
         stage.dispose();
         skin.dispose();
     }
+
 
 }

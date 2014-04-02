@@ -9,15 +9,22 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
+import edu.chalmers.sankoss.core.Coordinate;
+import edu.chalmers.sankoss.core.Player;
 import edu.chalmers.sankoss.core.Room;
+import edu.chalmers.sankoss.core.Ship;
 import edu.chalmers.sankoss.java.Models.Lobby;
 import edu.chalmers.sankoss.java.Renderers.LobbyRenderer;
 import edu.chalmers.sankoss.java.SankossController;
 import edu.chalmers.sankoss.java.SankossGame;
+import edu.chalmers.sankoss.java.client.SankossClientListener;
+
+import java.util.*;
 
 /**
  * Screen used at the game lobby when finding a game/room to join.
@@ -26,11 +33,13 @@ import edu.chalmers.sankoss.java.SankossGame;
  * @author Mikael Malmqvist
  * @date 3/24/14
  */
-public class LobbyScreen extends AbstractScreen {
+public class LobbyScreen extends AbstractScreen implements SankossClientListener{
 
+    private Lobby lobby;
     private Object[] keys;
     private Room[] rooms;
     private String[] roomNames;
+    private Map<Long, Room> gameRooms;
 
     // Controllers
     private TextButton joinBtn;
@@ -55,7 +64,8 @@ public class LobbyScreen extends AbstractScreen {
      */
     public LobbyScreen(SankossController controller, SankossGame game) {
         super(controller, game);
-
+        client.addListener(this);
+        //((Lobby) model).setClient(this.client);
         create();
 
     }
@@ -138,7 +148,6 @@ public class LobbyScreen extends AbstractScreen {
         labelStyle.font = skin.getFont("default");
         listStyle.font = skin.getFont("default");
         listStyle.selection = skin.newDrawable("white", Color.DARK_GRAY);
-        //listStyle.selection = skin.getDrawable("default"); // Important else nullPointerException is thrown
 
         // Makes buttons and labels with default style of button
         joinBtn = new TextButton("Join", btnStyle);
@@ -171,9 +180,8 @@ public class LobbyScreen extends AbstractScreen {
 
         Lobby lobby = (Lobby)controller.getModel();
 
-        keys = lobby.getKeys();
-        rooms = lobby.getRooms();
-        roomNames = lobby.getRoomNames(rooms);
+        client.fetchRooms();
+
         Object[] tempRooms = {"Hubben","Laxens Hideout","Open Oed","Dracos Lair","DunderPatrullen","Johan Korv Horv"};
 
         roomList = new List(tempRooms, listStyle);
@@ -251,5 +259,64 @@ public class LobbyScreen extends AbstractScreen {
         public void changed(ChangeEvent event, Actor actor) {
             controller.setMainMenuScreen();
         }
+    }
+
+
+    public void connected(Long playerID) {
+        System.out.print("You are connected");
+    }
+
+    public void fetchedRooms(Map<Long, Room> rooms) {
+        //gameRooms = rooms;
+
+        for(Room room : rooms.values()) {
+            System.out.println("Fetched room #" + room.getName());
+
+        }
+
+        //lobby.setNames(rooms.values().toArray(new Room[rooms.size()]));
+
+        roomList.setItems(rooms.values().toArray(new Room[rooms.size()]));
+        // lobby.setRoomMap(rooms);
+        /*lobby.setRoomMap(rooms);
+        this.keys = lobby.getKeys();
+        this.rooms = lobby.getRooms();
+        this.roomNames = lobby.getRoomNames(this.rooms);*/
+    }
+
+    public void createdRoom(Long roomID) {
+
+    }
+
+    public void joinedRoom(Player player) {
+
+    }
+
+    public void startedGame(Long gameID, java.util.List<Player> players) {
+
+    }
+
+    public void gameReady() {
+
+    }
+
+    public void playerIsReady(Player player) {
+
+    }
+
+    public void turn() {
+
+    }
+
+    public void fireResult(Long gameID, Player target, Coordinate coordinate, boolean hit) {
+
+    }
+
+    public void destroyedShip(Player player, Ship ship) {
+
+    }
+
+    public void disconnected() {
+
     }
 }

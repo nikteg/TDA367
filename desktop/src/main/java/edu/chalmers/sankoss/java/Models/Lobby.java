@@ -2,6 +2,7 @@ package edu.chalmers.sankoss.java.Models;
 
 import com.badlogic.gdx.scenes.scene2d.ui.List;
 import edu.chalmers.sankoss.core.Room;
+import edu.chalmers.sankoss.java.client.SankossClient;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,11 +16,12 @@ import java.util.Set;
  * @date 3/24/14
  */
 public class Lobby extends ScreenModel {
-    private Map<Long, Room> roomMap;
+    private Map<Long, Room> roomMap = new HashMap<Long, Room>();
+    private SankossClient client;
+    private String[] names = new String[0];
 
     public Lobby() {
         this.roomMap = new HashMap<Long, Room>();
-
     }
 
     /**
@@ -28,6 +30,12 @@ public class Lobby extends ScreenModel {
      */
     public Lobby(Map<Long, Room> roomMap) {
         this.roomMap = roomMap;
+    }
+
+    public void setClient(SankossClient client) {
+        this.client = client;
+        // client.fetchRooms();
+
     }
 
     public void setRoomMap(Map<Long, Room> roomMap) {
@@ -43,7 +51,7 @@ public class Lobby extends ScreenModel {
      */
     public Object[] getKeys() {
         Set<Long> keys = roomMap.keySet();
-
+        //TODO FIxx
         return keys.toArray();
     }
 
@@ -72,6 +80,18 @@ public class Lobby extends ScreenModel {
         }
 
         return names;
+    }
+
+    public void setNames(Room[] rooms) {
+        this.names = new String[rooms.length];
+
+        for(int i = 0; i < rooms.length; i++) {
+            names[i] = rooms[i].getName();
+        }
+    }
+
+    public String[] getNames() {
+        return this.names;
     }
 
 }

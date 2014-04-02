@@ -16,9 +16,9 @@ import edu.chalmers.sankoss.java.Models.ScreenModel;
  * @date 3/24/14
  */
 public abstract class Renderer {
-    private OrthographicCamera gameCamera;
-    private ScreenModel currentModel;
-    private int width, height;
+    protected OrthographicCamera gameCamera;
+    protected ScreenModel currentModel;
+    protected int width, height;
 
     /**
      * Sets initial variables.

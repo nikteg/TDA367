@@ -7,10 +7,10 @@ import com.badlogic.gdx.Screen;
 import edu.chalmers.sankoss.core.SankossClientExample;
 import edu.chalmers.sankoss.java.Inputs.MainMenuInputProcessor;
 import edu.chalmers.sankoss.java.Models.*;
-import edu.chalmers.sankoss.java.screens.InGameScreen;
-import edu.chalmers.sankoss.java.screens.LobbyScreen;
-import edu.chalmers.sankoss.java.screens.MainMenuScreen;
-import edu.chalmers.sankoss.java.screens.PlacementScreen;
+import edu.chalmers.sankoss.java.client.SankossClient;
+import edu.chalmers.sankoss.java.screens.*;
+
+import java.io.IOException;
 
 /**
  * Logical controller for the application.
@@ -23,17 +23,18 @@ import edu.chalmers.sankoss.java.screens.PlacementScreen;
  */
 public class SankossController{
     private InputProcessor activeInputProcessor;
-    private SankossClientExample client;
+    private SankossClient client;
     private ScreenModel model;
 
     // Instance of the started game
     private SankossGame sankossGame;
 
     // Instances of all screens
-    private InGameScreen inGameScreen;
+    /*private InGameScreen inGameScreen;
     private PlacementScreen placementScreen;
     private MainMenuScreen mainMenuScreen;
-    private LobbyScreen lobbyScreen;
+    private LobbyScreen lobbyScreen;*/
+    private AbstractScreen screen;
 
     // ENUMS to keep track of the current Screen
     public enum ScreenState {
@@ -51,7 +52,17 @@ public class SankossController{
      */
     public SankossController(SankossGame sankossGame) {
         this.sankossGame = sankossGame;
+        //this.client = new SankossClient("localhost");
         setMainMenuScreen();
+        this.client = screen.getClient();
+
+        try {
+            client.connect();
+
+        } catch (IOException exc) {
+            System.out.print("ERROR: Could not connect to " + client.getHost());
+            exc.getStackTrace();
+        }
         // lobbyScreen = new LobbyScreen(this, sankossGame);
         // activeInputProcessor = new MainMenuInputProcessor();
 
@@ -76,19 +87,19 @@ public class SankossController{
         switch (fromScreen) {
             case MAINMENU:
                 // changeInput(new LobbyInputProcessor());
-                return lobbyScreen;
+                return null;
 
             case LOBBY:
                 // changeInput(new PlacementInputProcessor());
-                return placementScreen;
+                return null;
 
             case PLACEMENT:
                 // changeInput(new InGameInputProcessor());
-                return inGameScreen;
+                return null;
 
             case INGAME:
                 // changeInput(new MainMenuInputProcessor());
-                return mainMenuScreen;
+                return null;
         }
 
         activeInputProcessor = new MainMenuInputProcessor();
@@ -110,8 +121,10 @@ public class SankossController{
      */
     public void setMainMenuScreen(){
         this.model = new MainMenu();
-        this.mainMenuScreen = new MainMenuScreen(this, sankossGame);
-        this.sankossGame.setScreen(mainMenuScreen);
+        this.screen = new MainMenuScreen(this, sankossGame);
+        //this.screen.setClient(client);
+        //this.client.addListener(screen);
+        this.sankossGame.setScreen(screen);
     }
 
     /**
@@ -120,8 +133,11 @@ public class SankossController{
      */
     public void setLobbyScreen(){
         this.model = new Lobby();
-        this.lobbyScreen = new LobbyScreen(this, sankossGame);
-        this.sankossGame.setScreen(lobbyScreen);
+        this.screen = new LobbyScreen(this, sankossGame);
+        //this.screen.setClient(client);
+        //this.client.addListener(screen);
+        ((Lobby) model).setClient(this.client);
+        this.sankossGame.setScreen(screen);
     }
 
     /**
@@ -130,8 +146,9 @@ public class SankossController{
      */
     public void setPlacementScreen(){
         this.model = new Placement();
-        this.placementScreen = new PlacementScreen(this, sankossGame);
-        this.sankossGame.setScreen(placementScreen);
+        this.screen = new PlacementScreen(this, sankossGame);
+        screen.setClient(client);
+        this.sankossGame.setScreen(screen);
     }
 
     /**
@@ -140,8 +157,9 @@ public class SankossController{
      */
     public void setInGameScreen(){
         this.model = new InGame();
-        this.inGameScreen = new InGameScreen(this, sankossGame);
-        this.sankossGame.setScreen(inGameScreen);
+        this.screen = new InGameScreen(this, sankossGame);
+        screen.setClient(client);
+        this.sankossGame.setScreen(screen);
     }
 
     /**

@@ -10,10 +10,19 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import edu.chalmers.sankoss.core.Coordinate;
+import edu.chalmers.sankoss.core.Player;
+import edu.chalmers.sankoss.core.Room;
+import edu.chalmers.sankoss.core.Ship;
 import edu.chalmers.sankoss.java.Models.MainMenu;
 import edu.chalmers.sankoss.java.Renderers.MainMenuRenderer;
 import edu.chalmers.sankoss.java.SankossController;
 import edu.chalmers.sankoss.java.SankossGame;
+import edu.chalmers.sankoss.java.client.SankossClient;
+import edu.chalmers.sankoss.java.client.SankossClientListener;
+
+import java.io.IOException;
+import java.util.*;
 
 /**
  * Screen used at the main menu.
@@ -22,7 +31,7 @@ import edu.chalmers.sankoss.java.SankossGame;
  * @author Mikael Malmqvist
  * @date 3/24/14
  */
-public class MainMenuScreen extends AbstractScreen {
+public class MainMenuScreen extends AbstractScreen implements SankossClientListener{
 
     private String roomName;
 
@@ -46,6 +55,7 @@ public class MainMenuScreen extends AbstractScreen {
      */
     public MainMenuScreen(SankossController controller, SankossGame game) {
         super(controller, game);
+        client.addListener(this);
 
         create();
 
@@ -184,27 +194,33 @@ public class MainMenuScreen extends AbstractScreen {
         statusLabel.setX(0);
         statusLabel.setY(0);
 
-
     }
 
 
 
     private class JoinButtonListener extends ChangeListener{
+
         @Override
         public void changed(ChangeEvent event, Actor actor) {
+
             controller.setLobbyScreen();
         }
     }
 
     private class HostButtonListener extends ChangeListener{
+
         @Override
         public void changed(ChangeEvent event, Actor actor) {
             Gdx.input.getTextInput(new Input.TextInputListener() {
+
                 @Override
-                public void input(String s) {
+                public void input(String roomName) {
                     // TODO: Create room, disable join game
-                    //roomName = s;
-                    statusLabel.setText("Waiting for opponent to join " + s + "..");
+
+                    statusLabel.setText("Waiting for opponent to join " + roomName + "..");
+                    client.createRoom(roomName, ""); //Roomname and password
+
+                    System.out.println("\n RoomID: #" + client.getRoomID());
                 }
 
                 @Override
@@ -214,6 +230,51 @@ public class MainMenuScreen extends AbstractScreen {
             }, "Enter room name:", "");
 
         }
+    }
+
+
+    public void connected(Long playerID) {
+        System.out.print("You are connected");
+    }
+
+    public void fetchedRooms(Map<Long, Room> rooms) {
+
+    }
+
+    public void createdRoom(Long roomID) {
+
+    }
+
+    public void joinedRoom(Player player) {
+
+    }
+
+    public void startedGame(Long gameID, java.util.List<Player> players) {
+
+    }
+
+    public void gameReady() {
+
+    }
+
+    public void playerIsReady(Player player) {
+
+    }
+
+    public void turn() {
+
+    }
+
+    public void fireResult(Long gameID, Player target, Coordinate coordinate, boolean hit) {
+
+    }
+
+    public void destroyedShip(Player player, Ship ship) {
+
+    }
+
+    public void disconnected() {
+
     }
 
 }
