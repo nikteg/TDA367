@@ -3,12 +3,15 @@ package edu.chalmers.sankoss.java;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
+import java.net.URI;
 import java.util.*;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 
+import com.google.gson.Gson;
+import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
@@ -39,8 +42,7 @@ public class SankossServer {
 	public static void main(String[] args) throws IOException {
 		SankossServer sankossServer = new SankossServer();
         sankossServer.startHTTPServer(8080);
-
-	}
+    }
 
     /**
      * Start server
@@ -374,44 +376,105 @@ public class SankossServer {
 	}
 
     public void startHTTPServer(int port) throws IOException {
-        HttpServer httpServer = HttpServer.create(new InetSocketAddress(port), 0);
-        httpServer.createContext("/", new WebHandler());
-        httpServer.setExecutor(java.util.concurrent.Executors.newCachedThreadPool()); // creates a default executor
-        httpServer.start();
+        new HTTPServer(port).start();
     }
 
-    private class WebHandler implements HttpHandler {
+    private class HTTPServer {
+        private int port = 8080;
+        private Gson gsonInstance = new Gson();
 
-        @Override
-        public void handle(HttpExchange exchange) throws IOException {
-            StringBuilder stringBuilder = new StringBuilder();
+        public HTTPServer() {
 
-            stringBuilder.append("<h1>Players</h1>\n");
+        }
 
-            for (Map.Entry pairs : players.entrySet()) {
-                Player player = (Player) pairs.getKey();
-                PlayerConnection playerConnection = (PlayerConnection) pairs.getValue();
-                stringBuilder.append(String.format("<p>#%d %s</p>\n", player.getID(), playerConnection.getRemoteAddressTCP()));
+        public HTTPServer(int port) {
+            this.port = port;
+        }
+
+        private class FetchPlayer {
+            private String name;
+            private String address;
+
+            private FetchPlayer(String name, String address) {
+                this.name = name;
+                this.address = address;
             }
+        }
 
-            stringBuilder.append("<h1>Rooms</h1>\n");
+        private class FetchRoom {
+            private String name;
+            private List<String> players;
 
-            for (Room room : RoomFactory.getRooms().values()) {
-                stringBuilder.append(String.format("<p>#%d %s</p>\n", room.getID(), room.getName()));
+            private FetchRoom(String name, List<String> players) {
+                this.name = name;
+                this.players = players;
+            }
+        }
 
-                stringBuilder.append(String.format("<b>Players in room:</b>\n"));
+        private class FetchGame {
+            private String name;
+            private List<String> players;
 
-                for (Player player : room.getPlayers()) {
-                    stringBuilder.append(String.format("<p>#%d</p>\n", player.getID()));
+            private FetchGame(String name, List<String> players) {
+                this.name = name;
+                this.players = players;
+            }
+        }
+
+        private class FetchData {
+            private List<FetchPlayer> players = new ArrayList<FetchPlayer>();
+            private List<FetchRoom> rooms = new ArrayList<FetchRoom>();
+            private List<FetchGame> games = new ArrayList<FetchGame>();
+
+            private FetchData(Map<Player, PlayerConnection> players, Map<Long, Room> rooms, Map<Long, Game> games) {
+                for (Map.Entry<Player, PlayerConnection> pairs : players.entrySet()) {
+                    this.players.add(new FetchPlayer("Player #" + pairs.getKey().getID().toString(),
+                            pairs.getValue().getRemoteAddressTCP().toString()));
+                }
+
+                for (Map.Entry<Long, Room> pairs : rooms.entrySet()) {
+                    List<String> roomPlayers = new ArrayList<String>();
+
+                    for (Player player : pairs.getValue().getPlayers()) {
+                        roomPlayers.add("Player #" + player.getID());
+                    }
+
+                    this.rooms.add(new FetchRoom(pairs.getValue().getName(), roomPlayers));
+                }
+
+                for (Map.Entry<Long, Game> pairs : games.entrySet()) {
+                    List<String> gamePlayers = new ArrayList<String>();
+
+                    for (Player player : pairs.getValue().getPlayers()) {
+                        gamePlayers.add("Player #" + player.getID());
+                    }
+
+                    this.games.add(new FetchGame("Game #" + pairs.getValue().getID(), gamePlayers));
                 }
             }
+        }
 
-            String response = stringBuilder.toString();
+        public void start() throws IOException {
+            HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
 
-            exchange.sendResponseHeaders(200, response.length());
-            OutputStream os = exchange.getResponseBody();
-            os.write(response.getBytes());
-            os.close();
+            server.createContext("/", new HttpHandler() {
+                @Override
+                public void handle(HttpExchange httpExchange) throws IOException {
+                    String response = gsonInstance.toJson(new FetchData(players, RoomFactory.getRooms(), GameFactory.getGames()));
+
+                    Headers headers = httpExchange.getResponseHeaders();
+                    headers.add("Content-Type", "application/json");
+                    headers.add("Access-Control-Allow-Origin", "*");
+
+                    httpExchange.sendResponseHeaders(200, response.getBytes().length);
+                    OutputStream os = httpExchange.getResponseBody();
+                    os.write(response.getBytes());
+                    os.close();
+                }
+            });
+
+            server.setExecutor(null);
+            server.start();
         }
     }
 
