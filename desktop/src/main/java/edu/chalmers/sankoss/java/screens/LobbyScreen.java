@@ -1,19 +1,13 @@
 package edu.chalmers.sankoss.java.screens;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
-import com.badlogic.gdx.scenes.scene2d.utils.BaseDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TiledDrawable;
 import edu.chalmers.sankoss.core.Coordinate;
 import edu.chalmers.sankoss.core.Player;
 import edu.chalmers.sankoss.core.Room;
@@ -182,18 +176,15 @@ public class LobbyScreen extends AbstractScreen implements SankossClientListener
 
         client.fetchRooms();
 
-        Object[] tempRooms = {"Hubben","Laxens Hideout","Open Oed","Dracos Lair","DunderPatrullen","Johan Korv Horv"};
+        //Object[] tempRooms = {"                                                              "};
 
-        roomList = new List(tempRooms, listStyle);
+        //roomList = new List(tempRooms, listStyle);
 
         middlePanel.setWidth(800);
         middlePanel.setHeight(800 - topPanel.getHeight() - bottomPanel.getHeight());
         middlePanel.setX(0);
         middlePanel.setY(bottomPanel.getHeight());
-        middlePanel.addActor(roomList);
-
-        roomList.setX(50);
-        roomList.setY(middlePanel.getHeight() - roomList.getHeight() - 20);
+        //middlePanel.addActor(roomList);
 
         // Adds the panels to stage
         stage.addActor(topPanel);
@@ -219,22 +210,25 @@ public class LobbyScreen extends AbstractScreen implements SankossClientListener
         topPanel.setY(height - 150);
         middlePanel.setY(bottomPanel.getHeight());
         middlePanel.setHeight(height - bottomPanel.getHeight() - topPanel.getHeight());
-        roomList.setY(middlePanel.getHeight() - roomList.getHeight() - 20);
+
+        if(roomList != null) {
+            roomList.setY(middlePanel.getHeight() - roomList.getHeight() - 20);
+        }
 
     }
 
     /**
      * Method for matching a Room with a name.
-     * @param rooms array of Rooms to search trough.
      * @param roomName name of Room.
      * @return
      */
-    public Room findRoom(Room[] rooms, String roomName) {
-        for(Room room : rooms) {
+    public Room findRoom(String roomName) {
+
+        /*for(Room room : this.gameRooms) {
             if(room.getName().equals(roomName)) {
                 return room;
             }
-        }
+        }*/
 
         return null;
     }
@@ -246,11 +240,14 @@ public class LobbyScreen extends AbstractScreen implements SankossClientListener
         public void changed(ChangeEvent event, Actor actor) {
             // Retrives selected name and matches with room
             String roomName = roomList.getSelection();
-            Room roomToJoin = findRoom(rooms, roomName);
+            Room roomToJoin = findRoom(roomName);
+            System.out.println("Selected room: #" + roomName);
+
+
 
             // TODO join roomToJoin
 
-            controller.setPlacementScreen();
+            // controller.setPlacementScreen();
         }
     }
 
@@ -266,22 +263,26 @@ public class LobbyScreen extends AbstractScreen implements SankossClientListener
         System.out.print("You are connected");
     }
 
+    /**
+     * Method for getting active rooms on server.
+     * @param rooms Rooms on Server to join.
+     */
     public void fetchedRooms(Map<Long, Room> rooms) {
-        //gameRooms = rooms;
+        this.gameRooms = rooms;
 
         for(Room room : rooms.values()) {
             System.out.println("Fetched room #" + room.getName());
 
         }
 
-        //lobby.setNames(rooms.values().toArray(new Room[rooms.size()]));
+        // Fills visual list with rooms
+        //roomList.setItems(rooms.values().toArray(new Room[rooms.size()]));
+        this.roomList = new List(rooms.values().toArray(new Room[rooms.size()]), listStyle);
 
-        roomList.setItems(rooms.values().toArray(new Room[rooms.size()]));
-        // lobby.setRoomMap(rooms);
-        /*lobby.setRoomMap(rooms);
-        this.keys = lobby.getKeys();
-        this.rooms = lobby.getRooms();
-        this.roomNames = lobby.getRoomNames(this.rooms);*/
+        this.roomList.setX(50);
+        this.roomList.setY(middlePanel.getHeight() - roomList.getHeight() - 20);
+
+        this.middlePanel.addActor(roomList);
     }
 
     public void createdRoom(Long roomID) {

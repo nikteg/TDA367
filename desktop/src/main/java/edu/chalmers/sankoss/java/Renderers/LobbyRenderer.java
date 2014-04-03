@@ -31,9 +31,5 @@ public class LobbyRenderer extends Renderer {
         Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glClearColor(0.09f, 0.28f, 0.2f, 1);
 
-        /*for (Map.Entry<Long, Room> pairs : ((Lobby)currentModel).getRoomMap().entrySet()) {
-            String str = pairs.getValue().getName();
-        }*/
-
     }
 }

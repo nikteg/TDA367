@@ -1,6 +1,5 @@
 package edu.chalmers.sankoss.java.Models;
 
-import com.badlogic.gdx.scenes.scene2d.ui.List;
 import edu.chalmers.sankoss.core.Room;
 import edu.chalmers.sankoss.java.client.SankossClient;
 
@@ -34,7 +33,6 @@ public class Lobby extends ScreenModel {
 
     public void setClient(SankossClient client) {
         this.client = client;
-        // client.fetchRooms();
 
     }
 
@@ -51,7 +49,6 @@ public class Lobby extends ScreenModel {
      */
     public Object[] getKeys() {
         Set<Long> keys = roomMap.keySet();
-        //TODO FIxx
         return keys.toArray();
     }
 

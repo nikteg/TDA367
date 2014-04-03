@@ -18,10 +18,8 @@ import edu.chalmers.sankoss.java.Models.MainMenu;
 import edu.chalmers.sankoss.java.Renderers.MainMenuRenderer;
 import edu.chalmers.sankoss.java.SankossController;
 import edu.chalmers.sankoss.java.SankossGame;
-import edu.chalmers.sankoss.java.client.SankossClient;
 import edu.chalmers.sankoss.java.client.SankossClientListener;
 
-import java.io.IOException;
 import java.util.*;
 
 /**
@@ -229,7 +227,6 @@ public class MainMenuScreen extends AbstractScreen implements SankossClientListe
                     statusLabel.setText("Waiting for opponent to join " + roomName + "..");
                     client.createRoom(roomName, ""); //Roomname and password
 
-                    System.out.println("\n RoomID: #" + client.getRoomID());
                 }
 
                 @Override
@@ -243,7 +240,7 @@ public class MainMenuScreen extends AbstractScreen implements SankossClientListe
 
 
     public void connected(Long playerID) {
-        System.out.print("You are connected");
+        System.out.print("Client connected");
     }
 
     public void fetchedRooms(Map<Long, Room> rooms) {
