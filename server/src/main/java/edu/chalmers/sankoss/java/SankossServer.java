@@ -1,14 +1,8 @@
 package edu.chalmers.sankoss.java;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.InetSocketAddress;
-import java.util.*;
-
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
-
 import com.google.gson.Gson;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
@@ -16,6 +10,11 @@ import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import edu.chalmers.sankoss.core.*;
 import edu.chalmers.sankoss.core.protocol.*;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.InetSocketAddress;
+import java.util.*;
 
 
 /**
@@ -34,6 +33,8 @@ public class SankossServer {
      * Map to link players with their connections
      */
     private Map<Player, PlayerConnection> players = new HashMap<Player, PlayerConnection>();
+
+    private List<SankossAI> ais = new ArrayList<SankossAI>();
 
 	public static void main(String[] args) throws IOException {
 		SankossServer sankossServer = new SankossServer();
@@ -271,11 +272,7 @@ public class SankossServer {
                         int starter = new Random().nextInt(game.getPlayers().size() - 1);
                         game.setAttacker(game.getPlayers().get(starter));
 
-                        if (player instanceof SankossAI) {
-                            ((SankossAI) player).fire();
-                        } else {
-                            players.get(game.getAttacker()).sendTCP(new Turn());
-                        }
+                        players.get(game.getAttacker()).sendTCP(new Turn());
                     }
 
                     player.setFleet(msg.getFleet());
@@ -349,12 +346,10 @@ public class SankossServer {
                         e.printStackTrace();
                         return;
                     }
+
                     System.out.println("Adding AI");
-                    SankossAI ai = new SankossAI(room.getID(), room.getPlayers());
-                    room.addPlayer(ai);
-                    PlayerConnection aiConnection = new PlayerConnection();
-                    aiConnection.setPlayer(ai);
-                    players.put(ai, aiConnection);
+                    new Thread(new SankossAI(room.getID())).start();
+
                 }
 
 			}
@@ -448,8 +443,13 @@ public class SankossServer {
 
             private FetchData(Map<Player, PlayerConnection> players, Map<Long, Room> rooms, Map<Long, Game> games) {
                 for (Map.Entry<Player, PlayerConnection> pairs : players.entrySet()) {
-                    this.players.add(new FetchPlayer("Player #" + pairs.getKey().getID().toString(),
-                            pairs.getValue().getRemoteAddressTCP().toString()));
+                    if (pairs.getValue().getRemoteAddressTCP().toString().contains("127.0.0.1")) {
+                        this.players.add(new FetchPlayer("Player #" + pairs.getKey().getID().toString(), "Bot"));
+                    } else {
+                        this.players.add(new FetchPlayer("Player #" + pairs.getKey().getID().toString(),
+                                pairs.getValue().getRemoteAddressTCP().toString()));
+                    }
+
                 }
 
                 for (Map.Entry<Long, Room> pairs : rooms.entrySet()) {

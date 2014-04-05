@@ -3,30 +3,33 @@ package edu.chalmers.sankoss.core;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import edu.chalmers.sankoss.core.Coordinate;
-import edu.chalmers.sankoss.core.Player;
-import edu.chalmers.sankoss.core.Ship;
 import edu.chalmers.sankoss.core.protocol.*;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 /**
  * @author Fredrik Thune
  */
-public class SankossAI extends Player {
+public class SankossAI implements Runnable {
     private Client client;
     private Player player;
     private List<Player> opponents = new ArrayList<Player>();
     private Long gameID;
     private Long roomID;
 
+    public SankossAI(Long roomID) {
+        this.roomID = roomID;
+    }
 
-    public SankossAI() {
+    public void destroy() {
+        client.close();
+    }
+
+    @Override
+    public void run() {
         client = new Client();
         new Thread(client).start();
 
@@ -34,7 +37,7 @@ public class SankossAI extends Player {
 
         client.addListener(new Listener.ThreadedListener(new Listener() {
             public void connected(Connection connection) {
-                System.out.println("Connected to server: " + connection.getRemoteAddressTCP());
+                System.out.println("AI: Connected to server: " + connection.getRemoteAddressTCP());
             }
 
             public void received(Connection connection, Object object) {
@@ -45,7 +48,7 @@ public class SankossAI extends Player {
                     player = new Player(msg.getPlayerID());
 
                     // Fetch remote rooms
-                    client.sendTCP(new FetchRooms());
+                    client.sendTCP(new JoinRoom(roomID));
 
                     return;
                 }
@@ -57,7 +60,7 @@ public class SankossAI extends Player {
 
                     gameID = msg.getGameID();
 
-                    System.out.println(String.format("Placing ships! #%d", msg.getGameID()));
+                    System.out.println(String.format("AI: Placing ships! #%d", msg.getGameID()));
 
                     List<Ship> fleet = new ArrayList<Ship>();
 
@@ -76,7 +79,7 @@ public class SankossAI extends Player {
                 if (object instanceof GameReady) {
                     if (player == null) return;
 
-                    System.out.println("Game started!");
+                    System.out.println("AI: Game started!");
                     return;
                 }
 
@@ -87,7 +90,7 @@ public class SankossAI extends Player {
 
                     opponents.add(msg.getPlayer());
 
-                    System.out.println(String.format("#%d is ready!", msg.getPlayer().getID()));
+                    System.out.println(String.format("AI: #%d is ready!", msg.getPlayer().getID()));
 
                     return;
                 }
@@ -98,7 +101,7 @@ public class SankossAI extends Player {
                     Random r = new Random();
                     do {
                         coordinate = new Coordinate(r.nextInt(9) + 1, r.nextInt(9) + 1);
-                    } while (getUsedCoordinates().contains(coordinate));
+                    } while (player.getUsedCoordinates().contains(coordinate));
 
                     client.sendTCP(new Fire(gameID, opponent, coordinate));
 
@@ -109,17 +112,12 @@ public class SankossAI extends Player {
         }));
 
         try {
-            client.connect(5000, "localhost", Network.PORT);
+            client.connect(5000, "127.0.0.1", Network.PORT);
         } catch (IOException e) {
-            System.out.println("Could not connect to remote server...");
+            System.out.println("AI: Could not connect to remote server...");
         }
 
         client.sendTCP(new Connect());
-
-    }
-
-    public void destroy() {
-        
     }
 }
 
