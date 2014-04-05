@@ -108,13 +108,17 @@ public class SankossClientExample {
 
                     roomID = msg.getRoomID();
 
-                    int choice;
-                    do {
-                        choice = JOptionPane.showOptionDialog(null, "Start game?", "Start game",
-                                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
-                    } while (choice != 0);
+                    int choice = JOptionPane.showOptionDialog(null, "Start game?", "Start game",
+                            JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+                            new String[] {"Start", "Add AI"}, null);
+                    if (choice == 0) {
+                        client.sendTCP(new StartGame(roomID));
+                    } else {
+                        client.sendTCP(new CreateAI(roomID));
+                        client.sendTCP(new StartGame(roomID));
+                    }
 
-                    client.sendTCP(new StartGame(roomID));
+
 
                 }
 

@@ -3,7 +3,6 @@ package edu.chalmers.sankoss.java;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
-import java.net.URI;
 import java.util.*;
 
 import com.esotericsoftware.kryonet.Connection;
@@ -15,10 +14,7 @@ import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
-import edu.chalmers.sankoss.core.Network;
-import edu.chalmers.sankoss.core.Player;
-import edu.chalmers.sankoss.core.Room;
-import edu.chalmers.sankoss.core.Ship;
+import edu.chalmers.sankoss.core.*;
 import edu.chalmers.sankoss.core.protocol.*;
 
 
@@ -274,8 +270,12 @@ public class SankossServer {
                         // Send turn to random player
                         int starter = new Random().nextInt(game.getPlayers().size() - 1);
                         game.setAttacker(game.getPlayers().get(starter));
-                        players.get(game.getAttacker()).sendTCP(new Turn());
 
+                        if (player instanceof SankossAI) {
+                            ((SankossAI) player).fire();
+                        } else {
+                            players.get(game.getAttacker()).sendTCP(new Turn());
+                        }
                     }
 
                     player.setFleet(msg.getFleet());
@@ -330,12 +330,32 @@ public class SankossServer {
                             players.get(gamePlayer).sendTCP(new DestroyedShip(msg.getTarget(), targetShip));
                         }
                     }
-
 					game.changeAttacker();
+
                     players.get(game.getAttacker()).sendTCP(new Turn());
+
 
 					return;
 				}
+
+                if (object instanceof CreateAI) {
+                    if (player == null) return;
+
+                    CreateAI msg = (CreateAI) object;
+                    Room room;
+                    try {
+                        room = RoomFactory.getRoom(msg.getRoomID());
+                    } catch (RoomNotFoundException e) {
+                        e.printStackTrace();
+                        return;
+                    }
+                    System.out.println("Adding AI");
+                    SankossAI ai = new SankossAI(room.getID(), room.getPlayers());
+                    room.addPlayer(ai);
+                    PlayerConnection aiConnection = new PlayerConnection();
+                    aiConnection.setPlayer(ai);
+                    players.put(ai, aiConnection);
+                }
 
 			}
 

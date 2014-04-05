@@ -18,6 +18,7 @@ public class Network {
         kryo.register(Connect.class);
         kryo.register(Connected.class);
         kryo.register(Coordinate.class);
+        kryo.register(CreateAI.class);
         kryo.register(CreatedRoom.class);
         kryo.register(CreateRoom.class);
         kryo.register(DestroyedShip.class);
@@ -36,6 +37,7 @@ public class Network {
         kryo.register(PlayerReady.class);
         kryo.register(Room.class);
         kryo.register(Ship.class);
+        kryo.register(SankossAI.class);
         kryo.register(StartedGame.class);
         kryo.register(StartGame.class);
         kryo.register(Turn.class);

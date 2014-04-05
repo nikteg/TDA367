@@ -30,7 +30,7 @@ public class Ship {
 	 */
 
 	public Ship(Coordinate start, Coordinate end){
-        size = Math.abs(start.getX() - end.getX()) + Math.abs(start.getY() - end.getY()) + 1;
+        size = distance(start, end) + 1;
 		setCoordinates(start, end);
 	}
 	
@@ -124,10 +124,43 @@ public class Ship {
 	 * @return True if the target coordinate is a part of the ship
 	 */
 	public boolean isShip(Coordinate target){
-        return (distance(start, target) + distance(target, end) == distance(start, end));
+        switch (getRotation()) {
+            case EAST:
+                return (target.getY() == start.getY() && target.getX() >= start.getX() && target.getX() <= end.getX());
+            case WEST:
+                return (target.getY() == start.getY() && target.getX() <= start.getX() && target.getX() >= end.getX());
+            case SOUTH:
+                return (target.getX() == start.getX() && target.getY() >= start.getY() && target.getY() <= end.getY());
+            default:
+                return (target.getX() == start.getX() && target.getY() <= start.getY() && target.getY() >= end.getY());
+        }
 	}
 
+    public ROTATION getRotation() {
+        if (start.getX() < end.getX())
+            return ROTATION.EAST;
+
+        if (start.getX() > end.getX())
+            return ROTATION.WEST;
+
+        if (start.getY() < end.getY())
+            return ROTATION.SOUTH;
+
+        return ROTATION.NORTH;
+
+    }
+
+    private enum ROTATION {
+        NORTH,
+        SOUTH,
+        EAST,
+        WEST
+    }
+
+
     private int distance(Coordinate start, Coordinate end) {
+        System.out.println("Distance:" + Math.sqrt(Math.pow((double)(start.getX() - end.getX()), 2) +
+                Math.pow((double)(start.getY() - end.getY()), 2)));
         return (int)Math.sqrt(Math.pow((double)(start.getX() - end.getX()), 2) +
                 Math.pow((double)(start.getY() - end.getY()), 2));
     }
@@ -144,6 +177,7 @@ public class Ship {
 	 * @return True if the boat is destroyed
 	 */
 	public boolean isDestroyed(){
+        System.out.println(toString() + " Destroyed:" + hits + " " + size);
 		return hits >= size;
 	}
 
