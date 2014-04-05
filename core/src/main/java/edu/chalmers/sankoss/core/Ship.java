@@ -41,7 +41,7 @@ public class Ship {
 	 */
 	public void setCoordinates(Coordinate start, Coordinate end){
 		if(start.getX() != end.getX() && start.getY() != end.getY()){
-			
+
 			//TODO Write our own exceptions?
 			throw new IllegalArgumentException("No valid coordinates for ship start and end");
 		}
@@ -159,8 +159,6 @@ public class Ship {
 
 
     private int distance(Coordinate start, Coordinate end) {
-        System.out.println("Distance:" + Math.sqrt(Math.pow((double)(start.getX() - end.getX()), 2) +
-                Math.pow((double)(start.getY() - end.getY()), 2)));
         return (int)Math.sqrt(Math.pow((double)(start.getX() - end.getX()), 2) +
                 Math.pow((double)(start.getY() - end.getY()), 2));
     }
@@ -177,7 +175,6 @@ public class Ship {
 	 * @return True if the boat is destroyed
 	 */
 	public boolean isDestroyed(){
-        System.out.println(toString() + " Destroyed:" + hits + " " + size);
 		return hits >= size;
 	}
 

@@ -97,8 +97,9 @@ public class SankossAI implements Runnable {
 
                 if (object instanceof Turn) {
                     Coordinate coordinate = null;
-                    Player opponent = opponents.get(0); // Only if 2 players
                     Random r = new Random();
+                    Player opponent = opponents.get(0); // Change if more than 2 players
+
                     do {
                         coordinate = new Coordinate(r.nextInt(9) + 1, r.nextInt(9) + 1);
                     } while (player.getUsedCoordinates().contains(coordinate));
@@ -106,6 +107,10 @@ public class SankossAI implements Runnable {
                     client.sendTCP(new Fire(gameID, opponent, coordinate));
 
                     return;
+                }
+
+                if (object instanceof Disconnect) {
+                    destroy();
                 }
 
             }

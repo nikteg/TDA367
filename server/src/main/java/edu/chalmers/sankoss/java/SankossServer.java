@@ -368,6 +368,10 @@ public class SankossServer {
                  */
                 for (Room room : RoomFactory.getRooms().values()) {
                     if (room.getPlayers().contains(player)) {
+                        room.getPlayers().remove(player);
+                        for (Player opponent : room.getPlayers()) {
+                            players.get(opponent).sendTCP(new Disconnect(player));
+                        }
                         try {
                             RoomFactory.removeRoom(room);
                         } catch (RoomNotFoundException e) {
@@ -376,8 +380,24 @@ public class SankossServer {
 
                         break;
                     }
-                }
 
+                }
+                for (Game game : GameFactory.getGames().values()) {
+                    if (game.getPlayers().contains(player)) {
+                        game.getPlayers().remove(player);
+                        for (Player opponent : game.getPlayers()) {
+                            players.get(opponent).sendTCP(new Disconnect(player));
+                        }
+                        try {
+                            GameFactory.removeGame(game);
+                        } catch (GameNotFoundException e) {
+                            System.out.println(e.getMessage());
+                        }
+
+                        break;
+                    }
+
+                }
                 players.remove(player);
 
                 System.out.println(String.format("#%d disconnected", connection.getID()));
