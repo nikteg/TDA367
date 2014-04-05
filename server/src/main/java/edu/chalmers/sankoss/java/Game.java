@@ -60,8 +60,7 @@ public class Game {
 
         getAttacker().addUsedCoordiante(coordinate);
 
-
-        System.out.println(String.format("Fire: #%d %d,%d", target.getID(), coordinate.getX(), coordinate.getY()));
+        //System.out.println(String.format("Fire: #%d %d,%d", target.getID(), coordinate.getX(), coordinate.getY()));
 
         for (Ship ship : target.getFleet()) {
             if (ship.isShip(coordinate)) {

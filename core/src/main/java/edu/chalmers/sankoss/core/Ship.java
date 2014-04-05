@@ -30,7 +30,7 @@ public class Ship {
 	 */
 
 	public Ship(Coordinate start, Coordinate end){
-        size = Math.abs(start.getX() - end.getX()) + Math.abs(start.getY() - end.getY()) + 1;
+        size = distance(start, end) + 1;
 		setCoordinates(start, end);
 	}
 	
@@ -41,7 +41,7 @@ public class Ship {
 	 */
 	public void setCoordinates(Coordinate start, Coordinate end){
 		if(start.getX() != end.getX() && start.getY() != end.getY()){
-			
+
 			//TODO Write our own exceptions?
 			throw new IllegalArgumentException("No valid coordinates for ship start and end");
 		}
@@ -124,8 +124,39 @@ public class Ship {
 	 * @return True if the target coordinate is a part of the ship
 	 */
 	public boolean isShip(Coordinate target){
-        return (distance(start, target) + distance(target, end) == distance(start, end));
+        switch (getRotation()) {
+            case EAST:
+                return (target.getY() == start.getY() && target.getX() >= start.getX() && target.getX() <= end.getX());
+            case WEST:
+                return (target.getY() == start.getY() && target.getX() <= start.getX() && target.getX() >= end.getX());
+            case SOUTH:
+                return (target.getX() == start.getX() && target.getY() >= start.getY() && target.getY() <= end.getY());
+            default:
+                return (target.getX() == start.getX() && target.getY() <= start.getY() && target.getY() >= end.getY());
+        }
 	}
+
+    public ROTATION getRotation() {
+        if (start.getX() < end.getX())
+            return ROTATION.EAST;
+
+        if (start.getX() > end.getX())
+            return ROTATION.WEST;
+
+        if (start.getY() < end.getY())
+            return ROTATION.SOUTH;
+
+        return ROTATION.NORTH;
+
+    }
+
+    private enum ROTATION {
+        NORTH,
+        SOUTH,
+        EAST,
+        WEST
+    }
+
 
     private int distance(Coordinate start, Coordinate end) {
         return (int)Math.sqrt(Math.pow((double)(start.getX() - end.getX()), 2) +

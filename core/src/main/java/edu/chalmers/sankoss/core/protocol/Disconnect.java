@@ -14,7 +14,11 @@ public class Disconnect {
 
 	}
 
-	public Player getPlayer() {
+    public Disconnect(Player player) {
+        this.player = player;
+    }
+
+    public Player getPlayer() {
 		return player;
 	}
 

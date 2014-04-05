@@ -108,13 +108,17 @@ public class SankossClientExample {
 
                     roomID = msg.getRoomID();
 
-                    int choice;
-                    do {
-                        choice = JOptionPane.showOptionDialog(null, "Start game?", "Start game",
-                                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
-                    } while (choice != 0);
+                    int choice = JOptionPane.showOptionDialog(null, "Start game?", "Start game",
+                            JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+                            new String[] {"Start", "Play with AI"}, null);
+                    if (choice == 0) {
+                        client.sendTCP(new StartGame(roomID));
+                    } else {
+                        client.sendTCP(new CreateAI(roomID));
+                        client.sendTCP(new StartGame(roomID));
+                    }
 
-                    client.sendTCP(new StartGame(roomID));
+
 
                 }
 
@@ -133,12 +137,6 @@ public class SankossClientExample {
                     StartedGame msg = (StartedGame) object;
 
                     if (msg.getGameID() == null) {
-                        int choice;
-                        do {
-                            choice = JOptionPane.showOptionDialog(null, "Start game?", "Start game",
-                                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
-                        } while (choice != 0);
-
                         client.sendTCP(new StartGame(roomID));
 
                         return;
@@ -183,25 +181,31 @@ public class SankossClientExample {
                 }
                 
                 if (object instanceof Turn) {
+                    if (player == null) return;
+
                     Coordinate coordinate = null;
-                    String input = null;
                     Player opponent = opponents.get(0); // Only if 2 players
 
-                    while (coordinate == null || input == null) {
+                    while (coordinate == null) {
+                        String input = null;
                         input = (String) JOptionPane.showInputDialog(null, "Skjut:", "Skjuter - #" + player.getID(), JOptionPane.QUESTION_MESSAGE, null, null, "1,1");
+
+                        if (input == null)
+                            System.exit(0);
 
                         try {
                             String coord = input.trim();
                             String[] coords = coord.split(",");
                             coordinate = new Coordinate(Integer.parseInt(coords[0]), Integer.parseInt(coords[1]));
                         } catch (IllegalArgumentException e) {
-                            System.out.println("Invalid coordinates. Turn is over, sucks to be you!");
+                            System.out.println("Invalid coordinates.");
                             coordinate = null;
                         } catch (NullPointerException e) {
-                            System.out.println("Invalid format on input. Turn is over, sucks to be you!");
+                            System.out.println("Invalid format on input.");
                             coordinate = null;
                         }
                     }
+
 
                     client.sendTCP(new Fire(gameID, opponent, coordinate));
 
@@ -209,6 +213,8 @@ public class SankossClientExample {
                 }
 
                 if (object instanceof FireResult) {
+                    if (player == null) return;
+
                     FireResult msg = (FireResult) object;
 
                     int x =  msg.getCoordinate().getX();
@@ -224,6 +230,8 @@ public class SankossClientExample {
                     return;
                 }
                 if (object instanceof DestroyedShip) {
+                    if (player == null) return;
+
                     DestroyedShip msg = (DestroyedShip) object;
                     if (msg.getPlayer().equals(player)) {
                         System.out.println(String.format("Your ship %s got destroyed!", msg.getShip()));
@@ -231,6 +239,15 @@ public class SankossClientExample {
                         System.out.println(String.format("Player #%d got their %s ship destroyed!!!", msg.getPlayer().getID(), msg.getShip()));
                     }
                     return;
+                }
+
+                if (object instanceof Disconnect) {
+                    if (player == null) return;
+
+                    Disconnect msg = (Disconnect) object;
+
+                    System.out.println("#" + msg.getPlayer().getID() + " disconnected from the server.");
+
                 }
                 
             }

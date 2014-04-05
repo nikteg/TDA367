@@ -1,25 +1,20 @@
 package edu.chalmers.sankoss.java;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.InetSocketAddress;
-import java.net.URI;
-import java.util.*;
-
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
-
 import com.google.gson.Gson;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
-import edu.chalmers.sankoss.core.Network;
-import edu.chalmers.sankoss.core.Player;
-import edu.chalmers.sankoss.core.Room;
-import edu.chalmers.sankoss.core.Ship;
+import edu.chalmers.sankoss.core.*;
 import edu.chalmers.sankoss.core.protocol.*;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.InetSocketAddress;
+import java.util.*;
 
 
 /**
@@ -38,6 +33,8 @@ public class SankossServer {
      * Map to link players with their connections
      */
     private Map<Player, PlayerConnection> players = new HashMap<Player, PlayerConnection>();
+
+    private List<SankossAI> ais = new ArrayList<SankossAI>();
 
 	public static void main(String[] args) throws IOException {
 		SankossServer sankossServer = new SankossServer();
@@ -274,8 +271,8 @@ public class SankossServer {
                         // Send turn to random player
                         int starter = new Random().nextInt(game.getPlayers().size() - 1);
                         game.setAttacker(game.getPlayers().get(starter));
-                        players.get(game.getAttacker()).sendTCP(new Turn());
 
+                        players.get(game.getAttacker()).sendTCP(new Turn());
                     }
 
                     player.setFleet(msg.getFleet());
@@ -330,12 +327,30 @@ public class SankossServer {
                             players.get(gamePlayer).sendTCP(new DestroyedShip(msg.getTarget(), targetShip));
                         }
                     }
-
 					game.changeAttacker();
+
                     players.get(game.getAttacker()).sendTCP(new Turn());
+
 
 					return;
 				}
+
+                if (object instanceof CreateAI) {
+                    if (player == null) return;
+
+                    CreateAI msg = (CreateAI) object;
+                    Room room;
+                    try {
+                        room = RoomFactory.getRoom(msg.getRoomID());
+                    } catch (RoomNotFoundException e) {
+                        e.printStackTrace();
+                        return;
+                    }
+
+                    System.out.println("Adding AI");
+                    new Thread(new SankossAI(room.getID())).start();
+
+                }
 
 			}
 
@@ -353,6 +368,10 @@ public class SankossServer {
                  */
                 for (Room room : RoomFactory.getRooms().values()) {
                     if (room.getPlayers().contains(player)) {
+                        room.getPlayers().remove(player);
+                        for (Player opponent : room.getPlayers()) {
+                            players.get(opponent).sendTCP(new Disconnect(player));
+                        }
                         try {
                             RoomFactory.removeRoom(room);
                         } catch (RoomNotFoundException e) {
@@ -361,8 +380,24 @@ public class SankossServer {
 
                         break;
                     }
-                }
 
+                }
+                for (Game game : GameFactory.getGames().values()) {
+                    if (game.getPlayers().contains(player)) {
+                        game.getPlayers().remove(player);
+                        for (Player opponent : game.getPlayers()) {
+                            players.get(opponent).sendTCP(new Disconnect(player));
+                        }
+                        try {
+                            GameFactory.removeGame(game);
+                        } catch (GameNotFoundException e) {
+                            System.out.println(e.getMessage());
+                        }
+
+                        break;
+                    }
+
+                }
                 players.remove(player);
 
                 System.out.println(String.format("#%d disconnected", connection.getID()));
@@ -428,8 +463,13 @@ public class SankossServer {
 
             private FetchData(Map<Player, PlayerConnection> players, Map<Long, Room> rooms, Map<Long, Game> games) {
                 for (Map.Entry<Player, PlayerConnection> pairs : players.entrySet()) {
-                    this.players.add(new FetchPlayer("Player #" + pairs.getKey().getID().toString(),
-                            pairs.getValue().getRemoteAddressTCP().toString()));
+                    if (pairs.getValue().getRemoteAddressTCP().toString().contains("127.0.0.1")) {
+                        this.players.add(new FetchPlayer("Player #" + pairs.getKey().getID().toString(), "Bot"));
+                    } else {
+                        this.players.add(new FetchPlayer("Player #" + pairs.getKey().getID().toString(),
+                                pairs.getValue().getRemoteAddressTCP().toString()));
+                    }
+
                 }
 
                 for (Map.Entry<Long, Room> pairs : rooms.entrySet()) {
