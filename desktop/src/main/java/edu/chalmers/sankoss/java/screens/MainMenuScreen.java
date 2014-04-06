@@ -44,9 +44,9 @@ public class MainMenuScreen extends AbstractScreen implements SankossClientListe
     private Label battleLabel;
     private Label statusLabel;
 
-    // Graphics of buttons
-    private static final int WIDTH_OF_BUTTON = 600;
-    private static final int HEIGHT_OF_BUTTON = 100;
+    // Dimensions of buttons
+    private final int WIDTH_OF_BUTTON = 600;
+    private final int HEIGHT_OF_BUTTON = 100;
 
     /**
      * @inheritdoc
@@ -54,6 +54,7 @@ public class MainMenuScreen extends AbstractScreen implements SankossClientListe
     public MainMenuScreen(SankossController controller, SankossGame game) {
         super(controller, game);
         client.addListener(this);
+        renderer = new MainMenuRenderer(model);
 
         create();
 
@@ -65,7 +66,7 @@ public class MainMenuScreen extends AbstractScreen implements SankossClientListe
     @Override
     public void show() {
         model = new MainMenu();
-        renderer = new MainMenuRenderer(model);
+        // renderer = new MainMenuRenderer(model);
 
     }
 
@@ -138,15 +139,13 @@ public class MainMenuScreen extends AbstractScreen implements SankossClientListe
         pnl.addActor(battleLabel);
         pnl.addActor(statusLabel);
 
-        stage.addActor(pnl);
+
+        renderer.drawActors(stage, pnl);
+        // stage.addActor(pnl);
 
         joinBtn.addListener(new JoinButtonListener());
         hostBtn.addListener(new HostButtonListener());
-    
 
-
-       
-        
         helpBtn.addListener(new ChangeListener(){
             @Override
             public void changed(ChangeEvent evt, Actor actor) {

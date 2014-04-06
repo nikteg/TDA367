@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
-import edu.chalmers.sankoss.core.SankossClientExample;
 import edu.chalmers.sankoss.java.Inputs.MainMenuInputProcessor;
 import edu.chalmers.sankoss.java.Models.*;
 import edu.chalmers.sankoss.java.client.SankossClient;
@@ -39,6 +38,13 @@ public class SankossController{
     // ENUMS to keep track of the current Screen
     public enum ScreenState {
         MAINMENU, LOBBY, PLACEMENT, INGAME
+    }
+
+    /**
+     * Default constructor.
+     */
+    public SankossController() {
+        super();
     }
 
 
@@ -111,7 +117,7 @@ public class SankossController{
      * @param inp is the new InputProcessor that will be set.
      */
     public void changeInput(InputProcessor inp) {
-        activeInputProcessor = inp;
+        this.activeInputProcessor = inp;
         Gdx.input.setInputProcessor(activeInputProcessor);
     }
 
