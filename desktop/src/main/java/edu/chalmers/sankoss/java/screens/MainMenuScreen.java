@@ -53,7 +53,8 @@ public class MainMenuScreen extends AbstractScreen implements SankossClientListe
      */
     public MainMenuScreen(SankossController controller, SankossGame game) {
         super(controller, game);
-        client.addListener(this);
+        model = new MainMenu();
+        model.getClient().addListener(this);
         renderer = new MainMenuRenderer(model);
 
         create();
@@ -65,8 +66,6 @@ public class MainMenuScreen extends AbstractScreen implements SankossClientListe
      */
     @Override
     public void show() {
-        model = new MainMenu();
-        // renderer = new MainMenuRenderer(model);
 
     }
 
@@ -173,6 +172,8 @@ public class MainMenuScreen extends AbstractScreen implements SankossClientListe
         // Adds font to skin
         skin.add("default", font);
 
+        // Configures how the Style of a button should behave and
+        // names is "white"
         btnStyle.up = skin.newDrawable("white", Color.DARK_GRAY);
         btnStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
         btnStyle.checked = skin.newDrawable("white", Color.BLUE);
@@ -224,7 +225,7 @@ public class MainMenuScreen extends AbstractScreen implements SankossClientListe
                     // TODO: Create room, disable join game
 
                     statusLabel.setText("Waiting for opponent to join " + roomName + "..");
-                    client.createRoom(roomName, ""); //Roomname and password
+                    model.getClient().createRoom(roomName, ""); //Roomname and password
 
                 }
 

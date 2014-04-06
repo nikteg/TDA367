@@ -27,7 +27,6 @@ public abstract class AbstractScreen implements Screen, ApplicationListener {
     protected Renderer renderer;
     protected SankossGame game;
     protected SankossController controller;
-    protected static SankossClient client = new SankossClient("localhost");
 
     protected Stage stage;
     protected Skin skin;
@@ -46,14 +45,8 @@ public abstract class AbstractScreen implements Screen, ApplicationListener {
 
     }
 
-    public SankossClient getClient() {
-        return client;
-    }
-
-    public void setClient(SankossClient client) {
-        this.client = client;
-        System.out.println("Client with host " + client.getHost() + " is set!");
-
+    public ScreenModel getModel() {
+        return model;
     }
 
     /**
