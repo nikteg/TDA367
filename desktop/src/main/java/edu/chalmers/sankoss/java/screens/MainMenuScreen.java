@@ -44,7 +44,7 @@ public class MainMenuScreen extends AbstractScreen implements SankossClientListe
     private Label battleLabel;
     private Label statusLabel;
 
-    // Dimensions of buttons
+    // Dimensions of buttonsz
     private final int WIDTH_OF_BUTTON = 600;
     private final int HEIGHT_OF_BUTTON = 100;
 
