@@ -49,9 +49,9 @@ public class LobbyScreen extends AbstractScreen implements SankossClientListener
     private WidgetGroup bottomPanel;
     private WidgetGroup middlePanel;
 
-    // Graphics of buttons
-    private static final int WIDTH_OF_BUTTON = 150;
-    private static final int HEIGHT_OF_BUTTON = 50;
+    // Dimensions of buttons
+    private final int WIDTH_OF_BUTTON = 150;
+    private final int HEIGHT_OF_BUTTON = 50;
 
     /**
      * @inheritdoc
@@ -59,6 +59,7 @@ public class LobbyScreen extends AbstractScreen implements SankossClientListener
     public LobbyScreen(SankossController controller, SankossGame game) {
         super(controller, game);
         client.addListener(this);
+        renderer = new LobbyRenderer(model);
         //((Lobby) model).setClient(this.client);
         create();
 
@@ -70,9 +71,7 @@ public class LobbyScreen extends AbstractScreen implements SankossClientListener
      */
     @Override
     public void show() {
-        // System.out.println("Welcome to the Lobby!");
         model = new Lobby();
-        renderer = new LobbyRenderer(model);
     }
 
     /**
@@ -172,7 +171,7 @@ public class LobbyScreen extends AbstractScreen implements SankossClientListener
         topPanel.addActor(infoLabel);
         topPanel.addActor(lobbyLabel);
 
-        Lobby lobby = (Lobby)controller.getModel();
+        this.lobby = (Lobby)controller.getModel();
 
         client.fetchRooms();
 
@@ -187,9 +186,9 @@ public class LobbyScreen extends AbstractScreen implements SankossClientListener
         //middlePanel.addActor(roomList);
 
         // Adds the panels to stage
-        stage.addActor(topPanel);
-        stage.addActor(bottomPanel);
-        stage.addActor(middlePanel);
+        renderer.drawActors(stage, topPanel);
+        renderer.drawActors(stage, bottomPanel);
+        renderer.drawActors(stage, middlePanel);
 
         // Adds listener to buttons
         joinBtn.addListener(new JoinButtonListener());
@@ -217,37 +216,16 @@ public class LobbyScreen extends AbstractScreen implements SankossClientListener
 
     }
 
-    /**
-     * Method for matching a Room with a name.
-     * @param roomName name of Room.
-     * @return
-     */
-    public Room findRoom(String roomName) {
-
-        /*for(Room room : this.gameRooms) {
-            if(room.getName().equals(roomName)) {
-                return room;
-            }
-        }*/
-
-        return null;
-    }
-
-
-
     private class JoinButtonListener extends ChangeListener{
         @Override
         public void changed(ChangeEvent event, Actor actor) {
             // Retrives selected name and matches with room
             String roomName = roomList.getSelection();
-            Room roomToJoin = findRoom(roomName);
-            System.out.println("Selected room: #" + roomName);
+            Room roomToJoin = lobby.getRoomByName(roomName, gameRooms);
+            System.out.println("Selected room: #" + roomToJoin.getName());
 
-
-
-            // TODO join roomToJoin
-
-            // controller.setPlacementScreen();
+            client.joinRoom(roomToJoin.getID());
+            controller.setPlacementScreen();
         }
     }
 
@@ -275,8 +253,9 @@ public class LobbyScreen extends AbstractScreen implements SankossClientListener
 
         }
 
+        lobby = new Lobby(this.gameRooms);
+
         // Fills visual list with rooms
-        //roomList.setItems(rooms.values().toArray(new Room[rooms.size()]));
         this.roomList = new List(rooms.values().toArray(new Room[rooms.size()]), listStyle);
 
         this.roomList.setX(50);

@@ -1,6 +1,8 @@
 package edu.chalmers.sankoss.java.Renderers;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import edu.chalmers.sankoss.java.Models.ScreenModel;
 
 /**
@@ -40,4 +42,8 @@ public abstract class Renderer {
      * the view of the application.
      */
     public abstract void render();
+
+    public void drawActors(Stage stage, Actor actor) {
+        stage.addActor(actor);
+    }
 }

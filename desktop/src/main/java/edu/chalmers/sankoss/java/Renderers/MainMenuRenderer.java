@@ -21,10 +21,14 @@ public class MainMenuRenderer extends Renderer{
         super(currentModel);
     }
 
+    /**
+     * This method loops.
+     */
     @Override
     public void render() {
         Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glClearColor(0.09f, 0.28f, 0.2f, 1);
-
     }
+
+
 }

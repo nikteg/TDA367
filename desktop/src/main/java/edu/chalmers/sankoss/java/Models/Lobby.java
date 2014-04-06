@@ -31,6 +31,16 @@ public class Lobby extends ScreenModel {
         this.roomMap = roomMap;
     }
 
+    public Room getRoomByName(String roomName, Map<Long, Room> rooms) {
+        for(Room room : rooms.values()) {
+            if(room.getName().equals(roomName)) {
+                return room;
+            }
+        }
+
+        return null;
+    }
+
     public void setClient(SankossClient client) {
         this.client = client;
 
