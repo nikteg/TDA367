@@ -5,11 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import edu.chalmers.sankoss.java.Inputs.MainMenuInputProcessor;
-import edu.chalmers.sankoss.java.Models.*;
-import edu.chalmers.sankoss.java.client.SankossClient;
 import edu.chalmers.sankoss.java.screens.*;
-
-import java.io.IOException;
 
 /**
  * Logical controller for the application.
@@ -49,7 +45,8 @@ public class SankossController{
      */
     public SankossController(SankossGame sankossGame) {
         this.sankossGame = sankossGame;
-        setMainMenuScreen();
+        // setMainMenuScreen();
+        changeScreen(new MainMenuScreen(this, this.sankossGame));
         screen.getModel().connectClient();
     }
 
@@ -98,45 +95,50 @@ public class SankossController{
         Gdx.input.setInputProcessor(activeInputProcessor);
     }
 
+    public void changeScreen(AbstractScreen screen) {
+        this.screen = screen;
+        this.sankossGame.setScreen(this.screen);
+    }
+
     /**
      * Creates instance of MainMenuScreen.
      * This type of method needs to be available for the Screens.
      */
-    public void setMainMenuScreen(){
+    /*public void setMainMenuScreen(){
 
         this.screen = new MainMenuScreen(this, sankossGame);
         this.sankossGame.setScreen(screen);
-    }
+    }*/
 
     /**
      * Creates instance of LobbyScreen.
      * This type of method needs to be available for the Screens.
      */
-    public void setLobbyScreen(){
+    /*public void setLobbyScreen(){
 
         this.screen = new LobbyScreen(this, sankossGame);
         this.sankossGame.setScreen(screen);
-    }
+    }*/
 
     /**
      * Creates instance of PlacementScreen.
      * This type of method needs to be available for the Screens.
      */
-    public void setPlacementScreen(){
+    /*public void setPlacementScreen(){
 
         this.screen = new PlacementScreen(this, sankossGame);
         this.sankossGame.setScreen(screen);
-    }
+    }*/
 
     /**
      * Creates instance of InGameScreen.
      * This type of method needs to be available for the Screens.
      */
-    public void setInGameScreen(){
+    /*public void setInGameScreen(){
 
         this.screen = new InGameScreen(this, sankossGame);
         this.sankossGame.setScreen(screen);
-    }
+    }*/
 
     /**
      *  Screen updater for testing.

@@ -225,14 +225,16 @@ public class LobbyScreen extends AbstractScreen implements SankossClientListener
             System.out.println("Selected room: #" + roomToJoin.getName());
 
             model.getClient().joinRoom(roomToJoin.getID());
-            controller.setPlacementScreen();
+            //controller.setPlacementScreen();
+            controller.changeScreen(new PlacementScreen(controller, game));
         }
     }
 
     private class CancelButtonListener extends ChangeListener{
         @Override
         public void changed(ChangeEvent event, Actor actor) {
-            controller.setMainMenuScreen();
+            // controller.setMainMenuScreen();
+            controller.changeScreen(new MainMenuScreen(controller, game));
         }
     }
 

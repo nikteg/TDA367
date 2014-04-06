@@ -148,7 +148,8 @@ public class MainMenuScreen extends AbstractScreen implements SankossClientListe
         helpBtn.addListener(new ChangeListener(){
             @Override
             public void changed(ChangeEvent evt, Actor actor) {
-                controller.setPlacementScreen();
+                //controller.setPlacementScreen();
+                controller.changeScreen(new PlacementScreen(controller, game));
             }
         });
     }
@@ -210,7 +211,8 @@ public class MainMenuScreen extends AbstractScreen implements SankossClientListe
         @Override
         public void changed(ChangeEvent event, Actor actor) {
 
-            controller.setLobbyScreen();
+            //controller.setLobbyScreen();
+            controller.changeScreen(new LobbyScreen(controller, game));
         }
     }
 
