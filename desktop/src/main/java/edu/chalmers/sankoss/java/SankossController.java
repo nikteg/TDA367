@@ -22,17 +22,8 @@ import java.io.IOException;
  */
 public class SankossController{
     private InputProcessor activeInputProcessor;
-    private SankossClient client;
-    private ScreenModel model;
 
-    // Instance of the started game
     private SankossGame sankossGame;
-
-    // Instances of all screens
-    /*private InGameScreen inGameScreen;
-    private PlacementScreen placementScreen;
-    private MainMenuScreen mainMenuScreen;
-    private LobbyScreen lobbyScreen;*/
     private AbstractScreen screen;
 
     // ENUMS to keep track of the current Screen
@@ -58,22 +49,8 @@ public class SankossController{
      */
     public SankossController(SankossGame sankossGame) {
         this.sankossGame = sankossGame;
-        //this.client = new SankossClient("localhost");
         setMainMenuScreen();
-        this.client = screen.getClient();
-
-        try {
-            client.connect();
-
-        } catch (IOException exc) {
-            System.out.print("ERROR: Could not connect to " + client.getHost());
-            exc.getStackTrace();
-        }
-        // lobbyScreen = new LobbyScreen(this, sankossGame);
-        // activeInputProcessor = new MainMenuInputProcessor();
-
-        // Sets the input processor and the main menu screen
-        // Gdx.input.setInputProcessor(activeInputProcessor);
+        screen.getModel().connectClient();
     }
 
     /**
@@ -126,10 +103,8 @@ public class SankossController{
      * This type of method needs to be available for the Screens.
      */
     public void setMainMenuScreen(){
-        this.model = new MainMenu();
+
         this.screen = new MainMenuScreen(this, sankossGame);
-        //this.screen.setClient(client);
-        //this.client.addListener(screen);
         this.sankossGame.setScreen(screen);
     }
 
@@ -138,11 +113,8 @@ public class SankossController{
      * This type of method needs to be available for the Screens.
      */
     public void setLobbyScreen(){
-        this.model = new Lobby();
+
         this.screen = new LobbyScreen(this, sankossGame);
-        //this.screen.setClient(client);
-        //this.client.addListener(screen);
-        ((Lobby) model).setClient(this.client);
         this.sankossGame.setScreen(screen);
     }
 
@@ -151,9 +123,8 @@ public class SankossController{
      * This type of method needs to be available for the Screens.
      */
     public void setPlacementScreen(){
-        this.model = new Placement();
+
         this.screen = new PlacementScreen(this, sankossGame);
-        screen.setClient(client);
         this.sankossGame.setScreen(screen);
     }
 
@@ -162,9 +133,8 @@ public class SankossController{
      * This type of method needs to be available for the Screens.
      */
     public void setInGameScreen(){
-        this.model = new InGame();
+
         this.screen = new InGameScreen(this, sankossGame);
-        screen.setClient(client);
         this.sankossGame.setScreen(screen);
     }
 
@@ -180,7 +150,4 @@ public class SankossController{
         return false;
     }
 
-    public ScreenModel getModel() {
-        return this.model;
-    }
 }

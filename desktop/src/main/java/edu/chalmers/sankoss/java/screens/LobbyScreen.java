@@ -29,7 +29,7 @@ import java.util.*;
  */
 public class LobbyScreen extends AbstractScreen implements SankossClientListener{
 
-    private Lobby lobby;
+    // private Lobby lobby;
     private Object[] keys;
     private Room[] rooms;
     private String[] roomNames;
@@ -58,9 +58,9 @@ public class LobbyScreen extends AbstractScreen implements SankossClientListener
      */
     public LobbyScreen(SankossController controller, SankossGame game) {
         super(controller, game);
-        client.addListener(this);
+        model = new Lobby();
+        model.getClient().addListener(this);
         renderer = new LobbyRenderer(model);
-        //((Lobby) model).setClient(this.client);
         create();
 
     }
@@ -71,7 +71,7 @@ public class LobbyScreen extends AbstractScreen implements SankossClientListener
      */
     @Override
     public void show() {
-        model = new Lobby();
+
     }
 
     /**
@@ -102,8 +102,8 @@ public class LobbyScreen extends AbstractScreen implements SankossClientListener
         skin.add("default", font);
 
 
-        // Configure a style for button and name it "default". Skin resources are stored by type,
-        // so this doesn't overwrite the font.
+        // Configures how the Style of a button should behave and
+        // names is "white"
         btnStyle.up = skin.newDrawable("white", Color.DARK_GRAY);
         btnStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
         btnStyle.checked = skin.newDrawable("white", Color.BLUE);
@@ -171,9 +171,9 @@ public class LobbyScreen extends AbstractScreen implements SankossClientListener
         topPanel.addActor(infoLabel);
         topPanel.addActor(lobbyLabel);
 
-        this.lobby = (Lobby)controller.getModel();
+        //this.lobby = (Lobby)controller.getModel();
 
-        client.fetchRooms();
+        model.getClient().fetchRooms();
 
         //Object[] tempRooms = {"                                                              "};
 
@@ -221,10 +221,10 @@ public class LobbyScreen extends AbstractScreen implements SankossClientListener
         public void changed(ChangeEvent event, Actor actor) {
             // Retrives selected name and matches with room
             String roomName = roomList.getSelection();
-            Room roomToJoin = lobby.getRoomByName(roomName, gameRooms);
+            Room roomToJoin = model.getRoomByName(roomName, gameRooms);
             System.out.println("Selected room: #" + roomToJoin.getName());
 
-            client.joinRoom(roomToJoin.getID());
+            model.getClient().joinRoom(roomToJoin.getID());
             controller.setPlacementScreen();
         }
     }
@@ -253,7 +253,8 @@ public class LobbyScreen extends AbstractScreen implements SankossClientListener
 
         }
 
-        lobby = new Lobby(this.gameRooms);
+        // lobby = new Lobby(this.gameRooms);
+        model.setRoomMap(gameRooms);
 
         // Fills visual list with rooms
         this.roomList = new List(rooms.values().toArray(new Room[rooms.size()]), listStyle);

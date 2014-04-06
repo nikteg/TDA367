@@ -16,7 +16,6 @@ import java.util.Set;
  */
 public class Lobby extends ScreenModel {
     private Map<Long, Room> roomMap = new HashMap<Long, Room>();
-    private SankossClient client;
     private String[] names = new String[0];
 
     public Lobby() {
@@ -24,13 +23,8 @@ public class Lobby extends ScreenModel {
     }
 
     /**
-     * Constructor to set Map of rooms.
-     * @param roomMap map with rooms on network.
+     * @inheritdoc
      */
-    public Lobby(Map<Long, Room> roomMap) {
-        this.roomMap = roomMap;
-    }
-
     public Room getRoomByName(String roomName, Map<Long, Room> rooms) {
         for(Room room : rooms.values()) {
             if(room.getName().equals(roomName)) {
@@ -41,11 +35,9 @@ public class Lobby extends ScreenModel {
         return null;
     }
 
-    public void setClient(SankossClient client) {
-        this.client = client;
-
-    }
-
+    /**
+     * @inheritdoc
+     */
     public void setRoomMap(Map<Long, Room> roomMap) {
         this.roomMap = roomMap;
     }
