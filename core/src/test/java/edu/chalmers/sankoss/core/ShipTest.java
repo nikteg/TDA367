@@ -4,11 +4,9 @@
 package edu.chalmers.sankoss.core;
 
 import static org.junit.Assert.*;
-
 import java.util.LinkedList;
-
 import org.junit.Test;
-import edu.chalmers.sankoss.core.Ship.ROTATION;
+import edu.chalmers.sankoss.core.Ship.Rotation;
 
 /**
  * @author Daniel Eineving
@@ -136,10 +134,10 @@ public class ShipTest {
 		Ship shipNorth= new Ship(new Coordinate(2,2), new Coordinate(2,4));
 		Ship shipSouth= new Ship(new Coordinate(2,4), new Coordinate(2,2));
 		
-		assertTrue(shipWest.getRotation()== ROTATION.WEST);
-		assertTrue(shipEast.getRotation()== ROTATION.EAST);
-		assertTrue(shipNorth.getRotation()== ROTATION.NORTH);
-		assertTrue(shipSouth.getRotation()== ROTATION.SOUTH);
+		assertTrue(shipWest.getRotation()== Rotation.WEST);
+		assertTrue(shipEast.getRotation()== Rotation.EAST);
+		assertTrue(shipNorth.getRotation()== Rotation.NORTH);
+		assertTrue(shipSouth.getRotation()== Rotation.SOUTH);
 	}
 
 	/**

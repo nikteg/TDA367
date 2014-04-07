@@ -21,7 +21,7 @@ public class Ship {
 	 * @date 2014-04-07
 	 *
 	 */
-	private enum ROTATION {
+	public enum Rotation {
 		NORTH,
 		SOUTH,
 		EAST,
@@ -137,6 +137,8 @@ public class Ship {
 	 * @return True if the target coordinate is a part of the ship
 	 */
 	public boolean isShip(Coordinate target){
+		
+		//TODO We do not need these long returns if we have the direction enum
 		switch (getRotation()) {
 		case EAST:
 			return (target.getY() == start.getY() && target.getX() >= start.getX() && target.getX() <= end.getX());
@@ -149,17 +151,17 @@ public class Ship {
 		}
 	}
 
-	public ROTATION getRotation() {
+	public Rotation getRotation() {
 		if (start.getX() < end.getX())
-			return ROTATION.WEST;
+			return Rotation.WEST;
 
 		if (start.getX() > end.getX())
-			return ROTATION.EAST;
+			return Rotation.EAST;
 
 		if (start.getY() < end.getY())
-			return ROTATION.NORTH;
+			return Rotation.NORTH;
 
-		return ROTATION.SOUTH;
+		return Rotation.SOUTH;
 
 	}
 
