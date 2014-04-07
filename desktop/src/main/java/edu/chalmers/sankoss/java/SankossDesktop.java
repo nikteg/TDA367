@@ -5,8 +5,12 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
 public class SankossDesktop {
 	public static void main (String[] args) {
-		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.useGL20 = true;
-		new LwjglApplication(new SankossGame(), config);
+		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
+        cfg.title = "Battleships";
+        cfg.useGL20 = true;
+        cfg.width = 800;
+        cfg.height = 600;
+
+		new LwjglApplication(new SankossGame(), cfg);
 	}
 }

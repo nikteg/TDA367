@@ -4,8 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
-import edu.chalmers.sankoss.java.Inputs.MainMenuInputProcessor;
-import edu.chalmers.sankoss.java.screens.*;
+import edu.chalmers.sankoss.java.screens.AbstractScreen;
+import edu.chalmers.sankoss.java.screens.MainMenuScreen;
 
 /**
  * Logical controller for the application.
@@ -50,6 +50,7 @@ public class SankossController{
         screen.getModel().connectClient();
     }
 
+    // TODO: Remove this method
     /**
      * Method for returning a new Screen and setting correct
      * InputProcessor.
@@ -82,8 +83,8 @@ public class SankossController{
                 return null;
         }
 
-        activeInputProcessor = new MainMenuInputProcessor();
-        return new MainMenuScreen(this, sankossGame);
+        // activeInputProcessor = new MainMenuInputProcessor();
+        return null;
     }
 
     /**
@@ -140,6 +141,8 @@ public class SankossController{
         this.sankossGame.setScreen(screen);
     }*/
 
+
+    // TODO: Remove this method
     /**
      *  Screen updater for testing.
      *  If F5 is pressed in the InputProcessor we'll change to next Screen.

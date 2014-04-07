@@ -1,7 +1,6 @@
 package edu.chalmers.sankoss.java.Models;
 
 import edu.chalmers.sankoss.core.Room;
-import edu.chalmers.sankoss.java.client.SankossClient;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -55,7 +54,8 @@ public class Lobby extends ScreenModel {
     }
 
     /**
-     * Method for getting Rooms from roomMap
+     * Method for getting Rooms from roomMap.
+     * @return an array of the Rooms.
      */
     public Room[] getRooms() {
         Object[] keys = getKeys();

@@ -1,7 +1,5 @@
 package edu.chalmers.sankoss.core;
 
-import edu.chalmers.sankoss.core.Player;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,5 +59,10 @@ public class Room {
 
     public String toString() {
         return this.getName();
+    }
+
+    public boolean equals(Room room) {
+        return(name.equals(room.getName()) && id == room.getID()
+                && password.equals(room.getPassword()));
     }
 }
