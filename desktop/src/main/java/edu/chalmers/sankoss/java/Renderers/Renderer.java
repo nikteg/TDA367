@@ -3,6 +3,7 @@ package edu.chalmers.sankoss.java.Renderers;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import edu.chalmers.sankoss.java.Models.ScreenModel;
 
 /**
@@ -17,6 +18,7 @@ public abstract class Renderer {
     protected OrthographicCamera gameCamera;
     protected ScreenModel currentModel;
     protected int width, height;
+    protected static Label.LabelStyle labelStyle;
 
     /**
      * Sets initial variables.
@@ -28,6 +30,7 @@ public abstract class Renderer {
     public Renderer(ScreenModel currentModel) {
         this.currentModel = currentModel;
         this.gameCamera = new OrthographicCamera();
+        labelStyle = new Label.LabelStyle();
     }
 
     public void setSize(int width, int height) {
@@ -46,4 +49,10 @@ public abstract class Renderer {
     public void drawActors(Stage stage, Actor actor) {
         stage.addActor(actor);
     }
+
+    /**
+     * Method for drawing controllers that wont be interactable.
+     */
+    public abstract void drawStaticControllers();
+
 }

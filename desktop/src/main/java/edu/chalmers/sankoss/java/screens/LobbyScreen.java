@@ -106,7 +106,7 @@ public class LobbyScreen extends AbstractScreen implements SankossClientListener
         // names is "white"
         btnStyle.up = skin.newDrawable("white", Color.DARK_GRAY);
         btnStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
-        btnStyle.checked = skin.newDrawable("white", Color.BLUE);
+        btnStyle.checked = skin.newDrawable("white", Color.DARK_GRAY);
         btnStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
 
         skin.add("default", btnStyle);
@@ -127,7 +127,6 @@ public class LobbyScreen extends AbstractScreen implements SankossClientListener
         middlePanel = new WidgetGroup();
 
         btnStyle = new TextButton.TextButtonStyle();
-        labelStyle = new Label.LabelStyle();
         listStyle = new List.ListStyle();
 
         // Configures necessary attributes for buttons
@@ -145,7 +144,7 @@ public class LobbyScreen extends AbstractScreen implements SankossClientListener
         // Makes buttons and labels with default style of button
         joinBtn = new TextButton("Join", btnStyle);
         joinBtn.setX(600 - WIDTH_OF_BUTTON);
-        joinBtn.setX(0);
+        joinBtn.setY(0);
         cancelBtn = new TextButton("Cancel", btnStyle);
         cancelBtn.setX(0);
         cancelBtn.setY(0);
