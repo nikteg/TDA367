@@ -14,14 +14,27 @@ public class Ship {
 	private int size;
 	private Coordinate start, end;
 	private int hits=0;
-	
-	
+
+	/**
+	 * Enum that describes in what way a ship is directed.
+	 * @author Daniel Eineving
+	 * @date 2014-04-07
+	 *
+	 */
+	public enum Rotation {
+		NORTH,
+		SOUTH,
+		EAST,
+		WEST
+	}
+
+
 	/**
 	 * Creates a ship without length and coordinates
 	 */
-    public Ship() {
-    	//KryoNet needs an empty constructor
-    }
+	public Ship() {
+		//KryoNet needs an empty constructor
+	}
 
 	/**
 	 * Creates a Ship with a given position
@@ -30,10 +43,10 @@ public class Ship {
 	 */
 
 	public Ship(Coordinate start, Coordinate end){
-        size = distance(start, end) + 1;
+		size = distance(start, end) + 1;
 		setCoordinates(start, end);
 	}
-	
+
 	/**
 	 * Sets the coordinates of the ship
 	 * @param start Start coordinate
@@ -49,7 +62,7 @@ public class Ship {
 		this.start=start;
 		this.end=end;
 	}
-	
+
 	/**
 	 * Start coordinate of the ship
 	 * @return the start coordinate
@@ -57,7 +70,7 @@ public class Ship {
 	public Coordinate getStart(){
 		return start;
 	}
-	
+
 	/**
 	 * End coordinate of the ship
 	 * @return the end coordinate
@@ -65,7 +78,7 @@ public class Ship {
 	public Coordinate getEnd(){
 		return end;
 	}
-	
+
 	/**
 	 * Gets the size of the ship
 	 * @return Size of the ship
@@ -74,47 +87,47 @@ public class Ship {
 		return size;
 	}
 
-    @Override
-    public String toString() {
-        return String.format("%d:(%d, %d)(%d, %d)", size, start.getX(), start.getY(), end.getX(), end.getY());
-    }
+	@Override
+	public String toString() {
+		return String.format("%d:(%d, %d)(%d, %d)", size, start.getX(), start.getY(), end.getX(), end.getY());
+	}
 
 	/**
 	 * Gets all the boats coordinates as a LinkedList
 	 * @return The coordinates of the boat.
 	 */
-    //TODO Do we need this?
+	//TODO Do we need this?
 	public LinkedList<Coordinate> getCoordinates(){
 		LinkedList<Coordinate> coordinates = new LinkedList<Coordinate>();
+		if(size > 0){
+			coordinates.add(start);
 
-		coordinates.add(start);
-
-		if(start.getX()==end.getX()){
-			if(start.getY()<end.getX()){
-				for(int i=1;i<(size-1);i++){
-					coordinates.add(new Coordinate(start.getX(), start.getY()+i));
+			if(start.getX()==end.getX()){
+				if(start.getY()<end.getX()){
+					for(int i=1;i<(size-1);i++){
+						coordinates.add(new Coordinate(start.getX(), start.getY()+i));
+					}
+				}
+				else{
+					for(int i=1;i<(size-1);i++){
+						coordinates.add(new Coordinate(start.getX(), start.getY()-i));
+					}
 				}
 			}
 			else{
-				for(int i=1;i<(size-1);i++){
-					coordinates.add(new Coordinate(start.getX(), start.getY()-i));
+				if(start.getY()<end.getX()){
+					for(int i=1;i<(size-1);i++){
+						coordinates.add(new Coordinate(start.getX()+i, start.getY()));
+					}
+				}
+				else{
+					for(int i=1;i<(size-1);i++){
+						coordinates.add(new Coordinate(start.getX()-i, start.getY()));
+					}
 				}
 			}
+			coordinates.add(end);
 		}
-		else{
-			if(start.getY()<end.getX()){
-				for(int i=1;i<(size-1);i++){
-					coordinates.add(new Coordinate(start.getX()+i, start.getY()));
-				}
-			}
-			else{
-				for(int i=1;i<(size-1);i++){
-					coordinates.add(new Coordinate(start.getX()-i, start.getY()));
-				}
-			}
-		}
-		coordinates.add(end);
-
 		return coordinates;
 	}
 
@@ -124,44 +137,38 @@ public class Ship {
 	 * @return True if the target coordinate is a part of the ship
 	 */
 	public boolean isShip(Coordinate target){
-        switch (getRotation()) {
-            case EAST:
-                return (target.getY() == start.getY() && target.getX() >= start.getX() && target.getX() <= end.getX());
-            case WEST:
-                return (target.getY() == start.getY() && target.getX() <= start.getX() && target.getX() >= end.getX());
-            case SOUTH:
-                return (target.getX() == start.getX() && target.getY() >= start.getY() && target.getY() <= end.getY());
-            default:
-                return (target.getX() == start.getX() && target.getY() <= start.getY() && target.getY() >= end.getY());
-        }
+		
+		//TODO We do not need these long returns if we have the direction enum
+		switch (getRotation()) {
+		case EAST:
+			return (target.getY() == start.getY() && target.getX() >= start.getX() && target.getX() <= end.getX());
+		case WEST:
+			return (target.getY() == start.getY() && target.getX() <= start.getX() && target.getX() >= end.getX());
+		case SOUTH:
+			return (target.getX() == start.getX() && target.getY() >= start.getY() && target.getY() <= end.getY());
+		default:
+			return (target.getX() == start.getX() && target.getY() <= start.getY() && target.getY() >= end.getY());
+		}
 	}
 
-    public ROTATION getRotation() {
-        if (start.getX() < end.getX())
-            return ROTATION.EAST;
+	public Rotation getRotation() {
+		if (start.getX() < end.getX())
+			return Rotation.WEST;
 
-        if (start.getX() > end.getX())
-            return ROTATION.WEST;
+		if (start.getX() > end.getX())
+			return Rotation.EAST;
 
-        if (start.getY() < end.getY())
-            return ROTATION.SOUTH;
+		if (start.getY() < end.getY())
+			return Rotation.NORTH;
 
-        return ROTATION.NORTH;
+		return Rotation.SOUTH;
 
-    }
+	}
 
-    private enum ROTATION {
-        NORTH,
-        SOUTH,
-        EAST,
-        WEST
-    }
-
-
-    private int distance(Coordinate start, Coordinate end) {
-        return (int)Math.sqrt(Math.pow((double)(start.getX() - end.getX()), 2) +
-                Math.pow((double)(start.getY() - end.getY()), 2));
-    }
+	private int distance(Coordinate start, Coordinate end) {
+		return (int)Math.sqrt(Math.pow((double)(start.getX() - end.getX()), 2) +
+				Math.pow((double)(start.getY() - end.getY()), 2));
+	}
 
 	/**
 	 * Adds a hit to the ship
@@ -197,7 +204,7 @@ public class Ship {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		
+
 		//TODO does now return false if no rotated the same direction
 		Ship other = (Ship) obj;
 
