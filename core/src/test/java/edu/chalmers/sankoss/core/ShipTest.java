@@ -8,6 +8,7 @@ import static org.junit.Assert.*;
 import java.util.LinkedList;
 
 import org.junit.Test;
+import edu.chalmers.sankoss.core.Ship.ROTATION;
 
 /**
  * @author Daniel Eineving
@@ -67,7 +68,8 @@ public class ShipTest {
 	 */
 	@Test
 	public void testGetStart() {
-		fail("Not yet implemented");
+		Ship ship= new Ship(new Coordinate(2,2), new Coordinate(2,4));
+		assertTrue(ship.getStart().equals(new Coordinate(2,2)));
 	}
 
 	/**
@@ -75,7 +77,8 @@ public class ShipTest {
 	 */
 	@Test
 	public void testGetEnd() {
-		fail("Not yet implemented");
+		Ship ship= new Ship(new Coordinate(2,2), new Coordinate(2,4));
+		assertTrue(ship.getEnd().equals(new Coordinate(2,4)));
 	}
 
 	/**
@@ -83,7 +86,8 @@ public class ShipTest {
 	 */
 	@Test
 	public void testGetSize() {
-		fail("Not yet implemented");
+		Ship ship= new Ship(new Coordinate(2,2), new Coordinate(2,4));
+		assertTrue(ship.getSize()==3);
 	}
 
 	/**
@@ -114,7 +118,12 @@ public class ShipTest {
 	 */
 	@Test
 	public void testIsShip() {
-		fail("Not yet implemented");
+		Ship ship= new Ship(new Coordinate(2,2), new Coordinate(2,4));
+		
+		for(int i=0;i<3;i++){
+			assertTrue(ship.getCoordinates().contains(new Coordinate(2,i+2)));
+		}
+		assertFalse(ship.getCoordinates().contains(new Coordinate(3,3)));
 	}
 
 	/**
@@ -122,7 +131,15 @@ public class ShipTest {
 	 */
 	@Test
 	public void testGetRotation() {
-		fail("Not yet implemented");
+		Ship shipWest= new Ship(new Coordinate(2,2), new Coordinate(4,2));
+		Ship shipEast= new Ship(new Coordinate(4,2), new Coordinate(2,2));
+		Ship shipNorth= new Ship(new Coordinate(2,2), new Coordinate(2,4));
+		Ship shipSouth= new Ship(new Coordinate(2,4), new Coordinate(2,2));
+		
+		assertTrue(shipWest.getRotation()== ROTATION.WEST);
+		assertTrue(shipEast.getRotation()== ROTATION.EAST);
+		assertTrue(shipNorth.getRotation()== ROTATION.NORTH);
+		assertTrue(shipSouth.getRotation()== ROTATION.SOUTH);
 	}
 
 	/**
@@ -130,7 +147,10 @@ public class ShipTest {
 	 */
 	@Test
 	public void testShipHit() {
-		fail("Not yet implemented");
+		Ship ship= new Ship(new Coordinate(2,2), new Coordinate(3,2));
+		ship.shipHit();
+		ship.shipHit();
+		assertTrue(ship.isDestroyed());
 	}
 
 	/**
@@ -138,7 +158,16 @@ public class ShipTest {
 	 */
 	@Test
 	public void testIsDestroyed() {
-		fail("Not yet implemented");
+		Ship ship= new Ship(new Coordinate(2,2), new Coordinate(2,4));
+		
+		assertFalse(ship.isDestroyed());
+		ship.shipHit();
+		assertFalse(ship.isDestroyed());
+		ship.shipHit();
+		assertFalse(ship.isDestroyed());
+		ship.shipHit();
+		
+		assertTrue(ship.isDestroyed());
 	}
 
 	/**
@@ -146,7 +175,17 @@ public class ShipTest {
 	 */
 	@Test
 	public void testEqualsObject() {
-		fail("Not yet implemented");
+		Ship ship1= new Ship(new Coordinate(2,2), new Coordinate(2,4));
+		Ship ship2= new Ship(new Coordinate(2,2), new Coordinate(2,4));
+		Ship ship3= new Ship(new Coordinate(2,2), new Coordinate(2,5));
+		
+		assertTrue(ship1.equals(ship2));
+		assertTrue(ship2.equals(ship1));
+		assertTrue(ship1.equals(ship1));
+		
+		assertFalse(ship1.equals(ship3));
+		
+		assertFalse(ship1.equals("Ship"));	
 	}
 
 }
