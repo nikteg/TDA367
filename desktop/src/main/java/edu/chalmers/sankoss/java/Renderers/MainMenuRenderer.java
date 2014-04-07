@@ -2,8 +2,8 @@ package edu.chalmers.sankoss.java.Renderers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL10;
-import edu.chalmers.sankoss.java.Models.ScreenModel;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import edu.chalmers.sankoss.java.Models.ScreenModel;
 
 /**
  * Description of class.
@@ -13,6 +13,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
  * @date 3/24/14
  */
 public class MainMenuRenderer extends Renderer{
+
+    private Label battleLabel;
+    private Label statusLabel;
 
     /**
      * @inheritdoc
@@ -30,5 +33,8 @@ public class MainMenuRenderer extends Renderer{
         Gdx.gl.glClearColor(0.09f, 0.28f, 0.2f, 1);
     }
 
+    public void drawStaticControllers() {
+
+    }
 
 }

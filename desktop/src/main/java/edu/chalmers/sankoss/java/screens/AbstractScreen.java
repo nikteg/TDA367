@@ -13,7 +13,6 @@ import edu.chalmers.sankoss.java.Models.ScreenModel;
 import edu.chalmers.sankoss.java.Renderers.Renderer;
 import edu.chalmers.sankoss.java.SankossController;
 import edu.chalmers.sankoss.java.SankossGame;
-import edu.chalmers.sankoss.java.client.SankossClient;
 
 /**
  * Abstraction of Screen implementation.
@@ -32,7 +31,7 @@ public abstract class AbstractScreen implements Screen, ApplicationListener {
     protected Skin skin;
     protected SpriteBatch batch;
     protected TextButton.TextButtonStyle btnStyle;
-    protected Label.LabelStyle labelStyle;
+    protected static Label.LabelStyle labelStyle;
 
     /**
      * This will keep a reference of the main game.
@@ -102,6 +101,7 @@ public abstract class AbstractScreen implements Screen, ApplicationListener {
         batch = new SpriteBatch();
         stage = new Stage();
         skin = new Skin();
+        labelStyle = new Label.LabelStyle();
     }
 
     @Override

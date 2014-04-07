@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * 
  * @author Niklas Tegnander
- * @modified Fredrik Thune
+ * @modified Fredrik Thune, Mikael Malmqvist
  * 
  */
 public class Player implements KryoSerializable {
@@ -20,18 +20,37 @@ public class Player implements KryoSerializable {
     private List<Ship> fleet = new ArrayList<Ship>();
     private List<Coordinate> usedCoordinates = new ArrayList<Coordinate>();
     private boolean ready;
+    private Nationality nationality = Nationality.USA;
     
     public Player() {
-        
+        this.nationality = Nationality.USA;
     }
 
     public Player(Long id) {
         this.playerID = id;
+        this.nationality = Nationality.USA;
+
+        this.name = "Player #" + playerID;
     }
     
     public Player(Long id, String name) {
         this(id);
         this.name = name;
+        this.nationality = Nationality.USA;
+    }
+
+
+    public enum Nationality{
+        USA, GERMANY, JAPAN, ENGLAND
+    }
+
+
+    public void setNationality(Nationality nationality) {
+        this.nationality = nationality;
+    }
+
+    public Nationality getNationality() {
+        return this.nationality;
     }
 
     public Long getID() {

@@ -25,4 +25,9 @@ public class InGameRenderer extends Renderer {
     public void render() {
 
     }
+
+    @Override
+    public void drawStaticControllers() {
+
+    }
 }

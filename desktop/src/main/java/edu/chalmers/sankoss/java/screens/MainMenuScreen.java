@@ -1,14 +1,16 @@
 package edu.chalmers.sankoss.java.screens;
 
-import com.badlogic.gdx.*;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import edu.chalmers.sankoss.core.Coordinate;
 import edu.chalmers.sankoss.core.Player;
@@ -20,7 +22,7 @@ import edu.chalmers.sankoss.java.SankossController;
 import edu.chalmers.sankoss.java.SankossGame;
 import edu.chalmers.sankoss.java.client.SankossClientListener;
 
-import java.util.*;
+import java.util.Map;
 
 /**
  * Screen used at the main menu.
@@ -32,6 +34,9 @@ import java.util.*;
 public class MainMenuScreen extends AbstractScreen implements SankossClientListener{
 
     private String roomName;
+    private Map<Long, Room> gameRooms;
+    private Object[] rooms;
+
 
     // Containers
     WidgetGroup pnl;
@@ -90,7 +95,6 @@ public class MainMenuScreen extends AbstractScreen implements SankossClientListe
         // Defines variables for visuals
         super.create();
         btnStyle = new TextButton.TextButtonStyle();
-        labelStyle = new Label.LabelStyle();
         pnl = new WidgetGroup(); // Panel to put actors in
 
         // Configures necessary attributes for buttons
@@ -177,7 +181,7 @@ public class MainMenuScreen extends AbstractScreen implements SankossClientListe
         // names is "white"
         btnStyle.up = skin.newDrawable("white", Color.DARK_GRAY);
         btnStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
-        btnStyle.checked = skin.newDrawable("white", Color.BLUE);
+        btnStyle.checked = skin.newDrawable("white", Color.DARK_GRAY);
         btnStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
 
         skin.add("default", btnStyle);
@@ -220,14 +224,27 @@ public class MainMenuScreen extends AbstractScreen implements SankossClientListe
 
         @Override
         public void changed(ChangeEvent event, Actor actor) {
+            model.getClient().fetchRooms();
+
             Gdx.input.getTextInput(new Input.TextInputListener() {
 
                 @Override
                 public void input(String roomName) {
-                    // TODO: Create room, disable join game
+                    boolean same = false;
 
-                    statusLabel.setText("Waiting for opponent to join " + roomName + "..");
-                    model.getClient().createRoom(roomName, ""); //Roomname and password
+                    for(int i = 0; i < rooms.length; i++) {
+                        if(((Room)rooms[i]).getName().equals(roomName)) {
+                            same = true;
+                        }
+                    }
+
+                    if(same) {
+                        //TODO: Display better error msg
+                        System.out.println("ERROR: Room already exists!");
+                    } else {
+                        statusLabel.setText("Waiting for opponent to join " + roomName + "..");
+                        model.getClient().createRoom(roomName, ""); //Roomname and password
+                    }
 
                 }
 
@@ -246,7 +263,8 @@ public class MainMenuScreen extends AbstractScreen implements SankossClientListe
     }
 
     public void fetchedRooms(Map<Long, Room> rooms) {
-
+        this.rooms = rooms.values().toArray();
+        //System.out.println(this.rooms[0]);
     }
 
     public void createdRoom(Long roomID) {
