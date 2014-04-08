@@ -12,6 +12,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Listener.ThreadedListener;
 
+import edu.chalmers.sankoss.core.exceptions.IllegalShipCoordinatesException;
 import edu.chalmers.sankoss.core.protocol.*;
 
 /*
@@ -153,10 +154,14 @@ public class SankossClientExample {
                     } while(choice != 0);
 
                     List<Ship> fleet = new ArrayList<Ship>();
-                    fleet.add(new Ship(new Coordinate(1,1), new Coordinate(1,3)));
-                    fleet.add(new Ship(new Coordinate(2,1), new Coordinate(2,4)));
-
-                   	client.sendTCP(new PlayerReady(msg.getGameID(), fleet));
+                    try {
+                    	fleet.add(new Ship(new Coordinate(1,1), new Coordinate(1,3)));
+                    	fleet.add(new Ship(new Coordinate(2,1), new Coordinate(2,4)));
+                    }
+                    catch (IllegalShipCoordinatesException ignore) {
+                    	//TODO Something something
+                    }
+                    client.sendTCP(new PlayerReady(msg.getGameID(), fleet));
 
                     return;
                 }

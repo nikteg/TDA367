@@ -2,6 +2,8 @@ package edu.chalmers.sankoss.core;
 
 import java.util.LinkedList;
 
+import edu.chalmers.sankoss.core.exceptions.IllegalShipCoordinatesException;
+
 /**
  * Class representing a ship
  * @author Daniel Eineving
@@ -12,7 +14,7 @@ import java.util.LinkedList;
 
 public class Ship {
 	private int size;
-	private Coordinate start, end;
+	private Coordinate front, rear;
 	private int hits=0;
 
 	/**
@@ -40,9 +42,10 @@ public class Ship {
 	 * Creates a Ship with a given position
 	 * @param start - Start Coordinate
 	 * @param end - End Coordinate
+	 * @throws IllegalShipCoordinatesException 
 	 */
 
-	public Ship(Coordinate start, Coordinate end){
+	public Ship(Coordinate start, Coordinate end) throws IllegalShipCoordinatesException{
 		size = distance(start, end) + 1;
 		setCoordinates(start, end);
 	}
@@ -51,32 +54,31 @@ public class Ship {
 	 * Sets the coordinates of the ship
 	 * @param start Start coordinate
 	 * @param end End Coordinate
+	 * @throws IllegalShipCoordinatesException 
 	 */
-	public void setCoordinates(Coordinate start, Coordinate end){
+	public void setCoordinates(Coordinate start, Coordinate end) throws IllegalShipCoordinatesException{
 		if(start.getX() != end.getX() && start.getY() != end.getY()){
-
-			//TODO Write our own exceptions?
-			throw new IllegalArgumentException("No valid coordinates for ship start and end");
+			throw new IllegalShipCoordinatesException();
 		}
 		//TODO Should we make copies of the coordinates instead?
-		this.start=start;
-		this.end=end;
+		this.front=start;
+		this.rear=end;
 	}
 
 	/**
 	 * Start coordinate of the ship
 	 * @return the start coordinate
 	 */
-	public Coordinate getStart(){
-		return start;
+	public Coordinate getFront(){
+		return front;
 	}
 
 	/**
 	 * End coordinate of the ship
 	 * @return the end coordinate
 	 */
-	public Coordinate getEnd(){
-		return end;
+	public Coordinate getRear(){
+		return rear;
 	}
 
 	/**
@@ -89,7 +91,7 @@ public class Ship {
 
 	@Override
 	public String toString() {
-		return String.format("%d:(%d, %d)(%d, %d)", size, start.getX(), start.getY(), end.getX(), end.getY());
+		return String.format("%d:(%d, %d)(%d, %d)", size, front.getX(), front.getY(), rear.getX(), rear.getY());
 	}
 
 	/**
@@ -100,33 +102,33 @@ public class Ship {
 	public LinkedList<Coordinate> getCoordinates(){
 		LinkedList<Coordinate> coordinates = new LinkedList<Coordinate>();
 		if(size > 0){
-			coordinates.add(start);
+			coordinates.add(front);
 
-			if(start.getX()==end.getX()){
-				if(start.getY()<end.getX()){
+			if(front.getX()==rear.getX()){
+				if(front.getY()<rear.getX()){
 					for(int i=1;i<(size-1);i++){
-						coordinates.add(new Coordinate(start.getX(), start.getY()+i));
+						coordinates.add(new Coordinate(front.getX(), front.getY()+i));
 					}
 				}
 				else{
 					for(int i=1;i<(size-1);i++){
-						coordinates.add(new Coordinate(start.getX(), start.getY()-i));
+						coordinates.add(new Coordinate(front.getX(), front.getY()-i));
 					}
 				}
 			}
 			else{
-				if(start.getY()<end.getX()){
+				if(front.getY()<rear.getX()){
 					for(int i=1;i<(size-1);i++){
-						coordinates.add(new Coordinate(start.getX()+i, start.getY()));
+						coordinates.add(new Coordinate(front.getX()+i, front.getY()));
 					}
 				}
 				else{
 					for(int i=1;i<(size-1);i++){
-						coordinates.add(new Coordinate(start.getX()-i, start.getY()));
+						coordinates.add(new Coordinate(front.getX()-i, front.getY()));
 					}
 				}
 			}
-			coordinates.add(end);
+			coordinates.add(rear);
 		}
 		return coordinates;
 	}
@@ -138,27 +140,26 @@ public class Ship {
 	 */
 	public boolean isShip(Coordinate target){
 		
-		//TODO We do not need these long returns if we have the direction enum
 		switch (getRotation()) {
-		case EAST:
-			return (target.getY() == start.getY() && target.getX() >= start.getX() && target.getX() <= end.getX());
 		case WEST:
-			return (target.getY() == start.getY() && target.getX() <= start.getX() && target.getX() >= end.getX());
-		case SOUTH:
-			return (target.getX() == start.getX() && target.getY() >= start.getY() && target.getY() <= end.getY());
+			return (target.getY() == front.getY() && target.getX() >= front.getX() && target.getX() <= rear.getX());
+		case EAST:
+			return (target.getY() == front.getY() && target.getX() <= front.getX() && target.getX() >= rear.getX());
+		case NORTH:
+			return (target.getX() == front.getX() && target.getY() >= front.getY() && target.getY() <= rear.getY());
 		default:
-			return (target.getX() == start.getX() && target.getY() <= start.getY() && target.getY() >= end.getY());
+			return (target.getX() == front.getX() && target.getY() <= front.getY() && target.getY() >= rear.getY());
 		}
 	}
 
 	public Rotation getRotation() {
-		if (start.getX() < end.getX())
+		if (front.getX() < rear.getX())
 			return Rotation.WEST;
 
-		if (start.getX() > end.getX())
+		if (front.getX() > rear.getX())
 			return Rotation.EAST;
 
-		if (start.getY() < end.getY())
+		if (front.getY() < rear.getY())
 			return Rotation.NORTH;
 
 		return Rotation.SOUTH;
@@ -189,10 +190,10 @@ public class Ship {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((end == null) ? 0 : end.hashCode());
+		result = prime * result + ((rear == null) ? 0 : rear.hashCode());
 		result = prime * result + hits;
 		result = prime * result + size;
-		result = prime * result + ((start == null) ? 0 : start.hashCode());
+		result = prime * result + ((front == null) ? 0 : front.hashCode());
 		return result;
 	}
 
@@ -208,7 +209,7 @@ public class Ship {
 		//TODO does now return false if no rotated the same direction
 		Ship other = (Ship) obj;
 
-		if(start.equals(other.start) && end.equals(other.end) && hits == other.hits && size == other.size){
+		if(front.equals(other.front) && rear.equals(other.rear) && hits == other.hits && size == other.size){
 			return true;
 		}
 		return false;
