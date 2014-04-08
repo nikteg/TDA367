@@ -16,7 +16,7 @@ import java.util.Map;
 public abstract class ScreenModel {
     // Client to be shared by all instances - Controller
     // wont have to send the client between different models
-    protected static SankossClient client = new SankossClient("sodapop.se");
+    protected static SankossClient client = new SankossClient("localhost");
 
     public ScreenModel() {
 

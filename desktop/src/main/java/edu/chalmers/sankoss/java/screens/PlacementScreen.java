@@ -172,12 +172,12 @@ public class PlacementScreen extends AbstractScreen implements SankossClientList
 
     @Override
     public void gameReady() {
-        ((PlacementRenderer) renderer).setReadyBtn("Enter Game");
+
     }
 
     @Override
     public void playerIsReady(Player player) {
-        ((PlacementRenderer) renderer).setReadyBtn("Waiting for opponent..");
+
     }
 
     @Override
@@ -220,7 +220,12 @@ public class PlacementScreen extends AbstractScreen implements SankossClientList
         public void changed(ChangeEvent event, Actor actor) {
             // if(model.getClient().getPlayer().getFleet()) TODO: Check if fleet is full/done
             System.out.println("Player #" + model.getClient().getPlayer().getID() +" is ready!");
+
+            // Tells server that player is ready
             model.getClient().playerReady(model.getClient().getGameID(), model.getClient().getPlayer().getFleet());
+
+            ((Placement)model).switchReadyBtnState();
+            ((PlacementRenderer)renderer).setReadyBtn(((Placement)model).getReadyBtnState());
 
         }
     }

@@ -14,12 +14,19 @@ public class Placement extends ScreenModel{
     public ReadyBtnState readyBtnState;
 
     public enum ReadyBtnState {
-        READY, WAITING, ENTER
+        READY, WAITING, ENTER;
 
+        public ReadyBtnState getNext(){
+            return values()[(ordinal() + 1) % values().length];
+        }
     }
 
     public Placement() {
         this.readyBtnState = ReadyBtnState.READY;
+    }
+
+    public void switchReadyBtnState() {
+       readyBtnState = readyBtnState.getNext();
     }
 
     /**
@@ -40,7 +47,4 @@ public class Placement extends ScreenModel{
         return readyBtnState;
     }
 
-    public void setReadyBtnState(ReadyBtnState readyBtnState) {
-        this.readyBtnState = readyBtnState;
-    }
 }
