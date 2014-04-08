@@ -1,12 +1,8 @@
 package edu.chalmers.sankoss.java.screens;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import edu.chalmers.sankoss.core.Coordinate;
@@ -35,14 +31,10 @@ public class PlacementScreen extends AbstractScreen implements SankossClientList
 	private final int GRID_TILE_SIDE=45;
 
     // Controllers
-    private TextButton nextBtn;
-    private TextButton backBtn;
     private Label nameLabel;
 
 	//Containers
 	private WidgetGroup gridPanel;
-    // private Table playerTable;
-    // private Table flag;
 
 	/**
 	 * This will keep a reference of the main game.
@@ -71,6 +63,9 @@ public class PlacementScreen extends AbstractScreen implements SankossClientList
 	 */
 	@Override
 	public void hide() {
+        if(stage.getRoot().hasChildren()) {
+            stage.getRoot().clearChildren();
+        }
 
 	}
 
@@ -91,28 +86,17 @@ public class PlacementScreen extends AbstractScreen implements SankossClientList
 	@Override
 	public void create() {
 		super.create();
-        renderer.drawStaticControllers();
+        renderer.drawControllers(this);
+
+        BitmapFont font = new BitmapFont();
+        font.scale(1); // Sets font's scale relative to current scale
 
         // Adds font to skin
+        skin.add("default", font);
 
-        btnStyle = new TextButton.TextButtonStyle();
-
-        // Configures necessary attributes for buttons
-        setButtons();
 
         // Sets the stage as input source
         controller.changeInput(stage);
-
-        btnStyle.font = skin.getFont("default");
-
-        nextBtn = new TextButton(">", btnStyle);
-        nextBtn.setX(160);
-        nextBtn.setY(0);
-        nextBtn.setHeight(30);
-        backBtn = new TextButton("<", btnStyle);
-        backBtn.setX(10);
-        backBtn.setY(0);
-        backBtn.setHeight(30);
 
         labelStyle.font = skin.getFont("default");
 
@@ -122,8 +106,6 @@ public class PlacementScreen extends AbstractScreen implements SankossClientList
         nameLabel.setY(110);
 
         ((PlacementRenderer) renderer).getPlayerTable().addActor(nameLabel);
-        ((PlacementRenderer) renderer).getPlayerTable().addActor(backBtn);
-        ((PlacementRenderer) renderer).getPlayerTable().addActor(nextBtn);
 
 		//TODO I am testing
         /*Pixmap pixmap = new Pixmap(new FileHandle("src/main/java/edu/chalmers/sankoss/java/texures/testSquare.png"));
@@ -147,41 +129,8 @@ public class PlacementScreen extends AbstractScreen implements SankossClientList
 		stage.addActor(gridPanel);*/
         stage.addActor(((PlacementRenderer) renderer).getPlayerTable());
 		stage.draw();
-
-        nextBtn.addListener(new NextBtnListener());
-        backBtn.addListener(new BackBtnListener());
-		
 		
 	}
-
-    /**
-     * Makes default configuration for a menu button.
-     * Sets Pixmap, Skin, BitmapFont and btnStyle.
-     */
-    public void setButtons() {
-        Pixmap pixmap = new Pixmap(20, 10, Pixmap.Format.RGBA8888);
-        pixmap.setColor(Color.GRAY);
-        pixmap.fill();
-
-        // Adds Texture with pixmap to skin
-        skin.add("white", new Texture(pixmap));
-
-        BitmapFont font = new BitmapFont();
-        font.scale(1); // Sets font's scale relative to current scale
-
-        // Adds font to skin
-        skin.add("default", font);
-
-        // Configures how the Style of a button should behave and
-        // names is "white"
-        btnStyle.up = skin.newDrawable("white", Color.DARK_GRAY);
-        btnStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
-        btnStyle.checked = skin.newDrawable("white", Color.DARK_GRAY);
-        btnStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
-
-        skin.add("default", btnStyle);
-
-    }
 
 	/**
 	 * @inheritdoc
@@ -249,6 +198,14 @@ public class PlacementScreen extends AbstractScreen implements SankossClientList
     @Override
     public void disconnected() {
 
+    }
+
+    public NextBtnListener getNextBtnListener() {
+        return new NextBtnListener();
+    }
+
+    public BackBtnListener getBackBtnListener() {
+        return new BackBtnListener();
     }
 
     private class NextBtnListener extends ChangeListener {

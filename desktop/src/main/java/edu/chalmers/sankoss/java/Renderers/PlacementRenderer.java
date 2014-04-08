@@ -10,8 +10,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import edu.chalmers.sankoss.core.Player;
 import edu.chalmers.sankoss.java.Models.ScreenModel;
+import edu.chalmers.sankoss.java.screens.AbstractScreen;
+import edu.chalmers.sankoss.java.screens.PlacementScreen;
 
 /**
  * Description of class.
@@ -36,6 +39,8 @@ public class PlacementRenderer extends Renderer{
     private Table playerTable;
 	private Label headerLabel;
     private Label landLabel;
+    private TextButton nextBtn;
+    private TextButton backBtn;
 	
 	
     /**
@@ -116,6 +121,10 @@ public class PlacementRenderer extends Renderer{
 
     }
 
+    public void resize(int width, int height) {
+
+    }
+
     /**
      * Method to set flag depending on nationality.
      */
@@ -136,7 +145,7 @@ public class PlacementRenderer extends Renderer{
 
     }
 
-    public void drawStaticControllers() {
+    public void drawControllers(AbstractScreen screen) {
         skin = new Skin();
 
         // skin for playerTable
@@ -169,6 +178,56 @@ public class PlacementRenderer extends Renderer{
         landLabel.setY(0);
 
         setFlag();
+
+        btnStyle = new TextButton.TextButtonStyle();
+
+        // Configures necessary attributes for buttons
+        setButtons();
+
+        btnStyle.font = skin.getFont("default");
+
+        nextBtn = new TextButton(">", btnStyle);
+        nextBtn.setX(160);
+        nextBtn.setY(0);
+        nextBtn.setHeight(30);
+        backBtn = new TextButton("<", btnStyle);
+        backBtn.setX(10);
+        backBtn.setY(0);
+        backBtn.setHeight(30);
+
+        playerTable.addActor(nextBtn);
+        playerTable.addActor(backBtn);
+
+        nextBtn.addListener(((PlacementScreen)screen).getNextBtnListener());
+        backBtn.addListener(((PlacementScreen) screen).getBackBtnListener());
+    }
+
+    /**
+     * Makes default configuration for a menu button.
+     * Sets Pixmap, Skin, BitmapFont and btnStyle.
+     */
+    public void setButtons() {
+        Pixmap pixmap = new Pixmap(20, 10, Pixmap.Format.RGBA8888);
+        pixmap.setColor(Color.GRAY);
+        pixmap.fill();
+
+        // Adds Texture with pixmap to skin
+        skin.add("white", new Texture(pixmap));
+
+        BitmapFont font = new BitmapFont();
+        font.scale(1); // Sets font's scale relative to current scale
+
+        // Adds font to skin
+        skin.add("default", font);
+
+        // Configures how the Style of a button should behave and
+        // names is "white"
+        btnStyle.up = skin.newDrawable("white", Color.DARK_GRAY);
+        btnStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
+        btnStyle.checked = skin.newDrawable("white", Color.DARK_GRAY);
+        btnStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
+
+        skin.add("default", btnStyle);
 
     }
 

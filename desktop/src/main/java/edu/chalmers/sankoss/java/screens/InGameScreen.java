@@ -1,8 +1,6 @@
 package edu.chalmers.sankoss.java.screens;
 
 import com.badlogic.gdx.ApplicationListener;
-import edu.chalmers.sankoss.java.Models.InGame;
-import edu.chalmers.sankoss.java.Renderers.InGameRenderer;
 import edu.chalmers.sankoss.java.SankossController;
 import edu.chalmers.sankoss.java.SankossGame;
 
@@ -31,8 +29,7 @@ public class InGameScreen extends AbstractScreen implements ApplicationListener 
      */
     @Override
     public void show() {
-        model = new InGame();
-        renderer = new InGameRenderer(model);
+
     }
 
     /**

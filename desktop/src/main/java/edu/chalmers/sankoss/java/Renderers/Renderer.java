@@ -4,7 +4,10 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import edu.chalmers.sankoss.java.Models.ScreenModel;
+import edu.chalmers.sankoss.java.screens.AbstractScreen;
 
 /**
  * Abstraction for drawing/rendering.
@@ -19,6 +22,8 @@ public abstract class Renderer {
     protected ScreenModel currentModel;
     protected int width, height;
     protected static Label.LabelStyle labelStyle;
+    protected static TextButton.TextButtonStyle btnStyle;
+    protected WidgetGroup actorPanel;
 
     /**
      * Sets initial variables.
@@ -31,12 +36,15 @@ public abstract class Renderer {
         this.currentModel = currentModel;
         this.gameCamera = new OrthographicCamera();
         labelStyle = new Label.LabelStyle();
+        // actorPanel = new WidgetGroup();
     }
 
     public void setSize(int width, int height) {
         this.width = width;
         this.height = height;
     }
+
+    public abstract void resize(int width, int height);
 
     /**
      * Render method to be implemented by each
@@ -53,6 +61,10 @@ public abstract class Renderer {
     /**
      * Method for drawing controllers that wont be interactable.
      */
-    public abstract void drawStaticControllers();
+    public abstract void drawControllers(AbstractScreen screen);
+
+    public WidgetGroup getActorPanel() {
+        return actorPanel;
+    }
 
 }

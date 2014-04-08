@@ -1,6 +1,7 @@
 package edu.chalmers.sankoss.java.Renderers;
 
 import edu.chalmers.sankoss.java.Models.ScreenModel;
+import edu.chalmers.sankoss.java.screens.AbstractScreen;
 
 /**
  * Description of class.
@@ -18,6 +19,11 @@ public class InGameRenderer extends Renderer {
         super(currentModel);
     }
 
+    @Override
+    public void resize(int width, int height) {
+
+    }
+
     /**
      * @inheritdoc
      */
@@ -27,7 +33,7 @@ public class InGameRenderer extends Renderer {
     }
 
     @Override
-    public void drawStaticControllers() {
+    public void drawControllers(AbstractScreen screen) {
 
     }
 }

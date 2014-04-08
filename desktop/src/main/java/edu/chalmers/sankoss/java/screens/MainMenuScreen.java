@@ -2,15 +2,7 @@ package edu.chalmers.sankoss.java.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import edu.chalmers.sankoss.core.Coordinate;
 import edu.chalmers.sankoss.core.Player;
@@ -36,22 +28,6 @@ public class MainMenuScreen extends AbstractScreen implements SankossClientListe
     private String roomName;
     private Map<Long, Room> gameRooms;
     private Object[] rooms;
-
-
-    // Containers
-    WidgetGroup pnl;
-
-    // Controllers
-    private TextButton joinBtn;
-    private TextButton hostBtn;
-    private TextButton optionBtn;
-    private TextButton helpBtn;
-    private Label battleLabel;
-    private Label statusLabel;
-
-    // Dimensions of buttons
-    private final int WIDTH_OF_BUTTON = 600;
-    private final int HEIGHT_OF_BUTTON = 100;
 
     /**
      * @inheritdoc
@@ -80,111 +56,25 @@ public class MainMenuScreen extends AbstractScreen implements SankossClientListe
     @Override
     public void hide() {
         if(stage.getRoot().hasChildren()) {
-            stage.getRoot().removeActor(pnl);
+            stage.getRoot().clearChildren();
         }
 
     }
 
-    // Below is we implement methods for ApplicationListener interface
     /**
      * @inheritdoc
      */
     @Override
     public void create() {
-
         // Defines variables for visuals
         super.create();
-        btnStyle = new TextButton.TextButtonStyle();
-        pnl = new WidgetGroup(); // Panel to put actors in
-
-        // Configures necessary attributes for buttons
-        setButtons();
+        renderer.drawControllers(this);
 
         // Sets the stage as input source
         controller.changeInput(stage);
 
-        // Makes the default styles for buttons and labels
-        btnStyle.font = skin.getFont("default");
-        labelStyle.font = skin.getFont("default");
-
-        // Makes buttons and labels with default style of button
-        joinBtn = new TextButton("Join Game", btnStyle);
-        hostBtn = new TextButton("Host Game", btnStyle);
-        optionBtn = new TextButton("Options", btnStyle);
-        helpBtn = new TextButton("Help", btnStyle);
-        battleLabel = new Label("Battleships", labelStyle);
-        statusLabel = new Label("Join or host game room..", labelStyle);
-
-        battleLabel.setX(325);
-        battleLabel.setY(550);
-        statusLabel.setX(0);
-        statusLabel.setY(0);
-
-
-        float x = (800 - WIDTH_OF_BUTTON)/2;
-        joinBtn.setPosition(x, 600/2 + 120);
-        hostBtn.setPosition(x, 600/2);
-        optionBtn.setPosition(x, 600/2 - 120);
-        helpBtn.setPosition(x, 600/2 - 240);
-
-        statusLabel.addAction(Actions.forever(
-                Actions.sequence(
-                        Actions.alpha(0.1f, 0.1f),
-                        Actions.fadeIn(2f), Actions.fadeOut(2f)
-                )
-        ));
-
-        // Adds actors to table
-        pnl.addActor(joinBtn);
-        pnl.addActor(hostBtn);
-        pnl.addActor(optionBtn);
-        pnl.addActor(helpBtn);
-        pnl.addActor(battleLabel);
-        pnl.addActor(statusLabel);
-
-
-        renderer.drawActors(stage, pnl);
-        // stage.addActor(pnl);
-
-        joinBtn.addListener(new JoinButtonListener());
-        hostBtn.addListener(new HostButtonListener());
-
-        helpBtn.addListener(new ChangeListener(){
-            @Override
-            public void changed(ChangeEvent evt, Actor actor) {
-                //controller.setPlacementScreen();
-                controller.changeScreen(new PlacementScreen(controller, game));
-            }
-        });
-    }
-
-
-    /**
-     * Makes default configuration for a menu button.
-     * Sets Pixmap, Skin, BitmapFont and btnStyle.
-     */
-    public void setButtons() {
-        Pixmap pixmap = new Pixmap(WIDTH_OF_BUTTON, HEIGHT_OF_BUTTON, Pixmap.Format.RGBA8888);
-        pixmap.setColor(Color.GRAY);
-        pixmap.fill();
-
-        // Adds Texture with pixmap to skin
-        skin.add("white", new Texture(pixmap));
-
-        BitmapFont font = new BitmapFont();
-        font.scale(1); // Sets font's scale relative to current scale
-
-        // Adds font to skin
-        skin.add("default", font);
-
-        // Configures how the Style of a button should behave and
-        // names is "white"
-        btnStyle.up = skin.newDrawable("white", Color.DARK_GRAY);
-        btnStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
-        btnStyle.checked = skin.newDrawable("white", Color.DARK_GRAY);
-        btnStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
-
-        skin.add("default", btnStyle);
+        stage.addActor(renderer.getActorPanel());
+        stage.draw();
 
     }
 
@@ -194,67 +84,8 @@ public class MainMenuScreen extends AbstractScreen implements SankossClientListe
     @Override
     public void resize(int width, int height) {
         super.resize(width, height);
-        // Centers the controllers based on new window size
-        float x = (width - WIDTH_OF_BUTTON)/2;
-        joinBtn.setPosition(x, height/2 + 120);
-        hostBtn.setPosition(x, height/2);
-        optionBtn.setPosition(x, height/2 - 120);
-        helpBtn.setPosition(x, height/2 - 240);
+        renderer.resize(width, height);
 
-        battleLabel.setX((width - battleLabel.getWidth()) / 2);
-        battleLabel.setY(height/2 + 240);
-        statusLabel.setX(0);
-        statusLabel.setY(0);
-
-    }
-
-
-
-    private class JoinButtonListener extends ChangeListener{
-
-        @Override
-        public void changed(ChangeEvent event, Actor actor) {
-
-            //controller.setLobbyScreen();
-            controller.changeScreen(new LobbyScreen(controller, game));
-        }
-    }
-
-    private class HostButtonListener extends ChangeListener{
-
-        @Override
-        public void changed(ChangeEvent event, Actor actor) {
-            model.getClient().fetchRooms();
-
-            Gdx.input.getTextInput(new Input.TextInputListener() {
-
-                @Override
-                public void input(String roomName) {
-                    boolean same = false;
-
-                    for(int i = 0; i < rooms.length; i++) {
-                        if(((Room)rooms[i]).getName().equals(roomName)) {
-                            same = true;
-                        }
-                    }
-
-                    if(same) {
-                        //TODO: Display better error msg
-                        System.out.println("ERROR: Room already exists!");
-                    } else {
-                        statusLabel.setText("Waiting for opponent to join " + roomName + "..");
-                        model.getClient().createRoom(roomName, ""); //Roomname and password
-                    }
-
-                }
-
-                @Override
-                public void canceled() {
-                    // nothing..
-                }
-            }, "Enter room name:", "");
-
-        }
     }
 
 
@@ -264,7 +95,6 @@ public class MainMenuScreen extends AbstractScreen implements SankossClientListe
 
     public void fetchedRooms(Map<Long, Room> rooms) {
         this.rooms = rooms.values().toArray();
-        //System.out.println(this.rooms[0]);
     }
 
     public void createdRoom(Long roomID) {
@@ -303,4 +133,71 @@ public class MainMenuScreen extends AbstractScreen implements SankossClientListe
 
     }
 
+
+    public JoinButtonListener getJoinButtonListener() {
+        return new JoinButtonListener();
+    }
+
+    public HostButtonListener getHostButtonListener() {
+        return new HostButtonListener();
+    }
+
+    public HelpButtonListener getHelpButtonListener() {
+        return new HelpButtonListener();
+    }
+
+    private class JoinButtonListener extends ChangeListener{
+
+        @Override
+        public void changed(ChangeEvent event, Actor actor) {
+
+            controller.changeScreen(new LobbyScreen(controller, game));
+        }
+    }
+
+    private class HostButtonListener extends ChangeListener{
+
+        @Override
+        public void changed(ChangeEvent event, Actor actor) {
+            model.getClient().fetchRooms();
+
+            Gdx.input.getTextInput(new Input.TextInputListener() {
+
+                @Override
+                public void input(String roomName) {
+                    boolean same = false;
+
+                    for(int i = 0; i < rooms.length; i++) {
+                        if(((Room)rooms[i]).getName().equals(roomName)) {
+                            same = true;
+                        }
+                    }
+
+                    if(same) {
+                        //TODO: Display better error msg
+                        System.out.println("ERROR: Room already exists!");
+                    } else {
+                        ((MainMenuRenderer)renderer).setStatusLabel("Waiting for opponent to join " + roomName + "..");
+                        model.getClient().createRoom(roomName, ""); //Roomname and password
+                    }
+
+                }
+
+                @Override
+                public void canceled() {
+                    // nothing..
+                }
+            }, "Enter room name:", "");
+
+        }
+    }
+
+    private class HelpButtonListener extends ChangeListener{
+
+        @Override
+        public void changed(ChangeEvent event, Actor actor) {
+
+            controller.changeScreen(new PlacementScreen(controller, game));
+        }
+    }
 }
