@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -34,9 +36,17 @@ public class SankossServer {
      */
     private Map<Player, PlayerConnection> players = new HashMap<Player, PlayerConnection>();
 
-    private List<SankossAI> ais = new ArrayList<SankossAI>();
+    /**
+     * Logger
+     */
+    private final static Logger LOGGER = Logger.getLogger(SankossServer.class.getName());
 
-	public static void main(String[] args) throws IOException {
+    /**
+     * Constructor
+     * @param args
+     * @throws IOException if the server couldn't start and bind to an address
+     */
+    public static void main(String[] args) throws IOException {
 		SankossServer sankossServer = new SankossServer();
         sankossServer.startHTTPServer(8080);
     }
@@ -72,7 +82,7 @@ public class SankossServer {
              * @param connection client connection
              */
 			public void connected(Connection connection) {
-                System.out.println(String.format("%s connected as #%d", connection.getRemoteAddressTCP(), connection.getID()));
+
             }
 
             /**
@@ -91,38 +101,52 @@ public class SankossServer {
                  * This package should be received as soon as the client has connected!
                  */
                 if (object instanceof Connect) {
-                    connection.setPlayer(new Player(new Long(connection.getID())));
-                    System.out.println(String.format("#%d connected", connection.getID()));
+                    connection.setPlayer(new Player((long) connection.getID()));
+
+                    LOGGER.log(Level.INFO, String.format("%s connected as #%d", connection.getRemoteAddressTCP(), connection.getID()));
 
                     players.put(connection.getPlayer(), connection);
 
-                    connection.sendTCP(new Connected(new Long(connection.getID())));
+                    connection.sendTCP(new Connected((long) connection.getID()));
 
                     return;
                 }
+
+                /**
+                 * Nothing below this line will be executed if no player has been created for the client.
+                 * This makes sure that not everyone can manipulate the server with messages.
+                 */
+                if (player == null) return;
 
                 /**
                  * Tell the RoomFactory to create a new room with given details from the message.
                  * Add the clients player instance to the room and send the room ID to the client.
                  */
 				if (object instanceof CreateRoom) {
-                    if (player == null)
-                        return;
-
 					CreateRoom msg = (CreateRoom) object;
+
+                    /**
+                     * A client cannot sit in more than one room at a time
+                     */
+                    for (Room room : RoomFactory.getRooms().values()) {
+                        if (room.getPlayers().contains(player)) {
+                            connection.sendTCP(new CreatedRoom());
+
+                            return;
+                        }
+                    }
 
                     Room room;
                     try {
                         room = RoomFactory.createRoom(msg.getName(), msg.getPassword());
                         room.addPlayer(player);
                     } catch (RoomNotFoundException e) {
-                        System.out.println("Room could not be created...");
                         connection.sendTCP(new CreatedRoom());
 
                         return;
                     }
 
-                    System.out.println(String.format("#%d created room #%d (%s with password '%s')", player.getID(), room.getID(), room.getName(), msg.getPassword()));
+                    LOGGER.log(Level.INFO, String.format("#%d created room #%d (%s with password '%s')", player.getID(), room.getID(), room.getName(), msg.getPassword()));
 
                     connection.sendTCP(new CreatedRoom(room.getID()));
 
@@ -134,22 +158,26 @@ public class SankossServer {
                  * Also tell the players already in the room that a new player has joined.
                  */
 				if (object instanceof JoinRoom) {
-                    if (player == null)
-                        return;
-
 					JoinRoom msg = (JoinRoom) object;
 
                     Room room;
                     try {
                         room = RoomFactory.getRoom(msg.getRoomID());
-                        room.addPlayer(player);
                     } catch (RoomNotFoundException e) {
                         connection.sendTCP(new JoinRoom());
 
                         return;
                     }
 
-                    System.out.println(String.format("#%d joined room #%d (%s)", player.getID(), room.getID(), room.getName()));
+                    if (!room.getPlayers().contains(player)) {
+                        connection.sendTCP(new JoinRoom());
+
+                        return;
+                    }
+
+                    room.addPlayer(player);
+
+                    LOGGER.log(Level.INFO, String.format("#%d joined room #%d (%s)", player.getID(), room.getID(), room.getName()));
 
                     JoinedRoom joinedRoom = new JoinedRoom(player);
 
@@ -190,7 +218,7 @@ public class SankossServer {
                     if (room.getPlayers().get(0).equals(player)) {
                         Game game = GameFactory.createGame(room.getPlayers());
 
-                        System.out.println(String.format("#%d started game #%d", player.getID(), game.getID()));
+                        LOGGER.log(Level.INFO, String.format("#%d started game #%d", player.getID(), game.getID()));
 
                         for (Player gamePlayer : game.getPlayers()) {
                             players.get(gamePlayer).sendTCP(new StartedGame(game.getID(), game.getPlayers()));
@@ -212,10 +240,7 @@ public class SankossServer {
                  * Received when the client wants to get a list of rooms.
                  */
 				if (object instanceof FetchRooms) {
-                    if (player == null)
-                        return;
-
-					System.out.println(String.format("#%d fetching rooms", player.getID()));
+                    LOGGER.log(Level.INFO, String.format("#%d fetching rooms", player.getID()));
 
 					FetchedRooms fetchedRooms = new FetchedRooms(RoomFactory.getRooms());
 					connection.sendTCP(fetchedRooms);
@@ -228,9 +253,6 @@ public class SankossServer {
                  * Will start the game when all the players in the game has placed their ships.
                  */
 				if (object instanceof PlayerReady) {
-                    if (player == null)
-                        return;
-
 					PlayerReady msg = (PlayerReady) object;
 
                     player.setReady(true);
@@ -266,7 +288,7 @@ public class SankossServer {
                             players.get(gamePlayer).sendTCP(new GameReady());
                         }
 
-                        System.out.println(String.format("Everyone is ready... Start game #%d", game.getID()));
+                        LOGGER.log(Level.INFO, String.format("Everyone is ready... Start game #%d", game.getID()));
 
                         // Send turn to random player
                         int starter = new Random().nextInt(game.getPlayers().size() - 1);
@@ -284,8 +306,6 @@ public class SankossServer {
                  * Player shoots at another player.
                  */
 				if (object instanceof Fire) {
-                    if (player == null) return;
-
 					Fire msg = (Fire) object;
 
                     // A player can't shoot at him/herself
@@ -308,7 +328,7 @@ public class SankossServer {
                     try {
                         targetShip = game.fire(players.get(msg.getTarget()).getPlayer(), msg.getCoordinate());
                     } catch (UsedCoordinateException e) {
-                        System.out.println(String.format("#%d %s", player.getID(), e.getMessage()));
+                        LOGGER.log(Level.INFO, String.format("#%d %s", player.getID(), e.getMessage()));
                         players.get(player).sendTCP(new Turn());
 
                         return;
@@ -335,10 +355,13 @@ public class SankossServer {
 					return;
 				}
 
+                /**
+                 * Add an AI player to a room with given room id.
+                 * Starts a new thread.
+                 */
                 if (object instanceof CreateAI) {
-                    if (player == null) return;
-
                     CreateAI msg = (CreateAI) object;
+
                     Room room;
                     try {
                         room = RoomFactory.getRoom(msg.getRoomID());
@@ -347,9 +370,43 @@ public class SankossServer {
                         return;
                     }
 
-                    System.out.println("Adding AI");
-                    new Thread(new SankossAI(room.getID())).start();
+                    LOGGER.log(Level.INFO, String.format("Adding AI player to room #%d", room.getID()));
 
+                    new Thread(new SankossAI(room.getID())).start();
+                }
+
+                /**
+                 * Remove room with given room id.
+                 */
+                if (object instanceof RemoveRoom) {
+                    RemoveRoom msg = (RemoveRoom) object;
+
+                    /**
+                     * Make sure that the client is inside the given room
+                     */
+                    Room room;
+                    try {
+                        room = RoomFactory.getRoom(msg.getRoomID());
+                    } catch (RoomNotFoundException e) {
+                        e.printStackTrace();
+                        return;
+                    }
+
+                    if (!room.getPlayers().contains(player)) return;
+
+                    /**
+                     * If so, remove the room and notify the client
+                     */
+                    try {
+                        RoomFactory.removeRoom(room);
+                    } catch (RoomNotFoundException e) {
+                        e.printStackTrace();
+                        return;
+                    }
+
+                    connection.sendTCP(new RemovedRoom());
+
+                    return;
                 }
 
 			}
@@ -400,13 +457,13 @@ public class SankossServer {
                 }
                 players.remove(player);
 
-                System.out.println(String.format("#%d disconnected", connection.getID()));
+                LOGGER.log(Level.INFO, String.format("#%d disconnected", connection.getID()));
             }
 		});
 
 		server.bind(Network.PORT);
 		server.start();
-		System.out.println("Server started on port: " + Network.PORT);
+        LOGGER.log(Level.INFO, "Server started on port: " + Network.PORT);
 
 	}
 
