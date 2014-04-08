@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import edu.chalmers.sankoss.core.Player;
+import edu.chalmers.sankoss.java.Models.Placement;
 import edu.chalmers.sankoss.java.Models.ScreenModel;
 import edu.chalmers.sankoss.java.screens.AbstractScreen;
 import edu.chalmers.sankoss.java.screens.PlacementScreen;
@@ -28,7 +29,7 @@ public class PlacementRenderer extends Renderer{
 	// private Sprite box= new Sprite(new Texture("src/main/java/edu/chalmers/sankoss/java/texures/testSquare.png"));
 
 	private final int GRID_SIDE=10;
-    private Color color = Color.WHITE;
+    private java.awt.Color color = java.awt.Color.WHITE;
     private String land = "USA";
 	
 	private SpriteBatch batch = new SpriteBatch();
@@ -72,7 +73,7 @@ public class PlacementRenderer extends Renderer{
     public void setFlag() {
 
         Pixmap flagPixmap = new Pixmap(200, 120, Pixmap.Format.RGBA8888);
-        flagPixmap.setColor(color);
+        flagPixmap.setColor(Color.WHITE);
         flagPixmap.fill();
 
         skin.add(land, new Texture(flagPixmap));
@@ -179,8 +180,20 @@ public class PlacementRenderer extends Renderer{
 
     }
 
-    public void setReadyBtn(String str) {
-        readyBtn.setText(str);
+    public void setReadyBtn(Placement.ReadyBtnState state) {
+        switch(state) {
+            case READY:
+                readyBtn.setText("Ready");
+                break;
+
+            case WAITING:
+                readyBtn.setText("Waiting..");
+                break;
+
+            case ENTER:
+                readyBtn.setText("Enter");
+                break;
+        }
     }
 
     public Table getPlayerTable() {
