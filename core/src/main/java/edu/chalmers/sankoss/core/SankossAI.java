@@ -3,6 +3,8 @@ package edu.chalmers.sankoss.core;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+
+import edu.chalmers.sankoss.core.exceptions.IllegalShipCoordinatesException;
 import edu.chalmers.sankoss.core.protocol.*;
 
 import java.io.IOException;
@@ -63,13 +65,16 @@ public class SankossAI implements Runnable {
                     System.out.println(String.format("AI: Placing ships! #%d", msg.getGameID()));
 
                     List<Ship> fleet = new ArrayList<Ship>();
-
-                    fleet.add(new Ship(new Coordinate(1, 5), new Coordinate(3, 5)));
-                    fleet.add(new Ship(new Coordinate(3, 7), new Coordinate(4, 7)));
-                    fleet.add(new Ship(new Coordinate(5, 2), new Coordinate(5, 5)));
-                    fleet.add(new Ship(new Coordinate(9, 8), new Coordinate(9, 4)));
-                    fleet.add(new Ship(new Coordinate(7, 2), new Coordinate(7, 3)));
-
+                    try {
+                    	fleet.add(new Ship(new Coordinate(1, 5), new Coordinate(3, 5)));
+                    	fleet.add(new Ship(new Coordinate(3, 7), new Coordinate(4, 7)));
+                    	fleet.add(new Ship(new Coordinate(5, 2), new Coordinate(5, 5)));
+                    	fleet.add(new Ship(new Coordinate(9, 8), new Coordinate(9, 4)));
+                    	fleet.add(new Ship(new Coordinate(7, 2), new Coordinate(7, 3)));
+                    }
+                    catch (IllegalShipCoordinatesException ignore) {
+                    	//TODO Something something
+                    }
 
                     client.sendTCP(new PlayerReady(msg.getGameID(), fleet));
 

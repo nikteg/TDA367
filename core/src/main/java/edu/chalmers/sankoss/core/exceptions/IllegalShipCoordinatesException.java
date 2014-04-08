@@ -7,24 +7,24 @@ package edu.chalmers.sankoss.core.exceptions;
  * @date 2014-04-08
  */
 public class IllegalShipCoordinatesException extends Exception {
-	
+
 	/** {@inheritDoc} */
-	public IllegalShipCoordinatesException() { 
-		super(); 
+	public IllegalShipCoordinatesException() {
+		super();
 	}
-	
+
 	/** {@inheritDoc} */
-	public IllegalShipCoordinatesException(String message) { 
-		super(message); 
+	public IllegalShipCoordinatesException(String message) {
+		super(message);
 	}
-	
+
 	/** {@inheritDoc} */
-	public IllegalShipCoordinatesException(String message, Throwable cause) { 
-		super(message, cause); 
+	public IllegalShipCoordinatesException(String message, Throwable cause) {
+		super(message, cause);
 	}
-	
+
 	/** {@inheritDoc} */
 	public IllegalShipCoordinatesException(Throwable cause) {
-		super(cause); 
+		super(cause);
 	}
 }
