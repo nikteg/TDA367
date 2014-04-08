@@ -163,9 +163,10 @@ public class LobbyScreen extends AbstractScreen implements SankossClientListener
             String roomName = ((LobbyRenderer)renderer).getRoomList().getSelection();
 
             Room roomToJoin = model.getRoomByName(roomName, gameRooms);
-            System.out.println("Selected room: #" + roomToJoin.getName());
 
             model.getClient().joinRoom(roomToJoin.getID());
+
+            System.out.println(model.getClient().getPlayer().getName() + " has joined room: #" + roomToJoin.getName());
             controller.changeScreen(new PlacementScreen(controller, game));
         }
     }

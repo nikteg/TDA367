@@ -11,6 +11,17 @@ import java.util.Map;
  */
 public class Placement extends ScreenModel{
 
+    public ReadyBtnState readyBtnState;
+
+    public enum ReadyBtnState {
+        READY, WAITING, ENTER
+
+    }
+
+    public Placement() {
+        this.readyBtnState = ReadyBtnState.READY;
+    }
+
     /**
      * @inheritdoc
      */
@@ -23,5 +34,13 @@ public class Placement extends ScreenModel{
      */
     public void setRoomMap(Map<Long, Room> roomMap) {
 
+    }
+
+    public ReadyBtnState getReadyBtnState() {
+        return readyBtnState;
+    }
+
+    public void setReadyBtnState(ReadyBtnState readyBtnState) {
+        this.readyBtnState = readyBtnState;
     }
 }

@@ -186,6 +186,13 @@ public class SankossClient {
         client.sendTCP(new CreateRoom(name, password));
     }
 
+    public void removeRoom(Long roomID) {
+        if (client == null) return;
+
+        //TODO: remove room with roomID
+
+    }
+
     public void disconnect() {
         if (client == null) return;
 

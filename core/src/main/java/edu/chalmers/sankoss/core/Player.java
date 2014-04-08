@@ -1,5 +1,6 @@
 package edu.chalmers.sankoss.core;
 
+import com.badlogic.gdx.graphics.Color;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.KryoSerializable;
 import com.esotericsoftware.kryo.io.Input;
@@ -40,8 +41,43 @@ public class Player implements KryoSerializable {
     }
 
 
-    public enum Nationality{
-        USA, GERMANY, JAPAN, ENGLAND
+    public enum Nationality {
+        USA("USA", Color.WHITE),
+        GERMANY("GER", Color.RED),
+        JAPAN("JAP", Color.GREEN),
+        ENGLAND("ENG", Color.BLUE);
+
+        private String landName;
+        private Color color;
+
+        Nationality(String name, Color color) {
+            this.landName = name;
+            this.color = color;
+        }
+
+        public Nationality getNext(){
+            return values()[(ordinal() + 1) % values().length];
+        }
+
+        public Nationality getLast(){
+            return values()[(ordinal() + 3) % values().length];
+        }
+
+        public Color getColor() {
+            return color;
+        }
+
+        public void setColor(Color color) {
+            this.color = color;
+        }
+
+        public String getLandName() {
+            return landName;
+        }
+
+        public void setLandName(String landName) {
+            this.landName = landName;
+        }
     }
 
 

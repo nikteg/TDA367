@@ -26,7 +26,7 @@ import edu.chalmers.sankoss.java.screens.PlacementScreen;
 public class PlacementRenderer extends Renderer{
 
 	// private Sprite box= new Sprite(new Texture("src/main/java/edu/chalmers/sankoss/java/texures/testSquare.png"));
-	
+
 	private final int GRID_SIDE=10;
     private Color color = Color.WHITE;
     private String land = "USA";
@@ -41,6 +41,7 @@ public class PlacementRenderer extends Renderer{
     private Label landLabel;
     private TextButton nextBtn;
     private TextButton backBtn;
+    private TextButton readyBtn;
 	
 	
     /**
@@ -53,71 +54,11 @@ public class PlacementRenderer extends Renderer{
 
     public void switchNationality(Player player, Boolean next) {
 
-        if(next) {
+        Player.Nationality nationality = next ? player.getNationality().getNext() : player.getNationality().getLast();
 
-            switch(player.getNationality()) {
-                case JAPAN:
-                    // Switch to USA
-                    color = Color.WHITE;
-                    land = "USA";
-                    player.setNationality(Player.Nationality.USA);
-                    break;
-
-                case USA:
-                    // Switch to ENGLAND
-                    color = Color.BLUE;
-                    land = "ENG";
-                    player.setNationality(Player.Nationality.ENGLAND);
-                    break;
-
-                case ENGLAND:
-                    // Switch to GERMANY
-                    color = Color.RED;
-                    land = "GER";
-                    player.setNationality(Player.Nationality.GERMANY);
-                    break;
-
-                case GERMANY:
-                    // Switch to JAPAN
-                    color = Color.GREEN;
-                    land = "JAP";
-                    player.setNationality(Player.Nationality.JAPAN);
-                    break;
-            }
-
-        } else {
-
-            switch(player.getNationality()) {
-                case ENGLAND:
-                    // Switch to USA
-                    color = Color.WHITE;
-                    land = "USA";
-                    player.setNationality(Player.Nationality.USA);
-                    break;
-
-                case JAPAN:
-                    // Switch to ENGLAND
-                    color = Color.RED;
-                    land = "GER";
-                    player.setNationality(Player.Nationality.GERMANY);
-                    break;
-
-                case GERMANY:
-                    // Switch to GERMANY
-                    color = Color.BLUE;
-                    land = "ENG";
-                    player.setNationality(Player.Nationality.ENGLAND);
-                    break;
-
-                case USA:
-                    // Switch to JAPAN
-                    color = Color.GREEN;
-                    land = "JAP";
-                    player.setNationality(Player.Nationality.JAPAN);
-                    break;
-
-            }
-        }
+        player.setNationality(nationality);
+        color = nationality.getColor();
+        land = nationality.getLandName();
 
     }
 
@@ -194,12 +135,19 @@ public class PlacementRenderer extends Renderer{
         backBtn.setX(10);
         backBtn.setY(0);
         backBtn.setHeight(30);
+        readyBtn = new TextButton("Ready", btnStyle);
+        readyBtn.setHeight(50);
+        readyBtn.setWidth(150);
+        readyBtn.setX(800 - readyBtn.getWidth());
+        readyBtn.setY(0);
 
         playerTable.addActor(nextBtn);
         playerTable.addActor(backBtn);
+        playerTable.addActor(readyBtn);
 
-        nextBtn.addListener(((PlacementScreen)screen).getNextBtnListener());
+        nextBtn.addListener(((PlacementScreen) screen).getNextBtnListener());
         backBtn.addListener(((PlacementScreen) screen).getBackBtnListener());
+        readyBtn.addListener(((PlacementScreen) screen).getReadyBtnListener());
     }
 
     /**
@@ -229,6 +177,10 @@ public class PlacementRenderer extends Renderer{
 
         skin.add("default", btnStyle);
 
+    }
+
+    public void setReadyBtn(String str) {
+        readyBtn.setText(str);
     }
 
     public Table getPlayerTable() {

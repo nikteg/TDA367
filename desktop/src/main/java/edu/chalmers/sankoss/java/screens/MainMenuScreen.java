@@ -26,6 +26,7 @@ import java.util.Map;
 public class MainMenuScreen extends AbstractScreen implements SankossClientListener{
 
     private String roomName;
+    private Long lastRoomID;
     private Map<Long, Room> gameRooms;
     private Object[] rooms;
 
@@ -163,6 +164,7 @@ public class MainMenuScreen extends AbstractScreen implements SankossClientListe
 
             Gdx.input.getTextInput(new Input.TextInputListener() {
 
+                // Gets user input
                 @Override
                 public void input(String roomName) {
                     boolean same = false;
@@ -179,6 +181,11 @@ public class MainMenuScreen extends AbstractScreen implements SankossClientListe
                     } else {
                         ((MainMenuRenderer)renderer).setStatusLabel("Waiting for opponent to join " + roomName + "..");
                         model.getClient().createRoom(roomName, ""); //Roomname and password
+
+
+                        if(lastRoomID != null) model.getClient().removeRoom(lastRoomID);
+
+                        lastRoomID = model.getClient().getRoomID();
                     }
 
                 }
