@@ -1,8 +1,17 @@
 package edu.chalmers.sankoss.java.screens;
 
-import com.badlogic.gdx.ApplicationListener;
+import edu.chalmers.sankoss.core.Coordinate;
+import edu.chalmers.sankoss.core.Player;
+import edu.chalmers.sankoss.core.Room;
+import edu.chalmers.sankoss.core.Ship;
+import edu.chalmers.sankoss.java.Models.InGame;
+import edu.chalmers.sankoss.java.Renderers.InGameRenderer;
 import edu.chalmers.sankoss.java.SankossController;
 import edu.chalmers.sankoss.java.SankossGame;
+import edu.chalmers.sankoss.java.client.SankossClientListener;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Screen used ingame when actually playing!
@@ -11,7 +20,7 @@ import edu.chalmers.sankoss.java.SankossGame;
  * @author Mikael Malmqvist
  * @date 3/24/14
  */
-public class InGameScreen extends AbstractScreen implements ApplicationListener {
+public class InGameScreen extends AbstractScreen implements SankossClientListener {
 
     /**
      * This will keep a reference of the main game.
@@ -20,6 +29,9 @@ public class InGameScreen extends AbstractScreen implements ApplicationListener 
      */
     public InGameScreen(SankossController controller, SankossGame game) {
         super(controller, game);
+        model = new InGame();
+        model.getClient().addListener(this);
+        renderer = new InGameRenderer(model);
 
         create();
     }
@@ -37,6 +49,9 @@ public class InGameScreen extends AbstractScreen implements ApplicationListener 
      */
     @Override
     public void hide() {
+        if(stage.getRoot().hasChildren()) {
+            stage.getRoot().clearChildren();
+        }
 
     }
 
@@ -53,6 +68,17 @@ public class InGameScreen extends AbstractScreen implements ApplicationListener 
     @Override
     public void create() {
 
+        // Defines variables for visuals
+        super.create();
+        renderer.drawControllers(this);
+
+        // Sets the stage as input source
+        controller.changeInput(stage);
+
+        /*stage.addActor(((InGameRenderer) renderer).getPlayerTable());
+        stage.addActor(((InGameRenderer) renderer).getTopTable());*/
+        stage.draw();
+        stage.draw();
     }
 
     /**
@@ -78,4 +104,58 @@ public class InGameScreen extends AbstractScreen implements ApplicationListener 
 
     }
 
+    @Override
+    public void connected(Long playerID) {
+
+    }
+
+    @Override
+    public void fetchedRooms(Map<Long, Room> rooms) {
+
+    }
+
+    @Override
+    public void createdRoom(Long roomID) {
+
+    }
+
+    @Override
+    public void joinedRoom(Player player) {
+
+    }
+
+    @Override
+    public void startedGame(Long gameID, List<Player> players) {
+
+    }
+
+    @Override
+    public void gameReady() {
+
+    }
+
+    @Override
+    public void playerIsReady(Player player) {
+
+    }
+
+    @Override
+    public void turn() {
+
+    }
+
+    @Override
+    public void fireResult(Long gameID, Player target, Coordinate coordinate, boolean hit) {
+
+    }
+
+    @Override
+    public void destroyedShip(Player player, Ship ship) {
+
+    }
+
+    @Override
+    public void disconnected() {
+
+    }
 }

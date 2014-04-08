@@ -7,10 +7,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import edu.chalmers.sankoss.core.Player;
 import edu.chalmers.sankoss.java.Models.Placement;
 import edu.chalmers.sankoss.java.Models.ScreenModel;
@@ -35,14 +32,20 @@ public class PlacementRenderer extends Renderer{
 	private SpriteBatch batch = new SpriteBatch();
     private Skin skin;
 
-	//controllers
-    private Table flag;
+    // Containers
     private Table playerTable;
+    private Table topTable;
+    private WidgetGroup ships;
+
+	// controllers
+    private Table flag;
 	private Label headerLabel;
     private Label landLabel;
+    private Label placeShipsLabel;
     private TextButton nextBtn;
     private TextButton backBtn;
     private TextButton readyBtn;
+    private TextButton rotateBtn;
 	
 	
     /**
@@ -64,7 +67,13 @@ public class PlacementRenderer extends Renderer{
     }
 
     public void resize(int width, int height) {
+        playerTable.setWidth(width);
+        topTable.setWidth(width);
+        topTable.setY(height - 100);
+        ships.setWidth(width - 200);
 
+        rotateBtn.setX(ships.getWidth() - rotateBtn.getWidth());
+        readyBtn.setX(width - readyBtn.getWidth());
     }
 
     /**
@@ -101,6 +110,21 @@ public class PlacementRenderer extends Renderer{
         playerTable.setHeight(150f);
         playerTable.setWidth(800f);
         playerTable.setBackground(skin.newDrawable("tableBack"));
+        playerTable.setPosition(0, 0);
+
+        // Panel with ships to be placed
+        topTable = new Table();
+        topTable.setHeight(100f);
+        topTable.setWidth(800f);
+        topTable.setBackground(skin.newDrawable("tableBack"));
+        topTable.setPosition(0, 500);
+
+
+        // This is where ships to pick from will be
+        ships = new WidgetGroup();
+        ships.setHeight(100f);
+        ships.setWidth(600f);
+        ships.setPosition(200, 0);
 
         flag = new Table();
         flag.setHeight(80f);
@@ -118,6 +142,10 @@ public class PlacementRenderer extends Renderer{
         landLabel = new Label(land, labelStyle);
         landLabel.setX(60);
         landLabel.setY(0);
+
+        placeShipsLabel = new Label("Place ships", labelStyle);
+        placeShipsLabel.setX(10);
+        placeShipsLabel.setY(55);
 
         setFlag();
 
@@ -141,10 +169,20 @@ public class PlacementRenderer extends Renderer{
         readyBtn.setWidth(150);
         readyBtn.setX(800 - readyBtn.getWidth());
         readyBtn.setY(0);
+        rotateBtn = new TextButton("R", btnStyle);
+        rotateBtn.setHeight(30);
+        rotateBtn.setWidth(30);
+        rotateBtn.setX(600 - rotateBtn.getWidth());
+        rotateBtn.setY(100 - rotateBtn.getHeight());
+
+        ships.addActor(rotateBtn);
 
         playerTable.addActor(nextBtn);
         playerTable.addActor(backBtn);
         playerTable.addActor(readyBtn);
+
+        topTable.addActor(placeShipsLabel);
+        topTable.addActor(ships);
 
         nextBtn.addListener(((PlacementScreen) screen).getNextBtnListener());
         backBtn.addListener(((PlacementScreen) screen).getBackBtnListener());
@@ -200,6 +238,10 @@ public class PlacementRenderer extends Renderer{
         return playerTable;
     }
 
+    public Table getTopTable() {
+        return topTable;
+    }
+
     public Table getFlag() {
         return flag;
     }
@@ -208,7 +250,7 @@ public class PlacementRenderer extends Renderer{
         return landLabel;
     }
 
-    // TODO: Put this code somewhere else! Method is a loop!
+    // TODO: Put this code somewhere else! Method is a loop - it's a trap!
     @Override
     public void render() {
     	Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);

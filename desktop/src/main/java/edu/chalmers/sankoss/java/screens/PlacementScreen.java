@@ -128,6 +128,7 @@ public class PlacementScreen extends AbstractScreen implements SankossClientList
 
 		stage.addActor(gridPanel);*/
         stage.addActor(((PlacementRenderer) renderer).getPlayerTable());
+        stage.addActor(((PlacementRenderer) renderer).getTopTable());
 		stage.draw();
 		
 	}
@@ -138,6 +139,7 @@ public class PlacementScreen extends AbstractScreen implements SankossClientList
 	@Override
 	public void resize(int width, int height) {
 		super.resize(width, height);
+        renderer.resize(width, height);
 	}
 
 	@Override

@@ -204,7 +204,8 @@ public class MainMenuScreen extends AbstractScreen implements SankossClientListe
         @Override
         public void changed(ChangeEvent event, Actor actor) {
 
-            controller.changeScreen(new PlacementScreen(controller, game));
+            // controller.changeScreen(new PlacementScreen(controller, game));
+            controller.changeScreen(new InGameScreen(controller, game));
         }
     }
 }
