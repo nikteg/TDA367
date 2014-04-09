@@ -1,5 +1,7 @@
 package edu.chalmers.sankoss.java.screens;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import edu.chalmers.sankoss.core.Coordinate;
@@ -156,6 +158,10 @@ public class LobbyScreen extends AbstractScreen implements SankossClientListener
         return new CancelButtonListener();
     }
 
+    public EditButtonListener getEditButtonListener() {
+        return new EditButtonListener();
+    }
+
     private class JoinButtonListener extends ChangeListener{
         @Override
         public void changed(ChangeEvent event, Actor actor) {
@@ -175,6 +181,29 @@ public class LobbyScreen extends AbstractScreen implements SankossClientListener
         @Override
         public void changed(ChangeEvent event, Actor actor) {
             controller.changeScreen(new MainMenuScreen(controller, game));
+        }
+    }
+
+    private class EditButtonListener extends ChangeListener{
+        @Override
+        public void changed(ChangeEvent event, Actor actor) {
+            Gdx.input.getTextInput(new Input.TextInputListener() {
+
+                // Gets user input
+                @Override
+                public void input(String name) {
+                    // TODO: DO WE NEED TO CHECK IF PLAYERS HAVE SAME NAME?!?
+                    model.getClient().getPlayer().setName(name);
+                    ((LobbyRenderer)renderer).setNameLabel(name);
+
+                }
+
+                @Override
+                public void canceled() {
+                    // nothing..
+                }
+            }, "Enter new name:", "");
+
         }
     }
 }

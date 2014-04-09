@@ -114,7 +114,7 @@ public class InGameRenderer extends Renderer {
         opponentLabel.setX(10);
         opponentLabel.setY(55);
 
-        playerLabel = new Label("Player #" + screen.getModel().getClient().getPlayer().getID(), labelStyle);
+        playerLabel = new Label(screen.getModel().getClient().getPlayer().getName(), labelStyle);
         playerLabel.setX(10);
         playerLabel.setY(100);
 
