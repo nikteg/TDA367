@@ -29,7 +29,8 @@ public class LobbyRenderer extends Renderer {
     // Controllers
     private TextButton joinBtn;
     private TextButton cancelBtn;
-    private Label lobbyLabel;
+    private TextButton editBtn;
+    private Label nameLabel;
     private Label infoLabel;
     private List roomList;
     private Skin skin;
@@ -62,7 +63,7 @@ public class LobbyRenderer extends Renderer {
         middlePanel.setHeight(height - bottomPanel.getHeight() - topPanel.getHeight());
 
         if(roomList != null) {
-            roomList.setY(middlePanel.getHeight() - roomList.getHeight() - 20);
+            roomList.setY(middlePanel.getHeight() - roomList.getHeight() - 75);
         }
     }
 
@@ -103,9 +104,12 @@ public class LobbyRenderer extends Renderer {
         cancelBtn = new TextButton("Cancel", btnStyle);
         cancelBtn.setX(0);
         cancelBtn.setY(0);
-        lobbyLabel = new Label("Game Lobby", labelStyle);
-        lobbyLabel.setX(10);
-        lobbyLabel.setY(110);
+        editBtn = new TextButton("Edit name", btnStyle);
+        editBtn.setX(0);
+        editBtn.setY(60);
+        nameLabel = new Label(currentModel.getClient().getPlayer().getName(), labelStyle);
+        nameLabel.setX(10);
+        nameLabel.setY(110);
         infoLabel = new Label("Select room to join", labelStyle);
         infoLabel.setX(600 - 50);
         infoLabel.setY(110);
@@ -123,19 +127,21 @@ public class LobbyRenderer extends Renderer {
         topPanel.setX(0);
         topPanel.setY(600 - 150);
         topPanel.addActor(infoLabel);
-        topPanel.addActor(lobbyLabel);
+        topPanel.addActor(nameLabel);
+        topPanel.addActor(editBtn);
 
         middlePanel.setWidth(800);
         middlePanel.setHeight(800 - topPanel.getHeight() - bottomPanel.getHeight());
         middlePanel.setX(0);
         middlePanel.setY(bottomPanel.getHeight());
 
-        actorPanel.addActor(topPanel);
-        actorPanel.addActor(middlePanel);
         actorPanel.addActor(bottomPanel);
+        actorPanel.addActor(middlePanel);
+        actorPanel.addActor(topPanel);
 
         joinBtn.addListener(((LobbyScreen)screen).getJoinButtonListener());
         cancelBtn.addListener(((LobbyScreen)screen).getCancelButtonListener());
+        editBtn.addListener(((LobbyScreen)screen).getEditButtonListener());
 
     }
 
@@ -178,12 +184,16 @@ public class LobbyRenderer extends Renderer {
         roomList = new List(rooms.values().toArray(new Room[rooms.size()]), listStyle);
 
         roomList.setX(50);
-        roomList.setY(middlePanel.getHeight() - roomList.getHeight() - 20);
+        roomList.setY(middlePanel.getHeight() - roomList.getHeight() - 75);
 
         middlePanel.addActor(roomList);
     }
 
     public List getRoomList() {
         return roomList;
+    }
+
+    public void setNameLabel(String name) {
+        nameLabel.setText(name);
     }
 }
