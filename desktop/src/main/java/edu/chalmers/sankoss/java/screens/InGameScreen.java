@@ -77,7 +77,7 @@ public class InGameScreen extends AbstractScreen implements SankossClientListene
 
         /*stage.addActor(((InGameRenderer) renderer).getPlayerTable());
         stage.addActor(((InGameRenderer) renderer).getTopTable());*/
-        stage.draw();
+        stage.addActor(renderer.getActorPanel());
         stage.draw();
     }
 
@@ -87,6 +87,8 @@ public class InGameScreen extends AbstractScreen implements SankossClientListene
     @Override
     public void resize(int width, int height) {
         super.resize(width, height);
+
+        renderer.resize(width, height);
     }
 
     /**

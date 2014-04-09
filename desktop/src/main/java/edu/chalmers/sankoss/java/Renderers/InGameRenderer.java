@@ -1,12 +1,13 @@
 package edu.chalmers.sankoss.java.Renderers;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import edu.chalmers.sankoss.java.Models.ScreenModel;
 import edu.chalmers.sankoss.java.screens.AbstractScreen;
 
@@ -20,6 +21,7 @@ import edu.chalmers.sankoss.java.screens.AbstractScreen;
 public class InGameRenderer extends Renderer {
 
     private Skin skin;
+    private SpriteBatch batch = new SpriteBatch();
 
     // Controllers
     private Label opponentLabel;
@@ -28,16 +30,22 @@ public class InGameRenderer extends Renderer {
     // Containers
     private Table playerTable;
     private Table topTable;
+    private Table middleTable;
 
     /**
      * @inheritdoc
      */
     public InGameRenderer(ScreenModel currentModel) {
         super(currentModel);
+        render();
     }
 
     @Override
     public void resize(int width, int height) {
+        playerTable.setWidth(width);
+        topTable.setWidth(width);
+        topTable.setY(height - 100);
+
 
     }
 
@@ -46,15 +54,30 @@ public class InGameRenderer extends Renderer {
      */
     @Override
     public void render() {
+        // Why isn't this called automatically??
+        // Why isn't this called automatically??
+        Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClearColor(0.09f, 0.28f, 0.5f, 1);
 
+        batch.begin();
     }
 
     @Override
     public void drawControllers(AbstractScreen screen) {
         skin = new Skin();
+        actorPanel = new WidgetGroup();
+        playerTable = new Table();
+        topTable = new Table();
+        middleTable = new Table();
+
+        btnStyle = new TextButton.TextButtonStyle();
+        labelStyle = new Label.LabelStyle();
 
         // Configs buttons
         setButtons();
+
+        btnStyle.font = skin.getFont("default");
+        labelStyle.font = skin.getFont("default");
 
         // skin for playerTable
         Pixmap tablePixmap = new Pixmap(800, 150, Pixmap.Format.RGBA8888);
@@ -63,25 +86,29 @@ public class InGameRenderer extends Renderer {
         skin.add("tableBack", new Texture(tablePixmap));
 
         // Panel with players info
-        playerTable = new Table();
         playerTable.setHeight(150f);
         playerTable.setWidth(800f);
         playerTable.setBackground(skin.newDrawable("tableBack"));
-        playerTable.setPosition(0, 0);
+        playerTable.setX(0);
+        playerTable.setY(0);
 
         // Panel with ships to be placed
-        topTable = new Table();
         topTable.setHeight(100f);
         topTable.setWidth(800f);
         topTable.setBackground(skin.newDrawable("tableBack"));
-        topTable.setPosition(0, 500);
+        topTable.setX(0);
+        topTable.setY(500);
+
+        middleTable.setWidth(800);
+        middleTable.setHeight(800 - topTable.getHeight() - playerTable.getHeight());
+        middleTable.setX(0);
+        middleTable.setY(playerTable.getHeight());
 
         BitmapFont font = new BitmapFont();
         font.scale(1); // Sets font's scale relative to current scale
 
         // Adds font to skin
         skin.add("default", font);
-        labelStyle.font = skin.getFont("default");
 
         opponentLabel = new Label("Opponent", labelStyle);
         opponentLabel.setX(10);
@@ -94,7 +121,15 @@ public class InGameRenderer extends Renderer {
         topTable.addActor(opponentLabel);
         playerTable.addActor(playerLabel);
 
+        actorPanel.addActor(playerTable);
+        actorPanel.addActor(topTable);
+        actorPanel.addActor(middleTable);
+
         //TODO: Add listeners and more..
+    }
+
+    public WidgetGroup getActorPanel() {
+        return actorPanel;
     }
 
     /**

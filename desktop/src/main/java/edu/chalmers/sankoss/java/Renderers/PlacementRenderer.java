@@ -99,6 +99,8 @@ public class PlacementRenderer extends Renderer{
     public void drawControllers(AbstractScreen screen) {
         skin = new Skin();
 
+        actorPanel = new WidgetGroup();
+
         // skin for playerTable
         Pixmap tablePixmap = new Pixmap(800, 150, Pixmap.Format.RGBA8888);
         tablePixmap.setColor(Color.DARK_GRAY);
@@ -187,6 +189,9 @@ public class PlacementRenderer extends Renderer{
         nextBtn.addListener(((PlacementScreen) screen).getNextBtnListener());
         backBtn.addListener(((PlacementScreen) screen).getBackBtnListener());
         readyBtn.addListener(((PlacementScreen) screen).getReadyBtnListener());
+
+        actorPanel.addActor(topTable);
+        actorPanel.addActor(playerTable);
     }
 
     /**
@@ -216,6 +221,11 @@ public class PlacementRenderer extends Renderer{
 
         skin.add("default", btnStyle);
 
+    }
+
+
+    public WidgetGroup getActorPanel() {
+        return actorPanel;
     }
 
     public void setReadyBtn(Placement.ReadyBtnState state) {
@@ -267,7 +277,7 @@ public class PlacementRenderer extends Renderer{
         lblStyle.font = skin.getFont("default");
         
         headerLabel = new Label("BATTLURUSHIPURU!!!", lblStyle);
-        
+
         batch.begin();
         headerLabel.setPosition(0, 510);
         headerLabel.draw(batch, 1);

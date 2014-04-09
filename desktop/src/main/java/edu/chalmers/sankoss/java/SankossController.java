@@ -101,47 +101,6 @@ public class SankossController{
         this.sankossGame.setScreen(this.screen);
     }
 
-    /**
-     * Creates instance of MainMenuScreen.
-     * This type of method needs to be available for the Screens.
-     */
-    /*public void setMainMenuScreen(){
-
-        this.screen = new MainMenuScreen(this, sankossGame);
-        this.sankossGame.setScreen(screen);
-    }*/
-
-    /**
-     * Creates instance of LobbyScreen.
-     * This type of method needs to be available for the Screens.
-     */
-    /*public void setLobbyScreen(){
-
-        this.screen = new LobbyScreen(this, sankossGame);
-        this.sankossGame.setScreen(screen);
-    }*/
-
-    /**
-     * Creates instance of PlacementScreen.
-     * This type of method needs to be available for the Screens.
-     */
-    /*public void setPlacementScreen(){
-
-        this.screen = new PlacementScreen(this, sankossGame);
-        this.sankossGame.setScreen(screen);
-    }*/
-
-    /**
-     * Creates instance of InGameScreen.
-     * This type of method needs to be available for the Screens.
-     */
-    /*public void setInGameScreen(){
-
-        this.screen = new InGameScreen(this, sankossGame);
-        this.sankossGame.setScreen(screen);
-    }*/
-
-
     // TODO: Remove this method
     /**
      *  Screen updater for testing.

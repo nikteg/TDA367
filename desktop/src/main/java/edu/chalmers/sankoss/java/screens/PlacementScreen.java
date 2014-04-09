@@ -127,8 +127,9 @@ public class PlacementScreen extends AbstractScreen implements SankossClientList
 		}
 
 		stage.addActor(gridPanel);*/
-        stage.addActor(((PlacementRenderer) renderer).getPlayerTable());
-        stage.addActor(((PlacementRenderer) renderer).getTopTable());
+        /*stage.addActor(((PlacementRenderer) renderer).getPlayerTable());
+        stage.addActor(((PlacementRenderer) renderer).getTopTable());*/
+        stage.addActor(renderer.getActorPanel());
 		stage.draw();
 		
 	}
