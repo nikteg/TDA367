@@ -88,6 +88,14 @@ public class ShipTest {
 		} catch (IllegalShipCoordinatesException e) {
 			fail("Should not throw exception");
 		}
+		
+		try{
+			ship.setCoordinates(new Coordinate (2, 2),new Coordinate(4,4));
+			fail("Exception should be thrown before this");
+		}
+		catch(IllegalShipCoordinatesException ignore){
+			//Nothing
+		}
 
 	}
 

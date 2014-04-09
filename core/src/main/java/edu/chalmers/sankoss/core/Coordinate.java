@@ -21,7 +21,7 @@ public class Coordinate {
 	public Coordinate(int x, int y){
 		//TODO Throw exception?
 		if(x<1 || 10<x || y<1 || 10<y){
-			throw new IllegalArgumentException("Illegal coordinates");
+			throw new IllegalArgumentException();
 		}
 		this.x=x;
 		this.y=y;
