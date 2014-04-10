@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import edu.chalmers.sankoss.core.Player;
 import edu.chalmers.sankoss.java.Models.Placement;
 import edu.chalmers.sankoss.java.Models.ScreenModel;
+import edu.chalmers.sankoss.java.misc.ShipButton;
 import edu.chalmers.sankoss.java.screens.AbstractScreen;
 import edu.chalmers.sankoss.java.screens.PlacementScreen;
 
@@ -19,7 +20,6 @@ import edu.chalmers.sankoss.java.screens.PlacementScreen;
  * More detailed description.
  *
  * @author Mikael Malmqvist
- * @date 3/24/14
  */
 public class PlacementRenderer extends Renderer{
 
@@ -32,7 +32,7 @@ public class PlacementRenderer extends Renderer{
     private final int WIDTH_OF_SQUARE = 50;
     private final int HEIGHT_OF_SQUARE = 50;
     private Table[] grid = new Table[100];
-    private TextButton follow = null;
+    private ShipButton follow = null;
 	
 	private SpriteBatch batch = new SpriteBatch();
     private Skin skin = new Skin();
@@ -55,9 +55,15 @@ public class PlacementRenderer extends Renderer{
 
     // Temporary ships
     private TextButton ship2;
-    private TextButton ship3;
+    /*private TextButton ship3;
     private TextButton ship4;
-    private TextButton ship5;
+    private TextButton ship5;*/
+
+    // Less temporary ships
+    private ShipButton twoShip;
+    private ShipButton threeShip;
+    private ShipButton fourShip;
+    private ShipButton fiveShip;
 	
 	
     /**
@@ -87,7 +93,7 @@ public class PlacementRenderer extends Renderer{
         middlePanel.setHeight(height - topTable.getHeight() - playerTable.getHeight());
         ships.setWidth(width - 200);
 
-        rotateBtn.setX(ships.getWidth() - rotateBtn.getWidth());
+        rotateBtn.setX(topTable.getWidth() - rotateBtn.getWidth());
         readyBtn.setX(width - readyBtn.getWidth());
 
 
@@ -160,6 +166,7 @@ public class PlacementRenderer extends Renderer{
 
 
         // This is where ships to pick from will be
+        // TODO: REMOVE THIS?!
         ships = new WidgetGroup();
         ships.setHeight(100f);
         ships.setWidth(600f);
@@ -197,28 +204,29 @@ public class PlacementRenderer extends Renderer{
 
         int n = 0;
 
+        // Creates 10x10 grid
         for (int i = 0; i < 10; i++){
             for (int j = 0; j < 10; j++){
                 grid[(i*10)+j] = new Table();
 
                 n++;
 
-                if(n%2 == 0) {
+                // Colorizes every second square with a different gray based on the tableBack
+                if(n % 2 == 0) {
                     grid[(i*10)+j].setBackground(skin.newDrawable("tableBack"));
                 } else {
                     grid[(i*10)+j].setBackground(skin.newDrawable("tableBack3"));
                 }
-                //Table square = grid[(i * 10) + j];
-                //square.setBackground(skin.newDrawable("tableBack"));
-                //middlePanel.addListener(((PlacementScreen) screen).getShipBtnListener());
+
+                // Adds grid to middlePanel and add a textButton to it
+                // This is needed to make it click-able
                 middlePanel.add(grid[(i*10)+j]).width(WIDTH_OF_SQUARE).height(HEIGHT_OF_SQUARE);
-                grid[(i*10)+j].addActor(new TextButton("00", btnStyle));
+                grid[(i*10)+j].addActor(new TextButton(i + "," + j, btnStyle));
                 grid[(i*10)+j].addListener(((PlacementScreen) screen).getShipBtnListener());
             }
             n++;
             middlePanel.row();
         }
-
 
         nextBtn = new TextButton(">", btnStyle);
         nextBtn.setX(160);
@@ -239,38 +247,40 @@ public class PlacementRenderer extends Renderer{
         rotateBtn.setX(600 - rotateBtn.getWidth());
         rotateBtn.setY(100 - rotateBtn.getHeight());
 
-        // TEMP SHIPS
-        ship2 = new TextButton("222", btnStyle);
-        ship2.setX(25);
-        ship2.addListener(((PlacementScreen) screen).getShip2Listener());
+        // Ships to be placed in grid
+        // These should be ImageButtons later on..
+        twoShip = new ShipButton("TWOT", btnStyle, 2);
+        twoShip.setX(175);
+        twoShip.setY(50);
+        twoShip.addListener(((PlacementScreen) screen).getShip2Listener());
+        threeShip = new ShipButton("THREETH", btnStyle, 3);
+        threeShip.setX(450);
+        threeShip.setY(50);
+        threeShip.addListener(((PlacementScreen) screen).getShip2Listener());
+        fourShip = new ShipButton("FOURFOURFO", btnStyle, 4);
+        fourShip.setX(175);
+        fourShip.addListener(((PlacementScreen) screen).getShip2Listener());
+        fiveShip = new ShipButton("FIVEFIVEFIVEFIVE", btnStyle, 5);
+        fiveShip.setX(450);
+        fiveShip.addListener(((PlacementScreen) screen).getShip2Listener());
 
-        ship3 = new TextButton("33333", btnStyle);
-        ship3.setX(100);
-        ship4 = new TextButton("4444444", btnStyle);
-        ship4.setX(225);
-        ship5 = new TextButton("555555555", btnStyle);
-        ship5.setX(400);
-
-
-        ships.addActor(rotateBtn);
-        //ships.addActor(ship2);
+        topTable.addActor(rotateBtn);
         topTable.addActor(ship2);
-        ships.addActor(ship3);
-        ships.addActor(ship4);
-        ships.addActor(ship5);
-
+        topTable.addActor(twoShip);
+        topTable.addActor(threeShip);
+        topTable.addActor(fourShip);
+        topTable.addActor(fiveShip);
 
         playerTable.addActor(nextBtn);
         playerTable.addActor(backBtn);
         playerTable.addActor(readyBtn);
 
         topTable.addActor(placeShipsLabel);
-        topTable.addActor(ships);
 
         nextBtn.addListener(((PlacementScreen) screen).getNextBtnListener());
         backBtn.addListener(((PlacementScreen) screen).getBackBtnListener());
         readyBtn.addListener(((PlacementScreen) screen).getReadyBtnListener());
-        // shipBtn.addListener(((PlacementScreen) screen).getShipBtnListener());
+        rotateBtn.addListener(((PlacementScreen) screen).getRotateBtnListener());
 
         actorPanel.addActor(playerTable);
         actorPanel.addActor(middlePanel);
@@ -304,10 +314,6 @@ public class PlacementRenderer extends Renderer{
 
         skin.add("default", btnStyle);
 
-    }
-
-    public TextButton getShip2() {
-        return ship2;
     }
 
     public WidgetGroup getActorPanel() {
@@ -350,13 +356,39 @@ public class PlacementRenderer extends Renderer{
         return landLabel;
     }
 
-    public void setFollow(TextButton button) {
+    public void setFollow(ShipButton button) {
         follow = button;
     }
 
-    public TextButton getFollow() {
+    public ShipButton getFollow() {
         return follow;
     }
+
+    /**
+     * Method for switching between Horizontal and Vertical ships
+     */
+    public void rotateShips() {
+        if(twoShip.getDirection() == ShipButton.Direction.HORIZONTAL) {
+            twoShip.setDirection(ShipButton.Direction.VERTICAL);
+            twoShip.setText(twoShip.getText() + " -R");
+            threeShip.setDirection(ShipButton.Direction.VERTICAL);
+            threeShip.setText(threeShip.getText() + " -R");
+            fourShip.setDirection(ShipButton.Direction.VERTICAL);
+            fourShip.setText(fourShip.getText() + " -R");
+            fiveShip.setDirection(ShipButton.Direction.VERTICAL);
+            fiveShip.setText(fiveShip.getText() + " -R");
+        } else {
+            twoShip.setDirection(ShipButton.Direction.HORIZONTAL);
+            twoShip.setText("TWOT");
+            threeShip.setDirection(ShipButton.Direction.HORIZONTAL);
+            threeShip.setText("THREETH");
+            fourShip.setDirection(ShipButton.Direction.HORIZONTAL);
+            fourShip.setText("FOURFOURFO");
+            fiveShip.setDirection(ShipButton.Direction.HORIZONTAL);
+            fiveShip.setText("FIVEFIVEFIVEFIVE");
+        }
+    }
+
 
     // TODO: Put this code somewhere else! Method is a loop - it's a trap!
     @Override
@@ -381,6 +413,7 @@ public class PlacementRenderer extends Renderer{
         headerLabel.draw(batch, 1);
         batch.end();
 
+        // ShipButton to follow cursor
         if(follow != null) {
             follow.setX(Gdx.input.getX());
             follow.setY(follow.getY()-Gdx.input.getDeltaY());
