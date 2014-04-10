@@ -23,18 +23,24 @@ import edu.chalmers.sankoss.java.screens.PlacementScreen;
  */
 public class PlacementRenderer extends Renderer{
 
-	// private Sprite box= new Sprite(new Texture("src/main/java/edu/chalmers/sankoss/java/texures/testSquare.png"));
+    // private Sprite box= new Sprite(new Texture("src/main/java/edu/chalmers/sankoss/java/texures/testSquare.png"));
 
+    private int windowWidth;
 	private final int GRID_SIDE=10;
     private java.awt.Color color = java.awt.Color.WHITE;
     private String land = "USA";
+    private final int WIDTH_OF_SQUARE = 50;
+    private final int HEIGHT_OF_SQUARE = 50;
+    private Table[] grid = new Table[100];
+    private TextButton follow = null;
 	
 	private SpriteBatch batch = new SpriteBatch();
-    private Skin skin;
+    private Skin skin = new Skin();
 
     // Containers
     private Table playerTable;
     private Table topTable;
+    private Table middlePanel;
     private WidgetGroup ships;
 
 	// controllers
@@ -46,6 +52,12 @@ public class PlacementRenderer extends Renderer{
     private TextButton backBtn;
     private TextButton readyBtn;
     private TextButton rotateBtn;
+
+    // Temporary ships
+    private TextButton ship2;
+    private TextButton ship3;
+    private TextButton ship4;
+    private TextButton ship5;
 	
 	
     /**
@@ -67,13 +79,22 @@ public class PlacementRenderer extends Renderer{
     }
 
     public void resize(int width, int height) {
+        windowWidth = width;
         playerTable.setWidth(width);
         topTable.setWidth(width);
         topTable.setY(height - 100);
+        middlePanel.setWidth(width);
+        middlePanel.setHeight(height - topTable.getHeight() - playerTable.getHeight());
         ships.setWidth(width - 200);
 
         rotateBtn.setX(ships.getWidth() - rotateBtn.getWidth());
         readyBtn.setX(width - readyBtn.getWidth());
+
+
+    }
+
+    public Table[] getGrid() {
+        return grid;
     }
 
     /**
@@ -97,7 +118,7 @@ public class PlacementRenderer extends Renderer{
     }
 
     public void drawControllers(AbstractScreen screen) {
-        skin = new Skin();
+        //skin = new Skin();
 
         actorPanel = new WidgetGroup();
 
@@ -106,6 +127,16 @@ public class PlacementRenderer extends Renderer{
         tablePixmap.setColor(Color.DARK_GRAY);
         tablePixmap.fill();
         skin.add("tableBack", new Texture(tablePixmap));
+
+        Pixmap tablePixmap2 = new Pixmap(800, 150, Pixmap.Format.RGBA8888);
+        tablePixmap2.setColor(Color.LIGHT_GRAY);
+        tablePixmap2.fill();
+        skin.add("tableBack2", new Texture(tablePixmap2));
+
+        Pixmap tablePixmap3 = new Pixmap(800, 150, Pixmap.Format.RGBA8888);
+        tablePixmap3.setColor(Color.GRAY);
+        tablePixmap3.fill();
+        skin.add("tableBack3", new Texture(tablePixmap3));
 
         // Panel with players info
         playerTable = new Table();
@@ -120,6 +151,12 @@ public class PlacementRenderer extends Renderer{
         topTable.setWidth(800f);
         topTable.setBackground(skin.newDrawable("tableBack"));
         topTable.setPosition(0, 500);
+
+        middlePanel = new Table();
+        middlePanel.setWidth(800);
+        middlePanel.setHeight(600 - topTable.getHeight() - playerTable.getHeight());
+        middlePanel.setBackground(skin.newDrawable("tableBack2"));
+        middlePanel.setPosition(0, playerTable.getHeight());
 
 
         // This is where ships to pick from will be
@@ -158,6 +195,31 @@ public class PlacementRenderer extends Renderer{
 
         btnStyle.font = skin.getFont("default");
 
+        int n = 0;
+
+        for (int i = 0; i < 10; i++){
+            for (int j = 0; j < 10; j++){
+                grid[(i*10)+j] = new Table();
+
+                n++;
+
+                if(n%2 == 0) {
+                    grid[(i*10)+j].setBackground(skin.newDrawable("tableBack"));
+                } else {
+                    grid[(i*10)+j].setBackground(skin.newDrawable("tableBack3"));
+                }
+                //Table square = grid[(i * 10) + j];
+                //square.setBackground(skin.newDrawable("tableBack"));
+                //middlePanel.addListener(((PlacementScreen) screen).getShipBtnListener());
+                middlePanel.add(grid[(i*10)+j]).width(WIDTH_OF_SQUARE).height(HEIGHT_OF_SQUARE);
+                grid[(i*10)+j].addActor(new TextButton("00", btnStyle));
+                grid[(i*10)+j].addListener(((PlacementScreen) screen).getShipBtnListener());
+            }
+            n++;
+            middlePanel.row();
+        }
+
+
         nextBtn = new TextButton(">", btnStyle);
         nextBtn.setX(160);
         nextBtn.setY(0);
@@ -177,7 +239,26 @@ public class PlacementRenderer extends Renderer{
         rotateBtn.setX(600 - rotateBtn.getWidth());
         rotateBtn.setY(100 - rotateBtn.getHeight());
 
+        // TEMP SHIPS
+        ship2 = new TextButton("222", btnStyle);
+        ship2.setX(25);
+        ship2.addListener(((PlacementScreen) screen).getShip2Listener());
+
+        ship3 = new TextButton("33333", btnStyle);
+        ship3.setX(100);
+        ship4 = new TextButton("4444444", btnStyle);
+        ship4.setX(225);
+        ship5 = new TextButton("555555555", btnStyle);
+        ship5.setX(400);
+
+
         ships.addActor(rotateBtn);
+        //ships.addActor(ship2);
+        topTable.addActor(ship2);
+        ships.addActor(ship3);
+        ships.addActor(ship4);
+        ships.addActor(ship5);
+
 
         playerTable.addActor(nextBtn);
         playerTable.addActor(backBtn);
@@ -189,9 +270,11 @@ public class PlacementRenderer extends Renderer{
         nextBtn.addListener(((PlacementScreen) screen).getNextBtnListener());
         backBtn.addListener(((PlacementScreen) screen).getBackBtnListener());
         readyBtn.addListener(((PlacementScreen) screen).getReadyBtnListener());
+        // shipBtn.addListener(((PlacementScreen) screen).getShipBtnListener());
 
-        actorPanel.addActor(topTable);
         actorPanel.addActor(playerTable);
+        actorPanel.addActor(middlePanel);
+        actorPanel.addActor(topTable);
     }
 
     /**
@@ -223,6 +306,9 @@ public class PlacementRenderer extends Renderer{
 
     }
 
+    public TextButton getShip2() {
+        return ship2;
+    }
 
     public WidgetGroup getActorPanel() {
         return actorPanel;
@@ -248,6 +334,10 @@ public class PlacementRenderer extends Renderer{
         return playerTable;
     }
 
+    public Table getMiddlePanel() {
+        return middlePanel;
+    }
+
     public Table getTopTable() {
         return topTable;
     }
@@ -258,6 +348,14 @@ public class PlacementRenderer extends Renderer{
 
     public Label getLandLabel() {
         return landLabel;
+    }
+
+    public void setFollow(TextButton button) {
+        follow = button;
+    }
+
+    public TextButton getFollow() {
+        return follow;
     }
 
     // TODO: Put this code somewhere else! Method is a loop - it's a trap!
@@ -282,20 +380,23 @@ public class PlacementRenderer extends Renderer{
         headerLabel.setPosition(0, 510);
         headerLabel.draw(batch, 1);
         batch.end();
-        
+
+        if(follow != null) {
+            follow.setX(Gdx.input.getX());
+            follow.setY(follow.getY()-Gdx.input.getDeltaY());
+        }
         //Writes the grid as texures
-       
-        /*
-        batch.begin();
+
+        /*batch.begin();
         for(int y = 0; y < GRID_SIDE; y++){
             for(int x = 0; x < GRID_SIDE; x++){
-                box.setX(x * 50);
+                box.setX(windowWidth/2 - box.getWidth()*5 + box.getWidth()*x);
                 box.setY(y * 50);
                 box.draw(batch);
              }
          }
-         batch.end();
-        */
+         batch.end();*/
+
       
     }
 }
