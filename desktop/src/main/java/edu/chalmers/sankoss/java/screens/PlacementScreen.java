@@ -1,10 +1,13 @@
 package edu.chalmers.sankoss.java.screens;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.SnapshotArray;
 import edu.chalmers.sankoss.core.Coordinate;
 import edu.chalmers.sankoss.core.Player;
 import edu.chalmers.sankoss.core.Room;
@@ -14,6 +17,7 @@ import edu.chalmers.sankoss.java.Renderers.PlacementRenderer;
 import edu.chalmers.sankoss.java.SankossController;
 import edu.chalmers.sankoss.java.SankossGame;
 import edu.chalmers.sankoss.java.client.SankossClientListener;
+import edu.chalmers.sankoss.java.misc.ShipButton;
 
 import java.util.List;
 import java.util.Map;
@@ -27,65 +31,65 @@ import java.util.Map;
  */
 public class PlacementScreen extends AbstractScreen implements SankossClientListener {
 
-	private final int GRID_SIDE=10;
-	private final int GRID_TILE_SIDE=45;
+    private final int GRID_SIDE=10;
+    private final int GRID_TILE_SIDE=45;
 
     // Controllers
     private Label nameLabel;
 
-	//Containers
-	private WidgetGroup gridPanel;
+    //Containers
+    private WidgetGroup gridPanel;
 
-	/**
-	 * This will keep a reference of the main game.
-	 * @param game reference to the SankossGame class
-	 * @param controller reference to the SankossController class
-	 */
-	public PlacementScreen(SankossController controller, SankossGame game) {
-		super(controller, game);
+    /**
+     * This will keep a reference of the main game.
+     * @param game reference to the SankossGame class
+     * @param controller reference to the SankossController class
+     */
+    public PlacementScreen(SankossController controller, SankossGame game) {
+        super(controller, game);
         model = new Placement();
         model.getClient().addListener(this);
         renderer = new PlacementRenderer(model);
 
-		create();
-	}
+        create();
+    }
 
-	/**
-	 * @inheritdoc
-	 */
-	@Override
-	public void show() {
+    /**
+     * @inheritdoc
+     */
+    @Override
+    public void show() {
 
-	}
+    }
 
-	/**
-	 * @inheritdoc
-	 */
-	@Override
-	public void hide() {
+    /**
+     * @inheritdoc
+     */
+    @Override
+    public void hide() {
         if(stage.getRoot().hasChildren()) {
             stage.getRoot().clearChildren();
         }
 
-	}
+    }
 
-	@Override
-	public void pause() {
+    @Override
+    public void pause() {
 
-	}
+    }
 
-	@Override
-	public void resume() {
+    @Override
+    public void resume() {
 
-	}
+    }
 
-	/**
-	 * Method to run upon creation of instance.
-	 * Configs visual controllers and sets listeners.
-	 */
-	@Override
-	public void create() {
-		super.create();
+    /**
+     * Method to run upon creation of instance.
+     * Configs visual controllers and sets listeners.
+     */
+    @Override
+    public void create() {
+        super.create();
         renderer.drawControllers(this);
 
         BitmapFont font = new BitmapFont();
@@ -107,7 +111,7 @@ public class PlacementScreen extends AbstractScreen implements SankossClientList
 
         ((PlacementRenderer) renderer).getPlayerTable().addActor(nameLabel);
 
-		//TODO I am testing
+        //TODO I am testing
         /*Pixmap pixmap = new Pixmap(new FileHandle("src/main/java/edu/chalmers/sankoss/java/texures/testSquare.png"));
         skin.add("gridTile", new Texture(pixmap));
 		
@@ -130,23 +134,23 @@ public class PlacementScreen extends AbstractScreen implements SankossClientList
         /*stage.addActor(((PlacementRenderer) renderer).getPlayerTable());
         stage.addActor(((PlacementRenderer) renderer).getTopTable());*/
         stage.addActor(renderer.getActorPanel());
-		stage.draw();
-		
-	}
+        stage.draw();
 
-	/**
-	 * @inheritdoc
-	 */
-	@Override
-	public void resize(int width, int height) {
-		super.resize(width, height);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    @Override
+    public void resize(int width, int height) {
+        super.resize(width, height);
         renderer.resize(width, height);
-	}
+    }
 
-	@Override
-	public void render() {
+    @Override
+    public void render() {
 
-	}
+    }
 
     @Override
     public void connected(Long playerID) {
@@ -215,10 +219,111 @@ public class PlacementScreen extends AbstractScreen implements SankossClientList
         return new ReadyBtnListener();
     }
 
+    public ShipBtnListener getShipBtnListener() {
+        return new ShipBtnListener();
+    }
+
+    public Ship2Listener getShip2Listener() {
+        return new Ship2Listener();
+    }
+
+    public RotateBtnListener getRotateBtnListener() {
+        return new RotateBtnListener();
+    }
+
+
+    public class RotateBtnListener extends ChangeListener {
+        @Override
+        public void changed(ChangeEvent event, Actor actor) {
+            ((PlacementRenderer)renderer).rotateShips();
+        }
+    }
+
+    public class Ship2Listener extends  ChangeListener {
+        @Override
+        public void changed(ChangeEvent event, Actor actor) {
+
+            // If there's a ship following the cursor, place it where it's at
+            if(((PlacementRenderer)renderer).getFollow() != null) {
+                ((PlacementRenderer)renderer).getFollow().setX(Gdx.input.getX());
+                ((PlacementRenderer)renderer).getFollow().setY(((PlacementRenderer)renderer).getFollow().getY()-Gdx.input.getDeltaY());
+                ((PlacementRenderer)renderer).setFollow(null);
+
+            } else { // If no ship is following the cursor, let clicked ship follow cursor
+                // Type-casting safe, since only ShipButtons has this as listener
+                ((PlacementRenderer)renderer).setFollow((ShipButton) actor);
+
+            }
+        }
+    }
+
+    private class ShipBtnListener extends ChangeListener {
+        @Override
+        public void changed(ChangeEvent event, Actor actor) {
+
+            // Checks if a follow-button exists
+            if(((PlacementRenderer)renderer).getFollow() != null){
+
+                // Loops through grid
+                for(int i = 0; i < 10; i++) {
+                    for(int j = 0; j < 10; j++){
+
+                        // gets array of 1 button from every table in grid (1 table per square in grid)
+                        SnapshotArray<Actor> children = ((PlacementRenderer)renderer).getGrid()[(i*10)+j].getChildren();
+                        Actor[] childrenArray = children.toArray();
+
+                        if(childrenArray.length > 0){
+                            // Matches button with clicked one
+                            if(childrenArray[0].equals(actor)) {
+
+                                // TODO Checks if it's available for ships
+                                //if(((TextButton)childrenArray[0]).getText().equals("00")) {
+
+                                // If ship is horizontal
+                                if(((PlacementRenderer) renderer).getFollow().getDirection() == ShipButton.Direction.HORIZONTAL
+                                        && j + (((PlacementRenderer) renderer).getFollow().getLength()-1) <= 9) {
+
+                                    // Adds ALL ship-pieces based on length
+                                    System.out.println("Added ship at: ");
+                                    for(int n = 0; n < ((PlacementRenderer)renderer).getFollow().getLength(); n++) {
+                                        children = ((PlacementRenderer)renderer).getGrid()[((i)*10)+j+n].getChildren();
+
+                                        childrenArray = children.toArray();
+                                        ((TextButton)childrenArray[0]).setText("XX");
+                                        System.out.println(i + ", " + j);
+                                    }
+
+                                    // Removes placed ship from ship panel
+                                    ((PlacementRenderer)renderer).getTopTable().removeActor(((PlacementRenderer)renderer).getFollow());
+                                    ((PlacementRenderer)renderer).setFollow(null);
+
+                                } else if(((PlacementRenderer) renderer).getFollow().getDirection() == ShipButton.Direction.VERTICAL
+                                        && i + (((PlacementRenderer) renderer).getFollow().getLength()-1) <= 9) {
+
+                                    // Adds ALL ship-pieces based on length
+                                    System.out.println("Added ship at: ");
+                                    for(int n = 0; n < ((PlacementRenderer)renderer).getFollow().getLength(); n++) {
+                                        children = ((PlacementRenderer)renderer).getGrid()[((i + n)*10)+j].getChildren();
+
+                                        childrenArray = children.toArray();
+                                        ((TextButton)childrenArray[0]).setText("XX");
+                                        System.out.println(i + ", " + j);
+                                    }
+
+                                    // Removes placed ship from ship panel
+                                    ((PlacementRenderer)renderer).getTopTable().removeActor(((PlacementRenderer)renderer).getFollow());
+                                    ((PlacementRenderer)renderer).setFollow(null);
+                                }
+
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     private class ReadyBtnListener extends ChangeListener {
-
-
-
         @Override
         public void changed(ChangeEvent event, Actor actor) {
             // if(model.getClient().getPlayer().getFleet()) TODO: Check if fleet is full/done
@@ -234,7 +339,6 @@ public class PlacementScreen extends AbstractScreen implements SankossClientList
     }
 
     private class NextBtnListener extends ChangeListener {
-
         @Override
         public void changed(ChangeEvent event, Actor actor) {
 
@@ -247,7 +351,6 @@ public class PlacementScreen extends AbstractScreen implements SankossClientList
     }
 
     private class BackBtnListener extends ChangeListener {
-
         @Override
         public void changed(ChangeEvent event, Actor actor) {
 

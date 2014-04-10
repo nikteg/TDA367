@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import edu.chalmers.sankoss.core.Player;
 import edu.chalmers.sankoss.java.Models.Placement;
 import edu.chalmers.sankoss.java.Models.ScreenModel;
+import edu.chalmers.sankoss.java.misc.ShipButton;
 import edu.chalmers.sankoss.java.screens.AbstractScreen;
 import edu.chalmers.sankoss.java.screens.PlacementScreen;
 
@@ -19,22 +20,27 @@ import edu.chalmers.sankoss.java.screens.PlacementScreen;
  * More detailed description.
  *
  * @author Mikael Malmqvist
- * @date 3/24/14
  */
 public class PlacementRenderer extends Renderer{
 
-	// private Sprite box= new Sprite(new Texture("src/main/java/edu/chalmers/sankoss/java/texures/testSquare.png"));
+    // private Sprite box= new Sprite(new Texture("src/main/java/edu/chalmers/sankoss/java/texures/testSquare.png"));
 
+    private int windowWidth;
 	private final int GRID_SIDE=10;
     private java.awt.Color color = java.awt.Color.WHITE;
     private String land = "USA";
+    private final int WIDTH_OF_SQUARE = 50;
+    private final int HEIGHT_OF_SQUARE = 50;
+    private Table[] grid = new Table[100];
+    private ShipButton follow = null;
 	
 	private SpriteBatch batch = new SpriteBatch();
-    private Skin skin;
+    private Skin skin = new Skin();
 
     // Containers
     private Table playerTable;
     private Table topTable;
+    private Table middlePanel;
     private WidgetGroup ships;
 
 	// controllers
@@ -46,6 +52,18 @@ public class PlacementRenderer extends Renderer{
     private TextButton backBtn;
     private TextButton readyBtn;
     private TextButton rotateBtn;
+
+    // Temporary ships
+    private TextButton ship2;
+    /*private TextButton ship3;
+    private TextButton ship4;
+    private TextButton ship5;*/
+
+    // Less temporary ships
+    private ShipButton twoShip;
+    private ShipButton threeShip;
+    private ShipButton fourShip;
+    private ShipButton fiveShip;
 	
 	
     /**
@@ -67,13 +85,22 @@ public class PlacementRenderer extends Renderer{
     }
 
     public void resize(int width, int height) {
+        windowWidth = width;
         playerTable.setWidth(width);
         topTable.setWidth(width);
         topTable.setY(height - 100);
+        middlePanel.setWidth(width);
+        middlePanel.setHeight(height - topTable.getHeight() - playerTable.getHeight());
         ships.setWidth(width - 200);
 
-        rotateBtn.setX(ships.getWidth() - rotateBtn.getWidth());
+        rotateBtn.setX(topTable.getWidth() - rotateBtn.getWidth());
         readyBtn.setX(width - readyBtn.getWidth());
+
+
+    }
+
+    public Table[] getGrid() {
+        return grid;
     }
 
     /**
@@ -97,7 +124,7 @@ public class PlacementRenderer extends Renderer{
     }
 
     public void drawControllers(AbstractScreen screen) {
-        skin = new Skin();
+        //skin = new Skin();
 
         actorPanel = new WidgetGroup();
 
@@ -106,6 +133,16 @@ public class PlacementRenderer extends Renderer{
         tablePixmap.setColor(Color.DARK_GRAY);
         tablePixmap.fill();
         skin.add("tableBack", new Texture(tablePixmap));
+
+        Pixmap tablePixmap2 = new Pixmap(800, 150, Pixmap.Format.RGBA8888);
+        tablePixmap2.setColor(Color.LIGHT_GRAY);
+        tablePixmap2.fill();
+        skin.add("tableBack2", new Texture(tablePixmap2));
+
+        Pixmap tablePixmap3 = new Pixmap(800, 150, Pixmap.Format.RGBA8888);
+        tablePixmap3.setColor(Color.GRAY);
+        tablePixmap3.fill();
+        skin.add("tableBack3", new Texture(tablePixmap3));
 
         // Panel with players info
         playerTable = new Table();
@@ -121,8 +158,15 @@ public class PlacementRenderer extends Renderer{
         topTable.setBackground(skin.newDrawable("tableBack"));
         topTable.setPosition(0, 500);
 
+        middlePanel = new Table();
+        middlePanel.setWidth(800);
+        middlePanel.setHeight(600 - topTable.getHeight() - playerTable.getHeight());
+        middlePanel.setBackground(skin.newDrawable("tableBack2"));
+        middlePanel.setPosition(0, playerTable.getHeight());
+
 
         // This is where ships to pick from will be
+        // TODO: REMOVE THIS?!
         ships = new WidgetGroup();
         ships.setHeight(100f);
         ships.setWidth(600f);
@@ -158,6 +202,32 @@ public class PlacementRenderer extends Renderer{
 
         btnStyle.font = skin.getFont("default");
 
+        int n = 0;
+
+        // Creates 10x10 grid
+        for (int i = 0; i < 10; i++){
+            for (int j = 0; j < 10; j++){
+                grid[(i*10)+j] = new Table();
+
+                n++;
+
+                // Colorizes every second square with a different gray based on the tableBack
+                if(n % 2 == 0) {
+                    grid[(i*10)+j].setBackground(skin.newDrawable("tableBack"));
+                } else {
+                    grid[(i*10)+j].setBackground(skin.newDrawable("tableBack3"));
+                }
+
+                // Adds grid to middlePanel and add a textButton to it
+                // This is needed to make it click-able
+                middlePanel.add(grid[(i*10)+j]).width(WIDTH_OF_SQUARE).height(HEIGHT_OF_SQUARE);
+                grid[(i*10)+j].addActor(new TextButton(i + "," + j, btnStyle));
+                grid[(i*10)+j].addListener(((PlacementScreen) screen).getShipBtnListener());
+            }
+            n++;
+            middlePanel.row();
+        }
+
         nextBtn = new TextButton(">", btnStyle);
         nextBtn.setX(160);
         nextBtn.setY(0);
@@ -177,21 +247,44 @@ public class PlacementRenderer extends Renderer{
         rotateBtn.setX(600 - rotateBtn.getWidth());
         rotateBtn.setY(100 - rotateBtn.getHeight());
 
-        ships.addActor(rotateBtn);
+        // Ships to be placed in grid
+        // These should be ImageButtons later on..
+        twoShip = new ShipButton("TWOT", btnStyle, 2);
+        twoShip.setX(175);
+        twoShip.setY(50);
+        twoShip.addListener(((PlacementScreen) screen).getShip2Listener());
+        threeShip = new ShipButton("THREETH", btnStyle, 3);
+        threeShip.setX(450);
+        threeShip.setY(50);
+        threeShip.addListener(((PlacementScreen) screen).getShip2Listener());
+        fourShip = new ShipButton("FOURFOURFO", btnStyle, 4);
+        fourShip.setX(175);
+        fourShip.addListener(((PlacementScreen) screen).getShip2Listener());
+        fiveShip = new ShipButton("FIVEFIVEFIVEFIVE", btnStyle, 5);
+        fiveShip.setX(450);
+        fiveShip.addListener(((PlacementScreen) screen).getShip2Listener());
+
+        topTable.addActor(rotateBtn);
+        topTable.addActor(ship2);
+        topTable.addActor(twoShip);
+        topTable.addActor(threeShip);
+        topTable.addActor(fourShip);
+        topTable.addActor(fiveShip);
 
         playerTable.addActor(nextBtn);
         playerTable.addActor(backBtn);
         playerTable.addActor(readyBtn);
 
         topTable.addActor(placeShipsLabel);
-        topTable.addActor(ships);
 
         nextBtn.addListener(((PlacementScreen) screen).getNextBtnListener());
         backBtn.addListener(((PlacementScreen) screen).getBackBtnListener());
         readyBtn.addListener(((PlacementScreen) screen).getReadyBtnListener());
+        rotateBtn.addListener(((PlacementScreen) screen).getRotateBtnListener());
 
-        actorPanel.addActor(topTable);
         actorPanel.addActor(playerTable);
+        actorPanel.addActor(middlePanel);
+        actorPanel.addActor(topTable);
     }
 
     /**
@@ -223,7 +316,6 @@ public class PlacementRenderer extends Renderer{
 
     }
 
-
     public WidgetGroup getActorPanel() {
         return actorPanel;
     }
@@ -248,6 +340,10 @@ public class PlacementRenderer extends Renderer{
         return playerTable;
     }
 
+    public Table getMiddlePanel() {
+        return middlePanel;
+    }
+
     public Table getTopTable() {
         return topTable;
     }
@@ -259,6 +355,40 @@ public class PlacementRenderer extends Renderer{
     public Label getLandLabel() {
         return landLabel;
     }
+
+    public void setFollow(ShipButton button) {
+        follow = button;
+    }
+
+    public ShipButton getFollow() {
+        return follow;
+    }
+
+    /**
+     * Method for switching between Horizontal and Vertical ships
+     */
+    public void rotateShips() {
+        if(twoShip.getDirection() == ShipButton.Direction.HORIZONTAL) {
+            twoShip.setDirection(ShipButton.Direction.VERTICAL);
+            twoShip.setText(twoShip.getText() + " -R");
+            threeShip.setDirection(ShipButton.Direction.VERTICAL);
+            threeShip.setText(threeShip.getText() + " -R");
+            fourShip.setDirection(ShipButton.Direction.VERTICAL);
+            fourShip.setText(fourShip.getText() + " -R");
+            fiveShip.setDirection(ShipButton.Direction.VERTICAL);
+            fiveShip.setText(fiveShip.getText() + " -R");
+        } else {
+            twoShip.setDirection(ShipButton.Direction.HORIZONTAL);
+            twoShip.setText("TWOT");
+            threeShip.setDirection(ShipButton.Direction.HORIZONTAL);
+            threeShip.setText("THREETH");
+            fourShip.setDirection(ShipButton.Direction.HORIZONTAL);
+            fourShip.setText("FOURFOURFO");
+            fiveShip.setDirection(ShipButton.Direction.HORIZONTAL);
+            fiveShip.setText("FIVEFIVEFIVEFIVE");
+        }
+    }
+
 
     // TODO: Put this code somewhere else! Method is a loop - it's a trap!
     @Override
@@ -282,20 +412,24 @@ public class PlacementRenderer extends Renderer{
         headerLabel.setPosition(0, 510);
         headerLabel.draw(batch, 1);
         batch.end();
-        
+
+        // ShipButton to follow cursor
+        if(follow != null) {
+            follow.setX(Gdx.input.getX());
+            follow.setY(follow.getY()-Gdx.input.getDeltaY());
+        }
         //Writes the grid as texures
-       
-        /*
-        batch.begin();
+
+        /*batch.begin();
         for(int y = 0; y < GRID_SIDE; y++){
             for(int x = 0; x < GRID_SIDE; x++){
-                box.setX(x * 50);
+                box.setX(windowWidth/2 - box.getWidth()*5 + box.getWidth()*x);
                 box.setY(y * 50);
                 box.draw(batch);
              }
          }
-         batch.end();
-        */
+         batch.end();*/
+
       
     }
 }

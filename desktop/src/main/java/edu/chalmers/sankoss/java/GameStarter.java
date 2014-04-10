@@ -18,8 +18,8 @@ public class GameStarter {
 
         cfg.title = "Battleships";
         cfg.useGL20 = true;
-        cfg.width = 800;
-        cfg.height = 600;
+        cfg.width = 900;
+        cfg.height = 800;
         LwjglApplication application = new LwjglApplication(new SankossGame(), cfg);
     }
 }
