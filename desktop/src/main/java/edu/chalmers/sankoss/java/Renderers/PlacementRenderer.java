@@ -265,7 +265,6 @@ public class PlacementRenderer extends Renderer{
         fiveShip.addListener(((PlacementScreen) screen).getShip2Listener());
 
         topTable.addActor(rotateBtn);
-        topTable.addActor(ship2);
         topTable.addActor(twoShip);
         topTable.addActor(threeShip);
         topTable.addActor(fourShip);

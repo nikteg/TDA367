@@ -63,7 +63,7 @@ public class LobbyRenderer extends Renderer {
         middlePanel.setHeight(height - bottomPanel.getHeight() - topPanel.getHeight());
 
         if(roomList != null) {
-            roomList.setY(middlePanel.getHeight() - roomList.getHeight() - 75);
+            roomList.setY(middlePanel.getHeight() - roomList.getHeight() - 20);
         }
     }
 
@@ -87,15 +87,12 @@ public class LobbyRenderer extends Renderer {
         middlePanel = new WidgetGroup();
 
         btnStyle = new TextButton.TextButtonStyle();
-        listStyle = new List.ListStyle();
 
         // Configures necessary attributes for buttons
         setButtons();
 
         btnStyle.font = skin.getFont("default");
         labelStyle.font = skin.getFont("default");
-        listStyle.font = skin.getFont("default");
-        listStyle.selection = skin.newDrawable("white", Color.DARK_GRAY);
 
         // Makes buttons and labels with default style of button
         joinBtn = new TextButton("Join", btnStyle);
@@ -114,7 +111,6 @@ public class LobbyRenderer extends Renderer {
         infoLabel.setX(600 - 50);
         infoLabel.setY(110);
 
-
         bottomPanel.setWidth(800);
         bottomPanel.setHeight(50);
         bottomPanel.setX(0);
@@ -125,7 +121,7 @@ public class LobbyRenderer extends Renderer {
         topPanel.setWidth(800);
         topPanel.setHeight(30);
         topPanel.setX(0);
-        topPanel.setY(600 - 150);
+        topPanel.setY(Gdx.graphics.getHeight()-150);
         topPanel.addActor(infoLabel);
         topPanel.addActor(nameLabel);
         topPanel.addActor(editBtn);
@@ -177,6 +173,12 @@ public class LobbyRenderer extends Renderer {
         btnStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
 
         skin.add("default", btnStyle);
+
+        listStyle = new List.ListStyle();
+        listStyle.font = skin.getFont("default");
+        listStyle.selection = skin.newDrawable("white", Color.DARK_GRAY);
+        listStyle.fontColorSelected = Color.WHITE;
+        listStyle.fontColorUnselected = Color.GRAY;
 
     }
 
