@@ -277,42 +277,71 @@ public class PlacementScreen extends AbstractScreen implements SankossClientList
                             if(childrenArray[0].equals(actor)) {
 
                                 // TODO Checks if it's available for ships
-                                //if(((TextButton)childrenArray[0]).getText().equals("00")) {
+                                boolean free = true;
 
                                 // If ship is horizontal
                                 if(((PlacementRenderer) renderer).getFollow().getDirection() == ShipButton.Direction.HORIZONTAL
                                         && j + (((PlacementRenderer) renderer).getFollow().getLength()-1) <= 9) {
 
-                                    // Adds ALL ship-pieces based on length
-                                    System.out.println("Added ship at: ");
-                                    for(int n = 0; n < ((PlacementRenderer)renderer).getFollow().getLength(); n++) {
-                                        children = ((PlacementRenderer)renderer).getGrid()[((i)*10)+j+n].getChildren();
 
-                                        childrenArray = children.toArray();
-                                        ((TextButton)childrenArray[0]).setText("XX");
-                                        System.out.println(i + ", " + j);
+                                    // Runs through array in model to check if spots are free
+                                    for(int n = 0; n < ((PlacementRenderer)renderer).getFollow().getLength(); n++) {
+                                        if(((Placement)model).getShipArray()[((i)*10)+j+n] == 1) {
+                                            free = false;
+                                        }
                                     }
 
-                                    // Removes placed ship from ship panel
-                                    ((PlacementRenderer)renderer).getTopTable().removeActor(((PlacementRenderer)renderer).getFollow());
-                                    ((PlacementRenderer)renderer).setFollow(null);
+                                    // If spots are free
+                                    if(free){
+                                        // Adds ALL ship-pieces based on length
+                                        System.out.println("Added ship at: ");
+                                        for(int n = 0; n < ((PlacementRenderer)renderer).getFollow().getLength(); n++) {
+                                            children = ((PlacementRenderer)renderer).getGrid()[((i)*10)+j+n].getChildren();
+
+                                            childrenArray = children.toArray();
+                                            ((TextButton)childrenArray[0]).setText("XX");
+                                            System.out.println(i + ", " + (j+n));
+
+                                            // Marks the select coordinate as occupied
+                                            ((Placement)model).addToShipArray(i, (j+n));
+                                        }
+
+                                        // Removes placed ship from ship panel
+                                        ((PlacementRenderer)renderer).getTopTable().removeActor(((PlacementRenderer)renderer).getFollow());
+                                        ((PlacementRenderer)renderer).setFollow(null);
+                                    }
 
                                 } else if(((PlacementRenderer) renderer).getFollow().getDirection() == ShipButton.Direction.VERTICAL
                                         && i + (((PlacementRenderer) renderer).getFollow().getLength()-1) <= 9) {
 
-                                    // Adds ALL ship-pieces based on length
-                                    System.out.println("Added ship at: ");
+                                    // Runs through array in model to check if spots are free
                                     for(int n = 0; n < ((PlacementRenderer)renderer).getFollow().getLength(); n++) {
-                                        children = ((PlacementRenderer)renderer).getGrid()[((i + n)*10)+j].getChildren();
-
-                                        childrenArray = children.toArray();
-                                        ((TextButton)childrenArray[0]).setText("XX");
-                                        System.out.println(i + ", " + j);
+                                        if(((Placement)model).getShipArray()[((i + n)*10)+j] == 1) {
+                                            free = false;
+                                        }
                                     }
 
-                                    // Removes placed ship from ship panel
-                                    ((PlacementRenderer)renderer).getTopTable().removeActor(((PlacementRenderer)renderer).getFollow());
-                                    ((PlacementRenderer)renderer).setFollow(null);
+                                    // If spots are free
+                                    if(free){
+                                        // Adds ALL ship-pieces based on length
+                                        System.out.println("Added ship at: ");
+                                        for(int n = 0; n < ((PlacementRenderer)renderer).getFollow().getLength(); n++) {
+                                            children = ((PlacementRenderer)renderer).getGrid()[((i + n)*10)+j].getChildren();
+
+                                            childrenArray = children.toArray();
+                                            ((TextButton)childrenArray[0]).setText("XX");
+                                            System.out.println((i+n) + ", " + j);
+
+                                            // Marks the select coordinate as occupied
+                                            ((Placement)model).addToShipArray((i+n), j);
+                                        }
+
+                                        // Removes placed ship from ship panel
+                                        ((PlacementRenderer)renderer).getTopTable().removeActor(((PlacementRenderer)renderer).getFollow());
+                                        ((PlacementRenderer)renderer).setFollow(null);
+                                    }
+
+
                                 }
 
                             }
