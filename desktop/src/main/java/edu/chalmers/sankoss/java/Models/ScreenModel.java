@@ -1,6 +1,7 @@
 package edu.chalmers.sankoss.java.Models;
 
 import edu.chalmers.sankoss.core.Room;
+import edu.chalmers.sankoss.java.Settings;
 import edu.chalmers.sankoss.java.client.SankossClient;
 
 import java.io.IOException;
@@ -16,7 +17,7 @@ import java.util.Map;
 public abstract class ScreenModel {
     // Client to be shared by all instances - Controller
     // wont have to send the client between different models
-    protected static SankossClient client = new SankossClient("localhost");
+    protected static SankossClient client = new SankossClient(Settings.HOSTNAME, Settings.PORT);
     protected static int numberOfShips;
 
     public ScreenModel() {

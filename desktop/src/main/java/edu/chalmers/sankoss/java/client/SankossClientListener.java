@@ -11,16 +11,60 @@ import java.util.Map;
 /**
  * @author Niklas Tegnander
  */
-public interface SankossClientListener {
-    public void connected(Long playerID);
-    public void fetchedRooms(Map<Long, Room> rooms);
-    public void createdRoom(Long roomID);
-    public void joinedRoom(Player player);
-    public void startedGame(Long gameID, List<Player> players);
-    public void gameReady();
-    public void playerIsReady(Player player);
-    public void turn();
-    public void fireResult(Long gameID, Player target, Coordinate coordinate, boolean hit);
-    public void destroyedShip(Player player, Ship ship);
-    public void disconnected();
+public class SankossClientListener implements ISankossClientListener {
+
+    @Override
+    public void connected(Long playerID) {
+
+    }
+
+    @Override
+    public void fetchedRooms(Map<Long, Room> rooms) {
+
+    }
+
+    @Override
+    public void createdRoom(Long roomID) {
+
+    }
+
+    @Override
+    public void joinedRoom(Player player) {
+
+    }
+
+    @Override
+    public void startedGame(Long gameID, List<Player> players) {
+
+    }
+
+    @Override
+    public void gameReady() {
+
+    }
+
+    @Override
+    public void playerIsReady(Player player) {
+
+    }
+
+    @Override
+    public void turn() {
+
+    }
+
+    @Override
+    public void fireResult(Long gameID, Player target, Coordinate coordinate, boolean hit) {
+
+    }
+
+    @Override
+    public void destroyedShip(Player player, Ship ship) {
+
+    }
+
+    @Override
+    public void disconnected() {
+
+    }
 }

@@ -23,7 +23,7 @@ import java.util.Map;
  * @author Mikael Malmqvist
  * @date 3/24/14
  */
-public class GameScreen extends AbstractScreen implements SankossClientListener {
+public class GameScreen extends AbstractScreen {
 
     private final int GRID_SIDE=10;
     private final int GRID_TILE_SIDE=45;
@@ -42,10 +42,16 @@ public class GameScreen extends AbstractScreen implements SankossClientListener 
     public GameScreen(SankossController controller, SankossGame game) {
         super(controller, game);
         model = new GameModel();
-        model.getClient().addListener(this);
+        model.getClient().addListener(new GameListener());
         renderer = new GameRenderer(model);
 
         create();
+    }
+
+    private class GameListener extends SankossClientListener {
+        /**
+         * This is where we override the methods we want to use
+         */
     }
 
     /**
@@ -124,60 +130,4 @@ public class GameScreen extends AbstractScreen implements SankossClientListener 
     public void render() {
 
     }
-
-    @Override
-    public void connected(Long playerID) {
-
-    }
-
-    @Override
-    public void fetchedRooms(Map<Long, Room> rooms) {
-
-    }
-
-    @Override
-    public void createdRoom(Long roomID) {
-
-    }
-
-    @Override
-    public void joinedRoom(Player player) {
-
-    }
-
-    @Override
-    public void startedGame(Long gameID, List<Player> players) {
-
-    }
-
-    @Override
-    public void gameReady() {
-
-    }
-
-    @Override
-    public void playerIsReady(Player player) {
-        System.out.println("SERVER: " + model.getClient().getPlayer().getName() + " is ready!");
-    }
-
-    @Override
-    public void turn() {
-
-    }
-
-    @Override
-    public void fireResult(Long gameID, Player target, Coordinate coordinate, boolean hit) {
-
-    }
-
-    @Override
-    public void destroyedShip(Player player, Ship ship) {
-
-    }
-
-    @Override
-    public void disconnected() {
-
-    }
-
 }
