@@ -20,7 +20,7 @@ import java.util.Map;
  * @author Mikael Malmqvist
  * @date 3/24/14
  */
-public class InGameScreen extends AbstractScreen implements SankossClientListener {
+public class InGameScreen extends AbstractScreen {
 
     /**
      * This will keep a reference of the main game.
@@ -30,10 +30,16 @@ public class InGameScreen extends AbstractScreen implements SankossClientListene
     public InGameScreen(SankossController controller, SankossGame game) {
         super(controller, game);
         model = new InGame();
-        model.getClient().addListener(this);
+        model.getClient().addListener(new GameListener());
         renderer = new InGameRenderer(model);
 
         create();
+    }
+
+    private class GameListener extends SankossClientListener {
+        /**
+         * This is where we override the methods we want to use
+         */
     }
 
     /**
@@ -100,61 +106,6 @@ public class InGameScreen extends AbstractScreen implements SankossClientListene
 
     @Override
     public void render() {
-
-    }
-
-    @Override
-    public void connected(Long playerID) {
-
-    }
-
-    @Override
-    public void fetchedRooms(Map<Long, Room> rooms) {
-
-    }
-
-    @Override
-    public void createdRoom(Long roomID) {
-
-    }
-
-    @Override
-    public void joinedRoom(Player player) {
-
-    }
-
-    @Override
-    public void startedGame(Long gameID, List<Player> players) {
-
-    }
-
-    @Override
-    public void gameReady() {
-
-    }
-
-    @Override
-    public void playerIsReady(Player player) {
-
-    }
-
-    @Override
-    public void turn() {
-
-    }
-
-    @Override
-    public void fireResult(Long gameID, Player target, Coordinate coordinate, boolean hit) {
-
-    }
-
-    @Override
-    public void destroyedShip(Player player, Ship ship) {
-
-    }
-
-    @Override
-    public void disconnected() {
 
     }
 }

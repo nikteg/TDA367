@@ -23,7 +23,7 @@ import java.util.Map;
  * @author Mikael Malmqvist
  * @date 3/24/14
  */
-public class LobbyScreen extends AbstractScreen implements SankossClientListener{
+public class LobbyScreen extends AbstractScreen {
 
     // private Lobby lobby;
     private Object[] keys;
@@ -38,10 +38,37 @@ public class LobbyScreen extends AbstractScreen implements SankossClientListener
     public LobbyScreen(SankossController controller, SankossGame game) {
         super(controller, game);
         model = new Lobby();
-        model.getClient().addListener(this);
+        model.getClient().addListener(new LobbyListener());
         renderer = new LobbyRenderer(model);
         create();
 
+    }
+
+    private class LobbyListener extends SankossClientListener {
+        /**
+         * Method for getting active rooms on server.
+         * @param rooms Rooms on Server to join.
+         */
+        public void fetchedRooms(Map<Long, Room> rooms) {
+            gameRooms = rooms;
+
+            for(Room room : rooms.values()) {
+                System.out.println("SERVER: Fetched room #" + room.getName());
+
+            }
+
+            model.setRoomMap(gameRooms);
+
+            ((LobbyRenderer)renderer).setList(rooms);
+        }
+
+        public void joinedRoom(Player player) {
+            System.out.println("SERVER: " + player.getName() + " joined!");
+        }
+
+        public void startedGame(Long gameID, java.util.List<Player> players) {
+            ((LobbyRenderer)renderer).getJoinBtn().setText("Enter Game");
+        }
     }
 
 
@@ -90,63 +117,6 @@ public class LobbyScreen extends AbstractScreen implements SankossClientListener
         super.resize(width, height);
 
         renderer.resize(width, height);
-
-    }
-
-    public void connected(Long playerID) {
-
-    }
-
-    /**
-     * Method for getting active rooms on server.
-     * @param rooms Rooms on Server to join.
-     */
-    public void fetchedRooms(Map<Long, Room> rooms) {
-        this.gameRooms = rooms;
-
-        for(Room room : rooms.values()) {
-            System.out.println("SERVER: Fetched room #" + room.getName());
-
-        }
-
-        model.setRoomMap(gameRooms);
-
-        ((LobbyRenderer)renderer).setList(rooms);
-    }
-
-    public void createdRoom(Long roomID) {
-
-    }
-
-    public void joinedRoom(Player player) {
-        System.out.println("SERVER: " + player.getName() + " joined!");
-    }
-
-    public void startedGame(Long gameID, java.util.List<Player> players) {
-        ((LobbyRenderer)renderer).getJoinBtn().setText("Enter Game");
-    }
-
-    public void gameReady() {
-
-    }
-
-    public void playerIsReady(Player player) {
-
-    }
-
-    public void turn() {
-
-    }
-
-    public void fireResult(Long gameID, Player target, Coordinate coordinate, boolean hit) {
-
-    }
-
-    public void destroyedShip(Player player, Ship ship) {
-
-    }
-
-    public void disconnected() {
 
     }
 

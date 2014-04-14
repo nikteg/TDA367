@@ -18,13 +18,14 @@ import java.util.List;
  */
 public class SankossClient {
     private Client client;
-    private SankossClientListener sankossListener;
     private Player player;
     private List<Player> opponents = new ArrayList<Player>();
     private Long gameID;
     private Long roomID;
     private String host;
     private int timeout;
+
+    private List<ISankossClientListener> listeners = new ArrayList<ISankossClientListener>();
 
     public SankossClient(String host, int timeout) {
         this.host = host;
@@ -50,7 +51,10 @@ public class SankossClient {
 
                     player = new Player(msg.getPlayerID());
 
-                    sankossListener.connected(msg.getPlayerID());
+                    for (ISankossClientListener listener : listeners) {
+                        listener.connected(msg.getPlayerID());
+                    }
+
 
                     return;
                 }
@@ -61,7 +65,10 @@ public class SankossClient {
                     FetchedRooms msg = (FetchedRooms) object;
 
                     System.out.println(msg.getRooms().toString());
-                    sankossListener.fetchedRooms(msg.getRooms());
+
+                    for (ISankossClientListener listener : listeners) {
+                        listener.fetchedRooms(msg.getRooms());
+                    }
 
                     return;
                 }
@@ -74,7 +81,10 @@ public class SankossClient {
 
 
                     roomID = msg.getRoomID();
-                    sankossListener.createdRoom(roomID);
+
+                    for (ISankossClientListener listener : listeners) {
+                        listener.createdRoom(roomID);
+                    }
 
                     return;
                 }
@@ -85,7 +95,9 @@ public class SankossClient {
                     if (msg.getPlayer().equals(player))
                         return;
 
-                    sankossListener.joinedRoom(msg.getPlayer());
+                    for (ISankossClientListener listener : listeners) {
+                        listener.joinedRoom(msg.getPlayer());
+                    }
 
                     return;
                 }
@@ -94,13 +106,18 @@ public class SankossClient {
                     StartedGame msg = (StartedGame) object;
 
                     gameID = msg.getGameID();
-                    sankossListener.startedGame(gameID, msg.getPlayers());
+
+                    for (ISankossClientListener listener : listeners) {
+                        listener.startedGame(gameID, msg.getPlayers());
+                    }
 
                     return;
                 }
 
                 if (object instanceof GameReady) {
-                    sankossListener.gameReady();
+                    for (ISankossClientListener listener : listeners) {
+                        listener.gameReady();
+                    }
 
                     return;
                 }
@@ -110,13 +127,17 @@ public class SankossClient {
 
                     opponents.add(msg.getPlayer());
 
-                    sankossListener.playerIsReady(msg.getPlayer());
+                    for (ISankossClientListener listener : listeners) {
+                        listener.playerIsReady(msg.getPlayer());
+                    }
 
                     return;
                 }
 
                 if (object instanceof Turn) {
-                    sankossListener.turn();
+                    for (ISankossClientListener listener : listeners) {
+                        listener.turn();
+                    }
 
                     return;
                 }
@@ -124,7 +145,9 @@ public class SankossClient {
                 if (object instanceof FireResult) {
                     FireResult msg = (FireResult) object;
 
-                    sankossListener.fireResult(msg.getGameID(), msg.getTarget(), msg.getCoordinate(), msg.isHit());
+                    for (ISankossClientListener listener : listeners) {
+                        listener.fireResult(msg.getGameID(), msg.getTarget(), msg.getCoordinate(), msg.isHit());
+                    }
 
                     return;
                 }
@@ -132,14 +155,19 @@ public class SankossClient {
                 if (object instanceof DestroyedShip) {
                     DestroyedShip msg = (DestroyedShip) object;
 
-                    sankossListener.destroyedShip(msg.getPlayer(), msg.getShip());
+                    for (ISankossClientListener listener : listeners) {
+                        listener.destroyedShip(msg.getPlayer(), msg.getShip());
+                    }
 
                     return;
                 }
             }
 
             public void disconnected(Connection connection) {
-                sankossListener.disconnected();
+
+                for (ISankossClientListener listener : listeners) {
+                    listener.disconnected();
+                }
             }
         }));
     }
@@ -168,8 +196,12 @@ public class SankossClient {
         this.host = host;
     }
 
-    public void addListener(SankossClientListener sankossListener) {
-        this.sankossListener = sankossListener;
+    public void addListener(ISankossClientListener listener) {
+        listeners.add(listener);
+    }
+
+    public void removeListener(ISankossClientListener listener) {
+        listeners.remove(listener);
     }
 
     public void connect() throws IOException {
@@ -189,8 +221,7 @@ public class SankossClient {
     public void removeRoom(Long roomID) {
         if (client == null) return;
 
-        //TODO: remove room with roomID
-
+        client.sendTCP(new RemoveRoom(roomID));
     }
 
     public void disconnect() {

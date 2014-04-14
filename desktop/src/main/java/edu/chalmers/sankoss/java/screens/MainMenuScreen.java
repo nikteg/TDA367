@@ -23,7 +23,7 @@ import java.util.Map;
  * @author Mikael Malmqvist
  * @date 3/24/14
  */
-public class MainMenuScreen extends AbstractScreen implements SankossClientListener{
+public class MainMenuScreen extends AbstractScreen {
 
     private String roomName;
     private Long lastRoomID;
@@ -36,11 +36,17 @@ public class MainMenuScreen extends AbstractScreen implements SankossClientListe
     public MainMenuScreen(SankossController controller, SankossGame game) {
         super(controller, game);
         model = new MainMenu();
-        model.getClient().addListener(this);
+        model.getClient().addListener(new MainMenuListener());
         renderer = new MainMenuRenderer(model);
 
         create();
 
+    }
+
+    private class MainMenuListener extends SankossClientListener {
+        /**
+         * This is where we override the methods we want to use
+         */
     }
 
     /**

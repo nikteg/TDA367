@@ -30,7 +30,7 @@ import java.util.Map;
  * @author Mikael Malmqvist
  * @date 3/24/14
  */
-public class PlacementScreen extends AbstractScreen implements SankossClientListener {
+public class PlacementScreen extends AbstractScreen {
 
     private final int GRID_SIDE=10;
     private final int GRID_TILE_SIDE=45;
@@ -49,10 +49,23 @@ public class PlacementScreen extends AbstractScreen implements SankossClientList
     public PlacementScreen(SankossController controller, SankossGame game) {
         super(controller, game);
         model = new Placement();
-        model.getClient().addListener(this);
+        model.getClient().addListener(new PlacementListener());
         renderer = new PlacementRenderer(model);
 
         create();
+    }
+
+    private class PlacementListener extends SankossClientListener {
+        @Override
+        public void gameReady() {
+            System.out.println("SERVER: Game is ready!");
+            ((PlacementRenderer)renderer).getReadyBtn().setText("Enter Game");
+        }
+
+        @Override
+        public void playerIsReady(Player player) {
+            System.out.println("SERVER: " + model.getClient().getPlayer().getName() + " is ready!");
+        }
     }
 
     /**
@@ -152,62 +165,6 @@ public class PlacementScreen extends AbstractScreen implements SankossClientList
 
     @Override
     public void render() {
-
-    }
-
-    @Override
-    public void connected(Long playerID) {
-
-    }
-
-    @Override
-    public void fetchedRooms(Map<Long, Room> rooms) {
-
-    }
-
-    @Override
-    public void createdRoom(Long roomID) {
-
-    }
-
-    @Override
-    public void joinedRoom(Player player) {
-
-    }
-
-    @Override
-    public void startedGame(Long gameID, List<Player> players) {
-
-    }
-
-    @Override
-    public void gameReady() {
-        System.out.println("SERVER: Game is ready!");
-        ((PlacementRenderer)renderer).getReadyBtn().setText("Enter Game");
-    }
-
-    @Override
-    public void playerIsReady(Player player) {
-        System.out.println("SERVER: " + model.getClient().getPlayer().getName() + " is ready!");
-    }
-
-    @Override
-    public void turn() {
-
-    }
-
-    @Override
-    public void fireResult(Long gameID, Player target, Coordinate coordinate, boolean hit) {
-
-    }
-
-    @Override
-    public void destroyedShip(Player player, Ship ship) {
-
-    }
-
-    @Override
-    public void disconnected() {
 
     }
 
