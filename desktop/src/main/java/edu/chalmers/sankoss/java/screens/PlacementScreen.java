@@ -183,7 +183,7 @@ public class PlacementScreen extends AbstractScreen implements SankossClientList
     @Override
     public void gameReady() {
         System.out.println("SERVER: Game is ready!");
-
+        ((PlacementRenderer)renderer).getReadyBtn().setText("Enter Game");
     }
 
     @Override
@@ -369,7 +369,7 @@ public class PlacementScreen extends AbstractScreen implements SankossClientList
                                             ((Placement)model).addToShipArray((i+n), j);
 
                                             // Adds to players fleet
-                                            model.getClient().getPlayer().addUsedCoordiante(new Coordinate((i+n+1),(j+1)));
+                                            model.getClient().getPlayer().addUsedCoordiante(new Coordinate((i + n + 1), (j + 1)));
                                         }
 
                                         // Removes placed ship from ship panel
@@ -392,18 +392,23 @@ public class PlacementScreen extends AbstractScreen implements SankossClientList
         @Override
         public void changed(ChangeEvent event, Actor actor) {
 
-            if(model.getClient().getPlayer().getFleet().size() == model.getNumberOfShips()){
+            String buttonText = "" + ((PlacementRenderer)renderer).getReadyBtn().getText();
+
+            if(model.getClient().getPlayer().getFleet().size() == model.getNumberOfShips() 
+            && buttonText.equals("Ready")){
                 System.out.println("CLIENT: You are ready with " + model.getNumberOfShips() + " ships on the board!");
 
                 // TODO: Find out why playerReady requires a GameID.. There's no gameID yet?!
 
                 // Tells server that player is ready
-                // model.getClient().playerReady(model.getClient().getGameID(), model.getClient().getPlayer().getFleet());
-                model.getClient().getPlayer().setReady(true);
+                model.getClient().playerReady(model.getClient().getGameID(), model.getClient().getPlayer().getFleet());
+                // model.getClient().getPlayer().setReady(true);
 
                 ((Placement)model).switchReadyBtnState();
                 ((PlacementRenderer)renderer).setReadyBtn(((Placement) model).getReadyBtnState());
 
+            } else if(buttonText.equals("Enter Game")) {
+                controller.changeScreen(new GameScreen(controller, game));
             } else {
                 System.out.println("CLIENT: Please place all " + model.getNumberOfShips() + " ships on board!");
             }
