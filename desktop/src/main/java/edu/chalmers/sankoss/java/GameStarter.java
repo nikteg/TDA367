@@ -14,6 +14,12 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
  */
 public class GameStarter {
     public static void main(String[] args) {
+
+        /**
+         * Load settings from ini file
+         */
+        Settings.loadSettings();
+
         LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
 
         cfg.title = "Battleships";
