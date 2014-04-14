@@ -214,6 +214,7 @@ public class SankossClient {
     public void joinRoom(Long roomID) {
         if (client == null) return;
 
+        System.out.println("CLIENT: Trying to join #" + roomID);
         client.sendTCP(new JoinRoom(roomID));
     }
 

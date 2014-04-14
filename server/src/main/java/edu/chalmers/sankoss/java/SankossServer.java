@@ -169,9 +169,8 @@ public class SankossServer {
                         return;
                     }
 
-                    if (!room.getPlayers().contains(player)) {
+                    if (room.getPlayers().contains(player)) {
                         connection.sendTCP(new JoinRoom());
-
                         return;
                     }
 

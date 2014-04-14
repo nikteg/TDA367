@@ -94,7 +94,7 @@ public class LobbyScreen extends AbstractScreen implements SankossClientListener
     }
 
     public void connected(Long playerID) {
-        System.out.print("You are connected");
+
     }
 
     /**
@@ -105,7 +105,7 @@ public class LobbyScreen extends AbstractScreen implements SankossClientListener
         this.gameRooms = rooms;
 
         for(Room room : rooms.values()) {
-            System.out.println("Fetched room #" + room.getName());
+            System.out.println("SERVER: Fetched room #" + room.getName());
 
         }
 
@@ -119,11 +119,11 @@ public class LobbyScreen extends AbstractScreen implements SankossClientListener
     }
 
     public void joinedRoom(Player player) {
-
+        System.out.println("SERVER: " + player.getName() + " joined!");
     }
 
     public void startedGame(Long gameID, java.util.List<Player> players) {
-
+        ((LobbyRenderer)renderer).getJoinBtn().setText("Enter Game");
     }
 
     public void gameReady() {
@@ -165,15 +165,24 @@ public class LobbyScreen extends AbstractScreen implements SankossClientListener
     private class JoinButtonListener extends ChangeListener{
         @Override
         public void changed(ChangeEvent event, Actor actor) {
-            // Retrives selected name and matches with room
-            String roomName = ((LobbyRenderer)renderer).getRoomList().getSelection();
 
-            Room roomToJoin = model.getRoomByName(roomName, gameRooms);
+            String buttonText = "" + ((LobbyRenderer)renderer).getJoinBtn().getText();
 
-            model.getClient().joinRoom(roomToJoin.getID());
+            if(buttonText.equals("Ask to join")) {
+                // Retrives selected name and matches with room
+                String roomName = ((LobbyRenderer)renderer).getRoomList().getSelection();
 
-            System.out.println(model.getClient().getPlayer().getName() + " has joined room: #" + roomToJoin.getName());
-            controller.changeScreen(new PlacementScreen(controller, game));
+                Room roomToJoin = model.getRoomByName(roomName, gameRooms);
+
+                model.getClient().joinRoom(roomToJoin.getID());
+
+                ((LobbyRenderer)renderer).getJoinBtn().setText("Joined");
+                //controller.changeScreen(new PlacementScreen(controller, game));
+
+            } else if(buttonText.equals("Enter Game") && model.getClient().getGameID() != null) {
+                controller.changeScreen(new PlacementScreen(controller, game));
+            }
+
         }
     }
 

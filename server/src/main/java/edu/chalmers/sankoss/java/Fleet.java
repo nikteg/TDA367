@@ -1,8 +1,9 @@
 package edu.chalmers.sankoss.java;
 
+import edu.chalmers.sankoss.core.Ship;
+
 import java.util.Arrays;
 import java.util.LinkedList;
-import edu.chalmers.sankoss.core.Ship;
 
 /**
  * Class representing a fleet of ships
@@ -10,7 +11,8 @@ import edu.chalmers.sankoss.core.Ship;
  * @date 2014-03-29
  */
 
-public class Fleet{
+// TODO: Why is this class in this package?
+public class Fleet {
 
 	private	Ship[] ship;
 

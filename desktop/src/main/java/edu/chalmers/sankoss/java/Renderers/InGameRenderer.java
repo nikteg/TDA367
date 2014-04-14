@@ -37,7 +37,7 @@ public class InGameRenderer extends Renderer {
      */
     public InGameRenderer(ScreenModel currentModel) {
         super(currentModel);
-        render();
+        // render();
     }
 
     @Override
@@ -45,39 +45,18 @@ public class InGameRenderer extends Renderer {
         playerTable.setWidth(width);
         topTable.setWidth(width);
         topTable.setY(height - 100);
+        middleTable.setWidth(width);
+        middleTable.setHeight(height - playerTable.getHeight() - topTable.getHeight());
 
+        render();
 
-    }
-
-    /**
-     * @inheritdoc
-     */
-    @Override
-    public void render() {
-        // Why isn't this called automatically??
-        // Why isn't this called automatically??
-        Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-        Gdx.gl.glClearColor(0.09f, 0.28f, 0.5f, 1);
-
-        batch.begin();
     }
 
     @Override
     public void drawControllers(AbstractScreen screen) {
         skin = new Skin();
+
         actorPanel = new WidgetGroup();
-        playerTable = new Table();
-        topTable = new Table();
-        middleTable = new Table();
-
-        btnStyle = new TextButton.TextButtonStyle();
-        labelStyle = new Label.LabelStyle();
-
-        // Configs buttons
-        setButtons();
-
-        btnStyle.font = skin.getFont("default");
-        labelStyle.font = skin.getFont("default");
 
         // skin for playerTable
         Pixmap tablePixmap = new Pixmap(800, 150, Pixmap.Format.RGBA8888);
@@ -85,20 +64,22 @@ public class InGameRenderer extends Renderer {
         tablePixmap.fill();
         skin.add("tableBack", new Texture(tablePixmap));
 
+
         // Panel with players info
+        playerTable = new Table();
         playerTable.setHeight(150f);
         playerTable.setWidth(800f);
         playerTable.setBackground(skin.newDrawable("tableBack"));
-        playerTable.setX(0);
-        playerTable.setY(0);
+        playerTable.setPosition(0, 0);
 
-        // Panel with ships to be placed
+        topTable = new Table();
         topTable.setHeight(100f);
         topTable.setWidth(800f);
         topTable.setBackground(skin.newDrawable("tableBack"));
         topTable.setX(0);
         topTable.setY(500);
 
+        middleTable = new Table();
         middleTable.setWidth(800);
         middleTable.setHeight(800 - topTable.getHeight() - playerTable.getHeight());
         middleTable.setX(0);
@@ -107,8 +88,8 @@ public class InGameRenderer extends Renderer {
         BitmapFont font = new BitmapFont();
         font.scale(1); // Sets font's scale relative to current scale
 
-        // Adds font to skin
         skin.add("default", font);
+        labelStyle.font = skin.getFont("default");
 
         opponentLabel = new Label("Opponent", labelStyle);
         opponentLabel.setX(10);
@@ -117,6 +98,17 @@ public class InGameRenderer extends Renderer {
         playerLabel = new Label(screen.getModel().getClient().getPlayer().getName(), labelStyle);
         playerLabel.setX(10);
         playerLabel.setY(100);
+
+        btnStyle = new TextButton.TextButtonStyle();
+        // labelStyle = new Label.LabelStyle();
+
+        // Configs buttons
+        setButtons();
+
+
+        btnStyle.font = skin.getFont("default");
+
+        // Adds font to skin
 
         topTable.addActor(opponentLabel);
         playerTable.addActor(playerLabel);
@@ -160,4 +152,18 @@ public class InGameRenderer extends Renderer {
         skin.add("default", btnStyle);
 
     }
+
+    /**
+     * @inheritdoc
+     */
+    @Override
+    public void render() {
+        // Why isn't this called automatically??
+        // Why isn't this called automatically??
+        Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClearColor(0.09f, 0.28f, 0.5f, 1);
+
+        //batch.begin();
+    }
+
 }

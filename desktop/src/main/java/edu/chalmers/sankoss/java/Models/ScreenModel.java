@@ -17,6 +17,7 @@ public abstract class ScreenModel {
     // Client to be shared by all instances - Controller
     // wont have to send the client between different models
     protected static SankossClient client = new SankossClient("localhost");
+    protected static int numberOfShips;
 
     public ScreenModel() {
 
@@ -28,6 +29,14 @@ public abstract class ScreenModel {
 
     public ScreenModel(SankossClient client) {
         setClient(client);
+    }
+
+    public void setNumberOfShips(int numberOfShips) {
+        this.numberOfShips = numberOfShips;
+    }
+
+    public int getNumberOfShips() {
+        return this.numberOfShips;
     }
 
     public void setClient(SankossClient client) {

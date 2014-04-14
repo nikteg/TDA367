@@ -67,16 +67,13 @@ public class InGameScreen extends AbstractScreen implements SankossClientListene
 
     @Override
     public void create() {
-
-        // Defines variables for visuals
         super.create();
-        renderer.drawControllers(this);
 
         // Sets the stage as input source
         controller.changeInput(stage);
 
-        /*stage.addActor(((InGameRenderer) renderer).getPlayerTable());
-        stage.addActor(((InGameRenderer) renderer).getTopTable());*/
+        renderer.drawControllers(this);
+
         stage.addActor(renderer.getActorPanel());
         stage.draw();
     }

@@ -12,6 +12,7 @@ import edu.chalmers.sankoss.core.Coordinate;
 import edu.chalmers.sankoss.core.Player;
 import edu.chalmers.sankoss.core.Room;
 import edu.chalmers.sankoss.core.Ship;
+import edu.chalmers.sankoss.core.exceptions.IllegalShipCoordinatesException;
 import edu.chalmers.sankoss.java.Models.Placement;
 import edu.chalmers.sankoss.java.Renderers.PlacementRenderer;
 import edu.chalmers.sankoss.java.SankossController;
@@ -89,6 +90,8 @@ public class PlacementScreen extends AbstractScreen implements SankossClientList
      */
     @Override
     public void create() {
+        System.out.println("You are connected to opponent #" + model.getClient().getOpponents());
+
         super.create();
         renderer.drawControllers(this);
 
@@ -179,12 +182,13 @@ public class PlacementScreen extends AbstractScreen implements SankossClientList
 
     @Override
     public void gameReady() {
+        System.out.println("SERVER: Game is ready!");
 
     }
 
     @Override
     public void playerIsReady(Player player) {
-
+        System.out.println("SERVER: " + model.getClient().getPlayer().getName() + " is ready!");
     }
 
     @Override
@@ -293,7 +297,20 @@ public class PlacementScreen extends AbstractScreen implements SankossClientList
 
                                     // If spots are free
                                     if(free){
-                                        // Adds ALL ship-pieces based on length
+
+                                        // Sets start and end coordinate
+                                        Coordinate start = new Coordinate((i+1), (j+1));
+                                        Coordinate end = new Coordinate((i+1), (j +((PlacementRenderer)renderer).getFollow().getLength()));
+
+                                        // Adds ships with start and end coordinate to player's fleet
+                                        try {
+                                            model.getClient().getPlayer().getFleet().add(new Ship(start, end));
+                                        } catch (IllegalShipCoordinatesException e) {
+                                            System.out.println("ERROR: Cannot place ship at give coordinates!");
+                                            e.getStackTrace();
+                                        }
+
+                                        // Adds ship to grid visually
                                         System.out.println("Added ship at: ");
                                         for(int n = 0; n < ((PlacementRenderer)renderer).getFollow().getLength(); n++) {
                                             children = ((PlacementRenderer)renderer).getGrid()[((i)*10)+j+n].getChildren();
@@ -304,6 +321,9 @@ public class PlacementScreen extends AbstractScreen implements SankossClientList
 
                                             // Marks the select coordinate as occupied
                                             ((Placement)model).addToShipArray(i, (j+n));
+
+                                            // Adds to players fleet
+                                            model.getClient().getPlayer().addUsedCoordiante(new Coordinate((i + 1), (j + n + 1)));
                                         }
 
                                         // Removes placed ship from ship panel
@@ -323,7 +343,20 @@ public class PlacementScreen extends AbstractScreen implements SankossClientList
 
                                     // If spots are free
                                     if(free){
-                                        // Adds ALL ship-pieces based on length
+
+                                        // Sets start and end coordinate
+                                        Coordinate start = new Coordinate((i+1), (j+1));
+                                        Coordinate end = new Coordinate((i+1), (j +((PlacementRenderer)renderer).getFollow().getLength()));
+
+                                        // Adds ships with start and end coordinate to player's fleet
+                                        try {
+                                            model.getClient().getPlayer().getFleet().add(new Ship(start, end));
+                                        } catch (IllegalShipCoordinatesException e) {
+                                            System.out.println("ERROR: Cannot place ship at give coordinates!");
+                                            e.getStackTrace();
+                                        }
+
+                                        // Adds ship to grid visually
                                         System.out.println("Added ship at: ");
                                         for(int n = 0; n < ((PlacementRenderer)renderer).getFollow().getLength(); n++) {
                                             children = ((PlacementRenderer)renderer).getGrid()[((i + n)*10)+j].getChildren();
@@ -334,6 +367,9 @@ public class PlacementScreen extends AbstractScreen implements SankossClientList
 
                                             // Marks the select coordinate as occupied
                                             ((Placement)model).addToShipArray((i+n), j);
+
+                                            // Adds to players fleet
+                                            model.getClient().getPlayer().addUsedCoordiante(new Coordinate((i+n+1),(j+1)));
                                         }
 
                                         // Removes placed ship from ship panel
@@ -355,14 +391,23 @@ public class PlacementScreen extends AbstractScreen implements SankossClientList
     private class ReadyBtnListener extends ChangeListener {
         @Override
         public void changed(ChangeEvent event, Actor actor) {
-            // if(model.getClient().getPlayer().getFleet()) TODO: Check if fleet is full/done
-            System.out.println("Player #" + model.getClient().getPlayer().getID() +" is ready!");
 
-            // Tells server that player is ready
-            model.getClient().playerReady(model.getClient().getGameID(), model.getClient().getPlayer().getFleet());
+            if(model.getClient().getPlayer().getFleet().size() == model.getNumberOfShips()){
+                System.out.println("CLIENT: You are ready with " + model.getNumberOfShips() + " ships on the board!");
 
-            ((Placement)model).switchReadyBtnState();
-            ((PlacementRenderer)renderer).setReadyBtn(((Placement)model).getReadyBtnState());
+                // TODO: Find out why playerReady requires a GameID.. There's no gameID yet?!
+
+                // Tells server that player is ready
+                // model.getClient().playerReady(model.getClient().getGameID(), model.getClient().getPlayer().getFleet());
+                model.getClient().getPlayer().setReady(true);
+
+                ((Placement)model).switchReadyBtnState();
+                ((PlacementRenderer)renderer).setReadyBtn(((Placement) model).getReadyBtnState());
+
+            } else {
+                System.out.println("CLIENT: Please place all " + model.getNumberOfShips() + " ships on board!");
+            }
+
 
         }
     }

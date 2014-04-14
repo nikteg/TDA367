@@ -53,6 +53,10 @@ public class LobbyRenderer extends Renderer {
         super(currentModel);
     }
 
+    public TextButton getJoinBtn() {
+        return joinBtn;
+    }
+
     @Override
     public void resize(int width, int height) {
         joinBtn.setPosition(width - WIDTH_OF_BUTTON, 0);
@@ -95,7 +99,7 @@ public class LobbyRenderer extends Renderer {
         labelStyle.font = skin.getFont("default");
 
         // Makes buttons and labels with default style of button
-        joinBtn = new TextButton("Join", btnStyle);
+        joinBtn = new TextButton("Ask to join", btnStyle);
         joinBtn.setX(600 - WIDTH_OF_BUTTON);
         joinBtn.setY(0);
         cancelBtn = new TextButton("Cancel", btnStyle);

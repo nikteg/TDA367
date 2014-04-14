@@ -91,7 +91,7 @@ public class MainMenuScreen extends AbstractScreen implements SankossClientListe
 
 
     public void connected(Long playerID) {
-        System.out.print("Client connected");
+        System.out.print("SERVER: Client connected");
     }
 
     public void fetchedRooms(Map<Long, Room> rooms) {
@@ -99,11 +99,12 @@ public class MainMenuScreen extends AbstractScreen implements SankossClientListe
     }
 
     public void createdRoom(Long roomID) {
-
+        System.out.println("SERVER: " + model.getClient().getPlayer().getName() + " created room #" + roomID);
     }
 
     public void joinedRoom(Player player) {
-
+        ((MainMenuRenderer)renderer).setStatusLabel(player.getName() + " has joined your room!");
+        ((MainMenuRenderer)renderer).createStartButton();
     }
 
     public void startedGame(Long gameID, java.util.List<Player> players) {
@@ -145,6 +146,20 @@ public class MainMenuScreen extends AbstractScreen implements SankossClientListe
 
     public HelpButtonListener getHelpButtonListener() {
         return new HelpButtonListener();
+    }
+
+    public StartButtonListener getStartButtonListener() {
+        return new StartButtonListener();
+    }
+
+    private class StartButtonListener extends ChangeListener{
+
+        @Override
+        public void changed(ChangeEvent event, Actor actor) {
+            // TODO: START GAME
+            model.getClient().startGame(model.getClient().getRoomID());
+            controller.changeScreen(new PlacementScreen(controller, game));
+        }
     }
 
     private class JoinButtonListener extends ChangeListener{

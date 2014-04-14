@@ -1,7 +1,6 @@
 package edu.chalmers.sankoss.java.Models;
 
 import edu.chalmers.sankoss.core.Room;
-
 import java.util.Map;
 
 /**
@@ -11,12 +10,13 @@ import java.util.Map;
  */
 public class Placement extends ScreenModel{
 
-    public ReadyBtnState readyBtnState;
+    private ReadyBtnState readyBtnState;
 
     // in array 1 represent occupied and 0 free
     // merely a array for checking if coordinates are
     // occupied or free
-    public int[] shipArray;
+    private int[] shipArray;
+
 
     public enum ReadyBtnState {
         READY, WAITING, ENTER;

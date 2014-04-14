@@ -27,11 +27,14 @@ public class MainMenuRenderer extends Renderer{
     // Containers
     // private WidgetGroup actorPanel;
 
+    private AbstractScreen screen;
+
     // Controllers
     private TextButton joinBtn;
     private TextButton hostBtn;
     private TextButton optionBtn;
     private TextButton helpBtn;
+    private TextButton startGameBtn;
     private Label battleLabel;
     private Label statusLabel;
     private Skin skin;
@@ -61,6 +64,10 @@ public class MainMenuRenderer extends Renderer{
         battleLabel.setY(height/2 + 240);
         statusLabel.setX(0);
         statusLabel.setY(0);
+
+        if(startGameBtn != null) {
+            startGameBtn.setPosition(width - startGameBtn.getWidth(), 0);
+        }
     }
 
     /**
@@ -72,8 +79,21 @@ public class MainMenuRenderer extends Renderer{
         Gdx.gl.glClearColor(0.09f, 0.28f, 0.2f, 1);
     }
 
+    public void createStartButton(){
+        startGameBtn = new TextButton("Start Game", btnStyle);
+        startGameBtn.setWidth(175);
+        startGameBtn.setHeight(50);
+        startGameBtn.setPosition(Gdx.graphics.getWidth() - startGameBtn.getWidth(), 0);
+
+        startGameBtn.addListener(((MainMenuScreen)screen).getStartButtonListener());
+
+        actorPanel.addActor(startGameBtn);
+    }
+
     public void drawControllers(AbstractScreen screen) {
         skin = new Skin();
+
+        this.screen = screen;
 
         btnStyle = new TextButton.TextButtonStyle();
         actorPanel = new WidgetGroup(); // Panel to put actors in

@@ -53,12 +53,6 @@ public class PlacementRenderer extends Renderer{
     private TextButton readyBtn;
     private TextButton rotateBtn;
 
-    // Temporary ships
-    private TextButton ship2;
-    /*private TextButton ship3;
-    private TextButton ship4;
-    private TextButton ship5;*/
-
     // Less temporary ships
     private ShipButton twoShip;
     private ShipButton threeShip;
@@ -84,6 +78,7 @@ public class PlacementRenderer extends Renderer{
 
     }
 
+    @Override
     public void resize(int width, int height) {
         windowWidth = width;
         playerTable.setWidth(width);
