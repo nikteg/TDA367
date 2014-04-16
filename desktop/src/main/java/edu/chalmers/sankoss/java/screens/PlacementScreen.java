@@ -10,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.SnapshotArray;
 import edu.chalmers.sankoss.core.Coordinate;
 import edu.chalmers.sankoss.core.Player;
-import edu.chalmers.sankoss.core.Room;
 import edu.chalmers.sankoss.core.Ship;
 import edu.chalmers.sankoss.core.exceptions.IllegalShipCoordinatesException;
 import edu.chalmers.sankoss.java.Models.Placement;
@@ -19,9 +18,6 @@ import edu.chalmers.sankoss.java.SankossController;
 import edu.chalmers.sankoss.java.SankossGame;
 import edu.chalmers.sankoss.java.client.SankossClientListener;
 import edu.chalmers.sankoss.java.misc.ShipButton;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * Screen used when placing the ships.
@@ -59,12 +55,13 @@ public class PlacementScreen extends AbstractScreen {
         @Override
         public void gameReady() {
             System.out.println("SERVER: Game is ready!");
-            ((PlacementRenderer)renderer).getReadyBtn().setText("Enter Game");
         }
 
         @Override
         public void playerIsReady(Player player) {
             System.out.println("SERVER: " + model.getClient().getPlayer().getName() + " is ready!");
+            ((Placement)model).setReadyBtnState(Placement.ReadyBtnState.ENTER);
+            ((PlacementRenderer)renderer).setReadyBtn(Placement.ReadyBtnState.ENTER);
         }
     }
 
