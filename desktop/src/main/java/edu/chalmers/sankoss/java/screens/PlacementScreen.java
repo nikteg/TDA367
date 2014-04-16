@@ -10,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.SnapshotArray;
 import edu.chalmers.sankoss.core.Coordinate;
 import edu.chalmers.sankoss.core.Player;
-import edu.chalmers.sankoss.core.Room;
 import edu.chalmers.sankoss.core.Ship;
 import edu.chalmers.sankoss.core.exceptions.IllegalShipCoordinatesException;
 import edu.chalmers.sankoss.java.Models.Placement;
@@ -19,9 +18,6 @@ import edu.chalmers.sankoss.java.SankossController;
 import edu.chalmers.sankoss.java.SankossGame;
 import edu.chalmers.sankoss.java.client.SankossClientListener;
 import edu.chalmers.sankoss.java.misc.ShipButton;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * Screen used when placing the ships.
@@ -59,12 +55,13 @@ public class PlacementScreen extends AbstractScreen {
         @Override
         public void gameReady() {
             System.out.println("SERVER: Game is ready!");
-            ((PlacementRenderer)renderer).getReadyBtn().setText("Enter Game");
         }
 
         @Override
         public void playerIsReady(Player player) {
             System.out.println("SERVER: " + model.getClient().getPlayer().getName() + " is ready!");
+            ((Placement)model).setReadyBtnState(Placement.ReadyBtnState.ENTER);
+            ((PlacementRenderer)renderer).setReadyBtn(Placement.ReadyBtnState.ENTER);
         }
     }
 
@@ -103,7 +100,6 @@ public class PlacementScreen extends AbstractScreen {
      */
     @Override
     public void create() {
-        System.out.println("You are connected to opponent #" + model.getClient().getOpponents());
 
         super.create();
         renderer.drawControllers(this);
@@ -349,27 +345,38 @@ public class PlacementScreen extends AbstractScreen {
         @Override
         public void changed(ChangeEvent event, Actor actor) {
 
-            String buttonText = "" + ((PlacementRenderer)renderer).getReadyBtn().getText();
+            // If all your boats are on the board
+            if(model.getClient().getPlayer().getFleet().size() == model.getNumberOfShips()){
 
-            if(model.getClient().getPlayer().getFleet().size() == model.getNumberOfShips() 
-            && buttonText.equals("Ready")){
-                System.out.println("CLIENT: You are ready with " + model.getNumberOfShips() + " ships on the board!");
 
-                // TODO: Find out why playerReady requires a GameID.. There's no gameID yet?!
+                // Tells server that you are ready if necessary
+                if(!model.getClient().getReady()) {
+                    model.getClient().playerReady(model.getClient().getGameID(), model.getClient().getPlayer().getFleet());
+                    model.getClient().setReady(true);
+                }
 
-                // Tells server that player is ready
-                model.getClient().playerReady(model.getClient().getGameID(), model.getClient().getPlayer().getFleet());
-                // model.getClient().getPlayer().setReady(true);
+                // You're done placing you're ships but opponent isn't done
+                if(((Placement)model).getReadyBtnState() == Placement.ReadyBtnState.READY) {
+                    System.out.println("CLIENT: You are ready with " + model.getNumberOfShips() + " ships on the board!");
 
-                ((Placement)model).switchReadyBtnState();
-                ((PlacementRenderer)renderer).setReadyBtn(((Placement) model).getReadyBtnState());
+                    // Switches state of ready button
+                    ((Placement)model).switchReadyBtnState();
+                    ((PlacementRenderer)renderer).setReadyBtn(((Placement) model).getReadyBtnState());
 
-            } else if(buttonText.equals("Enter Game")) {
-                controller.changeScreen(new GameScreen(controller, game));
+                } else if(((Placement)model).getReadyBtnState() == Placement.ReadyBtnState.ENTER){
+                    // This means your opponent is done and you can enter game directly
+                    controller.changeScreen(new GameScreen(controller, game));
+
+                } else {
+                    // This means you're marked as waiting since before, but the opponent is not yet done
+                    System.out.println("Waiting for opponent!");
+                }
+
+
             } else {
-                System.out.println("CLIENT: Please place all " + model.getNumberOfShips() + " ships on board!");
+                // If you haven't placed all your ships
+                System.out.println("Cannot enter game until all " + model.getNumberOfShips() + " ships are placed on the board!");
             }
-
 
         }
     }

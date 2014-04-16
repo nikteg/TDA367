@@ -40,7 +40,7 @@ public class GameRenderer extends Renderer{
     private Table flag;
 	private Label headerLabel;
     private Label landLabel;
-    private Label placeShipsLabel;
+    private Label opponentNameLabel;
 
 
     /**
@@ -48,6 +48,10 @@ public class GameRenderer extends Renderer{
      */
     public GameRenderer(ScreenModel currentModel) {
         super(currentModel);
+    }
+
+    public Label getOpponentNameLabel() {
+        return opponentNameLabel;
     }
 
     @Override
@@ -132,9 +136,9 @@ public class GameRenderer extends Renderer{
         landLabel.setX(60);
         landLabel.setY(0);
 
-        placeShipsLabel = new Label("Opponent's name", labelStyle);
-        placeShipsLabel.setX(10);
-        placeShipsLabel.setY(55);
+        opponentNameLabel = new Label("Opponent's name", labelStyle);
+        opponentNameLabel.setX(10);
+        opponentNameLabel.setY(55);
 
         btnStyle = new TextButton.TextButtonStyle();
 
@@ -170,7 +174,7 @@ public class GameRenderer extends Renderer{
         }
 
 
-        topTable.addActor(placeShipsLabel);
+        topTable.addActor(opponentNameLabel);
 
 
         actorPanel.addActor(playerTable);

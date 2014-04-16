@@ -2,7 +2,6 @@ package edu.chalmers.sankoss.java.Renderers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -315,19 +314,8 @@ public class PlacementRenderer extends Renderer{
     }
 
     public void setReadyBtn(Placement.ReadyBtnState state) {
-        switch(state) {
-            case READY:
-                readyBtn.setText("Ready");
-                break;
+        readyBtn.setText(state.getText());
 
-            case WAITING:
-                readyBtn.setText("Waiting..");
-                break;
-
-            case ENTER:
-                readyBtn.setText("Enter");
-                break;
-        }
     }
 
     public Table getPlayerTable() {
@@ -388,10 +376,10 @@ public class PlacementRenderer extends Renderer{
     }
 
 
-    // TODO: Put this code somewhere else! Method is a loop - it's a trap!
+    // TODO: Put this code somewhere else! Method is a loop and takes a lot of resources - it's a trap!
     @Override
     public void render() {
-    	Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+    	/*Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glClearColor(0.09f, 0.28f, 0.5f, 1);
         Skin skin = new Skin();
         
@@ -409,7 +397,7 @@ public class PlacementRenderer extends Renderer{
         batch.begin();
         headerLabel.setPosition(0, 510);
         headerLabel.draw(batch, 1);
-        batch.end();
+        batch.end();*/
 
         // ShipButton to follow cursor
         if(follow != null) {
