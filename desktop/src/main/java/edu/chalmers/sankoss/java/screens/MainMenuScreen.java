@@ -4,10 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import edu.chalmers.sankoss.core.Coordinate;
 import edu.chalmers.sankoss.core.Player;
 import edu.chalmers.sankoss.core.Room;
-import edu.chalmers.sankoss.core.Ship;
 import edu.chalmers.sankoss.java.Models.MainMenu;
 import edu.chalmers.sankoss.java.Renderers.MainMenuRenderer;
 import edu.chalmers.sankoss.java.SankossController;
@@ -28,7 +26,7 @@ public class MainMenuScreen extends AbstractScreen {
     private String roomName;
     private Long lastRoomID;
     private Map<Long, Room> gameRooms;
-    private Object[] rooms;
+    private Object[] rooms = new Object[0];
 
     /**
      * @inheritdoc
@@ -44,9 +42,22 @@ public class MainMenuScreen extends AbstractScreen {
     }
 
     private class MainMenuListener extends SankossClientListener {
-        /**
-         * This is where we override the methods we want to use
-         */
+        public void connected(Long playerID) {
+            System.out.print("SERVER: Client connected");
+        }
+
+        public void fetchedRooms(Map<Long, Room> fetchedRooms) {
+            rooms = fetchedRooms.values().toArray();
+        }
+
+        public void createdRoom(Long roomID) {
+            System.out.println("SERVER: " + model.getClient().getPlayer().getName() + " created room #" + roomID);
+        }
+
+        public void joinedRoom(Player player) {
+            ((MainMenuRenderer)renderer).setStatusLabel(player.getName() + " has joined your room!");
+            ((MainMenuRenderer)renderer).createStartButton();
+        }
     }
 
     /**
@@ -94,53 +105,6 @@ public class MainMenuScreen extends AbstractScreen {
         renderer.resize(width, height);
 
     }
-
-
-    public void connected(Long playerID) {
-        System.out.print("SERVER: Client connected");
-    }
-
-    public void fetchedRooms(Map<Long, Room> rooms) {
-        this.rooms = rooms.values().toArray();
-    }
-
-    public void createdRoom(Long roomID) {
-        System.out.println("SERVER: " + model.getClient().getPlayer().getName() + " created room #" + roomID);
-    }
-
-    public void joinedRoom(Player player) {
-        ((MainMenuRenderer)renderer).setStatusLabel(player.getName() + " has joined your room!");
-        ((MainMenuRenderer)renderer).createStartButton();
-    }
-
-    public void startedGame(Long gameID, java.util.List<Player> players) {
-
-    }
-
-    public void gameReady() {
-
-    }
-
-    public void playerIsReady(Player player) {
-
-    }
-
-    public void turn() {
-
-    }
-
-    public void fireResult(Long gameID, Player target, Coordinate coordinate, boolean hit) {
-
-    }
-
-    public void destroyedShip(Player player, Ship ship) {
-
-    }
-
-    public void disconnected() {
-
-    }
-
 
     public JoinButtonListener getJoinButtonListener() {
         return new JoinButtonListener();
