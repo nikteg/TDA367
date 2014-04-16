@@ -105,7 +105,7 @@ public class GameScreen extends AbstractScreen implements SankossClientListener 
         nameLabel.setY(110);
 
         ((GameRenderer) renderer).getPlayerTable().addActor(nameLabel);
-
+        ((GameRenderer) renderer).getOpponentNameLabel().setText(model.getClient().getOpponents().toString());
         stage.addActor(renderer.getActorPanel());
         stage.draw();
 

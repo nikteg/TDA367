@@ -78,4 +78,5 @@ public abstract class ScreenModel {
      * @param roomMap Map to set to.
      */
     public abstract void setRoomMap(Map<Long, Room> roomMap);
+
 }

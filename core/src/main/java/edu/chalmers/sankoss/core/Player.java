@@ -142,6 +142,11 @@ public class Player implements KryoSerializable {
 	}
 
     @Override
+    public String toString() {
+        return this.name;
+    }
+
+    @Override
     public int hashCode() {
         return playerID.hashCode();
     }

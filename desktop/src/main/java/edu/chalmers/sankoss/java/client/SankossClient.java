@@ -25,6 +25,7 @@ public class SankossClient {
     private Long roomID;
     private String host;
     private int timeout;
+    private boolean ready = false;
 
     public SankossClient(String host, int timeout) {
         this.host = host;
@@ -35,6 +36,14 @@ public class SankossClient {
 
     public SankossClient(String host) {
         this(host, 5000);
+    }
+
+    public void setReady(boolean ready) {
+        this.ready = ready;
+    }
+
+    public boolean getReady() {
+        return ready;
     }
 
     private void initialize() {
@@ -229,4 +238,10 @@ public class SankossClient {
 
         client.sendTCP(new StartGame(roomID));
     }
+
+    @Override
+    public String toString() {
+        return player.toString();
+    }
+
 }
