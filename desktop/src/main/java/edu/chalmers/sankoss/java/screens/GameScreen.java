@@ -1,13 +1,19 @@
 package edu.chalmers.sankoss.java.screens;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
-import edu.chalmers.sankoss.java.models.GameModel;
-import edu.chalmers.sankoss.java.renderers.GameRenderer;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.SnapshotArray;
+import edu.chalmers.sankoss.core.Coordinate;
+import edu.chalmers.sankoss.core.Player;
+import edu.chalmers.sankoss.core.Ship;
 import edu.chalmers.sankoss.java.SankossController;
 import edu.chalmers.sankoss.java.SankossGame;
 import edu.chalmers.sankoss.java.client.SankossClientListener;
+import edu.chalmers.sankoss.java.models.GameModel;
+import edu.chalmers.sankoss.java.renderers.GameRenderer;
 
 /**
  * Screen used when placing the ships.
@@ -42,9 +48,21 @@ public class GameScreen extends AbstractScreen {
     }
 
     private class GameListener extends SankossClientListener {
-        /**
-         * This is where we override the methods we want to use
-         */
+
+        @Override
+        public void fireResult(Long gameID, Player target, Coordinate coordinate, boolean hit) {
+
+            if(hit) {
+                System.out.println(target.getName() + " was shot at " + coordinate.getX() + ", " + coordinate.getY() + ". HIT!");
+            } else {
+                System.out.println(target.getName() + " was shot at " + coordinate.getX() + ", " + coordinate.getY() + ". Miss..");
+            }
+        }
+
+        @Override
+        public void destroyedShip(Player player, Ship ship) {
+            System.out.println("DESTROYED!!!!");
+        }
     }
 
     /**
@@ -122,5 +140,33 @@ public class GameScreen extends AbstractScreen {
     @Override
     public void render() {
 
+    }
+
+    public ShootBtnListener getShootBtnListener() {
+        return new ShootBtnListener();
+    }
+
+    private class ShootBtnListener extends ChangeListener {
+        @Override
+        public void changed(ChangeEvent event, Actor actor) {
+
+            // Loops through grid
+            for(int i = 0; i < 10; i++) {
+                for(int j = 0; j < 10; j++){
+
+                    // gets array of 1 button from every table in grid (1 table per square in grid)
+                    SnapshotArray<Actor> children = ((GameRenderer)renderer).getAimGrid()[(i*10)+j].getChildren();
+                    Actor[] childrenArray = children.toArray();
+
+                    if(childrenArray.length > 0){
+                        // Matches button with clicked one
+                        if(childrenArray[0].equals(actor)) {
+                            model.getClient().fire(model.getClient().getGameID(), model.getClient().getOpponents().get(0), new Coordinate(i+1, j+1));
+                        }
+                    }
+                }
+            }
+
+        }
     }
 }

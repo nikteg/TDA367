@@ -7,9 +7,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import edu.chalmers.sankoss.java.models.ScreenModel;
 import edu.chalmers.sankoss.java.misc.ShipButton;
+import edu.chalmers.sankoss.java.models.ScreenModel;
 import edu.chalmers.sankoss.java.screens.AbstractScreen;
+import edu.chalmers.sankoss.java.screens.GameScreen;
 
 /**
  * Description of class.
@@ -80,6 +81,10 @@ public class GameRenderer extends Renderer{
 
     public Table[] getPlayerGrid() {
         return playerGrid;
+    }
+
+    public Table[] getAimGrid() {
+        return aimGrid;
     }
 
     public void drawControllers(AbstractScreen screen) {
@@ -202,11 +207,12 @@ public class GameRenderer extends Renderer{
                     System.out.println(i + ", " + j + " is occupied!");
 
                 } else {
-                    playerGrid[(i*10)+j].addActor(new TextButton(i + "," + j, btnStyle));
+                    //playerGrid[(i*10)+j].addActor(new TextButton(i + "," + j, btnStyle));
                     aimGrid[(i*10)+j].addActor(new TextButton("??", btnStyle));
                     System.out.println(i + ", " + j + " is free!");
                 }
 
+                aimGrid[(i*10)+j].addListener(((GameScreen) screen).getShootBtnListener());
 
             }
             n++;
