@@ -37,6 +37,8 @@ public class InGameRenderer extends Renderer {
      */
     public InGameRenderer(ScreenModel currentModel) {
         super(currentModel);
+
+        System.out.println("FIRST: " + currentModel.getShipArray()[1]);
         // render();
     }
 

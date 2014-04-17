@@ -20,6 +20,11 @@ public abstract class ScreenModel {
     protected static SankossClient client = new SankossClient(Settings.HOSTNAME, Settings.PORT);
     protected static int numberOfShips;
 
+    // in array 1 represent occupied and 0 free
+    // merely a array for checking if coordinates are
+    // occupied or free
+    protected static int[] shipArray;
+
     public ScreenModel() {
 
     }
@@ -30,6 +35,19 @@ public abstract class ScreenModel {
 
     public ScreenModel(SankossClient client) {
         setClient(client);
+    }
+
+    public int[] getShipArray() {
+        return shipArray;
+    }
+
+    /**
+     * Method for setting a position in array as occupied.
+     * @param x x-coordinate
+     * @param y y-coordinate
+     */
+    public void addToShipArray(int x, int y) {
+        shipArray[x*10 + y] = 1;
     }
 
     public void setNumberOfShips(int numberOfShips) {
@@ -46,6 +64,15 @@ public abstract class ScreenModel {
 
     public SankossClient getClient() {
         return client;
+    }
+
+    /**
+     * Method for filling an array with zeros.
+     */
+    public void zeroArray() {
+        for(int i = 0; i < shipArray.length; i++) {
+            shipArray[i] = 0;
+        }
     }
 
     /**
