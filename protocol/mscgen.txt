@@ -1,0 +1,64 @@
+# MSC for some fictional process
+msc {
+  width="640";
+
+  A [label="Client"],B [label="Server"];
+
+
+  A box B [label="CONNECT TO SERVER", textbgcolour="#7fff7f"];
+  |||;
+
+  A=>B    [label="Connect"];
+  A<<B    [label="Connected(playerID)"];
+  |||;
+
+  A box B [label="FETCHING ROOMS", textbgcolour="#7fff7f"];
+  |||;
+
+  A=>B    [label="FetchRooms"];
+  A<<B    [label="FetchedRooms(rooms)"];
+  |||;
+
+  A box B [label="CREATING ROOM", textbgcolour="#7fff7f"];
+  |||;
+  
+  A=>B    [label="CreateRoom(name, password)"];
+  A<<B    [label="CreatedRoom(roomID)"];
+  |||;
+
+  A box B [label="JOINING ROOM", textbgcolour="#7fff7f"];
+  |||;
+  
+  A=>B    [label="JoinRoom(roomID)"];
+  A<<B    [label="JoinedRoom(player)", ID="*" ];
+  |||;
+
+  A box B [label="START GAME", textbgcolour="#7fff7f"];
+  |||;
+  
+  A=>B    [label="StartGame(roomID)"];
+  A<<B    [label="StartedGame(gameID, players)", ID="*"];
+  A<<B    [label="Turn"];
+  |||;
+
+  A box B [label="PLACE SHIPS", textbgcolour="#7fff7f"];
+  |||;
+  
+  A=>B    [label="PlayerReady(gameID, fleet)"];
+  A<<B    [label="PlayerIsReady(player)", ID="*"];
+  A<<B    [label="GameReady", ID="*?"];
+  |||;
+
+  A box B [label="FIRE AT OPPONENT", textbgcolour="#7fff7f"];
+  |||;
+  
+  A=>B    [label="Fire(gameID, target, coordinate)"];
+  A<<B    [label="FireResult(gameID, target, coordinate, isHit)", ID="*"];
+  A<<B    [label="DestroyedShip(player, ship)", ID="*?"];
+  |||;
+
+  A box B [label="PLAYER DISCONNECT", textbgcolour="#7fff7f"];
+  |||;
+
+  A<<B    [label="Disconnect(player)", ID="*"];
+}
