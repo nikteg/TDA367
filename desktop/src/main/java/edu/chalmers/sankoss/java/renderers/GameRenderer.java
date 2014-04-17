@@ -23,7 +23,8 @@ public class GameRenderer extends Renderer{
     private String land;
     private final int WIDTH_OF_SQUARE = 50;
     private final int HEIGHT_OF_SQUARE = 50;
-    private Table[] grid = new Table[100];
+    private Table[] playerGrid = new Table[100];
+    private Table[] aimGrid = new Table[100];
     private ShipButton follow = null;
 
 	private SpriteBatch batch = new SpriteBatch();
@@ -34,12 +35,16 @@ public class GameRenderer extends Renderer{
     private Table topTable;
     private Table middlePanel;
     private WidgetGroup ships;
+    private Table playerBoard;
+    private Table aimBoard;
 
 	// controllers
     private Table flag;
 	private Label headerLabel;
     private Label landLabel;
     private Label opponentNameLabel;
+    private Label playerBoardLabel;;
+    private Label aimBoardLabel;
 
 
     /**
@@ -60,13 +65,21 @@ public class GameRenderer extends Renderer{
         topTable.setY(height - 100);
         middlePanel.setWidth(width);
         middlePanel.setHeight(height - topTable.getHeight() - playerTable.getHeight());
+
+        aimBoard.setPosition(10, (middlePanel.getHeight() - aimBoard.getHeight())/2);
+        playerBoard.setPosition((middlePanel.getWidth() - playerBoard.getWidth() - 10),
+                (middlePanel.getHeight() - playerBoard.getHeight())/2);
         ships.setWidth(width - 200);
+
+        aimBoardLabel.setPosition(10 + (aimBoard.getWidth() - aimBoardLabel.getWidth())/2,
+               middlePanel.getHeight() - 50);
+        playerBoardLabel.setPosition(width - (playerBoardLabel.getWidth()/2) - 10 - (playerBoard.getWidth()/2), middlePanel.getHeight() - 50);
 
 
     }
 
-    public Table[] getGrid() {
-        return grid;
+    public Table[] getPlayerGrid() {
+        return playerGrid;
     }
 
     public void drawControllers(AbstractScreen screen) {
@@ -146,41 +159,68 @@ public class GameRenderer extends Renderer{
 
         btnStyle.font = skin.getFont("default");
 
+        aimBoard = new Table();
+        aimBoard.setWidth(500);
+        aimBoard.setHeight(500);
+        //aimBoard.setBackground(skin.newDrawable("tableBack2"));
+        aimBoard.setPosition(10, (middlePanel.getHeight() - aimBoard.getHeight())/2);
+
+        playerBoard = new Table();
+        playerBoard.setWidth(500);
+        playerBoard.setHeight(500);
+        //playerBoard.setBackground(skin.newDrawable("tableBack2"));
+        playerBoard.setPosition((middlePanel.getWidth() - playerBoard.getWidth() - 10), (middlePanel.getHeight() - playerBoard.getHeight())/2);
+
         int n = 0;
 
         // Creates 10x10 grid
         for (int i = 0; i < 10; i++){
             for (int j = 0; j < 10; j++){
-                grid[(i*10)+j] = new Table();
+                playerGrid[(i*10)+j] = new Table();
+                aimGrid[(i*10)+j] = new Table();
 
                 n++;
 
                 // Colorizes every second square with a different gray based on the tableBack
                 if(n % 2 == 0) {
-                    grid[(i*10)+j].setBackground(skin.newDrawable("tableBack"));
+                    playerGrid[(i*10)+j].setBackground(skin.newDrawable("tableBack"));
+                    aimGrid[(i*10)+j].setBackground(skin.newDrawable("tableBack3"));
                 } else {
-                    grid[(i*10)+j].setBackground(skin.newDrawable("tableBack3"));
+                    playerGrid[(i*10)+j].setBackground(skin.newDrawable("tableBack3"));
+                    aimGrid[(i*10)+j].setBackground(skin.newDrawable("tableBack"));
                 }
 
                 // Adds grid to middlePanel and add a textButton to it
                 // This is needed to make it click-able
-                middlePanel.add(grid[(i*10)+j]).width(WIDTH_OF_SQUARE).height(HEIGHT_OF_SQUARE);
+                playerBoard.add(playerGrid[(i*10)+j]).width(WIDTH_OF_SQUARE).height(HEIGHT_OF_SQUARE);
+                aimBoard.add(aimGrid[(i*10)+j]).width(WIDTH_OF_SQUARE).height(HEIGHT_OF_SQUARE);
 
 
                 if(currentModel.getShipArray()[(i*10)+j] == 1){
-                    grid[(i*10)+j].addActor(new TextButton("XX", btnStyle));
+                    playerGrid[(i*10)+j].addActor(new TextButton("XX", btnStyle));
+                    aimGrid[(i*10)+j].addActor(new TextButton("??", btnStyle));
                     System.out.println(i + ", " + j + " is occupied!");
 
                 } else {
-                    grid[(i*10)+j].addActor(new TextButton(i + "," + j, btnStyle));
+                    playerGrid[(i*10)+j].addActor(new TextButton(i + "," + j, btnStyle));
+                    aimGrid[(i*10)+j].addActor(new TextButton("??", btnStyle));
                     System.out.println(i + ", " + j + " is free!");
                 }
-                // grid[(i*10)+j].addListener(((GameScreen) screen).getShipBtnListener());
+
+
             }
             n++;
-            middlePanel.row();
+            playerBoard.row();
+            aimBoard.row();
         }
 
+        aimBoardLabel = new Label("Aim board", labelStyle);
+        playerBoardLabel = new Label("Your board", labelStyle);
+
+        middlePanel.addActor(playerBoardLabel);
+        middlePanel.addActor(aimBoardLabel);
+        middlePanel.addActor(playerBoard);
+        middlePanel.addActor(aimBoard);
 
         topTable.addActor(opponentNameLabel);
 
