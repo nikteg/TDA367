@@ -13,11 +13,6 @@ public class Placement extends ScreenModel{
     private ReadyBtnState readyBtnState;
     private String land;
 
-    // in array 1 represent occupied and 0 free
-    // merely a array for checking if coordinates are
-    // occupied or free
-    private int[] shipArray;
-
 
     /**
      * Enum representing the 3 different stages of the Ready button.
@@ -55,27 +50,6 @@ public class Placement extends ScreenModel{
 
     }
 
-    /**
-     * Method for filling an array with zeros.
-     */
-    public void zeroArray() {
-        for(int i = 0; i < shipArray.length; i++) {
-            shipArray[i] = 0;
-        }
-    }
-
-    /**
-     * Method for setting a position in array as occupied.
-     * @param x x-coordinate
-     * @param y y-coordinate
-     */
-    public void addToShipArray(int x, int y) {
-        shipArray[x*10 + y] = 1;
-    }
-
-    public int[] getShipArray() {
-        return shipArray;
-    }
 
     /**
      * Method for switching state of enum ReadyBtnState.

@@ -3,18 +3,11 @@ package edu.chalmers.sankoss.java.screens;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
-import edu.chalmers.sankoss.core.Coordinate;
-import edu.chalmers.sankoss.core.Player;
-import edu.chalmers.sankoss.core.Room;
-import edu.chalmers.sankoss.core.Ship;
 import edu.chalmers.sankoss.java.Models.GameModel;
 import edu.chalmers.sankoss.java.Renderers.GameRenderer;
 import edu.chalmers.sankoss.java.SankossController;
 import edu.chalmers.sankoss.java.SankossGame;
 import edu.chalmers.sankoss.java.client.SankossClientListener;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * Screen used when placing the ships.
@@ -111,7 +104,7 @@ public class GameScreen extends AbstractScreen {
         nameLabel.setY(110);
 
         ((GameRenderer) renderer).getPlayerTable().addActor(nameLabel);
-        ((GameRenderer) renderer).getOpponentNameLabel().setText(model.getClient().getOpponents().toString());
+        ((GameRenderer) renderer).getOpponentNameLabel().setText(model.getClient().getOpponents().get(0).getName());
         stage.addActor(renderer.getActorPanel());
         stage.draw();
 

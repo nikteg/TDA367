@@ -243,7 +243,7 @@ public class PlacementScreen extends AbstractScreen {
 
                                     // Runs through array in model to check if spots are free
                                     for(int n = 0; n < ((PlacementRenderer)renderer).getFollow().getLength(); n++) {
-                                        if(((Placement)model).getShipArray()[((i)*10)+j+n] == 1) {
+                                        if(model.getShipArray()[((i)*10)+j+n] == 1) {
                                             free = false;
                                         }
                                     }
@@ -273,7 +273,7 @@ public class PlacementScreen extends AbstractScreen {
                                             System.out.println(i + ", " + (j+n));
 
                                             // Marks the select coordinate as occupied
-                                            ((Placement)model).addToShipArray(i, (j+n));
+                                            model.addToShipArray(i, (j+n));
 
                                             // Adds to players fleet
                                             model.getClient().getPlayer().addUsedCoordiante(new Coordinate((i + 1), (j + n + 1)));
@@ -289,7 +289,7 @@ public class PlacementScreen extends AbstractScreen {
 
                                     // Runs through array in model to check if spots are free
                                     for(int n = 0; n < ((PlacementRenderer)renderer).getFollow().getLength(); n++) {
-                                        if(((Placement)model).getShipArray()[((i + n)*10)+j] == 1) {
+                                        if(model.getShipArray()[((i + n)*10)+j] == 1) {
                                             free = false;
                                         }
                                     }
@@ -319,7 +319,7 @@ public class PlacementScreen extends AbstractScreen {
                                             System.out.println((i+n) + ", " + j);
 
                                             // Marks the select coordinate as occupied
-                                            ((Placement)model).addToShipArray((i+n), j);
+                                            model.addToShipArray((i+n), j);
 
                                             // Adds to players fleet
                                             model.getClient().getPlayer().addUsedCoordiante(new Coordinate((i + n + 1), (j + 1)));
@@ -366,6 +366,7 @@ public class PlacementScreen extends AbstractScreen {
                 } else if(((Placement)model).getReadyBtnState() == Placement.ReadyBtnState.ENTER){
                     // This means your opponent is done and you can enter game directly
                     controller.changeScreen(new GameScreen(controller, game));
+
 
                 } else {
                     // This means you're marked as waiting since before, but the opponent is not yet done

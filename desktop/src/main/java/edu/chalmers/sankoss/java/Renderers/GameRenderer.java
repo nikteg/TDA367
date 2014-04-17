@@ -2,7 +2,6 @@ package edu.chalmers.sankoss.java.Renderers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -166,7 +165,16 @@ public class GameRenderer extends Renderer{
                 // Adds grid to middlePanel and add a textButton to it
                 // This is needed to make it click-able
                 middlePanel.add(grid[(i*10)+j]).width(WIDTH_OF_SQUARE).height(HEIGHT_OF_SQUARE);
-                grid[(i*10)+j].addActor(new TextButton(i + "," + j, btnStyle));
+
+
+                if(currentModel.getShipArray()[(i*10)+j] == 1){
+                    grid[(i*10)+j].addActor(new TextButton("XX", btnStyle));
+                    System.out.println(i + ", " + j + " is occupied!");
+
+                } else {
+                    grid[(i*10)+j].addActor(new TextButton(i + "," + j, btnStyle));
+                    System.out.println(i + ", " + j + " is free!");
+                }
                 // grid[(i*10)+j].addListener(((GameScreen) screen).getShipBtnListener());
             }
             n++;
@@ -239,7 +247,7 @@ public class GameRenderer extends Renderer{
     // TODO: Put this code somewhere else! Method is a loop - it's a trap!
     @Override
     public void render() {
-    	Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+    	/*Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glClearColor(0.09f, 0.28f, 0.5f, 1);
         Skin skin = new Skin();
         
@@ -257,7 +265,7 @@ public class GameRenderer extends Renderer{
         batch.begin();
         headerLabel.setPosition(0, 510);
         headerLabel.draw(batch, 1);
-        batch.end();
+        batch.end();*/
 
         // ShipButton to follow cursor
         if(follow != null) {
