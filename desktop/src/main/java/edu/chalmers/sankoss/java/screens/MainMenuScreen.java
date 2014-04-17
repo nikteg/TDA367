@@ -190,7 +190,7 @@ public class MainMenuScreen extends AbstractScreen {
         public void changed(ChangeEvent event, Actor actor) {
 
             // controller.changeScreen(new PlacementScreen(controller, game));
-            controller.changeScreen(new InGameScreen(controller, game));
+
         }
     }
 }
