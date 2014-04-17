@@ -1,4 +1,4 @@
-package edu.chalmers.sankoss.java.Renderers;
+package edu.chalmers.sankoss.java.renderers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import edu.chalmers.sankoss.java.Models.ScreenModel;
+import edu.chalmers.sankoss.java.models.ScreenModel;
 import edu.chalmers.sankoss.java.screens.AbstractScreen;
 
 /**

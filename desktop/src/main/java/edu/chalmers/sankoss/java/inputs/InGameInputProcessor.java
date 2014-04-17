@@ -1,25 +1,19 @@
-package edu.chalmers.sankoss.java.Inputs;
+package edu.chalmers.sankoss.java.inputs;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 
 /**
- * Handles input for the Lobby Screen.
+ * Handles input for the InGame Screen.
  * The SankossController will switch to this InputProcessor
- * when the LobbyScreen to set to its active Screen.
+ * when the InGameScreen to set to its active Screen.
  *
  * @author Mikael Malmqvist
  * @date 3/26/14
  */
-public class LobbyInputProcessor implements InputProcessor {
+public class InGameInputProcessor implements InputProcessor{
 
     @Override
     public boolean keyDown(int i) {
-        if(Gdx.input.isKeyPressed(Input.Keys.F5)) {
-            System.out.println("Refresh from Lobby's InputProcessor!");
-            return true;
-        }
 
         return false;
     }
@@ -59,4 +53,3 @@ public class LobbyInputProcessor implements InputProcessor {
         return false;
     }
 }
-

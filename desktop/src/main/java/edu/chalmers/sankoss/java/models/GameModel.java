@@ -1,4 +1,4 @@
-package edu.chalmers.sankoss.java.Models;
+package edu.chalmers.sankoss.java.models;
 
 import edu.chalmers.sankoss.core.Room;
 
@@ -8,10 +8,12 @@ import java.util.Map;
  * Description of class.
  * More detailed description.
  *
- * @author Mikael Malmqvist
- * @date 3/24/14
  */
-public class InGame extends ScreenModel{
+public class GameModel extends ScreenModel{
+
+    public GameModel() {
+
+    }
 
     /**
      * @inheritdoc
@@ -26,4 +28,5 @@ public class InGame extends ScreenModel{
     public void setRoomMap(Map<Long, Room> roomMap) {
 
     }
+
 }

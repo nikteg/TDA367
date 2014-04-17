@@ -1,17 +1,10 @@
 package edu.chalmers.sankoss.java.screens;
 
-import edu.chalmers.sankoss.core.Coordinate;
-import edu.chalmers.sankoss.core.Player;
-import edu.chalmers.sankoss.core.Room;
-import edu.chalmers.sankoss.core.Ship;
-import edu.chalmers.sankoss.java.Models.InGame;
-import edu.chalmers.sankoss.java.Renderers.InGameRenderer;
+import edu.chalmers.sankoss.java.models.InGame;
+import edu.chalmers.sankoss.java.renderers.InGameRenderer;
 import edu.chalmers.sankoss.java.SankossController;
 import edu.chalmers.sankoss.java.SankossGame;
 import edu.chalmers.sankoss.java.client.SankossClientListener;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * Screen used ingame when actually playing!

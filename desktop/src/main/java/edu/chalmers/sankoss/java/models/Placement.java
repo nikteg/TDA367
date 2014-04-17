@@ -1,4 +1,4 @@
-package edu.chalmers.sankoss.java.Models;
+package edu.chalmers.sankoss.java.models;
 
 import edu.chalmers.sankoss.core.Room;
 import java.util.Map;

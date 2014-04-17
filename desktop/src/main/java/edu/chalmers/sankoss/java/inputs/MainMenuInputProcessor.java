@@ -1,19 +1,26 @@
-package edu.chalmers.sankoss.java.Inputs;
+package edu.chalmers.sankoss.java.inputs;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 
 /**
- * Handles input for the InGame Screen.
+ * Handles input for the MainMenu Screen.
  * The SankossController will switch to this InputProcessor
- * when the InGameScreen to set to its active Screen.
+ * when the MainMenuScreen to set to its active Screen.
  *
  * @author Mikael Malmqvist
  * @date 3/26/14
  */
-public class InGameInputProcessor implements InputProcessor{
+public class MainMenuInputProcessor implements InputProcessor {
 
     @Override
     public boolean keyDown(int i) {
+        if(Gdx.input.isKeyPressed(Input.Keys.F5)) {
+            System.out.println("Refresh from MainMenuInputProcessor!");
+
+            return true;
+        }
 
         return false;
     }
@@ -45,6 +52,7 @@ public class InGameInputProcessor implements InputProcessor{
 
     @Override
     public boolean mouseMoved(int i, int i2) {
+
         return false;
     }
 

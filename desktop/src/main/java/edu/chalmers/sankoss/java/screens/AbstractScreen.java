@@ -9,8 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import edu.chalmers.sankoss.java.Models.ScreenModel;
-import edu.chalmers.sankoss.java.Renderers.Renderer;
+import edu.chalmers.sankoss.java.models.ScreenModel;
+import edu.chalmers.sankoss.java.renderers.Renderer;
 import edu.chalmers.sankoss.java.SankossController;
 import edu.chalmers.sankoss.java.SankossGame;
 
