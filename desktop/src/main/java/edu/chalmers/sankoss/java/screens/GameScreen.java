@@ -3,6 +3,7 @@ package edu.chalmers.sankoss.java.screens;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.SnapshotArray;
@@ -52,16 +53,21 @@ public class GameScreen extends AbstractScreen {
         @Override
         public void fireResult(Long gameID, Player target, Coordinate coordinate, boolean hit) {
 
-            if(hit) {
-                System.out.println(target.getName() + " was shot at " + coordinate.getX() + ", " + coordinate.getY() + ". HIT!");
-            } else {
-                System.out.println(target.getName() + " was shot at " + coordinate.getX() + ", " + coordinate.getY() + ". Miss..");
+            if(hit && !target.equals(model.getClient().getPlayer())) {
+
+                System.out.println("You shot at " + coordinate.getX() + ", " + coordinate.getY() + ". HIT!");
+                ((GameRenderer)renderer).getAimGrid()[(coordinate.getX()-1)*10 + (coordinate.getY()-1)].addActor(new TextButton("HIT", ((GameRenderer)renderer).getBtnStyle()));
+
+            } else if(!target.equals(model.getClient().getPlayer())){
+
+                System.out.println("You shot at " + coordinate.getX() + ", " + coordinate.getY() + ". Miss..");
+                ((GameRenderer)renderer).getAimGrid()[(coordinate.getX()-1)*10 + (coordinate.getY()-1)].addActor(new TextButton("MISS", ((GameRenderer)renderer).getBtnStyle()));
             }
         }
 
         @Override
         public void destroyedShip(Player player, Ship ship) {
-            System.out.println("DESTROYED!!!!");
+            System.out.println("Ship size " + ship.getSize() + " belonging to " + player.getName() + " has been destroyed!!!!");
         }
     }
 

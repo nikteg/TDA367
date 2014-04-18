@@ -87,6 +87,10 @@ public class GameRenderer extends Renderer{
         return aimGrid;
     }
 
+    public TextButton.TextButtonStyle getBtnStyle() {
+        return btnStyle;
+    }
+
     public void drawControllers(AbstractScreen screen) {
         //skin = new Skin();
 
