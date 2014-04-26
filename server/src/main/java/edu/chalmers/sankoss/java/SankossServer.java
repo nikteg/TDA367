@@ -3,18 +3,16 @@ package edu.chalmers.sankoss.java;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
-import com.google.gson.Gson;
-import com.sun.net.httpserver.Headers;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
-import com.sun.net.httpserver.HttpServer;
 import edu.chalmers.sankoss.core.*;
 import edu.chalmers.sankoss.core.protocol.*;
+import edu.chalmers.sankoss.java.web.WebServer;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.net.InetSocketAddress;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,7 +27,7 @@ public class SankossServer {
     /**
      * KryoNet server
      */
-	private Server server;
+    private Server server;
 
     /**
      * Map to link players with their connections
@@ -41,47 +39,51 @@ public class SankossServer {
      */
     private final static Logger LOGGER = Logger.getLogger(SankossServer.class.getName());
 
+    private PropertyChangeSupport pcs = new PropertyChangeSupport(this);
+
     /**
      * Constructor
      * @param args
      * @throws IOException if the server couldn't start and bind to an address
      */
     public static void main(String[] args) throws IOException {
-		SankossServer sankossServer = new SankossServer();
-        sankossServer.startHTTPServer(8080);
+        SankossServer sankossServer = new SankossServer();
+        //sankossServer.startHTTPServer(8080);
+
+        new Thread(new WebServer(sankossServer)).start();
     }
 
     /**
      * Start server
      * @throws IOException
      */
-	public SankossServer() throws IOException {
+    public SankossServer() throws IOException {
 
         /**
          * Create KryoNet server instance and configure it to use a PlayerConnection as connection.
          */
-		server = new Server() {
-			protected Connection newConnection() {
-				return new PlayerConnection();
-			}
-		};
+        server = new Server() {
+            protected Connection newConnection() {
+                return new PlayerConnection();
+            }
+        };
 
         /**
          * Register server for serialization (converting the objects so that they can be sent through the network).
          */
-		Network.register(server);
+        Network.register(server);
 
         /**
          * Add listener.
          * This is where all the network traffic gets filtered.
          */
-		server.addListener(new Listener() {
+        server.addListener(new Listener() {
 
             /**
              * Executed when the server receives a new client connection.
              * @param connection client connection
              */
-			public void connected(Connection connection) {
+            public void connected(Connection connection) {
 
             }
 
@@ -91,7 +93,7 @@ public class SankossServer {
              * @param c client connection
              * @param object sent object
              */
-			public void received(Connection c, Object object) {
+            public void received(Connection c, Object object) {
                 PlayerConnection connection = (PlayerConnection) c;
                 Player player = connection.getPlayer();
 
@@ -108,6 +110,7 @@ public class SankossServer {
                     players.put(connection.getPlayer(), connection);
 
                     connection.sendTCP(new Connected((long) connection.getID()));
+                    pcs.firePropertyChange("playerConnected", null, null);
 
                     return;
                 }
@@ -122,8 +125,8 @@ public class SankossServer {
                  * Tell the RoomFactory to create a new room with given details from the message.
                  * Add the clients player instance to the room and send the room ID to the client.
                  */
-				if (object instanceof CreateRoom) {
-					CreateRoom msg = (CreateRoom) object;
+                if (object instanceof CreateRoom) {
+                    CreateRoom msg = (CreateRoom) object;
 
                     /**
                      * A client cannot sit in more than one room at a time
@@ -149,16 +152,17 @@ public class SankossServer {
                     LOGGER.log(Level.INFO, String.format("#%d created room #%d (%s with password '%s')", player.getID(), room.getID(), room.getName(), msg.getPassword()));
 
                     connection.sendTCP(new CreatedRoom(room.getID()));
+                    pcs.firePropertyChange("roomCreated", null, null);
 
-					return;
-				}
+                    return;
+                }
 
                 /**
                  * Let client join room with given ID in the message.
                  * Also tell the players already in the room that a new player has joined.
                  */
-				if (object instanceof JoinRoom) {
-					JoinRoom msg = (JoinRoom) object;
+                if (object instanceof JoinRoom) {
+                    JoinRoom msg = (JoinRoom) object;
 
                     Room room;
                     try {
@@ -184,8 +188,10 @@ public class SankossServer {
                         players.get(roomPlayer).sendTCP(joinedRoom);
                     }
 
-					return;
-				}
+                    pcs.firePropertyChange("roomJoined", null, null);
+
+                    return;
+                }
 
                 /**
                  * The room creator wants to start the game.
@@ -223,11 +229,15 @@ public class SankossServer {
                             players.get(gamePlayer).sendTCP(new StartedGame(game.getID(), game.getPlayers()));
                         }
 
+                        pcs.firePropertyChange("gameStarted", null, null);
+
                         try {
                             RoomFactory.removeRoom(room);
                         } catch (RoomNotFoundException e) {
                             e.printStackTrace();
                         }
+
+                        pcs.firePropertyChange("roomRemoved", null, null);
 
                         return;
                     }
@@ -238,21 +248,21 @@ public class SankossServer {
                 /**
                  * Received when the client wants to get a list of rooms.
                  */
-				if (object instanceof FetchRooms) {
+                if (object instanceof FetchRooms) {
                     LOGGER.log(Level.INFO, String.format("#%d fetching rooms", player.getID()));
 
-					FetchedRooms fetchedRooms = new FetchedRooms(RoomFactory.getRooms());
-					connection.sendTCP(fetchedRooms);
+                    FetchedRooms fetchedRooms = new FetchedRooms(RoomFactory.getRooms());
+                    connection.sendTCP(fetchedRooms);
 
-					return;
-				}
+                    return;
+                }
 
                 /**
                  * The player has places their ships.
                  * Will start the game when all the players in the game has placed their ships.
                  */
-				if (object instanceof PlayerReady) {
-					PlayerReady msg = (PlayerReady) object;
+                if (object instanceof PlayerReady) {
+                    PlayerReady msg = (PlayerReady) object;
 
                     player.setReady(true);
 
@@ -299,13 +309,13 @@ public class SankossServer {
                     player.setFleet(msg.getFleet());
 
                     return;
-				}
+                }
 
                 /**
                  * Player shoots at another player.
                  */
-				if (object instanceof Fire) {
-					Fire msg = (Fire) object;
+                if (object instanceof Fire) {
+                    Fire msg = (Fire) object;
 
                     // A player can't shoot at him/herself
                     if (msg.getTarget().equals(player))
@@ -319,8 +329,8 @@ public class SankossServer {
                     }
 
                     // For safety, check if it REALLY is the players turn to fire
-					if (!game.getAttacker().equals(player))
-						return;
+                    if (!game.getAttacker().equals(player))
+                        return;
 
 
                     Ship targetShip;
@@ -346,13 +356,13 @@ public class SankossServer {
                             players.get(gamePlayer).sendTCP(new DestroyedShip(msg.getTarget(), targetShip));
                         }
                     }
-					game.changeAttacker();
+                    game.changeAttacker();
 
                     players.get(game.getAttacker()).sendTCP(new Turn());
 
 
-					return;
-				}
+                    return;
+                }
 
                 /**
                  * Add an AI player to a room with given room id.
@@ -405,19 +415,21 @@ public class SankossServer {
 
                     connection.sendTCP(new RemovedRoom());
 
+                    pcs.firePropertyChange("roomRemoved", null, null);
+
                     return;
                 }
 
-			}
+            }
 
             /**
              * Received when the client has disconnected from the server.
              * Will also be triggered if the keep-alive messages have not been confirmed.
              * @param c
              */
-			public void disconnected(Connection c) {
-				PlayerConnection connection = (PlayerConnection) c;
-				Player player = connection.getPlayer();
+            public void disconnected(Connection c) {
+                PlayerConnection connection = (PlayerConnection) c;
+                Player player = connection.getPlayer();
 
                 /**
                  * Remove room that the player was connected to.
@@ -438,6 +450,7 @@ public class SankossServer {
                     }
 
                 }
+
                 for (Game game : GameFactory.getGames().values()) {
                     if (game.getPlayers().contains(player)) {
                         game.getPlayers().remove(player);
@@ -454,130 +467,47 @@ public class SankossServer {
                     }
 
                 }
+
                 players.remove(player);
+
+                pcs.firePropertyChange("playerDisconnected", null, null);
+                pcs.firePropertyChange("roomRemoved", null, null);
+                pcs.firePropertyChange("gameRemoved", null, null);
 
                 LOGGER.log(Level.INFO, String.format("#%d disconnected", connection.getID()));
             }
-		});
+        });
 
-		server.bind(Network.PORT);
-		server.start();
+        server.bind(Network.PORT);
+        server.start();
         LOGGER.log(Level.INFO, "Server started on port: " + Network.PORT);
 
-	}
-
-    public void startHTTPServer(int port) throws IOException {
-        new HTTPServer(port).start();
     }
 
-    private class HTTPServer {
-        private int port = 8080;
-        private Gson gsonInstance = new Gson();
+    public void addPropertyChangeListener(PropertyChangeListener pcl) {
+        pcs.addPropertyChangeListener(pcl);
+    }
 
-        public HTTPServer() {
+    public void removePropertyChangeListener(PropertyChangeListener pcl) {
+        pcs.removePropertyChangeListener(pcl);
+    }
 
-        }
+    public Map<Player, PlayerConnection> getPlayers() {
+        return players;
+    }
 
-        public HTTPServer(int port) {
-            this.port = port;
-        }
+    public Map<Long, Room> getRooms() {
+        return RoomFactory.getRooms();
+    }
 
-        private class FetchPlayer {
-            private String name;
-            private String address;
-
-            private FetchPlayer(String name, String address) {
-                this.name = name;
-                this.address = address;
-            }
-        }
-
-        private class FetchRoom {
-            private String name;
-            private List<String> players;
-
-            private FetchRoom(String name, List<String> players) {
-                this.name = name;
-                this.players = players;
-            }
-        }
-
-        private class FetchGame {
-            private String name;
-            private List<String> players;
-
-            private FetchGame(String name, List<String> players) {
-                this.name = name;
-                this.players = players;
-            }
-        }
-
-        private class FetchData {
-            private List<FetchPlayer> players = new ArrayList<FetchPlayer>();
-            private List<FetchRoom> rooms = new ArrayList<FetchRoom>();
-            private List<FetchGame> games = new ArrayList<FetchGame>();
-
-            private FetchData(Map<Player, PlayerConnection> players, Map<Long, Room> rooms, Map<Long, Game> games) {
-                for (Map.Entry<Player, PlayerConnection> pairs : players.entrySet()) {
-                    if (pairs.getValue().getRemoteAddressTCP().toString().contains("127.0.0.1")) {
-                        this.players.add(new FetchPlayer("Player #" + pairs.getKey().getID().toString(), "Bot"));
-                    } else {
-                        this.players.add(new FetchPlayer("Player #" + pairs.getKey().getID().toString(),
-                                pairs.getValue().getRemoteAddressTCP().toString()));
-                    }
-
-                }
-
-                for (Map.Entry<Long, Room> pairs : rooms.entrySet()) {
-                    List<String> roomPlayers = new ArrayList<String>();
-
-                    for (Player player : pairs.getValue().getPlayers()) {
-                        roomPlayers.add("Player #" + player.getID());
-                    }
-
-                    this.rooms.add(new FetchRoom(pairs.getValue().getName(), roomPlayers));
-                }
-
-                for (Map.Entry<Long, Game> pairs : games.entrySet()) {
-                    List<String> gamePlayers = new ArrayList<String>();
-
-                    for (Player player : pairs.getValue().getPlayers()) {
-                        gamePlayers.add("Player #" + player.getID());
-                    }
-
-                    this.games.add(new FetchGame("Game #" + pairs.getValue().getID(), gamePlayers));
-                }
-            }
-        }
-
-        public void start() throws IOException {
-            HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
-
-            server.createContext("/", new HttpHandler() {
-                @Override
-                public void handle(HttpExchange httpExchange) throws IOException {
-                    String response = gsonInstance.toJson(new FetchData(players, RoomFactory.getRooms(), GameFactory.getGames()));
-
-                    Headers headers = httpExchange.getResponseHeaders();
-                    headers.add("Content-Type", "application/json");
-                    headers.add("Access-Control-Allow-Origin", "*");
-
-                    httpExchange.sendResponseHeaders(200, response.getBytes().length);
-                    OutputStream os = httpExchange.getResponseBody();
-                    os.write(response.getBytes());
-                    os.close();
-                }
-            });
-
-            server.setExecutor(null);
-            server.start();
-        }
+    public Map<Long, Game> getGames() {
+        return GameFactory.getGames();
     }
 
     /**
      * Holds the player connection
      */
-    private class PlayerConnection extends Connection {
+    public class PlayerConnection extends Connection {
         private Player player;
 
         public Player getPlayer() {
