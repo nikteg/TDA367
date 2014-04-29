@@ -171,6 +171,10 @@ public class MainMenuScreen extends AbstractScreen {
                         if(lastRoomID != null) model.getClient().removeRoom(lastRoomID);
 
                         lastRoomID = model.getClient().getRoomID();
+
+                        // Disables join and host button
+                        ((MainMenuRenderer)renderer).getJoinBtn().removeListener(((MainMenuRenderer)renderer).getJoinBtn().getListeners().first());
+                        ((MainMenuRenderer)renderer).getHostBtn().removeListener(((MainMenuRenderer)renderer).getHostBtn().getListeners().first());
                     }
 
                 }

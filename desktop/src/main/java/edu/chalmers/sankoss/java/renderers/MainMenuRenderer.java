@@ -50,6 +50,14 @@ public class MainMenuRenderer extends Renderer{
         super(currentModel);
     }
 
+    public TextButton getJoinBtn() {
+        return joinBtn;
+    }
+
+    public TextButton getHostBtn() {
+        return hostBtn;
+    }
+
     @Override
     public void resize(int width, int height) {
 

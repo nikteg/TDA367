@@ -169,7 +169,7 @@ public class LobbyScreen extends AbstractScreen {
                 // Gets user input
                 @Override
                 public void input(String name) {
-                    // TODO: DO WE NEED TO CHECK IF PLAYERS HAVE SAME NAME?!?
+
                     model.getClient().getPlayer().setName(name);
                     ((LobbyRenderer)renderer).setNameLabel(name);
 

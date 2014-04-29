@@ -128,7 +128,7 @@ public class GameScreen extends AbstractScreen {
         nameLabel.setY(110);
 
         ((GameRenderer) renderer).getPlayerTable().addActor(nameLabel);
-        ((GameRenderer) renderer).getOpponentNameLabel().setText("" + model.getClient().getOpponents().get(0).getName());
+        ((GameRenderer) renderer).getOpponentNameLabel().setText(model.getClient().getOpponents().get(0).getName());
         stage.addActor(renderer.getActorPanel());
         stage.draw();
 
