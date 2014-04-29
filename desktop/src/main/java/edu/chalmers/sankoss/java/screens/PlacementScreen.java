@@ -233,7 +233,7 @@ public class PlacementScreen extends AbstractScreen {
                             // Matches button with clicked one
                             if(childrenArray[0].equals(actor)) {
 
-                                // TODO Checks if it's available for ships
+                                // Checks if it's available for ships
                                 boolean free = true;
 
                                 // If ship is horizontal
@@ -299,7 +299,7 @@ public class PlacementScreen extends AbstractScreen {
 
                                         // Sets start and end coordinate
                                         Coordinate start = new Coordinate((i+1), (j+1));
-                                        Coordinate end = new Coordinate((i+1), (j +((PlacementRenderer)renderer).getFollow().getLength()));
+                                        Coordinate end = new Coordinate((i+(((PlacementRenderer)renderer).getFollow().getLength())), (j +1));
 
                                         // Adds ships with start and end coordinate to player's fleet
                                         try {

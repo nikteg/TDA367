@@ -35,6 +35,9 @@ public class WebServer implements Runnable, PropertyChangeListener {
         server.addPropertyChangeListener(this);
     }
 
+    public WebServer(SankossServer sankossServer) {
+    }
+
     @Override
     public void run() {
         if (server == null) return;
