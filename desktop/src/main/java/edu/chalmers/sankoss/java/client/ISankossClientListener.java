@@ -23,5 +23,4 @@ public interface ISankossClientListener {
     public void fireResult(Long gameID, Player target, Coordinate coordinate, boolean hit);
     public void destroyedShip(Player player, Ship ship);
     public void disconnected();
-    public void playerChangedName(Player player, String name);
 }

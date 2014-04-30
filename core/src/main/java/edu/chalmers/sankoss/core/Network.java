@@ -41,7 +41,5 @@ public class Network {
         kryo.register(StartedGame.class);
         kryo.register(StartGame.class);
         kryo.register(Turn.class);
-        kryo.register(PlayerChangeName.class);
-        kryo.register(PlayerChangedName.class);
     }
 }

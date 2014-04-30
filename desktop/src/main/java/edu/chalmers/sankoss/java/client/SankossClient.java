@@ -82,14 +82,6 @@ public class SankossClient {
                     return;
                 }
 
-                if (object instanceof PlayerChangedName) {
-                    PlayerChangedName msg = (PlayerChangedName) object;
-
-                    for (ISankossClientListener listener : listeners) {
-                        listener.playerChangedName(msg.getPlayer(), msg.getName());
-                    }
-                }
-
                 if (object instanceof CreatedRoom) {
                     CreatedRoom msg = (CreatedRoom) object;
 
@@ -251,12 +243,6 @@ public class SankossClient {
         if (client == null) return;
 
         client.sendTCP(new FetchRooms());
-    }
-
-    public void changeName(String name) {
-        if (client == null) return;
-
-        client.sendTCP(new PlayerChangeName(name));
     }
 
     public void fire(Long gameID, Player target, Coordinate coordinate) {
