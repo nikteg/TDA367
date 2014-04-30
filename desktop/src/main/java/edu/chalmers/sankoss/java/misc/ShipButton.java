@@ -1,8 +1,10 @@
 package edu.chalmers.sankoss.java.misc;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 
 /**
  * Button representing a ship.
@@ -11,19 +13,19 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
  *
  * @author Mikael Malmqvist
  */
-public class ShipButton extends TextButton {
+public class ShipButton extends ImageButton {
     private Sprite buttonSprite;
     private int length;
     private Direction direction;
 
-    public ShipButton(String text, Skin skin) {
-        super(text, skin);
+    public ShipButton(String path) {
+        super(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/ship_large_body.png")))));
         direction = Direction.HORIZONTAL;
        // setLength(length);
     }
 
-    public ShipButton(String text, TextButtonStyle style, int length) {
-        super(text, style);
+    public ShipButton(String path, int length) {
+        super(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/ship_large_body.png")))));
         direction = Direction.HORIZONTAL;
         setLength(length);
     }

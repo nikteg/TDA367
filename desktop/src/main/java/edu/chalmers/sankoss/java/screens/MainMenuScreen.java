@@ -6,11 +6,11 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import edu.chalmers.sankoss.core.Player;
 import edu.chalmers.sankoss.core.Room;
-import edu.chalmers.sankoss.java.models.MainMenu;
-import edu.chalmers.sankoss.java.renderers.MainMenuRenderer;
 import edu.chalmers.sankoss.java.SankossController;
 import edu.chalmers.sankoss.java.SankossGame;
 import edu.chalmers.sankoss.java.client.SankossClientListener;
+import edu.chalmers.sankoss.java.models.MainMenu;
+import edu.chalmers.sankoss.java.renderers.MainMenuRenderer;
 
 import java.util.Map;
 

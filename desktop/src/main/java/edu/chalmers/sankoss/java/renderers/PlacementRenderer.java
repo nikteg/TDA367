@@ -243,18 +243,18 @@ public class PlacementRenderer extends Renderer{
 
         // Ships to be placed in grid
         // These should be ImageButtons later on..
-        twoShip = new ShipButton("TWOT", btnStyle, 2);
+        twoShip = new ShipButton("TWOT", 2);
         twoShip.setX(175);
         twoShip.setY(50);
         twoShip.addListener(((PlacementScreen) screen).getShip2Listener());
-        threeShip = new ShipButton("THREETH", btnStyle, 3);
+        threeShip = new ShipButton("THREETH", 3);
         threeShip.setX(450);
         threeShip.setY(50);
         threeShip.addListener(((PlacementScreen) screen).getShip2Listener());
-        fourShip = new ShipButton("FOURFOURFO", btnStyle, 4);
+        fourShip = new ShipButton("FOURFOURFO", 4);
         fourShip.setX(175);
         fourShip.addListener(((PlacementScreen) screen).getShip2Listener());
-        fiveShip = new ShipButton("FIVEFIVEFIVEFIVE", btnStyle, 5);
+        fiveShip = new ShipButton("FIVEFIVEFIVEFIVE", 5);
         fiveShip.setX(450);
         fiveShip.addListener(((PlacementScreen) screen).getShip2Listener());
 
@@ -356,22 +356,22 @@ public class PlacementRenderer extends Renderer{
     public void rotateShips() {
         if(twoShip.getDirection() == ShipButton.Direction.HORIZONTAL) {
             twoShip.setDirection(ShipButton.Direction.VERTICAL);
-            twoShip.setText(twoShip.getText() + " -R");
+            // twoShip.setText(twoShip.getText() + " -R");
             threeShip.setDirection(ShipButton.Direction.VERTICAL);
-            threeShip.setText(threeShip.getText() + " -R");
+            // threeShip.setText(threeShip.getText() + " -R");
             fourShip.setDirection(ShipButton.Direction.VERTICAL);
-            fourShip.setText(fourShip.getText() + " -R");
+            // fourShip.setText(fourShip.getText() + " -R");
             fiveShip.setDirection(ShipButton.Direction.VERTICAL);
-            fiveShip.setText(fiveShip.getText() + " -R");
+            // fiveShip.setText(fiveShip.getText() + " -R");
         } else {
             twoShip.setDirection(ShipButton.Direction.HORIZONTAL);
-            twoShip.setText("TWOT");
+            // twoShip.setText("TWOT");
             threeShip.setDirection(ShipButton.Direction.HORIZONTAL);
-            threeShip.setText("THREETH");
+            // threeShip.setText("THREETH");
             fourShip.setDirection(ShipButton.Direction.HORIZONTAL);
-            fourShip.setText("FOURFOURFO");
+            // fourShip.setText("FOURFOURFO");
             fiveShip.setDirection(ShipButton.Direction.HORIZONTAL);
-            fiveShip.setText("FIVEFIVEFIVEFIVE");
+            // fiveShip.setText("FIVEFIVEFIVEFIVE");
         }
     }
 
