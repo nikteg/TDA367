@@ -18,14 +18,23 @@ public class ShipButton extends ImageButton {
     private int length;
     private Direction direction;
 
-    public ShipButton(String path) {
+    public ShipButton() {
         super(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/ship_large_body.png")))));
         direction = Direction.HORIZONTAL;
-       // setLength(length);
+
     }
 
-    public ShipButton(String path, int length) {
+    public ShipButton(int length) {
         super(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/ship_large_body.png")))));
+
+        if (length == 3 || length == 4) {
+            setStyle(new ImageButtonStyle(null, null, null, new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/ship_medium_body.png")))), null, null));
+
+        } else if (length == 2) {
+            setStyle(new ImageButtonStyle(null, null, null, new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/ship_small_body.png")))), null, null));
+
+        }
+
         direction = Direction.HORIZONTAL;
         setLength(length);
     }

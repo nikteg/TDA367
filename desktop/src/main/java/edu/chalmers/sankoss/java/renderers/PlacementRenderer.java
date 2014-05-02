@@ -243,18 +243,26 @@ public class PlacementRenderer extends Renderer{
 
         // Ships to be placed in grid
         // These should be ImageButtons later on..
-        twoShip = new ShipButton("TWOT", 2);
+        twoShip = new ShipButton(2);
         twoShip.setX(175);
         twoShip.setY(50);
+        twoShip.setWidth(WIDTH_OF_SQUARE*2) ;
+        //twoShip.setHeight(HEIGHT_OF_SQUARE*2);
         twoShip.addListener(((PlacementScreen) screen).getShip2Listener());
-        threeShip = new ShipButton("THREETH", 3);
+        threeShip = new ShipButton(3);
         threeShip.setX(450);
         threeShip.setY(50);
+        threeShip.setWidth(WIDTH_OF_SQUARE*3);
+        //threeShip.setHeight(HEIGHT_OF_SQUARE*3);
         threeShip.addListener(((PlacementScreen) screen).getShip2Listener());
-        fourShip = new ShipButton("FOURFOURFO", 4);
+        fourShip = new ShipButton(4);
+        fourShip.setWidth(WIDTH_OF_SQUARE*4);
+        //fourShip.setHeight(HEIGHT_OF_SQUARE);
         fourShip.setX(175);
         fourShip.addListener(((PlacementScreen) screen).getShip2Listener());
-        fiveShip = new ShipButton("FIVEFIVEFIVEFIVE", 5);
+        fiveShip = new ShipButton(5);
+        fiveShip.setWidth(WIDTH_OF_SQUARE*5);
+        //fiveShip.setHeight(HEIGHT_OF_SQUARE);
         fiveShip.setX(450);
         fiveShip.addListener(((PlacementScreen) screen).getShip2Listener());
 
