@@ -1,23 +1,26 @@
 package edu.chalmers.sankoss.java.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.SnapshotArray;
 import edu.chalmers.sankoss.core.Coordinate;
 import edu.chalmers.sankoss.core.Player;
 import edu.chalmers.sankoss.core.Ship;
 import edu.chalmers.sankoss.core.exceptions.IllegalShipCoordinatesException;
-import edu.chalmers.sankoss.java.models.Placement;
-import edu.chalmers.sankoss.java.renderers.PlacementRenderer;
 import edu.chalmers.sankoss.java.SankossController;
 import edu.chalmers.sankoss.java.SankossGame;
 import edu.chalmers.sankoss.java.client.SankossClientListener;
 import edu.chalmers.sankoss.java.misc.ShipButton;
+import edu.chalmers.sankoss.java.models.Placement;
+import edu.chalmers.sankoss.java.renderers.PlacementRenderer;
 
 /**
  * Screen used when placing the ships.
@@ -263,14 +266,32 @@ public class PlacementScreen extends AbstractScreen {
                                             e.getStackTrace();
                                         }
 
+                                        // Path to ship texture
+                                        String path = "desktop/src/main/java/assets/textures/HORIZONTAL_";
+
                                         // Adds ship to grid visually
                                         System.out.println("Added ship at: ");
                                         for(int n = 0; n < ((PlacementRenderer)renderer).getFollow().getLength(); n++) {
                                             children = ((PlacementRenderer)renderer).getGrid()[((i)*10)+j+n].getChildren();
 
+                                            if(((PlacementRenderer)renderer).getFollow().getLength() == 2) {
+                                                path = path + "ship_small_body_" + (n+1) + ".png";
+
+                                            } else if(((PlacementRenderer)renderer).getFollow().getLength() == 3) {
+                                                path = path + "ship_medium_body_" + (n+1) + ".png";
+
+                                            } else if(((PlacementRenderer)renderer).getFollow().getLength() == 4) {
+                                                path = path + "ship_large_body_" + (n+1) + ".png";
+
+                                            } else if(((PlacementRenderer)renderer).getFollow().getLength() == 5) {
+                                                path = path + "ship_huge_body_" + (n+1) + ".png";
+                                            }
+
                                             childrenArray = children.toArray();
-                                            ((TextButton)childrenArray[0]).setText("XX");
+                                            //((TextButton)childrenArray[0]).setText("XX");
+                                            ((ImageButton)childrenArray[0]).setStyle(new ImageButton.ImageButtonStyle(null, null, null, new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal(path)))), null, null));
                                             System.out.println(i + ", " + (j+n));
+                                            path = "desktop/src/main/java/assets/textures/HORIZONTAL_";
 
                                             // Marks the select coordinate as occupied
                                             model.addToShipArray(i, (j+n));
@@ -284,6 +305,7 @@ public class PlacementScreen extends AbstractScreen {
                                         ((PlacementRenderer)renderer).setFollow(null);
                                     }
 
+                                // If ship is vertical
                                 } else if(((PlacementRenderer) renderer).getFollow().getDirection() == ShipButton.Direction.VERTICAL
                                         && i + (((PlacementRenderer) renderer).getFollow().getLength()-1) <= 9) {
 
@@ -309,14 +331,31 @@ public class PlacementScreen extends AbstractScreen {
                                             e.getStackTrace();
                                         }
 
+                                        String path = "desktop/src/main/java/assets/textures/VERTICAL_";
+
                                         // Adds ship to grid visually
                                         System.out.println("Added ship at: ");
                                         for(int n = 0; n < ((PlacementRenderer)renderer).getFollow().getLength(); n++) {
                                             children = ((PlacementRenderer)renderer).getGrid()[((i + n)*10)+j].getChildren();
 
+                                            if(((PlacementRenderer)renderer).getFollow().getLength() == 2) {
+                                                path = path + "ship_small_body_" + (n+1) + ".png";
+
+                                            } else if(((PlacementRenderer)renderer).getFollow().getLength() == 3) {
+                                                path = path + "ship_medium_body_" + (n+1) + ".png";
+
+                                            } else if(((PlacementRenderer)renderer).getFollow().getLength() == 4) {
+                                                path = path + "ship_large_body_" + (n+1) + ".png";
+
+                                            } else if(((PlacementRenderer)renderer).getFollow().getLength() == 5) {
+                                                path = path + "ship_huge_body_" + (n+1) + ".png";
+                                            }
+
                                             childrenArray = children.toArray();
-                                            ((TextButton)childrenArray[0]).setText("XX");
+                                            //((TextButton)childrenArray[0]).setText("XX");
+                                            ((ImageButton)childrenArray[0]).setStyle(new ImageButton.ImageButtonStyle(null, null, null, new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal(path)))), null, null));
                                             System.out.println((i+n) + ", " + j);
+                                            path = "desktop/src/main/java/assets/textures/VERTICAL_";
 
                                             // Marks the select coordinate as occupied
                                             model.addToShipArray((i+n), j);

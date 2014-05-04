@@ -5,8 +5,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import edu.chalmers.sankoss.core.Player;
 import edu.chalmers.sankoss.java.models.Placement;
 import edu.chalmers.sankoss.java.models.ScreenModel;
@@ -201,15 +203,21 @@ public class PlacementRenderer extends Renderer{
 
                 n++;
 
-                // Colorizes every second square with a different gray based on the tableBack
+                // Adds button to be clicked when placing ships in the placement grid
                 if(n % 2 == 0) {
-                    //grid[(i*10)+j].setBackground(skin.newDrawable("tableBack"));
-                    grid[(i*10)+j].addActor(new TextButton("", btnStyle));
-                    ((TextButton) (grid[(i*10)+j]).getChildren().get(0)).setBackground(skin.newDrawable("tableBack"));
+
+                    //grid[(i*10)+j].addActor(new TextButton("", btnStyle));
+                    grid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/LIGHT_water.png"))))));
+                    //((ImageButton) (grid[(i*10)+j]).getChildren().get(0)).setBackground(skin.newDrawable("tableBack"));
+                    grid[(i*10)+j].setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/LIGHT_water.png")))));
                 } else {
-                    //grid[(i*10)+j].setBackground(skin.newDrawable("tableBack3"));
-                    grid[(i*10)+j].addActor(new TextButton("", btnStyle2));
-                    ((TextButton) (grid[(i*10)+j]).getChildren().get(0)).setBackground(skin.newDrawable("tableBack3"));
+
+                    //grid[(i*10)+j].addActor(new TextButton("", btnStyle2));
+                    grid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/DARK_water.png"))))));
+
+                    grid[(i*10)+j].setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/DARK_water.png")))));
+                    //((ImageButton) (grid[(i*10)+j]).getChildren().get(0)).setBackground(skin.newDrawable("tableBack3"));
+
                 }
 
                 // Adds grid to middlePanel and add a textButton to it
