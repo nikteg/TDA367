@@ -35,6 +35,7 @@ public class PlacementRenderer extends Renderer{
 	
 	private SpriteBatch batch = new SpriteBatch();
     private Skin skin = new Skin();
+    private TextButton.TextButtonStyle btnStyle2;
 
     // Containers
     private Table playerTable;
@@ -51,7 +52,7 @@ public class PlacementRenderer extends Renderer{
     private TextButton readyBtn;
     private TextButton rotateBtn;
 
-    // Less temporary ships
+    // ships
     private ShipButton twoShip;
     private ShipButton threeShip;
     private ShipButton fourShip;
@@ -119,6 +120,7 @@ public class PlacementRenderer extends Renderer{
         //skin = new Skin();
 
         actorPanel = new WidgetGroup();
+        btnStyle2 = new TextButton.TextButtonStyle();
 
         // skin for playerTable
         Pixmap tablePixmap = new Pixmap(800, 150, Pixmap.Format.RGBA8888);
@@ -185,6 +187,9 @@ public class PlacementRenderer extends Renderer{
         // Configures necessary attributes for buttons
         setButtons();
 
+
+        // Makes the default styles for buttons and labels
+        btnStyle2.font = skin.getFont("default");
         btnStyle.font = skin.getFont("default");
 
         int n = 0;
@@ -198,15 +203,22 @@ public class PlacementRenderer extends Renderer{
 
                 // Colorizes every second square with a different gray based on the tableBack
                 if(n % 2 == 0) {
-                    grid[(i*10)+j].setBackground(skin.newDrawable("tableBack"));
+                    //grid[(i*10)+j].setBackground(skin.newDrawable("tableBack"));
+                    grid[(i*10)+j].addActor(new TextButton("", btnStyle));
+                    ((TextButton) (grid[(i*10)+j]).getChildren().get(0)).setBackground(skin.newDrawable("tableBack"));
                 } else {
-                    grid[(i*10)+j].setBackground(skin.newDrawable("tableBack3"));
+                    //grid[(i*10)+j].setBackground(skin.newDrawable("tableBack3"));
+                    grid[(i*10)+j].addActor(new TextButton("", btnStyle2));
+                    ((TextButton) (grid[(i*10)+j]).getChildren().get(0)).setBackground(skin.newDrawable("tableBack3"));
                 }
 
                 // Adds grid to middlePanel and add a textButton to it
                 // This is needed to make it click-able
                 middlePanel.add(grid[(i*10)+j]).width(WIDTH_OF_SQUARE).height(HEIGHT_OF_SQUARE);
-                grid[(i*10)+j].addActor(new TextButton(i + "," + j, btnStyle));
+
+                grid[(i*10)+j].getChildren().get(0).setSize(50, 50);
+                //TextButton btn = (TextButton)(grid[(i*10)+j]).getChildren().get(0);
+                //btn.setBackground(skin.newDrawable("tableBack"));
                 grid[(i*10)+j].addListener(((PlacementScreen) screen).getShipBtnListener());
             }
             n++;
@@ -288,6 +300,7 @@ public class PlacementRenderer extends Renderer{
 
         // Adds Texture with pixmap to skin
         skin.add("white", new Texture(pixmap));
+        skin.add("gray", new Texture(pixmap));
 
         BitmapFont font = new BitmapFont();
         font.scale(1); // Sets font's scale relative to current scale
@@ -300,9 +313,17 @@ public class PlacementRenderer extends Renderer{
         btnStyle.up = skin.newDrawable("white", Color.DARK_GRAY);
         btnStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
         btnStyle.checked = skin.newDrawable("white", Color.DARK_GRAY);
-        btnStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
+        btnStyle.over = skin.newDrawable("white", Color.WHITE);
+
+        // Configures how the Style of a button should behave and
+        // names is "white"
+        btnStyle2.up = skin.newDrawable("gray", Color.LIGHT_GRAY);
+        btnStyle2.down = skin.newDrawable("gray", Color.LIGHT_GRAY);
+        btnStyle2.checked = skin.newDrawable("gray", Color.LIGHT_GRAY);
+        btnStyle2.over = skin.newDrawable("gray", Color.WHITE);
 
         skin.add("default", btnStyle);
+        skin.add("default", btnStyle2);
 
     }
 
@@ -403,8 +424,9 @@ public class PlacementRenderer extends Renderer{
 
         // ShipButton to follow cursor
         if(follow != null) {
-            follow.setX(Gdx.input.getX());
-            follow.setY(follow.getY()-Gdx.input.getDeltaY());
+            follow.setX(Gdx.input.getX() + 10);
+            // follow.setY(follow.getY()-Gdx.input.getDeltaY());
+            follow.setY(Gdx.input.getY()*(-1) + 10);
         }
         //Writes the grid as texures
 
