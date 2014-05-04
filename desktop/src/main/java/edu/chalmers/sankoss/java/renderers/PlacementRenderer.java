@@ -40,7 +40,6 @@ public class PlacementRenderer extends Renderer{
     private Table playerTable;
     private Table topTable;
     private Table middlePanel;
-    private WidgetGroup ships;
 
 	// controllers
     private Table flag;
@@ -85,7 +84,6 @@ public class PlacementRenderer extends Renderer{
         topTable.setY(height - 100);
         middlePanel.setWidth(width);
         middlePanel.setHeight(height - topTable.getHeight() - playerTable.getHeight());
-        ships.setWidth(width - 200);
 
         rotateBtn.setX(topTable.getWidth() - rotateBtn.getWidth());
         readyBtn.setX(width - readyBtn.getWidth());
@@ -158,13 +156,6 @@ public class PlacementRenderer extends Renderer{
         middlePanel.setBackground(skin.newDrawable("tableBack2"));
         middlePanel.setPosition(0, playerTable.getHeight());
 
-
-        // This is where ships to pick from will be
-        // TODO: REMOVE THIS?!
-        ships = new WidgetGroup();
-        ships.setHeight(100f);
-        ships.setWidth(600f);
-        ships.setPosition(200, 0);
 
         flag = new Table();
         flag.setHeight(80f);
@@ -244,26 +235,24 @@ public class PlacementRenderer extends Renderer{
         // Ships to be placed in grid
         // These should be ImageButtons later on..
         twoShip = new ShipButton(2);
-        twoShip.setX(175);
-        twoShip.setY(50);
-        twoShip.setWidth(WIDTH_OF_SQUARE*2) ;
+        //twoShip.setX(175);
+        //twoShip.setWidth(WIDTH_OF_SQUARE*2) ;
         //twoShip.setHeight(HEIGHT_OF_SQUARE*2);
         twoShip.addListener(((PlacementScreen) screen).getShip2Listener());
         threeShip = new ShipButton(3);
-        threeShip.setX(450);
-        threeShip.setY(50);
-        threeShip.setWidth(WIDTH_OF_SQUARE*3);
+        //threeShip.setX(325);
+        //threeShip.setWidth(WIDTH_OF_SQUARE*3);
         //threeShip.setHeight(HEIGHT_OF_SQUARE*3);
         threeShip.addListener(((PlacementScreen) screen).getShip2Listener());
         fourShip = new ShipButton(4);
-        fourShip.setWidth(WIDTH_OF_SQUARE*4);
+        //fourShip.setWidth(WIDTH_OF_SQUARE*4 + 25);
         //fourShip.setHeight(HEIGHT_OF_SQUARE);
-        fourShip.setX(175);
+        //fourShip.setX(525);
         fourShip.addListener(((PlacementScreen) screen).getShip2Listener());
         fiveShip = new ShipButton(5);
-        fiveShip.setWidth(WIDTH_OF_SQUARE*5);
+        //fiveShip.setWidth(WIDTH_OF_SQUARE*5);
         //fiveShip.setHeight(HEIGHT_OF_SQUARE);
-        fiveShip.setX(450);
+        //fiveShip.setX(775);
         fiveShip.addListener(((PlacementScreen) screen).getShip2Listener());
 
         topTable.addActor(rotateBtn);
@@ -317,6 +306,16 @@ public class PlacementRenderer extends Renderer{
 
     }
 
+    /**
+     * Method for updating all ships in game
+     */
+    public void updateShips() {
+        twoShip.update();
+        threeShip.update();
+        fourShip.update();
+        fiveShip.update();
+    }
+
     public WidgetGroup getActorPanel() {
         return actorPanel;
     }
@@ -364,25 +363,20 @@ public class PlacementRenderer extends Renderer{
     public void rotateShips() {
         if(twoShip.getDirection() == ShipButton.Direction.HORIZONTAL) {
             twoShip.setDirection(ShipButton.Direction.VERTICAL);
-            // twoShip.setText(twoShip.getText() + " -R");
             threeShip.setDirection(ShipButton.Direction.VERTICAL);
-            // threeShip.setText(threeShip.getText() + " -R");
             fourShip.setDirection(ShipButton.Direction.VERTICAL);
-            // fourShip.setText(fourShip.getText() + " -R");
             fiveShip.setDirection(ShipButton.Direction.VERTICAL);
-            // fiveShip.setText(fiveShip.getText() + " -R");
         } else {
             twoShip.setDirection(ShipButton.Direction.HORIZONTAL);
-            // twoShip.setText("TWOT");
             threeShip.setDirection(ShipButton.Direction.HORIZONTAL);
-            // threeShip.setText("THREETH");
             fourShip.setDirection(ShipButton.Direction.HORIZONTAL);
-            // fourShip.setText("FOURFOURFO");
             fiveShip.setDirection(ShipButton.Direction.HORIZONTAL);
-            // fiveShip.setText("FIVEFIVEFIVEFIVE");
-        }
-    }
 
+        }
+
+        updateShips();
+
+    }
 
     // TODO: Put this code somewhere else! Method is a loop and takes a lot of resources - it's a trap!
     @Override
