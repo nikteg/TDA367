@@ -121,7 +121,6 @@ public class PlacementRenderer extends Renderer{
     }
 
     public void drawControllers(AbstractScreen screen) {
-        //skin = new Skin();
 
         actorPanel = new WidgetGroup();
         btnStyle2 = new TextButton.TextButtonStyle();

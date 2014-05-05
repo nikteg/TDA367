@@ -6,11 +6,11 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import edu.chalmers.sankoss.core.Player;
 import edu.chalmers.sankoss.core.Room;
-import edu.chalmers.sankoss.java.models.Lobby;
-import edu.chalmers.sankoss.java.renderers.LobbyRenderer;
 import edu.chalmers.sankoss.java.SankossController;
 import edu.chalmers.sankoss.java.SankossGame;
 import edu.chalmers.sankoss.java.client.SankossClientListener;
+import edu.chalmers.sankoss.java.models.Lobby;
+import edu.chalmers.sankoss.java.renderers.LobbyRenderer;
 
 import java.util.Map;
 
@@ -66,6 +66,11 @@ public class LobbyScreen extends AbstractScreen {
 
         public void startedGame(Long gameID, java.util.List<Player> players) {
             ((LobbyRenderer)renderer).getJoinBtn().setText("Enter Game");
+        }
+
+        @Override
+        public void createdRoom(Long roomID) {
+            System.out.println("You hosted room #" + roomID);
         }
     }
 
@@ -130,6 +135,10 @@ public class LobbyScreen extends AbstractScreen {
         return new EditButtonListener();
     }
 
+    public HostButtonListener getHostButtonListener() {
+        return new HostButtonListener();
+    }
+
     private class JoinButtonListener extends ChangeListener{
 
         @Override
@@ -143,7 +152,7 @@ public class LobbyScreen extends AbstractScreen {
         public void joinGame() {
             String buttonText = "" + ((LobbyRenderer)renderer).getJoinBtn().getText();
 
-            if(buttonText.equals("Ask to join")) {
+            if(buttonText.equals("Join")) {
 
                 // Retrives selected name and matches with room
                 String roomName = ((LobbyRenderer)renderer).getRoomList().getSelection();
@@ -202,4 +211,27 @@ public class LobbyScreen extends AbstractScreen {
             }, "Enter new name:", "");
         }
     }
+
+    private class HostButtonListener extends ChangeListener{
+
+        @Override
+        public void changed(ChangeEvent event, Actor actor) {
+            startHosting();
+            jumpToWaiting();
+        }
+
+        /**
+         * Method for hosting a room.
+         */
+        public void startHosting() {
+            model.getClient().createRoom(model.getClient().getPlayer().getName() + "'s Room", ""); //Roomname and password
+
+        }
+
+        public void jumpToWaiting() {
+            controller.changeScreen(new WaitingScreen(controller, game));
+        }
+
+    }
+
 }

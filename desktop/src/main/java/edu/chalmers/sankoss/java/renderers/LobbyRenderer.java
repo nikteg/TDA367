@@ -28,6 +28,7 @@ public class LobbyRenderer extends Renderer {
 
     // Controllers
     private TextButton joinBtn;
+    private TextButton hostBtn;
     private TextButton cancelBtn;
     private TextButton editBtn;
     private Label nameLabel;
@@ -60,6 +61,7 @@ public class LobbyRenderer extends Renderer {
     @Override
     public void resize(int width, int height) {
         joinBtn.setPosition(width - WIDTH_OF_BUTTON, 0);
+        hostBtn.setPosition(width - WIDTH_OF_BUTTON*2 - 10, 0);
         infoLabel.setX(width - infoLabel.getWidth() - 10);
 
         topPanel.setY(height - 150);
@@ -99,19 +101,27 @@ public class LobbyRenderer extends Renderer {
         labelStyle.font = skin.getFont("default");
 
         // Makes buttons and labels with default style of button
-        joinBtn = new TextButton("Ask to join", btnStyle);
+        joinBtn = new TextButton("Join", btnStyle);
         joinBtn.setX(600 - WIDTH_OF_BUTTON);
         joinBtn.setY(0);
+
+        hostBtn = new TextButton("Host", btnStyle);
+        hostBtn.setX(600 - WIDTH_OF_BUTTON*2 - 10);
+        hostBtn.setY(0);
+
         cancelBtn = new TextButton("Cancel", btnStyle);
         cancelBtn.setX(0);
         cancelBtn.setY(0);
+
         editBtn = new TextButton("Edit name", btnStyle);
         editBtn.setX(0);
         editBtn.setY(60);
+
         nameLabel = new Label(currentModel.getClient().getPlayer().getName(), labelStyle);
         nameLabel.setX(10);
         nameLabel.setY(110);
-        infoLabel = new Label("Select room to join", labelStyle);
+
+        infoLabel = new Label("Join or host a game", labelStyle);
         infoLabel.setX(600 - 50);
         infoLabel.setY(110);
 
@@ -120,6 +130,7 @@ public class LobbyRenderer extends Renderer {
         bottomPanel.setX(0);
         bottomPanel.setY(0);
         bottomPanel.addActor(joinBtn);
+        bottomPanel.addActor(hostBtn);
         bottomPanel.addActor(cancelBtn);
 
         topPanel.setWidth(800);
@@ -140,6 +151,7 @@ public class LobbyRenderer extends Renderer {
         actorPanel.addActor(topPanel);
 
         joinBtn.addListener(((LobbyScreen)screen).getJoinButtonListener());
+        hostBtn.addListener(((LobbyScreen)screen).getHostButtonListener());
         cancelBtn.addListener(((LobbyScreen)screen).getCancelButtonListener());
         editBtn.addListener(((LobbyScreen)screen).getEditButtonListener());
 
