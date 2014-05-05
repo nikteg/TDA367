@@ -406,42 +406,59 @@ public class PlacementScreen extends AbstractScreen {
     }
 
     private class ReadyBtnListener extends ChangeListener {
-        @Override
-        public void changed(ChangeEvent event, Actor actor) {
+
+        public void enterGame() {
+            // This means your opponent is done and you can enter game directly
+            controller.changeScreen(new GameScreen(controller, game));
+        }
+
+        public void setReady() {
+            System.out.println("CLIENT: You are ready with " + model.getNumberOfShips() + " ships on the board!");
+
+            // Switches state of ready button
+            ((Placement)model).switchReadyBtnState();
+            ((PlacementRenderer)renderer).setReadyBtn(((Placement) model).getReadyBtnState());
+        }
+
+        /**
+         * Determines ready or not, and tells server if so.
+         */
+        public void determineReady() {
+            // Tells server that you are ready if necessary
+            if(!model.getClient().getReady()) {
+                model.getClient().playerReady(model.getClient().getGameID(), model.getClient().getPlayer().getFleet());
+                model.getClient().setReady(true);
+            }
+        }
+
+        public void setReadyOrEnter() {
+            // You're done placing you're ships but opponent isn't done
+            if(((Placement)model).getReadyBtnState() == Placement.ReadyBtnState.READY) {
+                setReady();
+
+            } else if(((Placement)model).getReadyBtnState() == Placement.ReadyBtnState.ENTER){
+                enterGame();
+
+            }
+        }
+
+        public void readyClicked() {
 
             // If all your boats are on the board
             if(model.getClient().getPlayer().getFleet().size() == model.getNumberOfShips()){
 
-
-                // Tells server that you are ready if necessary
-                if(!model.getClient().getReady()) {
-                    model.getClient().playerReady(model.getClient().getGameID(), model.getClient().getPlayer().getFleet());
-                    model.getClient().setReady(true);
-                }
-
-                // You're done placing you're ships but opponent isn't done
-                if(((Placement)model).getReadyBtnState() == Placement.ReadyBtnState.READY) {
-                    System.out.println("CLIENT: You are ready with " + model.getNumberOfShips() + " ships on the board!");
-
-                    // Switches state of ready button
-                    ((Placement)model).switchReadyBtnState();
-                    ((PlacementRenderer)renderer).setReadyBtn(((Placement) model).getReadyBtnState());
-
-                } else if(((Placement)model).getReadyBtnState() == Placement.ReadyBtnState.ENTER){
-                    // This means your opponent is done and you can enter game directly
-                    controller.changeScreen(new GameScreen(controller, game));
-
-
-                } else {
-                    // This means you're marked as waiting since before, but the opponent is not yet done
-                    System.out.println("Waiting for opponent!");
-                }
-
+                determineReady();
+                setReadyOrEnter();
 
             } else {
                 // If you haven't placed all your ships
                 System.out.println("Cannot enter game until all " + model.getNumberOfShips() + " ships are placed on the board!");
             }
+        }
+
+        @Override
+        public void changed(ChangeEvent event, Actor actor) {
+            readyClicked();
 
         }
     }
