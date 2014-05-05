@@ -131,39 +131,59 @@ public class LobbyScreen extends AbstractScreen {
     }
 
     private class JoinButtonListener extends ChangeListener{
+
         @Override
         public void changed(ChangeEvent event, Actor actor) {
+            joinGame();
+        }
 
+        /**
+         * Method for joining a game.
+         */
+        public void joinGame() {
             String buttonText = "" + ((LobbyRenderer)renderer).getJoinBtn().getText();
 
             if(buttonText.equals("Ask to join")) {
+
                 // Retrives selected name and matches with room
                 String roomName = ((LobbyRenderer)renderer).getRoomList().getSelection();
 
                 Room roomToJoin = model.getRoomByName(roomName, gameRooms);
-
                 model.getClient().joinRoom(roomToJoin.getID());
 
                 ((LobbyRenderer)renderer).getJoinBtn().setText("Joined");
-                //controller.changeScreen(new PlacementScreen(controller, game));
+
 
             } else if(buttonText.equals("Enter Game") && model.getClient().getGameID() != null) {
                 controller.changeScreen(new PlacementScreen(controller, game));
             }
-
         }
     }
 
     private class CancelButtonListener extends ChangeListener{
+
         @Override
         public void changed(ChangeEvent event, Actor actor) {
+            jumpToMainMenu();
+        }
+
+        public void jumpToMainMenu() {
             controller.changeScreen(new MainMenuScreen(controller, game));
         }
     }
 
+    // TODO: REDO COMPLETELY
     private class EditButtonListener extends ChangeListener{
+
         @Override
         public void changed(ChangeEvent event, Actor actor) {
+            changeName();
+        }
+
+        /**
+         * Method for changing player's name.
+         */
+        public void changeName() {
             Gdx.input.getTextInput(new Input.TextInputListener() {
 
                 // Gets user input
@@ -180,7 +200,6 @@ public class LobbyScreen extends AbstractScreen {
                     // nothing..
                 }
             }, "Enter new name:", "");
-
         }
     }
 }

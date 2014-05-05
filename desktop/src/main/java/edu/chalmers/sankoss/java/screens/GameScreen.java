@@ -153,9 +153,17 @@ public class GameScreen extends AbstractScreen {
     }
 
     private class ShootBtnListener extends ChangeListener {
+
         @Override
         public void changed(ChangeEvent event, Actor actor) {
+            shoot(actor);
+        }
 
+        /**
+         * Method for shooting at a grid in the aim grid.
+         * @param actor grid to be shot at.
+         */
+        public void shoot(Actor actor) {
             // Loops through grid
             for(int i = 0; i < 10; i++) {
                 for(int j = 0; j < 10; j++){
@@ -172,7 +180,6 @@ public class GameScreen extends AbstractScreen {
                     }
                 }
             }
-
         }
     }
 }

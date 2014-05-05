@@ -193,16 +193,32 @@ public class PlacementScreen extends AbstractScreen {
 
 
     public class RotateBtnListener extends ChangeListener {
+
         @Override
         public void changed(ChangeEvent event, Actor actor) {
+            rotateShips();
+        }
+
+        /**
+         * Method for rotating ships.
+         */
+        public void rotateShips() {
             ((PlacementRenderer)renderer).rotateShips();
         }
     }
 
     public class Ship2Listener extends  ChangeListener {
+
         @Override
         public void changed(ChangeEvent event, Actor actor) {
+            followCursor(actor);
+        }
 
+        /**
+         * Method for ship following the cursor.
+         * @param actor ship that will follow.
+         */
+        public void followCursor(Actor actor) {
             // If there's a ship following the cursor, place it where it's at
             if(((PlacementRenderer)renderer).getFollow() != null) {
                 ((PlacementRenderer)renderer).getFollow().setX(Gdx.input.getX());
@@ -218,9 +234,17 @@ public class PlacementScreen extends AbstractScreen {
     }
 
     private class ShipBtnListener extends ChangeListener {
+
         @Override
         public void changed(ChangeEvent event, Actor actor) {
+            placeShip(actor);
+        }
 
+        /**
+         * Method for placing ship on player game board.
+         * @param actor is the clicked square in grid.
+         */
+        public void placeShip(Actor actor) {
             // Checks if a follow-button exists
             if(((PlacementRenderer)renderer).getFollow() != null){
 
@@ -305,7 +329,7 @@ public class PlacementScreen extends AbstractScreen {
                                         ((PlacementRenderer)renderer).setFollow(null);
                                     }
 
-                                // If ship is vertical
+                                    // If ship is vertical
                                 } else if(((PlacementRenderer) renderer).getFollow().getDirection() == ShipButton.Direction.VERTICAL
                                         && i + (((PlacementRenderer) renderer).getFollow().getLength()-1) <= 9) {
 
@@ -378,6 +402,7 @@ public class PlacementScreen extends AbstractScreen {
                 }
             }
         }
+
     }
 
     private class ReadyBtnListener extends ChangeListener {

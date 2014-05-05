@@ -126,17 +126,31 @@ public class MainMenuScreen extends AbstractScreen {
 
         @Override
         public void changed(ChangeEvent event, Actor actor) {
-            // TODO: START GAME
+            startGame();
+        }
+
+        /**
+         * Method for stating a game.
+         * Calls client to start game and controller to change Screen.
+         */
+        public void startGame() {
             model.getClient().startGame(model.getClient().getRoomID());
             controller.changeScreen(new PlacementScreen(controller, game));
         }
     }
+
+
 
     private class JoinButtonListener extends ChangeListener{
 
         @Override
         public void changed(ChangeEvent event, Actor actor) {
 
+            jumpToLobby();
+        }
+
+
+        public void jumpToLobby() {
             controller.changeScreen(new LobbyScreen(controller, game));
         }
     }
@@ -145,6 +159,14 @@ public class MainMenuScreen extends AbstractScreen {
 
         @Override
         public void changed(ChangeEvent event, Actor actor) {
+            startHosting();
+
+        }
+
+        /**
+         * Method for hosting a game.
+         */
+        public void startHosting() {
             model.getClient().fetchRooms();
 
             Gdx.input.getTextInput(new Input.TextInputListener() {
@@ -184,8 +206,8 @@ public class MainMenuScreen extends AbstractScreen {
                     // nothing..
                 }
             }, "Enter room name:", "");
-
         }
+
     }
 
     private class HelpButtonListener extends ChangeListener{

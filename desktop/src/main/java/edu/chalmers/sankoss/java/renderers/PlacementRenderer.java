@@ -157,7 +157,7 @@ public class PlacementRenderer extends Renderer{
         middlePanel = new Table();
         middlePanel.setWidth(800);
         middlePanel.setHeight(600 - topTable.getHeight() - playerTable.getHeight());
-        middlePanel.setBackground(skin.newDrawable("tableBack2"));
+        middlePanel.setBackground(skin.newDrawable("tableBack"));
         middlePanel.setPosition(0, playerTable.getHeight());
 
 
