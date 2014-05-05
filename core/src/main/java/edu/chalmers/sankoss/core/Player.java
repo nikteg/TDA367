@@ -41,17 +41,27 @@ public class Player implements KryoSerializable {
 
 
     public enum Nationality {
-        USA("USA", java.awt.Color.WHITE),
-        GERMANY("GER", java.awt.Color.RED),
-        JAPAN("JAP", java.awt.Color.GREEN),
-        ENGLAND("ENG", java.awt.Color.BLUE);
+        USA("USA", "desktop/src/main/java/assets/textures/USA.png"),
+        GERMANY("GER", "desktop/src/main/java/assets/textures/germany.png"),
+        JAPAN("JAP", "desktop/src/main/java/assets/textures/japan.png"),
+        ENGLAND("ENG", "desktop/src/main/java/assets/textures/england.png");
 
         private String landName;
         private java.awt.Color color;
+        private String path;
 
         Nationality(String name, java.awt.Color color) {
             this.landName = name;
             this.color = color;
+        }
+
+        Nationality(String name, String path) {
+            this.landName = name;
+            this.path = path;
+        }
+
+        public String getPath() {
+            return path;
         }
 
         public Nationality getNext(){

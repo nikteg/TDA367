@@ -407,6 +407,12 @@ public class PlacementScreen extends AbstractScreen {
 
     private class ReadyBtnListener extends ChangeListener {
 
+        @Override
+        public void changed(ChangeEvent event, Actor actor) {
+            readyClicked();
+
+        }
+
         public void enterGame() {
             // This means your opponent is done and you can enter game directly
             controller.changeScreen(new GameScreen(controller, game));
@@ -456,11 +462,6 @@ public class PlacementScreen extends AbstractScreen {
             }
         }
 
-        @Override
-        public void changed(ChangeEvent event, Actor actor) {
-            readyClicked();
-
-        }
     }
 
     private class NextBtnListener extends ChangeListener {
@@ -471,6 +472,8 @@ public class PlacementScreen extends AbstractScreen {
             ((PlacementRenderer) renderer).getPlayerTable().removeActor(((PlacementRenderer) renderer).getFlag());
             ((PlacementRenderer) renderer).getPlayerTable().removeActor(((PlacementRenderer) renderer).getLandLabel());
             ((PlacementRenderer) renderer).switchNationality(model.getClient().getPlayer(), true);
+
+            ((PlacementRenderer) renderer).setNationality(model.getClient().getPlayer().getNationality());
             ((PlacementRenderer) renderer).setFlag();
         }
     }
@@ -483,6 +486,8 @@ public class PlacementScreen extends AbstractScreen {
             ((PlacementRenderer) renderer).getPlayerTable().removeActor(((PlacementRenderer) renderer).getFlag());
             ((PlacementRenderer) renderer).getPlayerTable().removeActor(((PlacementRenderer) renderer).getLandLabel());
             ((PlacementRenderer) renderer).switchNationality(model.getClient().getPlayer(), false);
+
+            ((PlacementRenderer) renderer).setNationality(model.getClient().getPlayer().getNationality());
             ((PlacementRenderer) renderer).setFlag();
         }
     }
