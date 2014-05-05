@@ -33,7 +33,6 @@ public class WaitingScreen extends AbstractScreen {
 
         @Override
         public void joinedRoom(Player player) {
-            System.out.println("SUCCESS");
             ((WaitingRenderer)renderer).getWaitingLabel().setText(player.getName() + " has joined your room!");
             ((WaitingRenderer)renderer).createStartBtn();
         }
@@ -99,6 +98,9 @@ public class WaitingScreen extends AbstractScreen {
         }
 
         public void jumpToLobby() {
+            // TODO: Fix exception when calling removeRoom()
+            // Removes room and backs to lobby
+            //model.getClient().removeRoom(model.getClient().getRoomID());
             controller.changeScreen(new LobbyScreen(controller, game));
         }
     }

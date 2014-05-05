@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -63,8 +64,8 @@ public class WaitingRenderer extends Renderer {
 
     @Override
     public void resize(int width, int height) {
-        waitingLabel.setX((width - waitingLabel.getWidth())/2);
-        waitingLabel.setY((height - waitingLabel.getHeight())/2);
+        waitingLabel.setX(width/2);
+        waitingLabel.setY(height/2);
     }
 
     @Override
@@ -97,6 +98,13 @@ public class WaitingRenderer extends Renderer {
         waitingLabel = new Label("Waiting for opponent to join!", labelStyle);
         waitingLabel.setX((Gdx.graphics.getWidth() - WIDTH_OF_BUTTON)/2);
         waitingLabel.setY((Gdx.graphics.getHeight() - HEIGHT_OF_BUTTON)/2);
+
+        waitingLabel.addAction(Actions.forever(
+                Actions.sequence(
+                        Actions.alpha(0.1f, 0.1f),
+                        Actions.fadeIn(2f), Actions.fadeOut(2f)
+                )
+        ));
 
         actorPanel.addActor(cancelBtn);
         actorPanel.addActor(waitingLabel);

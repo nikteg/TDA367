@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import edu.chalmers.sankoss.core.Player;
 import edu.chalmers.sankoss.core.Room;
 import edu.chalmers.sankoss.java.SankossController;
 import edu.chalmers.sankoss.java.SankossGame;
@@ -54,10 +53,6 @@ public class MainMenuScreen extends AbstractScreen {
             System.out.println("SERVER: " + model.getClient().getPlayer().getName() + " created room #" + roomID);
         }
 
-        public void joinedRoom(Player player) {
-            ((MainMenuRenderer)renderer).setStatusLabel(player.getName() + " has joined your room!");
-            ((MainMenuRenderer)renderer).createStartButton();
-        }
     }
 
     /**
@@ -118,28 +113,17 @@ public class MainMenuScreen extends AbstractScreen {
         return new HelpButtonListener();
     }
 
-    public StartButtonListener getStartButtonListener() {
-        return new StartButtonListener();
+    public OptionsButtonListener getOptionsButtonListener() {
+        return new OptionsButtonListener();
     }
 
-    private class StartButtonListener extends ChangeListener{
-
-        @Override
-        public void changed(ChangeEvent event, Actor actor) {
-            startGame();
-        }
-
-        /**
-         * Method for stating a game.
-         * Calls client to start game and controller to change Screen.
-         */
-        public void startGame() {
-            model.getClient().startGame(model.getClient().getRoomID());
-            controller.changeScreen(new PlacementScreen(controller, game));
-        }
+    public CreditButtonListener getCreditsButtonListener() {
+        return new CreditButtonListener();
     }
 
-
+    public ExitButtonListener getExitButtonListener() {
+        return new ExitButtonListener();
+    }
 
     private class JoinButtonListener extends ChangeListener{
 
@@ -155,6 +139,43 @@ public class MainMenuScreen extends AbstractScreen {
         }
     }
 
+    private class CreditButtonListener extends ChangeListener {
+
+        @Override
+        public void changed(ChangeEvent event, Actor actor) {
+            jumpToCredits();
+        }
+
+        public void jumpToCredits() {
+            // TODO: Jump to credit screen
+        }
+    }
+
+    private class OptionsButtonListener extends ChangeListener {
+
+        @Override
+        public void changed(ChangeEvent event, Actor actor) {
+            jumpToOptions();
+        }
+
+        public void jumpToOptions() {
+            // TODO: Jump to options screen
+        }
+    }
+
+    private class ExitButtonListener extends ChangeListener {
+
+        @Override
+        public void changed(ChangeEvent event, Actor actor) {
+            exitApplication();
+        }
+
+        public void exitApplication() {
+            model.getClient().disconnect();
+            System.exit(0);
+        }
+    }
+
     private class HostButtonListener extends ChangeListener{
 
         @Override
@@ -163,6 +184,7 @@ public class MainMenuScreen extends AbstractScreen {
 
         }
 
+        //TODO REMOVE SINCE IT WONT BE RUN ANY MORE, DUE TO NEW MENU SYSTEM
         /**
          * Method for hosting a game.
          */
@@ -195,8 +217,8 @@ public class MainMenuScreen extends AbstractScreen {
                         lastRoomID = model.getClient().getRoomID();
 
                         // Disables join and host button
-                        ((MainMenuRenderer)renderer).getJoinBtn().removeListener(((MainMenuRenderer)renderer).getJoinBtn().getListeners().first());
-                        ((MainMenuRenderer)renderer).getHostBtn().removeListener(((MainMenuRenderer)renderer).getHostBtn().getListeners().first());
+                        ((MainMenuRenderer)renderer).getMultiPlayerBtn().removeListener(((MainMenuRenderer)renderer).getMultiPlayerBtn().getListeners().first());
+                        //((MainMenuRenderer)renderer).getCreditsBtn().removeListener(((MainMenuRenderer)renderer).getCreditsBtn().getListeners().first());
                     }
 
                 }

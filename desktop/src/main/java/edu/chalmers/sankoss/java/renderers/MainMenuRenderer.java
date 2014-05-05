@@ -30,10 +30,10 @@ public class MainMenuRenderer extends Renderer{
     private AbstractScreen screen;
 
     // Controllers
-    private TextButton joinBtn;
-    private TextButton hostBtn;
+    private TextButton multiPlayerBtn;
     private TextButton optionBtn;
-    private TextButton helpBtn;
+    private TextButton creditsBtn;
+    private TextButton exitBtn;
     private TextButton startGameBtn;
     private Label battleLabel;
     private Label statusLabel;
@@ -50,12 +50,12 @@ public class MainMenuRenderer extends Renderer{
         super(currentModel);
     }
 
-    public TextButton getJoinBtn() {
-        return joinBtn;
+    public TextButton getMultiPlayerBtn() {
+        return multiPlayerBtn;
     }
 
-    public TextButton getHostBtn() {
-        return hostBtn;
+    public TextButton getCreditsBtn() {
+        return creditsBtn;
     }
 
     @Override
@@ -63,10 +63,10 @@ public class MainMenuRenderer extends Renderer{
 
         // Centers the controllers based on new window size
         float x = (width - WIDTH_OF_BUTTON)/2;
-        joinBtn.setPosition(x, height/2 + 120);
-        hostBtn.setPosition(x, height/2);
-        optionBtn.setPosition(x, height/2 - 120);
-        helpBtn.setPosition(x, height/2 - 240);
+        multiPlayerBtn.setPosition(x, height/2 + 120);
+        optionBtn.setPosition(x, height/2);
+        creditsBtn.setPosition(x, height/2 - 120);
+        exitBtn.setPosition(x, height/2 - 240);
 
         battleLabel.setX((width - battleLabel.getWidth()) / 2);
         battleLabel.setY(height/2 + 240);
@@ -87,16 +87,6 @@ public class MainMenuRenderer extends Renderer{
         Gdx.gl.glClearColor(0.09f, 0.28f, 0.2f, 1);
     }
 
-    public void createStartButton(){
-        startGameBtn = new TextButton("Start Game", btnStyle);
-        startGameBtn.setWidth(175);
-        startGameBtn.setHeight(50);
-        startGameBtn.setPosition(Gdx.graphics.getWidth() - startGameBtn.getWidth(), 0);
-
-        startGameBtn.addListener(((MainMenuScreen)screen).getStartButtonListener());
-
-        actorPanel.addActor(startGameBtn);
-    }
 
     public void drawControllers(AbstractScreen screen) {
         skin = new Skin();
@@ -114,12 +104,12 @@ public class MainMenuRenderer extends Renderer{
         labelStyle.font = skin.getFont("default");
 
         // Makes buttons and labels with default style of button
-        joinBtn = new TextButton("Join Game", btnStyle);
-        hostBtn = new TextButton("Host Game", btnStyle);
+        multiPlayerBtn = new TextButton("Multiplayer", btnStyle);
         optionBtn = new TextButton("Options", btnStyle);
-        helpBtn = new TextButton("Help", btnStyle);
+        creditsBtn = new TextButton("Credits", btnStyle);
+        exitBtn = new TextButton("Exit", btnStyle);
         battleLabel = new Label("Battleships", labelStyle);
-        statusLabel = new Label("Join or host game room..", labelStyle);
+        statusLabel = new Label("wow, such battle.. Many ship!", labelStyle);
 
         battleLabel.setX(325);
         battleLabel.setY(550);
@@ -128,10 +118,10 @@ public class MainMenuRenderer extends Renderer{
 
 
         float x = (800 - WIDTH_OF_BUTTON)/2;
-        joinBtn.setPosition(x, 600/2 + 120);
-        hostBtn.setPosition(x, 600/2);
-        optionBtn.setPosition(x, 600/2 - 120);
-        helpBtn.setPosition(x, 600/2 - 240);
+        multiPlayerBtn.setPosition(x, 600/2 + 120);
+        optionBtn.setPosition(x, height/2);
+        creditsBtn.setPosition(x, height/2 - 120);
+        exitBtn.setPosition(x, 600/2 - 240);
 
         statusLabel.addAction(Actions.forever(
                 Actions.sequence(
@@ -141,16 +131,17 @@ public class MainMenuRenderer extends Renderer{
         ));
 
         // Adds actors to table
-        actorPanel.addActor(joinBtn);
-        actorPanel.addActor(hostBtn);
+        actorPanel.addActor(multiPlayerBtn);
+        actorPanel.addActor(creditsBtn);
         actorPanel.addActor(optionBtn);
-        actorPanel.addActor(helpBtn);
+        actorPanel.addActor(exitBtn);
         actorPanel.addActor(battleLabel);
         actorPanel.addActor(statusLabel);
 
-        joinBtn.addListener(((MainMenuScreen)screen).getJoinButtonListener());
-        hostBtn.addListener(((MainMenuScreen)screen).getHostButtonListener());
-        helpBtn.addListener(((MainMenuScreen)screen).getHelpButtonListener());
+        multiPlayerBtn.addListener(((MainMenuScreen)screen).getJoinButtonListener());
+        optionBtn.addListener(((MainMenuScreen)screen).getOptionsButtonListener());
+        creditsBtn.addListener(((MainMenuScreen)screen).getCreditsButtonListener());
+        exitBtn.addListener(((MainMenuScreen)screen).getExitButtonListener());
 
     }
 
@@ -187,9 +178,5 @@ public class MainMenuRenderer extends Renderer{
         statusLabel.setText(str);
 
     }
-
-    /*public WidgetGroup getActorPanel() {
-        return actorPanel;
-    }*/
 
 }

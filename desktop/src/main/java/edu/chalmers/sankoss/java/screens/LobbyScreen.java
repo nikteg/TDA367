@@ -152,7 +152,7 @@ public class LobbyScreen extends AbstractScreen {
         public void joinGame() {
             String buttonText = "" + ((LobbyRenderer)renderer).getJoinBtn().getText();
 
-            if(buttonText.equals("Join")) {
+            if(buttonText.equals("Join") && gameRooms.size() > 0) {
 
                 // Retrives selected name and matches with room
                 String roomName = ((LobbyRenderer)renderer).getRoomList().getSelection();
