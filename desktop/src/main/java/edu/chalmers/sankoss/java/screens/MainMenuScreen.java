@@ -129,13 +129,7 @@ public class MainMenuScreen extends AbstractScreen {
 
         @Override
         public void changed(ChangeEvent event, Actor actor) {
-
             jumpToLobby();
-        }
-
-
-        public void jumpToLobby() {
-            controller.changeScreen(new LobbyScreen(controller, game));
         }
     }
 
@@ -145,10 +139,6 @@ public class MainMenuScreen extends AbstractScreen {
         public void changed(ChangeEvent event, Actor actor) {
             jumpToCredits();
         }
-
-        public void jumpToCredits() {
-            // TODO: Jump to credit screen
-        }
     }
 
     private class OptionsButtonListener extends ChangeListener {
@@ -156,10 +146,6 @@ public class MainMenuScreen extends AbstractScreen {
         @Override
         public void changed(ChangeEvent event, Actor actor) {
             jumpToOptions();
-        }
-
-        public void jumpToOptions() {
-            // TODO: Jump to options screen
         }
     }
 
@@ -170,10 +156,6 @@ public class MainMenuScreen extends AbstractScreen {
             exitApplication();
         }
 
-        public void exitApplication() {
-            model.getClient().disconnect();
-            System.exit(0);
-        }
     }
 
     private class HostButtonListener extends ChangeListener{
@@ -183,53 +165,6 @@ public class MainMenuScreen extends AbstractScreen {
             startHosting();
 
         }
-
-        //TODO REMOVE SINCE IT WONT BE RUN ANY MORE, DUE TO NEW MENU SYSTEM
-        /**
-         * Method for hosting a game.
-         */
-        public void startHosting() {
-            model.getClient().fetchRooms();
-
-            Gdx.input.getTextInput(new Input.TextInputListener() {
-
-                // Gets user input
-                @Override
-                public void input(String roomName) {
-                    boolean same = false;
-
-                    for(int i = 0; i < rooms.length; i++) {
-                        if(((Room)rooms[i]).getName().equals(roomName)) {
-                            same = true;
-                        }
-                    }
-
-                    if(same) {
-                        //TODO: Display better error msg
-                        System.out.println("ERROR: Room already exists!");
-                    } else {
-                        ((MainMenuRenderer)renderer).setStatusLabel("Waiting for opponent to join " + roomName + "..");
-                        model.getClient().createRoom(roomName, ""); //Roomname and password
-
-
-                        if(lastRoomID != null) model.getClient().removeRoom(lastRoomID);
-
-                        lastRoomID = model.getClient().getRoomID();
-
-                        // Disables join and host button
-                        ((MainMenuRenderer)renderer).getMultiPlayerBtn().removeListener(((MainMenuRenderer)renderer).getMultiPlayerBtn().getListeners().first());
-                        //((MainMenuRenderer)renderer).getCreditsBtn().removeListener(((MainMenuRenderer)renderer).getCreditsBtn().getListeners().first());
-                    }
-
-                }
-
-                @Override
-                public void canceled() {
-                    // nothing..
-                }
-            }, "Enter room name:", "");
-        }
-
     }
 
     private class HelpButtonListener extends ChangeListener{
@@ -237,8 +172,70 @@ public class MainMenuScreen extends AbstractScreen {
         @Override
         public void changed(ChangeEvent event, Actor actor) {
 
-            // controller.changeScreen(new PlacementScreen(controller, game));
 
         }
+    }
+
+    public void exitApplication() {
+        model.getClient().disconnect();
+        System.exit(0);
+    }
+
+    //TODO REMOVE SINCE IT WONT BE RUN ANY MORE, DUE TO NEW MENU SYSTEM
+    /**
+     * Method for hosting a game.
+     */
+    public void startHosting() {
+        model.getClient().fetchRooms();
+
+        Gdx.input.getTextInput(new Input.TextInputListener() {
+
+            // Gets user input
+            @Override
+            public void input(String roomName) {
+                boolean same = false;
+
+                for(int i = 0; i < rooms.length; i++) {
+                    if(((Room)rooms[i]).getName().equals(roomName)) {
+                        same = true;
+                    }
+                }
+
+                if(same) {
+                    //TODO: Display better error msg
+                    System.out.println("ERROR: Room already exists!");
+                } else {
+                    ((MainMenuRenderer)renderer).setStatusLabel("Waiting for opponent to join " + roomName + "..");
+                    model.getClient().createRoom(roomName, ""); //Roomname and password
+
+
+                    if(lastRoomID != null) model.getClient().removeRoom(lastRoomID);
+
+                    lastRoomID = model.getClient().getRoomID();
+
+                    // Disables join and host button
+                    ((MainMenuRenderer)renderer).getMultiPlayerBtn().removeListener(((MainMenuRenderer)renderer).getMultiPlayerBtn().getListeners().first());
+                    //((MainMenuRenderer)renderer).getCreditsBtn().removeListener(((MainMenuRenderer)renderer).getCreditsBtn().getListeners().first());
+                }
+
+            }
+
+            @Override
+            public void canceled() {
+                // nothing..
+            }
+        }, "Enter room name:", "");
+    }
+
+    public void jumpToOptions() {
+        // TODO: Jump to options screen
+    }
+
+    public void jumpToCredits() {
+        // TODO: Jump to credit screen
+    }
+
+    public void jumpToLobby() {
+        controller.changeScreen(new LobbyScreen(controller, game));
     }
 }

@@ -198,13 +198,6 @@ public class PlacementScreen extends AbstractScreen {
         public void changed(ChangeEvent event, Actor actor) {
             rotateShips();
         }
-
-        /**
-         * Method for rotating ships.
-         */
-        public void rotateShips() {
-            ((PlacementRenderer)renderer).rotateShips();
-        }
     }
 
     public class Ship2Listener extends  ChangeListener {
@@ -212,24 +205,6 @@ public class PlacementScreen extends AbstractScreen {
         @Override
         public void changed(ChangeEvent event, Actor actor) {
             followCursor(actor);
-        }
-
-        /**
-         * Method for ship following the cursor.
-         * @param actor ship that will follow.
-         */
-        public void followCursor(Actor actor) {
-            // If there's a ship following the cursor, place it where it's at
-            if(((PlacementRenderer)renderer).getFollow() != null) {
-                ((PlacementRenderer)renderer).getFollow().setX(Gdx.input.getX());
-                ((PlacementRenderer)renderer).getFollow().setY(((PlacementRenderer)renderer).getFollow().getY()-Gdx.input.getDeltaY());
-                ((PlacementRenderer)renderer).setFollow(null);
-
-            } else { // If no ship is following the cursor, let clicked ship follow cursor
-                // Type-casting safe, since only ShipButtons has this as listener
-                ((PlacementRenderer)renderer).setFollow((ShipButton) actor);
-
-            }
         }
     }
 
@@ -239,170 +214,6 @@ public class PlacementScreen extends AbstractScreen {
         public void changed(ChangeEvent event, Actor actor) {
             placeShip(actor);
         }
-
-        /**
-         * Method for placing ship on player game board.
-         * @param actor is the clicked square in grid.
-         */
-        public void placeShip(Actor actor) {
-            // Checks if a follow-button exists
-            if(((PlacementRenderer)renderer).getFollow() != null){
-
-                // Loops through grid
-                for(int i = 0; i < 10; i++) {
-                    for(int j = 0; j < 10; j++){
-
-                        // gets array of 1 button from every table in grid (1 table per square in grid)
-                        SnapshotArray<Actor> children = ((PlacementRenderer)renderer).getGrid()[(i*10)+j].getChildren();
-                        Actor[] childrenArray = children.toArray();
-
-                        if(childrenArray.length > 0){
-                            // Matches button with clicked one
-                            if(childrenArray[0].equals(actor)) {
-
-                                // Checks if it's available for ships
-                                boolean free = true;
-
-                                // If ship is horizontal
-                                if(((PlacementRenderer) renderer).getFollow().getDirection() == ShipButton.Direction.HORIZONTAL
-                                        && j + (((PlacementRenderer) renderer).getFollow().getLength()-1) <= 9) {
-
-
-                                    // Runs through array in model to check if spots are free
-                                    for(int n = 0; n < ((PlacementRenderer)renderer).getFollow().getLength(); n++) {
-                                        if(model.getShipArray()[((i)*10)+j+n] == 1) {
-                                            free = false;
-                                        }
-                                    }
-
-                                    // If spots are free
-                                    if(free){
-
-                                        // Sets start and end coordinate
-                                        Coordinate start = new Coordinate((i+1), (j+1));
-                                        Coordinate end = new Coordinate((i+1), (j +((PlacementRenderer)renderer).getFollow().getLength()));
-
-                                        // Adds ships with start and end coordinate to player's fleet
-                                        try {
-                                            model.getClient().getPlayer().getFleet().add(new Ship(start, end));
-                                        } catch (IllegalShipCoordinatesException e) {
-                                            System.out.println("ERROR: Cannot place ship at give coordinates!");
-                                            e.getStackTrace();
-                                        }
-
-                                        // Path to ship texture
-                                        String path = "desktop/src/main/java/assets/textures/HORIZONTAL_";
-
-                                        // Adds ship to grid visually
-                                        System.out.println("Added ship at: ");
-                                        for(int n = 0; n < ((PlacementRenderer)renderer).getFollow().getLength(); n++) {
-                                            children = ((PlacementRenderer)renderer).getGrid()[((i)*10)+j+n].getChildren();
-
-                                            if(((PlacementRenderer)renderer).getFollow().getLength() == 2) {
-                                                path = path + "ship_small_body_" + (n+1) + ".png";
-
-                                            } else if(((PlacementRenderer)renderer).getFollow().getLength() == 3) {
-                                                path = path + "ship_medium_body_" + (n+1) + ".png";
-
-                                            } else if(((PlacementRenderer)renderer).getFollow().getLength() == 4) {
-                                                path = path + "ship_large_body_" + (n+1) + ".png";
-
-                                            } else if(((PlacementRenderer)renderer).getFollow().getLength() == 5) {
-                                                path = path + "ship_huge_body_" + (n+1) + ".png";
-                                            }
-
-                                            childrenArray = children.toArray();
-                                            //((TextButton)childrenArray[0]).setText("XX");
-                                            ((ImageButton)childrenArray[0]).setStyle(new ImageButton.ImageButtonStyle(null, null, null, new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal(path)))), null, null));
-                                            System.out.println(i + ", " + (j+n));
-                                            path = "desktop/src/main/java/assets/textures/HORIZONTAL_";
-
-                                            // Marks the select coordinate as occupied
-                                            model.addToShipArray(i, (j+n));
-
-                                            // Adds to players fleet
-                                            model.getClient().getPlayer().addUsedCoordiante(new Coordinate((i + 1), (j + n + 1)));
-                                        }
-
-                                        // Removes placed ship from ship panel
-                                        ((PlacementRenderer)renderer).getTopTable().removeActor(((PlacementRenderer)renderer).getFollow());
-                                        ((PlacementRenderer)renderer).setFollow(null);
-                                    }
-
-                                    // If ship is vertical
-                                } else if(((PlacementRenderer) renderer).getFollow().getDirection() == ShipButton.Direction.VERTICAL
-                                        && i + (((PlacementRenderer) renderer).getFollow().getLength()-1) <= 9) {
-
-                                    // Runs through array in model to check if spots are free
-                                    for(int n = 0; n < ((PlacementRenderer)renderer).getFollow().getLength(); n++) {
-                                        if(model.getShipArray()[((i + n)*10)+j] == 1) {
-                                            free = false;
-                                        }
-                                    }
-
-                                    // If spots are free
-                                    if(free){
-
-                                        // Sets start and end coordinate
-                                        Coordinate start = new Coordinate((i+1), (j+1));
-                                        Coordinate end = new Coordinate((i+(((PlacementRenderer)renderer).getFollow().getLength())), (j +1));
-
-                                        // Adds ships with start and end coordinate to player's fleet
-                                        try {
-                                            model.getClient().getPlayer().getFleet().add(new Ship(start, end));
-                                        } catch (IllegalShipCoordinatesException e) {
-                                            System.out.println("ERROR: Cannot place ship at give coordinates!");
-                                            e.getStackTrace();
-                                        }
-
-                                        String path = "desktop/src/main/java/assets/textures/VERTICAL_";
-
-                                        // Adds ship to grid visually
-                                        System.out.println("Added ship at: ");
-                                        for(int n = 0; n < ((PlacementRenderer)renderer).getFollow().getLength(); n++) {
-                                            children = ((PlacementRenderer)renderer).getGrid()[((i + n)*10)+j].getChildren();
-
-                                            if(((PlacementRenderer)renderer).getFollow().getLength() == 2) {
-                                                path = path + "ship_small_body_" + (n+1) + ".png";
-
-                                            } else if(((PlacementRenderer)renderer).getFollow().getLength() == 3) {
-                                                path = path + "ship_medium_body_" + (n+1) + ".png";
-
-                                            } else if(((PlacementRenderer)renderer).getFollow().getLength() == 4) {
-                                                path = path + "ship_large_body_" + (n+1) + ".png";
-
-                                            } else if(((PlacementRenderer)renderer).getFollow().getLength() == 5) {
-                                                path = path + "ship_huge_body_" + (n+1) + ".png";
-                                            }
-
-                                            childrenArray = children.toArray();
-                                            //((TextButton)childrenArray[0]).setText("XX");
-                                            ((ImageButton)childrenArray[0]).setStyle(new ImageButton.ImageButtonStyle(null, null, null, new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal(path)))), null, null));
-                                            System.out.println((i+n) + ", " + j);
-                                            path = "desktop/src/main/java/assets/textures/VERTICAL_";
-
-                                            // Marks the select coordinate as occupied
-                                            model.addToShipArray((i+n), j);
-
-                                            // Adds to players fleet
-                                            model.getClient().getPlayer().addUsedCoordiante(new Coordinate((i + n + 1), (j + 1)));
-                                        }
-
-                                        // Removes placed ship from ship panel
-                                        ((PlacementRenderer)renderer).getTopTable().removeActor(((PlacementRenderer)renderer).getFollow());
-                                        ((PlacementRenderer)renderer).setFollow(null);
-                                    }
-
-
-                                }
-
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
     }
 
     private class ReadyBtnListener extends ChangeListener {
@@ -410,85 +221,285 @@ public class PlacementScreen extends AbstractScreen {
         @Override
         public void changed(ChangeEvent event, Actor actor) {
             readyClicked();
-
         }
-
-        public void enterGame() {
-            // This means your opponent is done and you can enter game directly
-            controller.changeScreen(new GameScreen(controller, game));
-        }
-
-        public void setReady() {
-            System.out.println("CLIENT: You are ready with " + model.getNumberOfShips() + " ships on the board!");
-
-            // Switches state of ready button
-            ((Placement)model).switchReadyBtnState();
-            ((PlacementRenderer)renderer).setReadyBtn(((Placement) model).getReadyBtnState());
-        }
-
-        /**
-         * Determines ready or not, and tells server if so.
-         */
-        public void determineReady() {
-            // Tells server that you are ready if necessary
-            if(!model.getClient().getReady()) {
-                model.getClient().playerReady(model.getClient().getGameID(), model.getClient().getPlayer().getFleet());
-                model.getClient().setReady(true);
-            }
-        }
-
-        public void setReadyOrEnter() {
-            // You're done placing you're ships but opponent isn't done
-            if(((Placement)model).getReadyBtnState() == Placement.ReadyBtnState.READY) {
-                setReady();
-
-            } else if(((Placement)model).getReadyBtnState() == Placement.ReadyBtnState.ENTER){
-                enterGame();
-
-            }
-        }
-
-        public void readyClicked() {
-
-            // If all your boats are on the board
-            if(model.getClient().getPlayer().getFleet().size() == model.getNumberOfShips()){
-
-                determineReady();
-                setReadyOrEnter();
-
-            } else {
-                // If you haven't placed all your ships
-                System.out.println("Cannot enter game until all " + model.getNumberOfShips() + " ships are placed on the board!");
-            }
-        }
-
     }
 
     private class NextBtnListener extends ChangeListener {
+
         @Override
         public void changed(ChangeEvent event, Actor actor) {
-
-            //TODO: Switch flag
-            ((PlacementRenderer) renderer).getPlayerTable().removeActor(((PlacementRenderer) renderer).getFlag());
-            ((PlacementRenderer) renderer).getPlayerTable().removeActor(((PlacementRenderer) renderer).getLandLabel());
-            ((PlacementRenderer) renderer).switchNationality(model.getClient().getPlayer(), true);
-
-            ((PlacementRenderer) renderer).setNationality(model.getClient().getPlayer().getNationality());
-            ((PlacementRenderer) renderer).setFlag();
+            nextFlag();
         }
     }
 
+
     private class BackBtnListener extends ChangeListener {
+
         @Override
         public void changed(ChangeEvent event, Actor actor) {
-
-            //TODO: Switch flag
-            ((PlacementRenderer) renderer).getPlayerTable().removeActor(((PlacementRenderer) renderer).getFlag());
-            ((PlacementRenderer) renderer).getPlayerTable().removeActor(((PlacementRenderer) renderer).getLandLabel());
-            ((PlacementRenderer) renderer).switchNationality(model.getClient().getPlayer(), false);
-
-            ((PlacementRenderer) renderer).setNationality(model.getClient().getPlayer().getNationality());
-            ((PlacementRenderer) renderer).setFlag();
+            previousFlag();
         }
+    }
+
+    /**
+     * Method for switching to next nationality. (flag and country name)
+     */
+    public void nextFlag() {
+        ((PlacementRenderer) renderer).getPlayerTable().removeActor(((PlacementRenderer) renderer).getFlag());
+        ((PlacementRenderer) renderer).getPlayerTable().removeActor(((PlacementRenderer) renderer).getLandLabel());
+        ((PlacementRenderer) renderer).switchNationality(model.getClient().getPlayer(), true);
+
+        ((PlacementRenderer) renderer).setNationality(model.getClient().getPlayer().getNationality());
+        ((PlacementRenderer) renderer).setFlag();
+    }
+
+    /**
+     * Method for switching to previous nationality. (flag and country name)
+     */
+    public void previousFlag() {
+        ((PlacementRenderer) renderer).getPlayerTable().removeActor(((PlacementRenderer) renderer).getFlag());
+        ((PlacementRenderer) renderer).getPlayerTable().removeActor(((PlacementRenderer) renderer).getLandLabel());
+        ((PlacementRenderer) renderer).switchNationality(model.getClient().getPlayer(), false);
+
+        ((PlacementRenderer) renderer).setNationality(model.getClient().getPlayer().getNationality());
+        ((PlacementRenderer) renderer).setFlag();
+    }
+
+    public void enterGame() {
+        // This means your opponent is done and you can enter game directly
+        controller.changeScreen(new GameScreen(controller, game));
+    }
+
+    public void setReady() {
+        System.out.println("CLIENT: You are ready with " + model.getNumberOfShips() + " ships on the board!");
+
+        // Switches state of ready button
+        ((Placement)model).switchReadyBtnState();
+        ((PlacementRenderer)renderer).setReadyBtn(((Placement) model).getReadyBtnState());
+    }
+
+    /**
+     * Determines ready or not, and tells server if so.
+     */
+    public void determineReady() {
+        // Tells server that you are ready if necessary
+        if(!model.getClient().getReady()) {
+            model.getClient().playerReady(model.getClient().getGameID(), model.getClient().getPlayer().getFleet());
+            model.getClient().setReady(true);
+        }
+    }
+
+    public void setReadyOrEnter() {
+        // You're done placing you're ships but opponent isn't done
+        if(((Placement)model).getReadyBtnState() == Placement.ReadyBtnState.READY) {
+            setReady();
+
+        } else if(((Placement)model).getReadyBtnState() == Placement.ReadyBtnState.ENTER){
+            enterGame();
+
+        }
+    }
+
+    public void readyClicked() {
+
+        // If all your boats are on the board
+        if(model.getClient().getPlayer().getFleet().size() == model.getNumberOfShips()){
+
+            determineReady();
+            setReadyOrEnter();
+
+        } else {
+            // If you haven't placed all your ships
+            System.out.println("Cannot enter game until all " + model.getNumberOfShips() + " ships are placed on the board!");
+        }
+    }
+
+    // TODO: Refactor this method ASAP
+    /**
+     * Method for placing ship on player game board.
+     * @param actor is the clicked square in grid.
+     */
+    public void placeShip(Actor actor) {
+        // Checks if a follow-button exists
+        if(((PlacementRenderer)renderer).getFollow() != null){
+
+            // Loops through grid
+            for(int i = 0; i < 10; i++) {
+                for(int j = 0; j < 10; j++){
+
+                    // gets array of 1 button from every table in grid (1 table per square in grid)
+                    SnapshotArray<Actor> children = ((PlacementRenderer)renderer).getGrid()[(i*10)+j].getChildren();
+                    Actor[] childrenArray = children.toArray();
+
+                    if(childrenArray.length > 0){
+                        // Matches button with clicked one
+                        if(childrenArray[0].equals(actor)) {
+
+                            // Checks if it's available for ships
+                            boolean free = true;
+
+                            // If ship is horizontal
+                            if(((PlacementRenderer) renderer).getFollow().getDirection() == ShipButton.Direction.HORIZONTAL
+                                    && j + (((PlacementRenderer) renderer).getFollow().getLength()-1) <= 9) {
+
+
+                                // Runs through array in model to check if spots are free
+                                for(int n = 0; n < ((PlacementRenderer)renderer).getFollow().getLength(); n++) {
+                                    if(model.getShipArray()[((i)*10)+j+n] == 1) {
+                                        free = false;
+                                    }
+                                }
+
+                                // If spots are free
+                                if(free){
+
+                                    // Sets start and end coordinate
+                                    Coordinate start = new Coordinate((i+1), (j+1));
+                                    Coordinate end = new Coordinate((i+1), (j +((PlacementRenderer)renderer).getFollow().getLength()));
+
+                                    // Adds ships with start and end coordinate to player's fleet
+                                    try {
+                                        model.getClient().getPlayer().getFleet().add(new Ship(start, end));
+                                    } catch (IllegalShipCoordinatesException e) {
+                                        System.out.println("ERROR: Cannot place ship at give coordinates!");
+                                        e.getStackTrace();
+                                    }
+
+                                    // Path to ship texture
+                                    String path = "desktop/src/main/java/assets/textures/HORIZONTAL_";
+
+                                    // Adds ship to grid visually
+                                    System.out.println("Added ship at: ");
+                                    for(int n = 0; n < ((PlacementRenderer)renderer).getFollow().getLength(); n++) {
+                                        children = ((PlacementRenderer)renderer).getGrid()[((i)*10)+j+n].getChildren();
+
+                                        if(((PlacementRenderer)renderer).getFollow().getLength() == 2) {
+                                            path = path + "ship_small_body_" + (n+1) + ".png";
+
+                                        } else if(((PlacementRenderer)renderer).getFollow().getLength() == 3) {
+                                            path = path + "ship_medium_body_" + (n+1) + ".png";
+
+                                        } else if(((PlacementRenderer)renderer).getFollow().getLength() == 4) {
+                                            path = path + "ship_large_body_" + (n+1) + ".png";
+
+                                        } else if(((PlacementRenderer)renderer).getFollow().getLength() == 5) {
+                                            path = path + "ship_huge_body_" + (n+1) + ".png";
+                                        }
+
+                                        childrenArray = children.toArray();
+                                        //((TextButton)childrenArray[0]).setText("XX");
+                                        ((ImageButton)childrenArray[0]).setStyle(new ImageButton.ImageButtonStyle(null, null, null, new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal(path)))), null, null));
+                                        System.out.println(i + ", " + (j+n));
+                                        path = "desktop/src/main/java/assets/textures/HORIZONTAL_";
+
+                                        // Marks the select coordinate as occupied
+                                        model.addToShipArray(i, (j+n));
+
+                                        // Adds to players fleet
+                                        model.getClient().getPlayer().addUsedCoordiante(new Coordinate((i + 1), (j + n + 1)));
+                                    }
+
+                                    // Removes placed ship from ship panel
+                                    ((PlacementRenderer)renderer).getTopTable().removeActor(((PlacementRenderer)renderer).getFollow());
+                                    ((PlacementRenderer)renderer).setFollow(null);
+                                }
+
+                                // If ship is vertical
+                            } else if(((PlacementRenderer) renderer).getFollow().getDirection() == ShipButton.Direction.VERTICAL
+                                    && i + (((PlacementRenderer) renderer).getFollow().getLength()-1) <= 9) {
+
+                                // Runs through array in model to check if spots are free
+                                for(int n = 0; n < ((PlacementRenderer)renderer).getFollow().getLength(); n++) {
+                                    if(model.getShipArray()[((i + n)*10)+j] == 1) {
+                                        free = false;
+                                    }
+                                }
+
+                                // If spots are free
+                                if(free){
+
+                                    // Sets start and end coordinate
+                                    Coordinate start = new Coordinate((i+1), (j+1));
+                                    Coordinate end = new Coordinate((i+(((PlacementRenderer)renderer).getFollow().getLength())), (j +1));
+
+                                    // Adds ships with start and end coordinate to player's fleet
+                                    try {
+                                        model.getClient().getPlayer().getFleet().add(new Ship(start, end));
+                                    } catch (IllegalShipCoordinatesException e) {
+                                        System.out.println("ERROR: Cannot place ship at give coordinates!");
+                                        e.getStackTrace();
+                                    }
+
+                                    String path = "desktop/src/main/java/assets/textures/VERTICAL_";
+
+                                    // Adds ship to grid visually
+                                    System.out.println("Added ship at: ");
+                                    for(int n = 0; n < ((PlacementRenderer)renderer).getFollow().getLength(); n++) {
+                                        children = ((PlacementRenderer)renderer).getGrid()[((i + n)*10)+j].getChildren();
+
+                                        if(((PlacementRenderer)renderer).getFollow().getLength() == 2) {
+                                            path = path + "ship_small_body_" + (n+1) + ".png";
+
+                                        } else if(((PlacementRenderer)renderer).getFollow().getLength() == 3) {
+                                            path = path + "ship_medium_body_" + (n+1) + ".png";
+
+                                        } else if(((PlacementRenderer)renderer).getFollow().getLength() == 4) {
+                                            path = path + "ship_large_body_" + (n+1) + ".png";
+
+                                        } else if(((PlacementRenderer)renderer).getFollow().getLength() == 5) {
+                                            path = path + "ship_huge_body_" + (n+1) + ".png";
+                                        }
+
+                                        childrenArray = children.toArray();
+                                        //((TextButton)childrenArray[0]).setText("XX");
+                                        ((ImageButton)childrenArray[0]).setStyle(new ImageButton.ImageButtonStyle(null, null, null, new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal(path)))), null, null));
+                                        System.out.println((i+n) + ", " + j);
+                                        path = "desktop/src/main/java/assets/textures/VERTICAL_";
+
+                                        // Marks the select coordinate as occupied
+                                        model.addToShipArray((i+n), j);
+
+                                        // Adds to players fleet
+                                        model.getClient().getPlayer().addUsedCoordiante(new Coordinate((i + n + 1), (j + 1)));
+                                    }
+
+                                    // Removes placed ship from ship panel
+                                    ((PlacementRenderer)renderer).getTopTable().removeActor(((PlacementRenderer)renderer).getFollow());
+                                    ((PlacementRenderer)renderer).setFollow(null);
+                                }
+
+
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Method for ship following the cursor.
+     * @param actor ship that will follow.
+     */
+    public void followCursor(Actor actor) {
+        // If there's a ship following the cursor, place it where it's at
+        if(((PlacementRenderer)renderer).getFollow() != null) {
+            ((PlacementRenderer)renderer).getFollow().setX(Gdx.input.getX());
+            ((PlacementRenderer)renderer).getFollow().setY(((PlacementRenderer)renderer).getFollow().getY()-Gdx.input.getDeltaY());
+            ((PlacementRenderer)renderer).setFollow(null);
+
+        } else { // If no ship is following the cursor, let clicked ship follow cursor
+            // Type-casting safe, since only ShipButtons has this as listener
+            ((PlacementRenderer)renderer).setFollow((ShipButton) actor);
+
+        }
+    }
+
+    /**
+     * Method for rotating ships.
+     */
+    public void rotateShips() {
+        ((PlacementRenderer)renderer).rotateShips();
     }
 }

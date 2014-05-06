@@ -145,28 +145,6 @@ public class LobbyScreen extends AbstractScreen {
         public void changed(ChangeEvent event, Actor actor) {
             joinGame();
         }
-
-        /**
-         * Method for joining a game.
-         */
-        public void joinGame() {
-            String buttonText = "" + ((LobbyRenderer)renderer).getJoinBtn().getText();
-
-            if(buttonText.equals("Join") && gameRooms.size() > 0) {
-
-                // Retrives selected name and matches with room
-                String roomName = ((LobbyRenderer)renderer).getRoomList().getSelection();
-
-                Room roomToJoin = model.getRoomByName(roomName, gameRooms);
-                model.getClient().joinRoom(roomToJoin.getID());
-
-                ((LobbyRenderer)renderer).getJoinBtn().setText("Joined");
-
-
-            } else if(buttonText.equals("Enter Game") && model.getClient().getGameID() != null) {
-                controller.changeScreen(new PlacementScreen(controller, game));
-            }
-        }
     }
 
     private class CancelButtonListener extends ChangeListener{
@@ -188,28 +166,6 @@ public class LobbyScreen extends AbstractScreen {
         public void changed(ChangeEvent event, Actor actor) {
             changeName();
         }
-
-        /**
-         * Method for changing player's name.
-         */
-        public void changeName() {
-            Gdx.input.getTextInput(new Input.TextInputListener() {
-
-                // Gets user input
-                @Override
-                public void input(String name) {
-
-                    model.getClient().getPlayer().setName(name);
-                    ((LobbyRenderer)renderer).setNameLabel(name);
-
-                }
-
-                @Override
-                public void canceled() {
-                    // nothing..
-                }
-            }, "Enter new name:", "");
-        }
     }
 
     private class HostButtonListener extends ChangeListener{
@@ -219,19 +175,61 @@ public class LobbyScreen extends AbstractScreen {
             startHosting();
             jumpToWaiting();
         }
+    }
 
-        /**
-         * Method for hosting a room.
-         */
-        public void startHosting() {
-            model.getClient().createRoom(model.getClient().getPlayer().getName() + "'s Room", ""); //Roomname and password
-
-        }
-
-        public void jumpToWaiting() {
-            controller.changeScreen(new WaitingScreen(controller, game));
-        }
+    /**
+     * Method for hosting a room.
+     */
+    public void startHosting() {
+        model.getClient().createRoom(model.getClient().getPlayer().getName() + "'s Room", ""); //Roomname and password
 
     }
 
+    public void jumpToWaiting() {
+        controller.changeScreen(new WaitingScreen(controller, game));
+    }
+
+    /**
+     * Method for changing player's name.
+     */
+    public void changeName() {
+        Gdx.input.getTextInput(new Input.TextInputListener() {
+
+            // Gets user input
+            @Override
+            public void input(String name) {
+
+                model.getClient().getPlayer().setName(name);
+                ((LobbyRenderer)renderer).setNameLabel(name);
+
+            }
+
+            @Override
+            public void canceled() {
+                // nothing..
+            }
+        }, "Enter new name:", "");
+    }
+
+    /**
+     * Method for joining a game.
+     */
+    public void joinGame() {
+        String buttonText = "" + ((LobbyRenderer)renderer).getJoinBtn().getText();
+
+        if(buttonText.equals("Join") && gameRooms.size() > 0) {
+
+            // Retrives selected name and matches with room
+            String roomName = ((LobbyRenderer)renderer).getRoomList().getSelection();
+
+            Room roomToJoin = model.getRoomByName(roomName, gameRooms);
+            model.getClient().joinRoom(roomToJoin.getID());
+
+            ((LobbyRenderer)renderer).getJoinBtn().setText("Joined");
+
+
+        } else if(buttonText.equals("Enter Game") && model.getClient().getGameID() != null) {
+            controller.changeScreen(new PlacementScreen(controller, game));
+        }
+    }
 }

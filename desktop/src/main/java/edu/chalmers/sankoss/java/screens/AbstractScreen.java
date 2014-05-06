@@ -89,9 +89,6 @@ public abstract class AbstractScreen implements Screen, ApplicationListener {
     public abstract void hide();
 
 
-
-    // BELOW WE DEFINE METHODS FOR APPLICATIONLISTENER
-
     /**
      * Method to run upon creation of instance.
      * Configs visual controllers and sets listeners.

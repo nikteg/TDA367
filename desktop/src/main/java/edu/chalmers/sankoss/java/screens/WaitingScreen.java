@@ -80,14 +80,6 @@ public class WaitingScreen extends AbstractScreen {
             startGame();
         }
 
-        /**
-         * Method for stating a game.
-         * Calls client to start game and controller to change Screen.
-         */
-        public void startGame() {
-            model.getClient().startGame(model.getClient().getRoomID());
-            controller.changeScreen(new PlacementScreen(controller, game));
-        }
     }
 
     private class CancelButtonListener extends ChangeListener{
@@ -97,11 +89,21 @@ public class WaitingScreen extends AbstractScreen {
             jumpToLobby();
         }
 
-        public void jumpToLobby() {
-            // Removes room and backs to lobby
-            model.getClient().removeRoom(model.getClient().getRoomID());
-            controller.changeScreen(new LobbyScreen(controller, game));
-        }
+    }
+
+    /**
+     * Method for stating a game.
+     * Calls client to start game and controller to change Screen.
+     */
+    public void startGame() {
+        model.getClient().startGame(model.getClient().getRoomID());
+        controller.changeScreen(new PlacementScreen(controller, game));
+    }
+
+    public void jumpToLobby() {
+        // Removes room and backs to lobby
+        model.getClient().removeRoom(model.getClient().getRoomID());
+        controller.changeScreen(new LobbyScreen(controller, game));
     }
 
 }

@@ -158,25 +158,25 @@ public class GameScreen extends AbstractScreen {
         public void changed(ChangeEvent event, Actor actor) {
             shoot(actor);
         }
+    }
 
-        /**
-         * Method for shooting at a grid in the aim grid.
-         * @param actor grid to be shot at.
-         */
-        public void shoot(Actor actor) {
-            // Loops through grid
-            for(int i = 0; i < 10; i++) {
-                for(int j = 0; j < 10; j++){
+    /**
+     * Method for shooting at a grid in the aim grid.
+     * @param actor grid to be shot at.
+     */
+    public void shoot(Actor actor) {
+        // Loops through grid
+        for(int i = 0; i < 10; i++) {
+            for(int j = 0; j < 10; j++){
 
-                    // gets array of 1 button from every table in grid (1 table per square in grid)
-                    SnapshotArray<Actor> children = ((GameRenderer)renderer).getAimGrid()[(i*10)+j].getChildren();
-                    Actor[] childrenArray = children.toArray();
+                // gets array of 1 button from every table in grid (1 table per square in grid)
+                SnapshotArray<Actor> children = ((GameRenderer)renderer).getAimGrid()[(i*10)+j].getChildren();
+                Actor[] childrenArray = children.toArray();
 
-                    if(childrenArray.length > 0){
-                        // Matches button with clicked one
-                        if(childrenArray[0].equals(actor)) {
-                            model.getClient().fire(model.getClient().getGameID(), model.getClient().getOpponents().get(0), new Coordinate(i+1, j+1));
-                        }
+                if(childrenArray.length > 0){
+                    // Matches button with clicked one
+                    if(childrenArray[0].equals(actor)) {
+                        model.getClient().fire(model.getClient().getGameID(), model.getClient().getOpponents().get(0), new Coordinate(i+1, j+1));
                     }
                 }
             }
