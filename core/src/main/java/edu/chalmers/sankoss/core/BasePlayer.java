@@ -1,15 +1,25 @@
 package edu.chalmers.sankoss.core;
 
 /**
- * Created by nikteg on 04/05/14.
+ * @author Niklas Tegnander
+ * @modified Fredrik Thune
  */
 public class BasePlayer {
-    private Long playerID;
-    private String name;
-    private Nationality nationality;
+    private Long playerID = (long) -1;
+    private String name = "Unnamed";
+    private Nationality nationality = Nationality.USA;
 
     public BasePlayer() {
 
+    }
+
+    public BasePlayer(Long playerID) {
+        this.playerID = playerID;
+    }
+
+    public BasePlayer(Long playerID, String name) {
+        this.name = name;
+        this.playerID = playerID;
     }
 
     public BasePlayer(Long playerID, String name, Nationality nationality) {
@@ -18,7 +28,7 @@ public class BasePlayer {
         this.nationality = nationality;
     }
 
-    public Long getPlayerID() {
+    public Long getID() {
         return playerID;
     }
 
@@ -67,5 +77,17 @@ public class BasePlayer {
         public void setLandName(String landName) {
             this.landName = landName;
         }
+    }
+
+    public void setID(Long playerID) {
+        this.playerID = playerID;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setNationality(Nationality nationality) {
+        this.nationality = nationality;
     }
 }
