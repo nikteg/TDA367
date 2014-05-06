@@ -2,6 +2,9 @@ package edu.chalmers.sankoss.core;
 
 import static org.junit.Assert.*;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.junit.Test;
 
 import edu.chalmers.sankoss.core.Player.Nationality;
@@ -142,12 +145,35 @@ public class PlayerTest {
 
 	@Test
 	public void testGetFleet() {
-		fail("Not yet implemented");
+		Player player = new Player((long) 314158979, "Daniel");
+		List<Ship> fleet = new LinkedList<Ship>();
+		try {
+			fleet.add(new Ship(new Coordinate(2, 2), new Coordinate(2, 4)));
+			fleet.add(new Ship(new Coordinate(3, 2), new Coordinate(3, 3)));
+			fleet.add(new Ship(new Coordinate(4, 2), new Coordinate(4, 4)));
+			fleet.add(new Ship(new Coordinate(5, 2), new Coordinate(5, 5)));
+		} catch (Exception ignore) {}
+		
+		player.setFleet(fleet);
+		
+		assertTrue(fleet.equals(player.getFleet()));
 	}
 
 	@Test
 	public void testSetFleet() {
-		fail("Not yet implemented");
+		//Same test as testGetFleet
+		Player player = new Player((long) 314158979, "Daniel");
+		List<Ship> fleet = new LinkedList<Ship>();
+		try {
+			fleet.add(new Ship(new Coordinate(2, 2), new Coordinate(2, 4)));
+			fleet.add(new Ship(new Coordinate(3, 2), new Coordinate(3, 3)));
+			fleet.add(new Ship(new Coordinate(4, 2), new Coordinate(4, 4)));
+			fleet.add(new Ship(new Coordinate(5, 2), new Coordinate(5, 5)));
+		} catch (Exception ignore) {}
+		
+		player.setFleet(fleet);
+		
+		assertTrue(fleet.equals(player.getFleet()));
 	}
 
 	@Test
