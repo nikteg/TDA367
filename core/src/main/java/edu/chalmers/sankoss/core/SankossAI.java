@@ -1,3 +1,4 @@
+/*
 package edu.chalmers.sankoss.core;
 
 import com.esotericsoftware.kryonet.Client;
@@ -12,9 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+*/
 /**
  * @author Fredrik Thune
- */
+ *//*
+
 public class SankossAI implements Runnable {
     private Client client;
     private Player player;
@@ -47,7 +50,7 @@ public class SankossAI implements Runnable {
                     Connected msg = (Connected) object;
 
                     // Create new local player with remote ID
-                    player = new Player(msg.getPlayerID());
+                    player = new Player(msg.getID());
 
                     // Fetch remote rooms
                     client.sendTCP(new JoinRoom(roomID, "BOT-BERT")); // TODO fix name
@@ -95,7 +98,7 @@ public class SankossAI implements Runnable {
 
                     opponents.add(msg.getPlayer());
 
-                    System.out.println(String.format("AI: #%d is ready!", msg.getPlayer().getPlayerID()));
+                    System.out.println(String.format("AI: #%d is ready!", msg.getPlayer().getID()));
 
                     return;
                 }
@@ -131,3 +134,4 @@ public class SankossAI implements Runnable {
     }
 }
 
+*/
