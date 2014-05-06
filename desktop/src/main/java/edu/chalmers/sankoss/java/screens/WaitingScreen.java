@@ -29,6 +29,16 @@ public class WaitingScreen extends AbstractScreen {
         create();
     }
 
+    /**
+     * @inheritdoc
+     */
+    @Override
+    public void resize(int width, int height) {
+        super.resize(width, height);
+        renderer.resize(width, height);
+
+    }
+
     private class WaitingListener extends SankossClientListener {
 
         @Override

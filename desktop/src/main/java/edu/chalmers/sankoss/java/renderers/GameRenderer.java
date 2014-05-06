@@ -5,8 +5,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import edu.chalmers.sankoss.java.misc.ShipButton;
 import edu.chalmers.sankoss.java.models.ScreenModel;
 import edu.chalmers.sankoss.java.screens.AbstractScreen;
@@ -129,7 +131,7 @@ public class GameRenderer extends Renderer{
         middlePanel = new Table();
         middlePanel.setWidth(800);
         middlePanel.setHeight(600 - topTable.getHeight() - playerTable.getHeight());
-        middlePanel.setBackground(skin.newDrawable("tableBack2"));
+        middlePanel.setBackground(skin.newDrawable("tableBack"));
         middlePanel.setPosition(0, playerTable.getHeight());
 
 
@@ -192,11 +194,21 @@ public class GameRenderer extends Renderer{
 
                 // Colorizes every second square with a different gray based on the tableBack
                 if(n % 2 == 0) {
-                    playerGrid[(i*10)+j].setBackground(skin.newDrawable("tableBack"));
-                    aimGrid[(i*10)+j].setBackground(skin.newDrawable("tableBack3"));
+                    playerGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/LIGHT_water.png"))))));
+                    playerGrid[(i*10)+j].setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/LIGHT_water.png")))));
+                    aimGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/LIGHT_water.png"))))));
+                    aimGrid[(i*10)+j].setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/LIGHT_water.png")))));
+
+                    // playerGrid[(i*10)+j].setBackground(skin.newDrawable("tableBack"));
+                    // aimGrid[(i*10)+j].setBackground(skin.newDrawable("tableBack3"));
                 } else {
-                    playerGrid[(i*10)+j].setBackground(skin.newDrawable("tableBack3"));
-                    aimGrid[(i*10)+j].setBackground(skin.newDrawable("tableBack"));
+                    playerGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/DARK_water.png"))))));
+                    playerGrid[(i*10)+j].setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/DARK_water.png")))));
+                    aimGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/DARK_water.png"))))));
+                    aimGrid[(i*10)+j].setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/DARK_water.png")))));
+
+                    // playerGrid[(i*10)+j].setBackground(skin.newDrawable("tableBack3"));
+                    // aimGrid[(i*10)+j].setBackground(skin.newDrawable("tableBack"));
                 }
 
                 // Adds grid to middlePanel and add a textButton to it
@@ -205,15 +217,15 @@ public class GameRenderer extends Renderer{
                 aimBoard.add(aimGrid[(i*10)+j]).width(WIDTH_OF_SQUARE).height(HEIGHT_OF_SQUARE);
 
 
+                // Finds where in grid a player has his ships
                 if(currentModel.getShipArray()[(i*10)+j] == 1){
-                    playerGrid[(i*10)+j].addActor(new TextButton("XX", btnStyle));
-                    aimGrid[(i*10)+j].addActor(new TextButton("??", btnStyle));
-                    System.out.println(i + ", " + j + " is occupied!");
+                    playerGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/miss.png"))))));
+
+                    //aimGrid[(i*10)+j].addActor(new TextButton("??", btnStyle));
 
                 } else {
                     //playerGrid[(i*10)+j].addActor(new TextButton(i + "," + j, btnStyle));
-                    aimGrid[(i*10)+j].addActor(new TextButton("??", btnStyle));
-                    System.out.println(i + ", " + j + " is free!");
+                    //aimGrid[(i*10)+j].addActor(new TextButton("??", btnStyle));
                 }
 
                 aimGrid[(i*10)+j].addListener(((GameScreen) screen).getShootBtnListener());
@@ -238,6 +250,47 @@ public class GameRenderer extends Renderer{
         actorPanel.addActor(playerTable);
         actorPanel.addActor(middlePanel);
         actorPanel.addActor(topTable);
+    }
+
+    /**
+     * Determines whether to call hit or miss method for
+     * drawing explosion or hole.
+     * @param x X-coordinate.
+     * @param y Y-coordinate.
+     * @param str Tells if hit or miss.
+     */
+    public void setHitOrMiss(int x, int y, String str) {
+
+        if(str.equals("HIT")) {
+            setHit(x, y);
+
+        } else if (str.equals("MISS")) {
+            setMiss(x, y);
+        }
+
+        //aimGrid[x + y].addActor(new TextButton(str, btnStyle));
+    }
+
+    /**
+     * Draws a hole (miss) at given coordinates in grid.
+     * @param x X-coordinate.
+     * @param y Y-coordinate.
+     */
+    public void setMiss(int x, int y) {
+
+        aimGrid[(x-1)*10 + (y-1)].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/miss.png"))))));
+
+    }
+
+    /**
+     * Draws an explosion at given coordinates in grid.
+     * @param x X-coordinate.
+     * @param y Y-coordinate.
+     */
+    public void setHit(int x, int y) {
+
+        aimGrid[(x-1)*10 + (y-1)].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/explosion.png"))))));
+
     }
 
     /**

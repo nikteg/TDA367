@@ -3,7 +3,6 @@ package edu.chalmers.sankoss.java.screens;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.SnapshotArray;
@@ -48,21 +47,38 @@ public class GameScreen extends AbstractScreen {
         create();
     }
 
+    public void hit(Coordinate coordinate) {
+        ((GameModel) model).setHitOrMiss(coordinate.getX(), coordinate.getY(), "HIT");
+        //((GameRenderer)renderer).setHitOrMiss((coordinate.getX()-1)*10, coordinate.getY(), "HIT");
+
+    }
+
+    public void miss(Coordinate coordinate) {
+        ((GameModel) model).setHitOrMiss(coordinate.getX(), coordinate.getY(), "MISS");
+        //((GameRenderer)renderer).setHitOrMiss((coordinate.getX()-1)*10, coordinate.getY(), "MISS");
+    }
+
     private class GameListener extends SankossClientListener {
 
         @Override
         public void fireResult(Long gameID, Player target, Coordinate coordinate, boolean hit) {
 
             if(hit && !target.equals(model.getClient().getPlayer())) {
-
                 System.out.println("You shot at " + coordinate.getX() + ", " + coordinate.getY() + ". HIT!");
-                ((GameRenderer)renderer).getAimGrid()[(coordinate.getX()-1)*10 + (coordinate.getY()-1)].addActor(new TextButton("HIT", ((GameRenderer)renderer).getBtnStyle()));
+                // ((GameRenderer)renderer).getAimGrid()[(coordinate.getX()-1)*10 + (coordinate.getY()-1)].addActor(new TextButton("HIT", ((GameRenderer)renderer).getBtnStyle()));
+                //((GameRenderer)renderer).getAimGrid()[(coordinate.getX()-1)*10 + (coordinate.getY()-1)].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/explosion.png"))))));
+                //((GameRenderer)renderer).setHitOrMiss((coordinate.getX()-1)*10, coordinate.getY(), "HIT");
+                hit(coordinate);
 
             } else if(!target.equals(model.getClient().getPlayer())){
 
                 System.out.println("You shot at " + coordinate.getX() + ", " + coordinate.getY() + ". Miss..");
-                ((GameRenderer)renderer).getAimGrid()[(coordinate.getX()-1)*10 + (coordinate.getY()-1)].addActor(new TextButton("MISS", ((GameRenderer)renderer).getBtnStyle()));
+                // ((GameRenderer)renderer).getAimGrid()[(coordinate.getX()-1)*10 + (coordinate.getY()-1)].addActor(new TextButton("MISS", ((GameRenderer)renderer).getBtnStyle()));
+                //((GameRenderer)renderer).getAimGrid()[(coordinate.getX()-1)*10 + (coordinate.getY()-1)].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/miss.png"))))));
+                //((GameRenderer)renderer).setHitOrMiss((coordinate.getX()-1)*10, coordinate.getY(), "MISS");
+                miss(coordinate);
             }
+
         }
 
         @Override
@@ -177,9 +193,20 @@ public class GameScreen extends AbstractScreen {
                     // Matches button with clicked one
                     if(childrenArray[0].equals(actor)) {
                         model.getClient().fire(model.getClient().getGameID(), model.getClient().getOpponents().get(0), new Coordinate(i+1, j+1));
+
                     }
                 }
             }
         }
+
+        // Delay to get thread to catch up
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.getStackTrace();
+        }
+
+        ((GameRenderer)renderer).setHitOrMiss(((GameModel)model).getX(), ((GameModel)model).getY(), ((GameModel)model).getHitMsg());
+
     }
 }
