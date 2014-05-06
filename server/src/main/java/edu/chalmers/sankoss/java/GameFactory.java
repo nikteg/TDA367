@@ -1,7 +1,5 @@
 package edu.chalmers.sankoss.java;
 
-import edu.chalmers.sankoss.core.Player;
-
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -50,6 +48,13 @@ public class GameFactory {
         }
     }
 
+    public static boolean hasPlayerWithID(Long id) {
+        for (Game game : games.values()) {
+            if (game.hasPlayerWithID(id))
+                return true;
+        }
+        return false;
+    }
     public static Map<Long, Game> getGames() {
         return games;
     }

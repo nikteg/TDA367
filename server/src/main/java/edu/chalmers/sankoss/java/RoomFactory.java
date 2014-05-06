@@ -1,6 +1,5 @@
 package edu.chalmers.sankoss.java;
 
-import edu.chalmers.sankoss.core.Player;
 import edu.chalmers.sankoss.core.Room;
 
 import java.util.*;
@@ -53,6 +52,13 @@ public class RoomFactory {
         if (rooms.remove(id) == null) {
             throw new RoomNotFoundException("Game was not found with given id: " + id.toString());
         }
+    }
+    public static boolean hasPlayerWithID(Long id) {
+        for (Room room : rooms.values()) {
+            if (room.hasPlayerWithID(id))
+                return true;
+        }
+        return false;
     }
 
     public static Map<Long, Room> getRooms() {
