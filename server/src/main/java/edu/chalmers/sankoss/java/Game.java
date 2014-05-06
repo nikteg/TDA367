@@ -71,4 +71,29 @@ public class Game {
 
         return null;
     }
+
+
+    public boolean hasPlayerWithID(Long id) {
+        for (Player player : players) {
+            if (player.getID().equals(id))
+                return true;
+        }
+
+        return false;
+    }
+
+    public boolean isPlayerWithIDHost(Long id) {
+        return players.get(0).getID().equals(id);
+    }
+
+    public void removePlayerWithID(Long id) {
+        for (Player player : players) {
+            if (player.getID().equals(id)) {
+                players.remove(player);
+
+                return;
+            }
+
+        }
+    }
 }
