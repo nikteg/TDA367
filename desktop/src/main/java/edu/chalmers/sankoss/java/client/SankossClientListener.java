@@ -1,9 +1,6 @@
 package edu.chalmers.sankoss.java.client;
 
-import edu.chalmers.sankoss.core.Coordinate;
-import edu.chalmers.sankoss.core.Player;
-import edu.chalmers.sankoss.core.Room;
-import edu.chalmers.sankoss.core.Ship;
+import edu.chalmers.sankoss.core.*;
 
 import java.util.List;
 import java.util.Map;
@@ -29,7 +26,7 @@ public class SankossClientListener implements ISankossClientListener {
     }
 
     @Override
-    public void joinedRoom(Player player) {
+    public void joinedRoom(BasePlayer player) {
 
     }
 
@@ -44,7 +41,7 @@ public class SankossClientListener implements ISankossClientListener {
     }
 
     @Override
-    public void playerIsReady(Player player) {
+    public void playerIsReady(BasePlayer player) {
 
     }
 
@@ -54,12 +51,12 @@ public class SankossClientListener implements ISankossClientListener {
     }
 
     @Override
-    public void fireResult(Long gameID, Player target, Coordinate coordinate, boolean hit) {
+    public void fireResult(Long gameID, BasePlayer target, Coordinate coordinate, boolean hit) {
 
     }
 
     @Override
-    public void destroyedShip(Player player, Ship ship) {
+    public void destroyedShip(BasePlayer player, Ship ship) {
 
     }
 

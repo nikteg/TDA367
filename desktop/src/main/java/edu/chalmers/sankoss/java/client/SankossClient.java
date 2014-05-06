@@ -3,10 +3,7 @@ package edu.chalmers.sankoss.java.client;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import edu.chalmers.sankoss.core.Coordinate;
-import edu.chalmers.sankoss.core.Network;
-import edu.chalmers.sankoss.core.Player;
-import edu.chalmers.sankoss.core.Ship;
+import edu.chalmers.sankoss.core.*;
 import edu.chalmers.sankoss.core.protocol.*;
 
 import java.io.IOException;
@@ -19,7 +16,7 @@ import java.util.List;
 public class SankossClient {
     private Client client;
     private Player player;
-    private List<Player> opponents = new ArrayList<Player>();
+    private List<BasePlayer> opponents = new ArrayList<BasePlayer>();
     private Long gameID;
     private Long roomID;
     private String host;
@@ -101,7 +98,7 @@ public class SankossClient {
                 if (object instanceof JoinedRoom) {
                     JoinedRoom msg = (JoinedRoom) object;
 
-                    if (msg.getPlayer().equals(player))
+                    if (msg.getPlayer().equals(player.getBasePlayer()))
                         return;
 
                     for (ISankossClientListener listener : listeners) {
@@ -170,6 +167,16 @@ public class SankossClient {
 
                     return;
                 }
+
+                if (object instanceof PlayerChangedName) {
+                    PlayerChangedName msg = (PlayerChangedName) object;
+
+                    for (ISankossClientListener listener : listeners) {
+                        listener.playerChangedName(msg.getPlayer().getBasePlayer(), msg.getName());
+                    }
+
+                    return;
+                }
             }
 
             public void disconnected(Connection connection) {
@@ -185,7 +192,7 @@ public class SankossClient {
         return player;
     }
 
-    public List<Player> getOpponents() {
+    public List<BasePlayer> getOpponents() {
         return opponents;
     }
 
@@ -239,23 +246,29 @@ public class SankossClient {
         client.close();
     }
 
+    public void playerChangeName(String name) {
+        if (client == null) return;
+
+        client.sendTCP(new PlayerChangeName(name));
+    }
+
     public void fetchRooms() {
         if (client == null) return;
 
         client.sendTCP(new FetchRooms());
     }
 
-    public void fire(Long gameID, Player target, Coordinate coordinate) {
+    public void fire(Long gameID, BasePlayer target, Coordinate coordinate) {
         if (client == null) return;
 
         client.sendTCP(new Fire(gameID, target, coordinate));
     }
 
-    public void joinRoom(Long roomID) {
+    public void joinRoom(Long roomID, String playerName) {
         if (client == null) return;
 
         System.out.println("CLIENT: Trying to join #" + roomID);
-        client.sendTCP(new JoinRoom(roomID));
+        client.sendTCP(new JoinRoom(roomID, playerName));
     }
 
     public void playerReady(Long gameID, List<Ship> fleet) {

@@ -32,7 +32,7 @@ public class Network {
         kryo.register(java.util.HashMap.class);
         kryo.register(JoinedRoom.class);
         kryo.register(JoinRoom.class);
-        kryo.register(Player.class);
+        kryo.register(BasePlayer.class);
         kryo.register(PlayerIsReady.class);
         kryo.register(PlayerReady.class);
         kryo.register(Room.class);
@@ -41,5 +41,7 @@ public class Network {
         kryo.register(StartedGame.class);
         kryo.register(StartGame.class);
         kryo.register(Turn.class);
+        kryo.register(PlayerChangeName.class);
+        kryo.register(PlayerChangedName.class);
     }
 }

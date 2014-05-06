@@ -10,9 +10,7 @@ import edu.chalmers.sankoss.java.web.WebServer;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -28,11 +26,6 @@ public class SankossServer {
      * KryoNet server
      */
     private Server server;
-
-    /**
-     * Map to link players with their connections
-     */
-    private Map<Player, PlayerConnection> players = new HashMap<Player, PlayerConnection>();
 
     /**
      * Logger
@@ -107,8 +100,6 @@ public class SankossServer {
 
                     LOGGER.log(Level.INFO, String.format("%s connected as #%d", connection.getRemoteAddressTCP(), connection.getID()));
 
-                    players.put(connection.getPlayer(), connection);
-
                     connection.sendTCP(new Connected((long) connection.getID()));
                     pcs.firePropertyChange("playerConnected", null, null);
 
@@ -132,7 +123,7 @@ public class SankossServer {
                      * A client cannot sit in more than one room at a time
                      */
                     for (Room room : RoomFactory.getRooms().values()) {
-                        if (room.getPlayers().contains(player)) {
+                        if (room.hasPlayerWithID(player.getID())) {
                             connection.sendTCP(new CreatedRoom());
 
                             return;
@@ -142,7 +133,7 @@ public class SankossServer {
                     Room room;
                     try {
                         room = RoomFactory.createRoom(msg.getName(), msg.getPassword());
-                        room.addPlayer(player);
+                        room.addPlayer(player.getBasePlayer());
                     } catch (RoomNotFoundException e) {
                         connection.sendTCP(new CreatedRoom());
 
@@ -173,19 +164,23 @@ public class SankossServer {
                         return;
                     }
 
-                    if (room.getPlayers().contains(player)) {
-                        connection.sendTCP(new JoinRoom());
-                        return;
+                    // A player cannot join the same room twice
+                    for (BasePlayer roomPlayer : room.getPlayers()) {
+                        if (roomPlayer.getPlayerID().equals(player.getID())) {
+                            connection.sendTCP(new JoinRoom());
+                            return;
+                        }
                     }
 
-                    room.addPlayer(player);
+                    room.addPlayer(player.getBasePlayer());
 
                     LOGGER.log(Level.INFO, String.format("#%d joined room #%d (%s)", player.getID(), room.getID(), room.getName()));
 
-                    JoinedRoom joinedRoom = new JoinedRoom(player);
+                    JoinedRoom joinedRoom = new JoinedRoom(player.getBasePlayer());
 
-                    for (Player roomPlayer : room.getPlayers()) {
-                        players.get(roomPlayer).sendTCP(joinedRoom);
+                    // Should be one player in the room, but doing it this way will support more players
+                    for (BasePlayer roomPlayer : room.getPlayers()) {
+                        getPlayerConnectionFromID(roomPlayer.getPlayerID()).sendTCP(joinedRoom);
                     }
 
                     pcs.firePropertyChange("roomJoined", null, null);
@@ -220,13 +215,20 @@ public class SankossServer {
                      * Security check.
                      * Make sure that the message was sent from the creator.
                      */
-                    if (room.getPlayers().get(0).equals(player)) {
-                        Game game = GameFactory.createGame(room.getPlayers());
+                    if (room.getPlayers().get(0).equals(player.getBasePlayer())) {
+
+                        List<Player> gamePlayers = new ArrayList<Player>();
+
+                        for (BasePlayer basePlayer : room.getPlayers()) {
+                            gamePlayers.add(getPlayerConnectionFromID(basePlayer.getPlayerID()).getPlayer());
+                        }
+
+                        Game game = GameFactory.createGame(gamePlayers);
 
                         LOGGER.log(Level.INFO, String.format("#%d started game #%d", player.getID(), game.getID()));
 
                         for (Player gamePlayer : game.getPlayers()) {
-                            players.get(gamePlayer).sendTCP(new StartedGame(game.getID(), game.getPlayers()));
+                            getPlayerConnectionFromID(gamePlayer.getID()).sendTCP(new StartedGame(game.getID(), game.getPlayers()));
                         }
 
                         pcs.firePropertyChange("gameStarted", null, null);
@@ -286,15 +288,16 @@ public class SankossServer {
                         }
                     }
 
-                    PlayerIsReady playerIsReady = new PlayerIsReady(player);
+                    PlayerIsReady playerIsReady = new PlayerIsReady(player.getBasePlayer());
                     for (Player gamePlayer : game.getPlayers()) {
-                        if (!gamePlayer.equals(player))
-                            players.get(gamePlayer).sendTCP(playerIsReady);
+                        if (!gamePlayer.equals(player)) {
+                            getPlayerConnectionFromID(gamePlayer.getID()).sendTCP(playerIsReady);
+                        }
                     }
 
                     if (allReady) {
                         for (Player gamePlayer : game.getPlayers()) {
-                            players.get(gamePlayer).sendTCP(new GameReady());
+                            getPlayerConnectionFromID(gamePlayer.getID()).sendTCP(new GameReady());
                         }
 
                         LOGGER.log(Level.INFO, String.format("Everyone is ready... Start game #%d", game.getID()));
@@ -303,7 +306,7 @@ public class SankossServer {
                         int starter = new Random().nextInt(game.getPlayers().size() - 1);
                         game.setAttacker(game.getPlayers().get(starter));
 
-                        players.get(game.getAttacker()).sendTCP(new Turn());
+                        getPlayerConnectionFromID(game.getAttacker().getID()).sendTCP(new Turn());
                     }
 
                     player.setFleet(msg.getFleet());
@@ -318,7 +321,7 @@ public class SankossServer {
                     Fire msg = (Fire) object;
 
                     // A player can't shoot at him/herself
-                    if (msg.getTarget().equals(player))
+                    if (msg.getTarget().equals(player.getBasePlayer()))
                         return;
 
                     Game game;
@@ -335,10 +338,12 @@ public class SankossServer {
 
                     Ship targetShip;
                     try {
-                        targetShip = game.fire(players.get(msg.getTarget()).getPlayer(), msg.getCoordinate());
+                        Player targetPlayer = getPlayerConnectionFromID(msg.getTarget().getPlayerID()).getPlayer();
+                        targetShip = game.fire(targetPlayer, msg.getCoordinate());
+
                     } catch (UsedCoordinateException e) {
                         LOGGER.log(Level.INFO, String.format("#%d %s", player.getID(), e.getMessage()));
-                        players.get(player).sendTCP(new Turn());
+                        getPlayerConnectionFromID(player.getID()).sendTCP(new Turn());
 
                         return;
                     }
@@ -347,18 +352,18 @@ public class SankossServer {
                     FireResult fireResult = new FireResult(msg, hit);
 
                     for (Player gamePlayer : game.getPlayers()) {
-                        players.get(gamePlayer).sendTCP(fireResult);
+                        getPlayerConnectionFromID(gamePlayer.getID()).sendTCP(fireResult);
 
                         /**
                          * Send message telling everyone that a ship was destroyed.
                          */
                         if (targetShip != null && targetShip.isDestroyed()) {
-                            players.get(gamePlayer).sendTCP(new DestroyedShip(msg.getTarget(), targetShip));
+                            getPlayerConnectionFromID(gamePlayer.getID()).sendTCP(new DestroyedShip(msg.getTarget(), targetShip));
                         }
                     }
                     game.changeAttacker();
 
-                    players.get(game.getAttacker()).sendTCP(new Turn());
+                    getPlayerConnectionFromID(game.getAttacker().getID()).sendTCP(new Turn());
 
 
                     return;
@@ -401,7 +406,7 @@ public class SankossServer {
                         return;
                     }
 
-                    if (!room.getPlayers().contains(player)) return;
+                    if (!room.hasPlayerWithID(player.getID())) return;
 
                     /**
                      * If so, remove the room and notify the client
@@ -420,6 +425,19 @@ public class SankossServer {
                     return;
                 }
 
+                if (object instanceof PlayerChangeName) {
+                    PlayerChangeName msg = (PlayerChangeName) object;
+
+                    LOGGER.log(Level.INFO, String.format("%s is now known as %s", player.getName(), msg.getName()));
+
+                    // TODO Verify name
+                    player.setName(msg.getName());
+
+                    connection.sendTCP(new PlayerChangedName(player.getBasePlayer()));
+
+                    return;
+                }
+
             }
 
             /**
@@ -434,16 +452,21 @@ public class SankossServer {
                 /**
                  * Remove room that the player was connected to.
                  */
+
                 for (Room room : RoomFactory.getRooms().values()) {
-                    if (room.getPlayers().contains(player)) {
-                        room.getPlayers().remove(player);
-                        for (Player opponent : room.getPlayers()) {
-                            players.get(opponent).sendTCP(new Disconnect(player));
+                    if (room.hasPlayerWithID(player.getID())) {
+
+                        if (room.isPlayerWithIDHost(player.getID())) {
+                            try {
+                                RoomFactory.removeRoom(room);
+                            } catch (RoomNotFoundException e) {
+                                System.out.println(e.getMessage());
+                            }
                         }
-                        try {
-                            RoomFactory.removeRoom(room);
-                        } catch (RoomNotFoundException e) {
-                            System.out.println(e.getMessage());
+
+                        room.removePlayerWithID(player.getID());
+                        for (BasePlayer opponent : room.getPlayers()) {
+                            getPlayerConnectionFromID(opponent.getPlayerID()).sendTCP(new Disconnect(player));
                         }
 
                         break;
@@ -452,23 +475,25 @@ public class SankossServer {
                 }
 
                 for (Game game : GameFactory.getGames().values()) {
-                    if (game.getPlayers().contains(player)) {
-                        game.getPlayers().remove(player);
-                        for (Player opponent : game.getPlayers()) {
-                            players.get(opponent).sendTCP(new Disconnect(player));
+                    if (game.hasPlayerWithID(player.getID())) {
+
+                        if (game.isPlayerWithIDHost(player.getID())) {
+                            try {
+                                GameFactory.removeGame(game);
+                            } catch (GameNotFoundException e) {
+                                System.out.println(e.getMessage());
+                            }
                         }
-                        try {
-                            GameFactory.removeGame(game);
-                        } catch (GameNotFoundException e) {
-                            System.out.println(e.getMessage());
+
+                        game.removePlayerWithID(player.getID());
+                        for (Player opponent : game.getPlayers()) {
+                            getPlayerConnectionFromID(opponent.getID()).sendTCP(new Disconnect(player));
                         }
 
                         break;
                     }
 
                 }
-
-                players.remove(player);
 
                 pcs.firePropertyChange("playerDisconnected", null, null);
                 pcs.firePropertyChange("roomRemoved", null, null);
@@ -484,6 +509,16 @@ public class SankossServer {
 
     }
 
+    protected PlayerConnection getPlayerConnectionFromID(Long id) {
+        for (PlayerConnection playerConnection : (PlayerConnection[])server.getConnections()) {
+            if (playerConnection.getPlayer().getID().equals(id)) {
+                return playerConnection;
+            }
+        }
+
+        return null;
+    }
+
     public void addPropertyChangeListener(PropertyChangeListener pcl) {
         pcs.addPropertyChangeListener(pcl);
     }
@@ -492,8 +527,8 @@ public class SankossServer {
         pcs.removePropertyChangeListener(pcl);
     }
 
-    public Map<Player, PlayerConnection> getPlayers() {
-        return players;
+    public List<PlayerConnection> getPlayerConnections() {
+        return Arrays.asList((PlayerConnection[])server.getConnections());
     }
 
     public Map<Long, Room> getRooms() {

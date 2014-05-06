@@ -1,10 +1,5 @@
 package edu.chalmers.sankoss.core;
 
-import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryo.KryoSerializable;
-import com.esotericsoftware.kryo.io.Input;
-import com.esotericsoftware.kryo.io.Output;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,21 +9,21 @@ import java.util.List;
  * @modified Fredrik Thune, Mikael Malmqvist
  * 
  */
-public class Player implements KryoSerializable {
+public class Player {
     private Long playerID;
     private String name;
     private List<Ship> fleet = new ArrayList<Ship>();
     private List<Coordinate> usedCoordinates = new ArrayList<Coordinate>();
     private boolean ready;
-    private Nationality nationality = Nationality.USA;
-    
+    private BasePlayer.Nationality nationality = BasePlayer.Nationality.USA;
+
     public Player() {
-        this.nationality = Nationality.USA;
+        this.nationality = BasePlayer.Nationality.USA;
     }
 
     public Player(Long id) {
         this.playerID = id;
-        this.nationality = Nationality.USA;
+        this.nationality = BasePlayer.Nationality.USA;
 
         this.name = "Player #" + playerID;
     }
@@ -36,55 +31,18 @@ public class Player implements KryoSerializable {
     public Player(Long id, String name) {
         this(id);
         this.name = name;
-        this.nationality = Nationality.USA;
+        this.nationality = BasePlayer.Nationality.USA;
     }
 
-
-    public enum Nationality {
-        USA("USA", java.awt.Color.WHITE),
-        GERMANY("GER", java.awt.Color.RED),
-        JAPAN("JAP", java.awt.Color.GREEN),
-        ENGLAND("ENG", java.awt.Color.BLUE);
-
-        private String landName;
-        private java.awt.Color color;
-
-        Nationality(String name, java.awt.Color color) {
-            this.landName = name;
-            this.color = color;
-        }
-
-        public Nationality getNext(){
-            return values()[(ordinal() + 1) % values().length];
-        }
-
-        public Nationality getLast(){
-            return values()[(ordinal() + 3) % values().length];
-        }
-
-        public java.awt.Color getColor() {
-            return color;
-        }
-
-        public void setColor(java.awt.Color color) {
-            this.color = color;
-        }
-
-        public String getLandName() {
-            return landName;
-        }
-
-        public void setLandName(String landName) {
-            this.landName = landName;
-        }
+    public BasePlayer getBasePlayer() {
+        return new BasePlayer(playerID, name, nationality);
     }
 
-
-    public void setNationality(Nationality nationality) {
+    public void setNationality(BasePlayer.Nationality nationality) {
         this.nationality = nationality;
     }
 
-    public Nationality getNationality() {
+    public BasePlayer.Nationality getNationality() {
         return this.nationality;
     }
 
@@ -149,17 +107,5 @@ public class Player implements KryoSerializable {
     @Override
     public int hashCode() {
         return playerID.hashCode();
-    }
-
-    @Override
-    public void write(Kryo kryo, Output output) {
-        output.writeLong(playerID);
-        output.writeString(name);
-    }
-
-    @Override
-    public void read(Kryo kryo, Input input) {
-        this.playerID = input.readLong();
-        this.name = input.readString();
     }
 }
