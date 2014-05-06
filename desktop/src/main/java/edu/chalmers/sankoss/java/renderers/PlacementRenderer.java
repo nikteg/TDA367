@@ -10,9 +10,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import edu.chalmers.sankoss.core.Player;
+import edu.chalmers.sankoss.java.misc.ShipButton;
 import edu.chalmers.sankoss.java.models.Placement;
 import edu.chalmers.sankoss.java.models.ScreenModel;
-import edu.chalmers.sankoss.java.misc.ShipButton;
 import edu.chalmers.sankoss.java.screens.AbstractScreen;
 import edu.chalmers.sankoss.java.screens.PlacementScreen;
 

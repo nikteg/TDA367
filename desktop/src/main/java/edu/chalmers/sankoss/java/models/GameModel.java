@@ -11,6 +11,10 @@ import java.util.Map;
  */
 public class GameModel extends ScreenModel{
 
+    private String hitMsg = "";
+    private int x;
+    private int y;
+
     public GameModel() {
 
     }
@@ -20,6 +24,24 @@ public class GameModel extends ScreenModel{
      */
     public Room getRoomByName(String roomName, Map<Long, Room> rooms) {
         return null;
+    }
+
+    public void setHitOrMiss(int x, int y, String msg) {
+        hitMsg = msg;
+        this.x = x;
+        this.y = y;
+    }
+
+    public String getHitMsg() {
+        return hitMsg;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 
     /**

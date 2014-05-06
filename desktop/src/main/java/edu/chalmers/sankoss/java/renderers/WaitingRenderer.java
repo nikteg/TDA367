@@ -64,8 +64,8 @@ public class WaitingRenderer extends Renderer {
 
     @Override
     public void resize(int width, int height) {
-        waitingLabel.setX(width/2);
-        waitingLabel.setY(height/2);
+        waitingLabel.setX((width - waitingLabel.getWidth())/2);
+        waitingLabel.setY((height - waitingLabel.getHeight())/2);
     }
 
     @Override
@@ -96,8 +96,8 @@ public class WaitingRenderer extends Renderer {
         cancelBtn.setY(0);
 
         waitingLabel = new Label("Waiting for opponent to join!", labelStyle);
-        waitingLabel.setX((Gdx.graphics.getWidth() - WIDTH_OF_BUTTON)/2);
-        waitingLabel.setY((Gdx.graphics.getHeight() - HEIGHT_OF_BUTTON)/2);
+        waitingLabel.setX((Gdx.graphics.getWidth() - WIDTH_OF_BUTTON)/2 - 100);
+        waitingLabel.setY((Gdx.graphics.getHeight() - HEIGHT_OF_BUTTON)/2 - 100);
 
         waitingLabel.addAction(Actions.forever(
                 Actions.sequence(
