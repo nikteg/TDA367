@@ -59,7 +59,7 @@ public class Room {
 
     public boolean hasPlayerWithID(Long id) {
         for (BasePlayer basePlayer : players) {
-            if (basePlayer.getPlayerID().equals(id))
+            if (basePlayer.getID().equals(id))
                 return true;
         }
 
@@ -67,12 +67,12 @@ public class Room {
     }
 
     public boolean isPlayerWithIDHost(Long id) {
-        return players.get(0).getPlayerID().equals(id);
+        return players.get(0).getID().equals(id);
     }
 
     public void removePlayerWithID(Long id) {
         for (BasePlayer basePlayer : players) {
-            if (basePlayer.getPlayerID().equals(id)) {
+            if (basePlayer.getID().equals(id)) {
                 players.remove(basePlayer);
 
                 return;

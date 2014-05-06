@@ -9,7 +9,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
-import edu.chalmers.sankoss.core.Player;
+import edu.chalmers.sankoss.core.BasePlayer;
+import edu.chalmers.sankoss.java.client.SankossClientPlayer;
 import edu.chalmers.sankoss.java.models.Placement;
 import edu.chalmers.sankoss.java.models.ScreenModel;
 import edu.chalmers.sankoss.java.misc.ShipButton;
@@ -69,9 +70,9 @@ public class PlacementRenderer extends Renderer{
     }
 
 
-    public void switchNationality(Player player, Boolean next) {
+    public void switchNationality(SankossClientPlayer player, Boolean next) {
 
-        Player.Nationality nationality = next ? player.getNationality().getNext() : player.getNationality().getLast();
+        BasePlayer.Nationality nationality = next ? player.getNationality().getNext() : player.getNationality().getLast();
 
         player.setNationality(nationality);
         color = nationality.getColor();

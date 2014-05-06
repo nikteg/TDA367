@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import edu.chalmers.sankoss.core.Player;
+import edu.chalmers.sankoss.core.BasePlayer;
 import edu.chalmers.sankoss.core.Room;
 import edu.chalmers.sankoss.java.SankossController;
 import edu.chalmers.sankoss.java.SankossGame;
@@ -54,7 +54,7 @@ public class MainMenuScreen extends AbstractScreen {
             System.out.println("SERVER: " + model.getClient().getPlayer().getName() + " created room #" + roomID);
         }
 
-        public void joinedRoom(Player player) {
+        public void joinedRoom(BasePlayer player) {
             ((MainMenuRenderer)renderer).setStatusLabel(player.getName() + " has joined your room!");
             ((MainMenuRenderer)renderer).createStartButton();
         }

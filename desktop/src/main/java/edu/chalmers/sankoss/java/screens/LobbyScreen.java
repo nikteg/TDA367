@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import edu.chalmers.sankoss.core.Player;
+import edu.chalmers.sankoss.core.BasePlayer;
 import edu.chalmers.sankoss.core.Room;
 import edu.chalmers.sankoss.java.models.Lobby;
 import edu.chalmers.sankoss.java.renderers.LobbyRenderer;
@@ -60,11 +60,11 @@ public class LobbyScreen extends AbstractScreen {
             ((LobbyRenderer)renderer).setList(rooms);
         }
 
-        public void joinedRoom(Player player) {
+        public void joinedRoom(BasePlayer player) {
             System.out.println("SERVER: " + player.getName() + " joined!");
         }
 
-        public void startedGame(Long gameID, java.util.List<Player> players) {
+        public void startedGame(Long gameID) {
             ((LobbyRenderer)renderer).getJoinBtn().setText("Enter Game");
         }
     }

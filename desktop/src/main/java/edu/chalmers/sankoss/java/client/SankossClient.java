@@ -12,10 +12,12 @@ import java.util.List;
 
 /**
  * @author Niklas Tegnander
+ * @modified Fredrik Thune
  */
 public class SankossClient {
     private Client client;
-    private Player player;
+    private SankossClientPlayer player;
+
     private List<BasePlayer> opponents = new ArrayList<BasePlayer>();
     private Long gameID;
     private Long roomID;
@@ -55,7 +57,7 @@ public class SankossClient {
                 if (object instanceof Connected) {
                     Connected msg = (Connected) object;
 
-                    player = new Player(msg.getPlayerID());
+                    player = new SankossClientPlayer(msg.getPlayerID());
 
                     for (ISankossClientListener listener : listeners) {
                         listener.connected(msg.getPlayerID());
@@ -114,7 +116,7 @@ public class SankossClient {
                     gameID = msg.getGameID();
 
                     for (ISankossClientListener listener : listeners) {
-                        listener.startedGame(gameID, msg.getPlayers());
+                        listener.startedGame(gameID);
                     }
 
                     return;
@@ -172,7 +174,7 @@ public class SankossClient {
                     PlayerChangedName msg = (PlayerChangedName) object;
 
                     for (ISankossClientListener listener : listeners) {
-                        listener.playerChangedName(msg.getPlayer().getBasePlayer(), msg.getName());
+                        listener.playerChangedName(msg.getPlayer());
                     }
 
                     return;
@@ -188,7 +190,7 @@ public class SankossClient {
         }));
     }
 
-    public Player getPlayer() {
+    public SankossClientPlayer getPlayer() {
         return player;
     }
 
@@ -264,17 +266,17 @@ public class SankossClient {
         client.sendTCP(new Fire(gameID, target, coordinate));
     }
 
-    public void joinRoom(Long roomID, String playerName) {
+    public void joinRoom(Long roomID) {
         if (client == null) return;
 
         System.out.println("CLIENT: Trying to join #" + roomID);
-        client.sendTCP(new JoinRoom(roomID, playerName));
+        client.sendTCP(new JoinRoom(roomID));
     }
 
-    public void playerReady(Long gameID, List<Ship> fleet) {
+    public void playerReady(Long gameID, Fleet fleet) {
         if (client == null) return;
 
-        client.sendTCP(new PlayerReady(gameID, fleet));
+        client.sendTCP(new PlayerReady(gameID, fleet.getShips()));
     }
 
     public void startGame(Long roomID) {

@@ -7,6 +7,7 @@ import java.util.Map;
 
 /**
  * @author Niklas Tegnander
+ * @modified Fredrik Thune
  */
 public class SankossClientListener implements ISankossClientListener {
 
@@ -31,7 +32,7 @@ public class SankossClientListener implements ISankossClientListener {
     }
 
     @Override
-    public void startedGame(Long gameID, List<Player> players) {
+    public void startedGame(Long gameID) {
 
     }
 
@@ -62,6 +63,11 @@ public class SankossClientListener implements ISankossClientListener {
 
     @Override
     public void disconnected() {
+
+    }
+
+    @Override
+    public void playerChangedName(BasePlayer player) {
 
     }
 }

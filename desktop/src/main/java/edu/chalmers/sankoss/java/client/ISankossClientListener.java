@@ -13,12 +13,12 @@ public interface ISankossClientListener {
     public void fetchedRooms(Map<Long, Room> rooms);
     public void createdRoom(Long roomID);
     public void joinedRoom(BasePlayer player);
-    public void startedGame(Long gameID, List<Player> players);
+    public void startedGame(Long gameID);
     public void gameReady();
     public void playerIsReady(BasePlayer player);
     public void turn();
     public void fireResult(Long gameID, BasePlayer target, Coordinate coordinate, boolean hit);
     public void destroyedShip(BasePlayer player, Ship ship);
     public void disconnected();
-    public void playerChangedName(BasePlayer player, String name);
+    public void playerChangedName(BasePlayer player);
 }

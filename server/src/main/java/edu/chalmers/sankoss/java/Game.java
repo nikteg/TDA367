@@ -1,7 +1,6 @@
 package edu.chalmers.sankoss.java;
 
 import edu.chalmers.sankoss.core.Coordinate;
-import edu.chalmers.sankoss.core.Player;
 import edu.chalmers.sankoss.core.Ship;
 
 import java.util.List;

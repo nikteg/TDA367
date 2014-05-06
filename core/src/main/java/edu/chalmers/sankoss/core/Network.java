@@ -15,6 +15,8 @@ public class Network {
     
     public static void register(EndPoint endPoint) {
         Kryo kryo = endPoint.getKryo();
+        kryo.register(BasePlayer.class);
+        kryo.register(BasePlayer.Nationality.class);
         kryo.register(Connect.class);
         kryo.register(Connected.class);
         kryo.register(Coordinate.class);
@@ -32,12 +34,12 @@ public class Network {
         kryo.register(java.util.HashMap.class);
         kryo.register(JoinedRoom.class);
         kryo.register(JoinRoom.class);
-        kryo.register(BasePlayer.class);
+
         kryo.register(PlayerIsReady.class);
         kryo.register(PlayerReady.class);
         kryo.register(Room.class);
         kryo.register(Ship.class);
-        kryo.register(SankossAI.class);
+        //kryo.register(SankossAI.class);
         kryo.register(StartedGame.class);
         kryo.register(StartGame.class);
         kryo.register(Turn.class);

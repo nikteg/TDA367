@@ -1,7 +1,7 @@
 package edu.chalmers.sankoss.java.web;
 
 import edu.chalmers.sankoss.core.BasePlayer;
-import edu.chalmers.sankoss.core.Player;
+import edu.chalmers.sankoss.java.Player;
 import edu.chalmers.sankoss.core.Room;
 import edu.chalmers.sankoss.java.Game;
 import edu.chalmers.sankoss.java.JsonTransformerRoute;
@@ -92,7 +92,7 @@ public class WebServer implements Runnable, PropertyChangeListener {
 
                 for (BasePlayer player : room.getPlayers()) {
                     for (WebPlayer webPlayer : players) {
-                        if (webPlayer.getID().equals(player.getPlayerID())) {
+                        if (webPlayer.getID().equals(player.getID())) {
                             webRoom.addPlayer(webPlayer);
                         }
                     }

@@ -1,6 +1,6 @@
 package edu.chalmers.sankoss.core.protocol;
 
-import edu.chalmers.sankoss.core.Player;
+import edu.chalmers.sankoss.core.BasePlayer;
 
 /**
  * 
@@ -8,21 +8,21 @@ import edu.chalmers.sankoss.core.Player;
  * 
  */
 public class Disconnect {
-	private Player player;
+	private BasePlayer player;
 
 	public Disconnect() {
 
 	}
 
-    public Disconnect(Player player) {
+    public Disconnect(BasePlayer player) {
         this.player = player;
     }
 
-    public Player getPlayer() {
+    public BasePlayer getPlayer() {
 		return player;
 	}
 
-	public void setPlayer(Player player) {
+	public void setPlayer(BasePlayer player) {
 		this.player = player;
 	}
 }
