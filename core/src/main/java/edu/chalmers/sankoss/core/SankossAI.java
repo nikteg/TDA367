@@ -18,7 +18,7 @@ import java.util.Random;
 public class SankossAI implements Runnable {
     private Client client;
     private Player player;
-    private List<Player> opponents = new ArrayList<Player>();
+    private List<BasePlayer> opponents = new ArrayList<BasePlayer>();
     private Long gameID;
     private Long roomID;
 
@@ -50,7 +50,7 @@ public class SankossAI implements Runnable {
                     player = new Player(msg.getPlayerID());
 
                     // Fetch remote rooms
-                    client.sendTCP(new JoinRoom(roomID));
+                    client.sendTCP(new JoinRoom(roomID, "BOT-BERT")); // TODO fix name
 
                     return;
                 }
@@ -95,7 +95,7 @@ public class SankossAI implements Runnable {
 
                     opponents.add(msg.getPlayer());
 
-                    System.out.println(String.format("AI: #%d is ready!", msg.getPlayer().getID()));
+                    System.out.println(String.format("AI: #%d is ready!", msg.getPlayer().getPlayerID()));
 
                     return;
                 }
@@ -103,7 +103,7 @@ public class SankossAI implements Runnable {
                 if (object instanceof Turn) {
                     Coordinate coordinate = null;
                     Random r = new Random();
-                    Player opponent = opponents.get(0); // Change if more than 2 players
+                    BasePlayer opponent = opponents.get(0); // Change if more than 2 players
 
                     do {
                         coordinate = new Coordinate(r.nextInt(9) + 1, r.nextInt(9) + 1);
