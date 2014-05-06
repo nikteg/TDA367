@@ -98,9 +98,8 @@ public class WaitingScreen extends AbstractScreen {
         }
 
         public void jumpToLobby() {
-            // TODO: Fix exception when calling removeRoom()
             // Removes room and backs to lobby
-            //model.getClient().removeRoom(model.getClient().getRoomID());
+            model.getClient().removeRoom(model.getClient().getRoomID());
             controller.changeScreen(new LobbyScreen(controller, game));
         }
     }
