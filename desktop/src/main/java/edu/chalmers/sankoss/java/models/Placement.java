@@ -1,7 +1,12 @@
 package edu.chalmers.sankoss.java.models;
 
+import edu.chalmers.sankoss.core.Coordinate;
 import edu.chalmers.sankoss.core.Room;
+import edu.chalmers.sankoss.java.misc.ShipButton;
+
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Description of class.
@@ -10,6 +15,8 @@ import java.util.Map;
  */
 public class Placement extends ScreenModel{
 
+    private Map<Coordinate, ShipButton.Direction> rotationMap;
+    private Map<Integer, Set<Coordinate>> shipMap;
     private ReadyBtnState readyBtnState;
     private String land;
 
@@ -39,9 +46,19 @@ public class Placement extends ScreenModel{
     }
 
     public Placement() {
+        shipMap = new HashMap<Integer, Set<Coordinate>>();
+        rotationMap = new HashMap<Coordinate, ShipButton.Direction>();
         this.readyBtnState = ReadyBtnState.READY;
         shipArray = new int[100];
         zeroArray();
+    }
+
+    public Map<Coordinate, ShipButton.Direction> getRotationMap (){
+        return rotationMap;
+    }
+
+    public Map<Integer, Set<Coordinate>> getShipMap() {
+        return shipMap;
     }
 
 

@@ -12,8 +12,12 @@ import edu.chalmers.sankoss.core.Ship;
 import edu.chalmers.sankoss.java.SankossController;
 import edu.chalmers.sankoss.java.SankossGame;
 import edu.chalmers.sankoss.java.client.SankossClientListener;
+import edu.chalmers.sankoss.java.misc.ShipButton;
 import edu.chalmers.sankoss.java.models.GameModel;
 import edu.chalmers.sankoss.java.renderers.GameRenderer;
+
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Screen used when placing the ships.
@@ -38,9 +42,9 @@ public class GameScreen extends AbstractScreen {
      * @param game reference to the SankossGame class
      * @param controller reference to the SankossController class
      */
-    public GameScreen(SankossController controller, SankossGame game) {
+    public GameScreen(SankossController controller, SankossGame game, Map<Integer, Set<Coordinate>> shipMap, Map<Coordinate, ShipButton.Direction> rotationMap) {
         super(controller, game);
-        model = new GameModel();
+        model = new GameModel(shipMap, rotationMap);
         model.getClient().addListener(new GameListener());
         renderer = new GameRenderer(model);
 

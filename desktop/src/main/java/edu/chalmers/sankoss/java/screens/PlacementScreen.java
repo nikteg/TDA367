@@ -22,6 +22,8 @@ import edu.chalmers.sankoss.java.misc.ShipButton;
 import edu.chalmers.sankoss.java.models.Placement;
 import edu.chalmers.sankoss.java.renderers.PlacementRenderer;
 
+import java.util.HashSet;
+
 /**
  * Screen used when placing the ships.
  * Handles game logic when placing ships, almost like a controller.
@@ -267,7 +269,7 @@ public class PlacementScreen extends AbstractScreen {
 
     public void enterGame() {
         // This means your opponent is done and you can enter game directly
-        controller.changeScreen(new GameScreen(controller, game));
+        controller.changeScreen(new GameScreen(controller, game, ((Placement)model).getShipMap(), ((Placement)model).getRotationMap()));
     }
 
     public void setReady() {
@@ -314,6 +316,29 @@ public class PlacementScreen extends AbstractScreen {
         }
     }
 
+    /**
+     * Creates new key in ShipMap, in model
+     * to place Set of coordinates in.
+     * @param length length of ship.
+     */
+    public void createKey(int length) {
+        ((Placement)model).getShipMap().put(length, new HashSet<Coordinate>());
+    }
+
+    /**
+     * Method for adding a coordinate to a specific key based on length.
+     * @param length length of ship.
+     * @param coordinate coordinate to be added.
+     */
+    public void addCoordinateToShipMap(int length, Coordinate coordinate) {
+        ((Placement)model).getShipMap().get(length).add(coordinate);
+        System.out.println("X: " + coordinate.getX() + ". Y: " + coordinate.getY() + ". Added to " + length);
+    }
+
+    public void addToRotationMap(Coordinate coordinate, ShipButton.Direction direction) {
+        ((Placement)model).getRotationMap().put(coordinate, direction);
+    }
+
     // TODO: Refactor this method ASAP
     /**
      * Method for placing ship on player game board.
@@ -357,6 +382,9 @@ public class PlacementScreen extends AbstractScreen {
                                     Coordinate start = new Coordinate((i+1), (j+1));
                                     Coordinate end = new Coordinate((i+1), (j +((PlacementRenderer)renderer).getFollow().getLength()));
 
+                                    // Creates new key in ShipMap for a set of coordinates
+                                    createKey(end.getY() - start.getY() + 1);
+
                                     // Adds ships with start and end coordinate to player's fleet
                                     try {
                                         model.getClient().getPlayer().getFleet().add(new Ship(start, end));
@@ -373,6 +401,10 @@ public class PlacementScreen extends AbstractScreen {
                                     for(int n = 0; n < ((PlacementRenderer)renderer).getFollow().getLength(); n++) {
                                         children = ((PlacementRenderer)renderer).getGrid()[((i)*10)+j+n].getChildren();
 
+                                        // Add to coordinateMap and rotationMap
+                                        addCoordinateToShipMap(end.getY() - start.getY() + 1, new Coordinate(i + 1, j + 1 + n));
+                                        addToRotationMap(new Coordinate(i + 1, j + 1 + n), ShipButton.Direction.HORIZONTAL);
+
                                         if(((PlacementRenderer)renderer).getFollow().getLength() == 2) {
                                             path = path + "ship_small_body_" + (n+1) + ".png";
 
@@ -387,7 +419,6 @@ public class PlacementScreen extends AbstractScreen {
                                         }
 
                                         childrenArray = children.toArray();
-                                        //((TextButton)childrenArray[0]).setText("XX");
                                         ((ImageButton)childrenArray[0]).setStyle(new ImageButton.ImageButtonStyle(null, null, null, new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal(path)))), null, null));
                                         System.out.println(i + ", " + (j+n));
                                         path = "desktop/src/main/java/assets/textures/HORIZONTAL_";
@@ -422,6 +453,9 @@ public class PlacementScreen extends AbstractScreen {
                                     Coordinate start = new Coordinate((i+1), (j+1));
                                     Coordinate end = new Coordinate((i+(((PlacementRenderer)renderer).getFollow().getLength())), (j +1));
 
+                                    // Creates new key in ShipMap for a set of coordinates
+                                    createKey(end.getX() - start.getX() + 1);
+
                                     // Adds ships with start and end coordinate to player's fleet
                                     try {
                                         model.getClient().getPlayer().getFleet().add(new Ship(start, end));
@@ -437,6 +471,10 @@ public class PlacementScreen extends AbstractScreen {
                                     for(int n = 0; n < ((PlacementRenderer)renderer).getFollow().getLength(); n++) {
                                         children = ((PlacementRenderer)renderer).getGrid()[((i + n)*10)+j].getChildren();
 
+                                        // Add to coordinateMap and rotationMap
+                                        addCoordinateToShipMap(end.getX() - start.getX() + 1, new Coordinate(i + 1 + n, j + 1));
+                                        addToRotationMap(new Coordinate(i + 1 + n, j + 1), ShipButton.Direction.VERTICAL);
+
                                         if(((PlacementRenderer)renderer).getFollow().getLength() == 2) {
                                             path = path + "ship_small_body_" + (n+1) + ".png";
 
@@ -451,9 +489,8 @@ public class PlacementScreen extends AbstractScreen {
                                         }
 
                                         childrenArray = children.toArray();
-                                        //((TextButton)childrenArray[0]).setText("XX");
                                         ((ImageButton)childrenArray[0]).setStyle(new ImageButton.ImageButtonStyle(null, null, null, new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal(path)))), null, null));
-                                        System.out.println((i+n) + ", " + j);
+                                        System.out.println((i+n) + 1 + ", " + (j+1));
                                         path = "desktop/src/main/java/assets/textures/VERTICAL_";
 
                                         // Marks the select coordinate as occupied

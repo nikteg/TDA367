@@ -9,10 +9,14 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import edu.chalmers.sankoss.core.Coordinate;
 import edu.chalmers.sankoss.java.misc.ShipButton;
+import edu.chalmers.sankoss.java.models.GameModel;
 import edu.chalmers.sankoss.java.models.ScreenModel;
 import edu.chalmers.sankoss.java.screens.AbstractScreen;
 import edu.chalmers.sankoss.java.screens.GameScreen;
+
+import java.util.Set;
 
 /**
  * Description of class.
@@ -48,6 +52,11 @@ public class GameRenderer extends Renderer{
     private Label opponentNameLabel;
     private Label playerBoardLabel;;
     private Label aimBoardLabel;
+
+    int two = 1;
+    int three = 1;
+    int four = 1;
+    int five = 1;
 
 
     /**
@@ -216,17 +225,7 @@ public class GameRenderer extends Renderer{
                 playerBoard.add(playerGrid[(i*10)+j]).width(WIDTH_OF_SQUARE).height(HEIGHT_OF_SQUARE);
                 aimBoard.add(aimGrid[(i*10)+j]).width(WIDTH_OF_SQUARE).height(HEIGHT_OF_SQUARE);
 
-
-                // Finds where in grid a player has his ships
-                if(currentModel.getShipArray()[(i*10)+j] == 1){
-                    playerGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/miss.png"))))));
-
-                    //aimGrid[(i*10)+j].addActor(new TextButton("??", btnStyle));
-
-                } else {
-                    //playerGrid[(i*10)+j].addActor(new TextButton(i + "," + j, btnStyle));
-                    //aimGrid[(i*10)+j].addActor(new TextButton("??", btnStyle));
-                }
+                placeShipsOnPlayerGrid(i, j);
 
                 aimGrid[(i*10)+j].addListener(((GameScreen) screen).getShootBtnListener());
 
@@ -251,6 +250,54 @@ public class GameRenderer extends Renderer{
         actorPanel.addActor(middlePanel);
         actorPanel.addActor(topTable);
     }
+
+    public void placeShipsOnPlayerGrid(int i, int j) {
+        // Finds where in grid a player has placed ships
+        if(currentModel.getShipArray()[(i*10)+j] == 1){
+            //playerGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/miss.png"))))));
+
+            drawOwnShips(i, j);
+
+        }
+
+    }
+
+    /**
+     * Method for drawing specific ship visually.
+     */
+    public void drawOwnShips(int i, int j) {
+        // Path to ship texture
+        Set<Coordinate> twoSet = ((GameModel)currentModel).getShipMap().get(2);
+        Set<Coordinate> threeSet = ((GameModel)currentModel).getShipMap().get(3);
+        Set<Coordinate> fourSet = ((GameModel)currentModel).getShipMap().get(4);
+        Set<Coordinate> fiveSet = ((GameModel)currentModel).getShipMap().get(5);
+
+        ShipButton.Direction direction = ((GameModel) currentModel).getRotationMap().get(new Coordinate(i+1, j+1));
+
+        String path = "desktop/src/main/java/assets/textures/" + direction + "_";
+
+        if(twoSet.contains(new Coordinate(i+1, j+1))){
+            playerGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal(path + "ship_small_body_" + two + ".png"))))));
+            two++;
+        }
+
+        if(threeSet.contains(new Coordinate(i+1, j+1))){
+            playerGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal(path + "ship_medium_body_" + three + ".png"))))));
+            three++;
+        }
+
+        if(fourSet.contains(new Coordinate(i+1, j+1))){
+            playerGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal(path + "ship_large_body_" + four + ".png"))))));
+            four++;
+        }
+
+        if(fiveSet.contains(new Coordinate(i+1, j+1))){
+            playerGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal(path + "ship_huge_body_" + five + ".png"))))));
+            five++;
+        }
+    }
+
+
 
     /**
      * Determines whether to call hit or miss method for
