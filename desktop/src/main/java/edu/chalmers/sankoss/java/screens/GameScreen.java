@@ -47,6 +47,7 @@ public class GameScreen extends AbstractScreen {
         model = new GameModel(shipMap, rotationMap);
         model.getClient().addListener(new GameListener());
         renderer = new GameRenderer(model);
+        //((GameRenderer)renderer).setNationality(model.getClient().getPlayer().getNationality());
 
         create();
     }

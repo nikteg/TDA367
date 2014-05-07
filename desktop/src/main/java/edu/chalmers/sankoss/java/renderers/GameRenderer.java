@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import edu.chalmers.sankoss.core.Coordinate;
+import edu.chalmers.sankoss.core.Player;
 import edu.chalmers.sankoss.java.misc.ShipButton;
 import edu.chalmers.sankoss.java.models.GameModel;
 import edu.chalmers.sankoss.java.models.ScreenModel;
@@ -33,6 +34,7 @@ public class GameRenderer extends Renderer{
     private Table[] playerGrid = new Table[100];
     private Table[] aimGrid = new Table[100];
     private ShipButton follow = null;
+    private Player.Nationality nationality;
 
 	private SpriteBatch batch = new SpriteBatch();
     private Skin skin = new Skin();
@@ -174,6 +176,12 @@ public class GameRenderer extends Renderer{
 
         btnStyle = new TextButton.TextButtonStyle();
 
+        land = currentModel.getClient().getPlayer().getNationality().getLandName();
+        nationality = currentModel.getClient().getPlayer().getNationality();
+
+        // Configs flags
+        setFlag();
+
         // Configures necessary attributes for buttons
         setButtons();
 
@@ -249,6 +257,35 @@ public class GameRenderer extends Renderer{
         actorPanel.addActor(playerTable);
         actorPanel.addActor(middlePanel);
         actorPanel.addActor(topTable);
+    }
+
+    /**
+     * Method to set flag depending on nationality.
+     */
+    public void setFlag() {
+
+        Pixmap flagPixmap = new Pixmap(200, 120, Pixmap.Format.RGBA8888);
+        flagPixmap.setColor(Color.WHITE);
+        flagPixmap.fill();
+
+        skin.add(land, new Texture(flagPixmap));
+        //flag.setBackground(skin.newDrawable(land));
+        flag.setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal(nationality.getPath())))));
+
+        landLabel.setText(land);
+
+        playerTable.addActor(landLabel);
+        playerTable.addActor(flag);
+
+
+    }
+
+    public Player.Nationality getNationality() {
+        return nationality;
+    }
+
+    public void setNationality(Player.Nationality nationality) {
+        this.nationality = nationality;
     }
 
     public void placeShipsOnPlayerGrid(int i, int j) {
