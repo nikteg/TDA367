@@ -7,10 +7,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import edu.chalmers.sankoss.java.models.ScreenModel;
 import edu.chalmers.sankoss.java.screens.AbstractScreen;
 import edu.chalmers.sankoss.java.screens.WaitingScreen;
@@ -38,6 +35,9 @@ public class WaitingRenderer extends Renderer {
     private final int WIDTH_OF_BUTTON = 150;
     private final int HEIGHT_OF_BUTTON = 50;
 
+    //Table
+    private Table table = new Table();
+
     /**
      * @inherticdoc
      */
@@ -49,23 +49,11 @@ public class WaitingRenderer extends Renderer {
         return waitingLabel;
     }
 
-    public void createStartBtn() {
-        startGameBtn = new TextButton("Start Game", btnStyle);
-        startGameBtn.setWidth(175);
-        startGameBtn.setHeight(50);
-        startGameBtn.setPosition(Gdx.graphics.getWidth() - startGameBtn.getWidth(), 0);
-        startGameBtn.setX(Gdx.graphics.getWidth() - WIDTH_OF_BUTTON);
-        startGameBtn.setY(0);
-
-        startGameBtn.addListener(((WaitingScreen)screen).getStartButtonListener());
-
-        actorPanel.addActor(startGameBtn);
-    }
 
     @Override
     public void resize(int width, int height) {
-        waitingLabel.setX((width - waitingLabel.getWidth())/2);
-        waitingLabel.setY((height - waitingLabel.getHeight())/2);
+        table.setWidth(width);
+        table.setHeight(height);
     }
 
     @Override
@@ -91,13 +79,16 @@ public class WaitingRenderer extends Renderer {
         btnStyle.font = skin.getFont("default");
         labelStyle.font = skin.getFont("default");
 
+        startGameBtn = new TextButton("Start Game", btnStyle);
+        startGameBtn.setWidth(175);
+        startGameBtn.setHeight(50);
+        startGameBtn.setDisabled(true);
+
+        startGameBtn.addListener(((WaitingScreen)screen).getStartButtonListener());
+
         cancelBtn = new TextButton("Cancel", btnStyle);
-        cancelBtn.setX(0);
-        cancelBtn.setY(0);
 
         waitingLabel = new Label("Waiting for opponent to join!", labelStyle);
-        waitingLabel.setX((Gdx.graphics.getWidth() - WIDTH_OF_BUTTON)/2 - 100);
-        waitingLabel.setY((Gdx.graphics.getHeight() - HEIGHT_OF_BUTTON)/2 - 100);
 
         waitingLabel.addAction(Actions.forever(
                 Actions.sequence(
@@ -105,10 +96,16 @@ public class WaitingRenderer extends Renderer {
                         Actions.fadeIn(2f), Actions.fadeOut(2f)
                 )
         ));
+        table.add(waitingLabel).colspan(2).expandY();
+        table.row();
+        table.add(cancelBtn).left().bottom().expandX();
+        table.add(startGameBtn).right().bottom().expandX();
 
-        actorPanel.addActor(cancelBtn);
-        actorPanel.addActor(waitingLabel);
+        table.setHeight(800);
+        table.setWidth(1200);
+        table.pad(8f);
 
+        //table.debug();
         cancelBtn.addListener(((WaitingScreen)screen).getCancelButtonListener());
     }
 
@@ -138,8 +135,18 @@ public class WaitingRenderer extends Renderer {
         btnStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
         btnStyle.checked = skin.newDrawable("white", Color.DARK_GRAY);
         btnStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
+        btnStyle.disabledFontColor = Color.GRAY;
+        btnStyle.disabled = skin.newDrawable("white", Color.DARK_GRAY);
 
         skin.add("default", btnStyle);
 
+    }
+
+    public Table getTable() {
+        return table;
+    }
+
+    public TextButton getStartGameBtn() {
+        return startGameBtn;
     }
 }

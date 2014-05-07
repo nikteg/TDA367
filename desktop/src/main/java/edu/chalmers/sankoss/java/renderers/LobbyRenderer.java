@@ -6,7 +6,9 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import edu.chalmers.sankoss.core.Room;
 import edu.chalmers.sankoss.java.models.ScreenModel;
 import edu.chalmers.sankoss.java.screens.AbstractScreen;
@@ -30,11 +32,15 @@ public class LobbyRenderer extends Renderer {
     private TextButton joinBtn;
     private TextButton hostBtn;
     private TextButton cancelBtn;
-    private TextButton editBtn;
-    private Label nameLabel;
+    private ImageButton editBtn;
+    private TextField nameField;
     private Label infoLabel;
     private List roomList;
     private Skin skin;
+
+    //Image for edit button
+    SpriteDrawable imagePen = new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/pen.png"))));
+    SpriteDrawable imageCheck = new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/check.png"))));
 
     protected List.ListStyle listStyle;
 
@@ -46,6 +52,9 @@ public class LobbyRenderer extends Renderer {
     // Dimensions of buttons
     private final int WIDTH_OF_BUTTON = 150;
     private final int HEIGHT_OF_BUTTON = 50;
+
+    //Table
+    private Table table = new Table();
 
     /**
      * @inheritdoc
@@ -60,17 +69,8 @@ public class LobbyRenderer extends Renderer {
 
     @Override
     public void resize(int width, int height) {
-        joinBtn.setPosition(width - WIDTH_OF_BUTTON, 0);
-        hostBtn.setPosition(width - WIDTH_OF_BUTTON*2 - 10, 0);
-        infoLabel.setX(width - infoLabel.getWidth() - 10);
-
-        topPanel.setY(height - 150);
-        middlePanel.setY(bottomPanel.getHeight());
-        middlePanel.setHeight(height - bottomPanel.getHeight() - topPanel.getHeight());
-
-        if(roomList != null) {
-            roomList.setY(middlePanel.getHeight() - roomList.getHeight() - 20);
-        }
+        table.setWidth(width);
+        table.setHeight(height);
     }
 
     @Override
@@ -86,69 +86,61 @@ public class LobbyRenderer extends Renderer {
 
         // Defines variables for visuals
         skin = new Skin();
-        actorPanel = new WidgetGroup();
-
-        bottomPanel = new WidgetGroup();
-        topPanel = new WidgetGroup();
-        middlePanel = new WidgetGroup();
 
         btnStyle = new TextButton.TextButtonStyle();
+        textFieldStyle = new TextField.TextFieldStyle();
 
         // Configures necessary attributes for buttons
         setButtons();
 
+        roomList = new List(new String[]{}, listStyle);
+
+        textFieldStyle.font = skin.getFont("textField");
         btnStyle.font = skin.getFont("default");
         labelStyle.font = skin.getFont("default");
 
         // Makes buttons and labels with default style of button
         joinBtn = new TextButton("Join", btnStyle);
-        joinBtn.setX(600 - WIDTH_OF_BUTTON);
-        joinBtn.setY(0);
-
         hostBtn = new TextButton("Host", btnStyle);
-        hostBtn.setX(600 - WIDTH_OF_BUTTON*2 - 10);
-        hostBtn.setY(0);
-
         cancelBtn = new TextButton("Cancel", btnStyle);
-        cancelBtn.setX(0);
-        cancelBtn.setY(0);
 
-        editBtn = new TextButton("Edit name", btnStyle);
-        editBtn.setX(0);
-        editBtn.setY(60);
 
-        nameLabel = new Label(currentModel.getClient().getPlayer().getName(), labelStyle);
-        nameLabel.setX(10);
-        nameLabel.setY(110);
 
+        editBtn = new ImageButton(imagePen, null, imageCheck);
+
+        nameField = new TextField(currentModel.getClient().getPlayer().getName(), textFieldStyle);
+        nameField.setDisabled(true);
+        nameField.setMaxLength(16);
+        nameField.setRightAligned(true);
+
+        System.out.println(nameField.getHeight());
         infoLabel = new Label("Join or host a game", labelStyle);
-        infoLabel.setX(600 - 50);
-        infoLabel.setY(110);
 
-        bottomPanel.setWidth(800);
-        bottomPanel.setHeight(50);
-        bottomPanel.setX(0);
-        bottomPanel.setY(0);
-        bottomPanel.addActor(joinBtn);
-        bottomPanel.addActor(hostBtn);
-        bottomPanel.addActor(cancelBtn);
+        table.add(infoLabel).expandX().left().fillX().top();
+        table.add(nameField).expandX().right().top().width(250);
+        table.add(editBtn).right().fillX().top().width(44f).height(44f);
 
-        topPanel.setWidth(800);
-        topPanel.setHeight(30);
-        topPanel.setX(0);
-        topPanel.setY(Gdx.graphics.getHeight()-150);
-        topPanel.addActor(infoLabel);
-        topPanel.addActor(nameLabel);
-        topPanel.addActor(editBtn);
+        table.row();
 
-        middlePanel.setWidth(800);
-        middlePanel.setHeight(800 - topPanel.getHeight() - bottomPanel.getHeight());
-        middlePanel.setX(0);
-        middlePanel.setY(bottomPanel.getHeight());
+        table.add(roomList).colspan(3).expand().fill().padTop(8).padBottom(8);
 
-        actorPanel.addActor(bottomPanel);
-        actorPanel.addActor(middlePanel);
-        actorPanel.addActor(topPanel);
+        table.row();
+
+
+        table.add(cancelBtn).expandX().left().bottom();
+        Table joinHostTable = new Table();
+
+        joinHostTable.add(hostBtn);
+        joinHostTable.add(joinBtn).padLeft(8);
+
+        table.add(joinHostTable).expandX().right().bottom().colspan(2);
+
+        table.setHeight(800);
+        table.setWidth(1200);
+        table.pad(8f);
+
+        //table.debug();
+
 
         joinBtn.addListener(((LobbyScreen)screen).getJoinButtonListener());
         hostBtn.addListener(((LobbyScreen)screen).getHostButtonListener());
@@ -196,15 +188,30 @@ public class LobbyRenderer extends Renderer {
         listStyle.fontColorSelected = Color.WHITE;
         listStyle.fontColorUnselected = Color.GRAY;
 
+
+
+
+        // Adds font to skin
+        skin.add("textField", font);
+
+        // Configures how the Style of a textField should behave and
+        // names is "white"
+        textFieldStyle.cursor = skin.newDrawable("white", Color.LIGHT_GRAY);
+        textFieldStyle.cursor.setMinWidth(2f);
+        textFieldStyle.selection = skin.newDrawable("white", Color.DARK_GRAY);
+        textFieldStyle.fontColor =  Color.WHITE;
+        textFieldStyle.focusedBackground = skin.newDrawable("white", Color.GREEN);
+
+
+
+
+        skin.add("textField", textFieldStyle);
+
+
     }
 
     public void setList(Map<Long, Room> rooms) {
-        roomList = new List(rooms.values().toArray(new Room[rooms.size()]), listStyle);
-
-        roomList.setX(50);
-        roomList.setY(middlePanel.getHeight() - roomList.getHeight() - 75);
-
-        middlePanel.addActor(roomList);
+        roomList.setItems(rooms.values().toArray(new Room[rooms.size()]));
     }
 
     public List getRoomList() {
@@ -212,6 +219,19 @@ public class LobbyRenderer extends Renderer {
     }
 
     public void setNameLabel(String name) {
-        nameLabel.setText(name);
+        nameField.setText(name);
+    }
+
+    public TextField getNameField() {
+        return nameField;
+    }
+
+    public Table getTable() {
+        return table;
+    }
+
+    public void toggleEditBtn() {
+        boolean isChecked = editBtn.isChecked();
+        editBtn.setChecked(!isChecked);
     }
 }

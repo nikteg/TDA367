@@ -1,6 +1,7 @@
 package edu.chalmers.sankoss.java.screens;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import edu.chalmers.sankoss.core.Player;
 import edu.chalmers.sankoss.java.SankossController;
@@ -16,7 +17,7 @@ import edu.chalmers.sankoss.java.renderers.WaitingRenderer;
  * @author Mikael Malmqvist
  * @date 5/5/14
  */
-public class WaitingScreen extends AbstractScreen {
+public class WaitingScreen extends AbstractScreen<WaitingRenderer> {
 
     /**
      * @inheritdoc
@@ -43,8 +44,8 @@ public class WaitingScreen extends AbstractScreen {
 
         @Override
         public void joinedRoom(Player player) {
-            ((WaitingRenderer)renderer).getWaitingLabel().setText(player.getName() + " has joined your room!");
-            ((WaitingRenderer)renderer).createStartBtn();
+            renderer.getWaitingLabel().setText(player.getName() + " has joined your room!");
+            renderer.getStartGameBtn().setDisabled(false);
         }
     }
 
@@ -70,8 +71,9 @@ public class WaitingScreen extends AbstractScreen {
 
         renderer.drawControllers(this);
 
-        stage.addActor(renderer.getActorPanel());
+        stage.addActor(renderer.getTable());
         stage.draw();
+        Table.drawDebug(stage);
 
     }
 

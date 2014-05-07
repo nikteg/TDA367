@@ -20,10 +20,10 @@ import edu.chalmers.sankoss.java.SankossGame;
  * @author Mikael Malmqvist
  * @date 3/31/14
  */
-public abstract class AbstractScreen implements Screen, ApplicationListener {
+public abstract class AbstractScreen<R extends Renderer> implements Screen, ApplicationListener {
 
     protected ScreenModel model;
-    protected Renderer renderer;
+    protected R renderer;
     protected SankossGame game;
     protected SankossController controller;
 

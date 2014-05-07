@@ -3,6 +3,7 @@ package edu.chalmers.sankoss.java.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import edu.chalmers.sankoss.core.Player;
 import edu.chalmers.sankoss.core.Room;
@@ -21,7 +22,7 @@ import java.util.Map;
  * @author Mikael Malmqvist
  * @date 3/24/14
  */
-public class LobbyScreen extends AbstractScreen {
+public class LobbyScreen extends AbstractScreen<LobbyRenderer> {
 
     // private Lobby lobby;
     private Object[] keys;
@@ -57,7 +58,7 @@ public class LobbyScreen extends AbstractScreen {
 
             model.setRoomMap(gameRooms);
 
-            ((LobbyRenderer)renderer).setList(rooms);
+            renderer.setList(rooms);
         }
 
         public void joinedRoom(Player player) {
@@ -107,8 +108,9 @@ public class LobbyScreen extends AbstractScreen {
 
         model.getClient().fetchRooms();
 
-        stage.addActor(renderer.getActorPanel());
+        stage.addActor(renderer.getTable());
         stage.draw();
+        Table.drawDebug(stage);
 
     }
 
@@ -193,6 +195,20 @@ public class LobbyScreen extends AbstractScreen {
      * Method for changing player's name.
      */
     public void changeName() {
+        if (renderer.getNameField().isDisabled()) {
+            stage.setKeyboardFocus(renderer.getNameField());
+            renderer.getNameField().setDisabled(false);
+            renderer.getNameField().selectAll();
+            renderer.getNameField().setRightAligned(false);
+        } else {
+            String name = renderer.getNameField().getText();
+            model.getClient().getPlayer().setName(name);
+            renderer.getNameField().setDisabled(true);
+            stage.unfocus(renderer.getNameField());
+            renderer.getNameField().setRightAligned(true);
+        }
+
+/*
         Gdx.input.getTextInput(new Input.TextInputListener() {
 
             // Gets user input
@@ -209,23 +225,24 @@ public class LobbyScreen extends AbstractScreen {
                 // nothing..
             }
         }, "Enter new name:", "");
+        */
     }
 
     /**
      * Method for joining a game.
      */
     public void joinGame() {
-        String buttonText = "" + ((LobbyRenderer)renderer).getJoinBtn().getText();
+        String buttonText = "" + renderer.getJoinBtn().getText();
 
         if(buttonText.equals("Join") && gameRooms.size() > 0) {
 
             // Retrives selected name and matches with room
-            String roomName = ((LobbyRenderer)renderer).getRoomList().getSelection();
+            String roomName = renderer.getRoomList().getSelection();
 
             Room roomToJoin = model.getRoomByName(roomName, gameRooms);
             model.getClient().joinRoom(roomToJoin.getID());
 
-            ((LobbyRenderer)renderer).getJoinBtn().setText("Joined");
+            renderer.getJoinBtn().setText("Joined");
 
 
         } else if(buttonText.equals("Enter Game") && model.getClient().getGameID() != null) {

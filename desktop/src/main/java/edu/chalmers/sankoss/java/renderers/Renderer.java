@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import edu.chalmers.sankoss.java.models.ScreenModel;
 import edu.chalmers.sankoss.java.screens.AbstractScreen;
@@ -23,6 +24,7 @@ public abstract class Renderer {
     protected int width, height;
     protected static Label.LabelStyle labelStyle;
     protected static TextButton.TextButtonStyle btnStyle;
+    protected static TextField.TextFieldStyle textFieldStyle;
     protected WidgetGroup actorPanel;
 
     /**
