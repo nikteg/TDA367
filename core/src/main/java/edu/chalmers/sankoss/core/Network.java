@@ -38,6 +38,8 @@ public class Network {
         kryo.register(PlayerIsReady.class);
         kryo.register(PlayerReady.class);
         kryo.register(Room.class);
+        kryo.register(RemoveRoom.class);
+        kryo.register(RemovedRoom.class);
         kryo.register(Ship.class);
         //kryo.register(SankossAI.class);
         kryo.register(StartedGame.class);

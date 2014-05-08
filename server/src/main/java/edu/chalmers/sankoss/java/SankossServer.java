@@ -480,7 +480,7 @@ public class SankossServer {
 
                         room.removePlayerWithID(player.getID());
                         for (BasePlayer opponent : room.getPlayers()) {
-                            getPlayerConnectionFromID(opponent.getID()).sendTCP(new Disconnect(player));
+                            getPlayerConnectionFromID(opponent.getID()).sendTCP(new Disconnect(player.getBasePlayer()));
                         }
 
                         break;
@@ -524,7 +524,8 @@ public class SankossServer {
     }
 
     protected PlayerConnection getPlayerConnectionFromID(Long id) {
-        for (PlayerConnection playerConnection : (PlayerConnection[])server.getConnections()) {
+        for (Connection con : server.getConnections()) {
+            PlayerConnection playerConnection = (PlayerConnection)con;
             if (playerConnection.getPlayer().getID().equals(id)) {
                 return playerConnection;
             }

@@ -5,12 +5,19 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import edu.chalmers.sankoss.core.BasePlayer;
+import edu.chalmers.sankoss.core.Coordinate;
 import edu.chalmers.sankoss.java.misc.ShipButton;
+import edu.chalmers.sankoss.java.models.GameModel;
 import edu.chalmers.sankoss.java.models.ScreenModel;
 import edu.chalmers.sankoss.java.screens.AbstractScreen;
 import edu.chalmers.sankoss.java.screens.GameScreen;
+
+import java.util.Set;
 
 /**
  * Description of class.
@@ -27,6 +34,7 @@ public class GameRenderer extends Renderer{
     private Table[] playerGrid = new Table[100];
     private Table[] aimGrid = new Table[100];
     private ShipButton follow = null;
+    private BasePlayer.Nationality nationality;
 
 	private SpriteBatch batch = new SpriteBatch();
     private Skin skin = new Skin();
@@ -46,6 +54,11 @@ public class GameRenderer extends Renderer{
     private Label opponentNameLabel;
     private Label playerBoardLabel;;
     private Label aimBoardLabel;
+
+    int two = 1;
+    int three = 1;
+    int four = 1;
+    int five = 1;
 
 
     /**
@@ -129,7 +142,7 @@ public class GameRenderer extends Renderer{
         middlePanel = new Table();
         middlePanel.setWidth(800);
         middlePanel.setHeight(600 - topTable.getHeight() - playerTable.getHeight());
-        middlePanel.setBackground(skin.newDrawable("tableBack2"));
+        middlePanel.setBackground(skin.newDrawable("tableBack"));
         middlePanel.setPosition(0, playerTable.getHeight());
 
 
@@ -163,6 +176,12 @@ public class GameRenderer extends Renderer{
 
         btnStyle = new TextButton.TextButtonStyle();
 
+        land = currentModel.getClient().getPlayer().getNationality().getLandName();
+        nationality = currentModel.getClient().getPlayer().getNationality();
+
+        // Configs flags
+        setFlag();
+
         // Configures necessary attributes for buttons
         setButtons();
 
@@ -192,11 +211,21 @@ public class GameRenderer extends Renderer{
 
                 // Colorizes every second square with a different gray based on the tableBack
                 if(n % 2 == 0) {
-                    playerGrid[(i*10)+j].setBackground(skin.newDrawable("tableBack"));
-                    aimGrid[(i*10)+j].setBackground(skin.newDrawable("tableBack3"));
+                    playerGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/LIGHT_water.png"))))));
+                    playerGrid[(i*10)+j].setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/LIGHT_water.png")))));
+                    aimGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/LIGHT_water.png"))))));
+                    aimGrid[(i*10)+j].setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/LIGHT_water.png")))));
+
+                    // playerGrid[(i*10)+j].setBackground(skin.newDrawable("tableBack"));
+                    // aimGrid[(i*10)+j].setBackground(skin.newDrawable("tableBack3"));
                 } else {
-                    playerGrid[(i*10)+j].setBackground(skin.newDrawable("tableBack3"));
-                    aimGrid[(i*10)+j].setBackground(skin.newDrawable("tableBack"));
+                    playerGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/DARK_water.png"))))));
+                    playerGrid[(i*10)+j].setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/DARK_water.png")))));
+                    aimGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/DARK_water.png"))))));
+                    aimGrid[(i*10)+j].setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/DARK_water.png")))));
+
+                    // playerGrid[(i*10)+j].setBackground(skin.newDrawable("tableBack3"));
+                    // aimGrid[(i*10)+j].setBackground(skin.newDrawable("tableBack"));
                 }
 
                 // Adds grid to middlePanel and add a textButton to it
@@ -204,17 +233,7 @@ public class GameRenderer extends Renderer{
                 playerBoard.add(playerGrid[(i*10)+j]).width(WIDTH_OF_SQUARE).height(HEIGHT_OF_SQUARE);
                 aimBoard.add(aimGrid[(i*10)+j]).width(WIDTH_OF_SQUARE).height(HEIGHT_OF_SQUARE);
 
-
-                if(currentModel.getShipArray()[(i*10)+j] == 1){
-                    playerGrid[(i*10)+j].addActor(new TextButton("XX", btnStyle));
-                    aimGrid[(i*10)+j].addActor(new TextButton("??", btnStyle));
-                    System.out.println(i + ", " + j + " is occupied!");
-
-                } else {
-                    //playerGrid[(i*10)+j].addActor(new TextButton(i + "," + j, btnStyle));
-                    aimGrid[(i*10)+j].addActor(new TextButton("??", btnStyle));
-                    System.out.println(i + ", " + j + " is free!");
-                }
+                placeShipsOnPlayerGrid(i, j);
 
                 aimGrid[(i*10)+j].addListener(((GameScreen) screen).getShootBtnListener());
 
@@ -238,6 +257,124 @@ public class GameRenderer extends Renderer{
         actorPanel.addActor(playerTable);
         actorPanel.addActor(middlePanel);
         actorPanel.addActor(topTable);
+    }
+
+    /**
+     * Method to set flag depending on nationality.
+     */
+    public void setFlag() {
+
+        Pixmap flagPixmap = new Pixmap(200, 120, Pixmap.Format.RGBA8888);
+        flagPixmap.setColor(Color.WHITE);
+        flagPixmap.fill();
+
+        skin.add(land, new Texture(flagPixmap));
+        //flag.setBackground(skin.newDrawable(land));
+        flag.setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal(nationality.getPath())))));
+
+        landLabel.setText(land);
+
+        playerTable.addActor(landLabel);
+        playerTable.addActor(flag);
+
+
+    }
+
+    public BasePlayer.Nationality getNationality() {
+        return nationality;
+    }
+
+    public void setNationality(BasePlayer.Nationality nationality) {
+        this.nationality = nationality;
+    }
+
+    public void placeShipsOnPlayerGrid(int i, int j) {
+        // Finds where in grid a player has placed ships
+        if(currentModel.getShipArray()[(i*10)+j] == 1){
+            //playerGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/miss.png"))))));
+
+            drawOwnShips(i, j);
+
+        }
+
+    }
+
+    /**
+     * Method for drawing specific ship visually.
+     */
+    public void drawOwnShips(int i, int j) {
+        // Path to ship texture
+        Set<Coordinate> twoSet = ((GameModel)currentModel).getShipMap().get(2);
+        Set<Coordinate> threeSet = ((GameModel)currentModel).getShipMap().get(3);
+        Set<Coordinate> fourSet = ((GameModel)currentModel).getShipMap().get(4);
+        Set<Coordinate> fiveSet = ((GameModel)currentModel).getShipMap().get(5);
+
+        ShipButton.Direction direction = ((GameModel) currentModel).getRotationMap().get(new Coordinate(i+1, j+1));
+
+        String path = "desktop/src/main/java/assets/textures/" + direction + "_";
+
+        if(twoSet.contains(new Coordinate(i+1, j+1))){
+            playerGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal(path + "ship_small_body_" + two + ".png"))))));
+            two++;
+        }
+
+        if(threeSet.contains(new Coordinate(i+1, j+1))){
+            playerGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal(path + "ship_medium_body_" + three + ".png"))))));
+            three++;
+        }
+
+        if(fourSet.contains(new Coordinate(i+1, j+1))){
+            playerGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal(path + "ship_large_body_" + four + ".png"))))));
+            four++;
+        }
+
+        if(fiveSet.contains(new Coordinate(i+1, j+1))){
+            playerGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal(path + "ship_huge_body_" + five + ".png"))))));
+            five++;
+        }
+    }
+
+
+
+    /**
+     * Determines whether to call hit or miss method for
+     * drawing explosion or hole.
+     * @param x X-coordinate.
+     * @param y Y-coordinate.
+     * @param str Tells if hit or miss.
+     */
+    public void setHitOrMiss(int x, int y, String str) {
+
+        if(str.equals("HIT")) {
+            setHit(x, y);
+
+        } else if (str.equals("MISS")) {
+            setMiss(x, y);
+        }
+
+        //aimGrid[x + y].addActor(new TextButton(str, btnStyle));
+    }
+
+    /**
+     * Draws a hole (miss) at given coordinates in grid.
+     * @param x X-coordinate.
+     * @param y Y-coordinate.
+     */
+    public void setMiss(int x, int y) {
+
+        aimGrid[(x-1)*10 + (y-1)].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/miss.png"))))));
+
+    }
+
+    /**
+     * Draws an explosion at given coordinates in grid.
+     * @param x X-coordinate.
+     * @param y Y-coordinate.
+     */
+    public void setHit(int x, int y) {
+
+        aimGrid[(x-1)*10 + (y-1)].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/explosion.png"))))));
+
     }
 
     /**

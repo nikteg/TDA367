@@ -3,14 +3,15 @@ package edu.chalmers.sankoss.java.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import edu.chalmers.sankoss.core.BasePlayer;
 import edu.chalmers.sankoss.core.Room;
-import edu.chalmers.sankoss.java.models.Lobby;
-import edu.chalmers.sankoss.java.renderers.LobbyRenderer;
 import edu.chalmers.sankoss.java.SankossController;
 import edu.chalmers.sankoss.java.SankossGame;
 import edu.chalmers.sankoss.java.client.SankossClientListener;
+import edu.chalmers.sankoss.java.models.Lobby;
+import edu.chalmers.sankoss.java.renderers.LobbyRenderer;
 
 import java.util.Map;
 
@@ -21,7 +22,7 @@ import java.util.Map;
  * @author Mikael Malmqvist
  * @date 3/24/14
  */
-public class LobbyScreen extends AbstractScreen {
+public class LobbyScreen extends AbstractScreen<LobbyRenderer> {
 
     // private Lobby lobby;
     private Object[] keys;
@@ -57,7 +58,7 @@ public class LobbyScreen extends AbstractScreen {
 
             model.setRoomMap(gameRooms);
 
-            ((LobbyRenderer)renderer).setList(rooms);
+            renderer.setList(rooms);
         }
 
         public void joinedRoom(BasePlayer player) {
@@ -66,6 +67,11 @@ public class LobbyScreen extends AbstractScreen {
 
         public void startedGame(Long gameID) {
             ((LobbyRenderer)renderer).getJoinBtn().setText("Enter Game");
+        }
+
+        @Override
+        public void createdRoom(Long roomID) {
+            System.out.println("You hosted room #" + roomID);
         }
     }
 
@@ -102,8 +108,9 @@ public class LobbyScreen extends AbstractScreen {
 
         model.getClient().fetchRooms();
 
-        stage.addActor(renderer.getActorPanel());
+        stage.addActor(renderer.getTable());
         stage.draw();
+        Table.drawDebug(stage);
 
     }
 
@@ -130,57 +137,116 @@ public class LobbyScreen extends AbstractScreen {
         return new EditButtonListener();
     }
 
+    public HostButtonListener getHostButtonListener() {
+        return new HostButtonListener();
+    }
+
     private class JoinButtonListener extends ChangeListener{
+
         @Override
         public void changed(ChangeEvent event, Actor actor) {
-
-            String buttonText = "" + ((LobbyRenderer)renderer).getJoinBtn().getText();
-
-            if(buttonText.equals("Ask to join")) {
-                // Retrives selected name and matches with room
-                String roomName = ((LobbyRenderer)renderer).getRoomList().getSelection();
-
-                Room roomToJoin = model.getRoomByName(roomName, gameRooms);
-
-                model.getClient().joinRoom(roomToJoin.getID());
-
-                ((LobbyRenderer)renderer).getJoinBtn().setText("Joined");
-                //controller.changeScreen(new PlacementScreen(controller, game));
-
-            } else if(buttonText.equals("Enter Game") && model.getClient().getGameID() != null) {
-                controller.changeScreen(new PlacementScreen(controller, game));
-            }
-
+            joinGame();
         }
     }
 
     private class CancelButtonListener extends ChangeListener{
+
         @Override
         public void changed(ChangeEvent event, Actor actor) {
+            jumpToMainMenu();
+        }
+
+        public void jumpToMainMenu() {
             controller.changeScreen(new MainMenuScreen(controller, game));
         }
     }
 
+    // TODO: REDO COMPLETELY
     private class EditButtonListener extends ChangeListener{
+
         @Override
         public void changed(ChangeEvent event, Actor actor) {
-            Gdx.input.getTextInput(new Input.TextInputListener() {
+            changeName();
+        }
+    }
 
-                // Gets user input
-                @Override
-                public void input(String name) {
+    private class HostButtonListener extends ChangeListener{
 
-                    model.getClient().getPlayer().setName(name);
-                    ((LobbyRenderer)renderer).setNameLabel(name);
+        @Override
+        public void changed(ChangeEvent event, Actor actor) {
+            startHosting();
+            jumpToWaiting();
+        }
+    }
 
-                }
+    /**
+     * Method for hosting a room.
+     */
+    public void startHosting() {
+        model.getClient().createRoom(model.getClient().getPlayer().getName() + "'s Room", ""); //Roomname and password
 
-                @Override
-                public void canceled() {
-                    // nothing..
-                }
-            }, "Enter new name:", "");
+    }
 
+    public void jumpToWaiting() {
+        controller.changeScreen(new WaitingScreen(controller, game));
+    }
+
+    /**
+     * Method for changing player's name.
+     */
+    public void changeName() {
+        if (renderer.getNameField().isDisabled()) {
+            stage.setKeyboardFocus(renderer.getNameField());
+            renderer.getNameField().setDisabled(false);
+            renderer.getNameField().selectAll();
+            renderer.getNameField().setRightAligned(false);
+        } else {
+            String name = renderer.getNameField().getText();
+            model.getClient().getPlayer().setName(name);
+            renderer.getNameField().setDisabled(true);
+            stage.unfocus(renderer.getNameField());
+            renderer.getNameField().setRightAligned(true);
+        }
+
+/*
+        Gdx.input.getTextInput(new Input.TextInputListener() {
+
+            // Gets user input
+            @Override
+            public void input(String name) {
+
+                model.getClient().getPlayer().setName(name);
+                ((LobbyRenderer)renderer).setNameLabel(name);
+
+            }
+
+            @Override
+            public void canceled() {
+                // nothing..
+            }
+        }, "Enter new name:", "");
+        */
+    }
+
+    /**
+     * Method for joining a game.
+     */
+    public void joinGame() {
+        String buttonText = "" + renderer.getJoinBtn().getText();
+
+        if(buttonText.equals("Join") && gameRooms.size() > 0) {
+
+            // Retrives selected name and matches with room
+            String roomName = renderer.getRoomList().getSelection();
+
+            Room roomToJoin = model.getRoomByName(roomName, gameRooms);
+            model.getClient().joinRoom(roomToJoin.getID());
+
+            renderer.getJoinBtn().setText("Joined");
+
+
+        } else if(buttonText.equals("Enter Game") && model.getClient().getGameID() != null) {
+            controller.changeScreen(new PlacementScreen(controller, game));
         }
     }
 }

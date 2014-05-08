@@ -11,9 +11,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import edu.chalmers.sankoss.core.BasePlayer;
 import edu.chalmers.sankoss.java.client.SankossClientPlayer;
+import edu.chalmers.sankoss.java.misc.ShipButton;
 import edu.chalmers.sankoss.java.models.Placement;
 import edu.chalmers.sankoss.java.models.ScreenModel;
-import edu.chalmers.sankoss.java.misc.ShipButton;
 import edu.chalmers.sankoss.java.screens.AbstractScreen;
 import edu.chalmers.sankoss.java.screens.PlacementScreen;
 
@@ -31,6 +31,7 @@ public class PlacementRenderer extends Renderer{
 	private final int GRID_SIDE=10;
     private java.awt.Color color = java.awt.Color.WHITE;
     private String land = "USA";
+    private BasePlayer.Nationality nationality = BasePlayer.Nationality.USA;
     private final int WIDTH_OF_SQUARE = 50;
     private final int HEIGHT_OF_SQUARE = 50;
     private Table[] grid = new Table[100];
@@ -109,7 +110,8 @@ public class PlacementRenderer extends Renderer{
         flagPixmap.fill();
 
         skin.add(land, new Texture(flagPixmap));
-        flag.setBackground(skin.newDrawable(land));
+        //flag.setBackground(skin.newDrawable(land));
+        flag.setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal(nationality.getPath())))));
 
         landLabel.setText(land);
 
@@ -120,7 +122,6 @@ public class PlacementRenderer extends Renderer{
     }
 
     public void drawControllers(AbstractScreen screen) {
-        //skin = new Skin();
 
         actorPanel = new WidgetGroup();
         btnStyle2 = new TextButton.TextButtonStyle();
@@ -158,7 +159,7 @@ public class PlacementRenderer extends Renderer{
         middlePanel = new Table();
         middlePanel.setWidth(800);
         middlePanel.setHeight(600 - topTable.getHeight() - playerTable.getHeight());
-        middlePanel.setBackground(skin.newDrawable("tableBack2"));
+        middlePanel.setBackground(skin.newDrawable("tableBack"));
         middlePanel.setPosition(0, playerTable.getHeight());
 
 
@@ -206,18 +207,12 @@ public class PlacementRenderer extends Renderer{
 
                 // Adds button to be clicked when placing ships in the placement grid
                 if(n % 2 == 0) {
-
-                    //grid[(i*10)+j].addActor(new TextButton("", btnStyle));
                     grid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/LIGHT_water.png"))))));
-                    //((ImageButton) (grid[(i*10)+j]).getChildren().get(0)).setBackground(skin.newDrawable("tableBack"));
                     grid[(i*10)+j].setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/LIGHT_water.png")))));
+
                 } else {
-
-                    //grid[(i*10)+j].addActor(new TextButton("", btnStyle2));
                     grid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/DARK_water.png"))))));
-
                     grid[(i*10)+j].setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/DARK_water.png")))));
-                    //((ImageButton) (grid[(i*10)+j]).getChildren().get(0)).setBackground(skin.newDrawable("tableBack3"));
 
                 }
 
@@ -226,8 +221,6 @@ public class PlacementRenderer extends Renderer{
                 middlePanel.add(grid[(i*10)+j]).width(WIDTH_OF_SQUARE).height(HEIGHT_OF_SQUARE);
 
                 grid[(i*10)+j].getChildren().get(0).setSize(50, 50);
-                //TextButton btn = (TextButton)(grid[(i*10)+j]).getChildren().get(0);
-                //btn.setBackground(skin.newDrawable("tableBack"));
                 grid[(i*10)+j].addListener(((PlacementScreen) screen).getShipBtnListener());
             }
             n++;
@@ -254,26 +247,13 @@ public class PlacementRenderer extends Renderer{
         rotateBtn.setY(100 - rotateBtn.getHeight());
 
         // Ships to be placed in grid
-        // These should be ImageButtons later on..
         twoShip = new ShipButton(2);
-        //twoShip.setX(175);
-        //twoShip.setWidth(WIDTH_OF_SQUARE*2) ;
-        //twoShip.setHeight(HEIGHT_OF_SQUARE*2);
         twoShip.addListener(((PlacementScreen) screen).getShip2Listener());
         threeShip = new ShipButton(3);
-        //threeShip.setX(325);
-        //threeShip.setWidth(WIDTH_OF_SQUARE*3);
-        //threeShip.setHeight(HEIGHT_OF_SQUARE*3);
         threeShip.addListener(((PlacementScreen) screen).getShip2Listener());
         fourShip = new ShipButton(4);
-        //fourShip.setWidth(WIDTH_OF_SQUARE*4 + 25);
-        //fourShip.setHeight(HEIGHT_OF_SQUARE);
-        //fourShip.setX(525);
         fourShip.addListener(((PlacementScreen) screen).getShip2Listener());
         fiveShip = new ShipButton(5);
-        //fiveShip.setWidth(WIDTH_OF_SQUARE*5);
-        //fiveShip.setHeight(HEIGHT_OF_SQUARE);
-        //fiveShip.setX(775);
         fiveShip.addListener(((PlacementScreen) screen).getShip2Listener());
 
         topTable.addActor(rotateBtn);
@@ -344,6 +324,10 @@ public class PlacementRenderer extends Renderer{
         threeShip.update();
         fourShip.update();
         fiveShip.update();
+    }
+
+    public void setNationality(BasePlayer.Nationality nationality) {
+        this.nationality = nationality;
     }
 
     public WidgetGroup getActorPanel() {
