@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * 
  * @author Niklas Tegnander
- * @modified Fredrik Thune, Mikael Malmqvist
+ * @modified Fredrik Thune, Mikael Malmqvist, Daniel Eineving
  * 
  */
 public class Player implements KryoSerializable {
@@ -41,10 +41,10 @@ public class Player implements KryoSerializable {
 
 
     public enum Nationality {
-        USA("USA", "desktop/src/main/java/assets/textures/USA.png"),
-        GERMANY("GER", "desktop/src/main/java/assets/textures/germany.png"),
-        JAPAN("JAP", "desktop/src/main/java/assets/textures/japan.png"),
-        ENGLAND("ENG", "desktop/src/main/java/assets/textures/england.png");
+        USA("USA", "assets/textures/USA.png"),
+        GERMANY("GER", "assets/textures/germany.png"),
+        JAPAN("JAP", "assets/textures/japan.png"),
+        ENGLAND("ENG", "assets/textures/england.png");
 
         private String landName;
         private java.awt.Color color;

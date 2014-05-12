@@ -24,6 +24,7 @@ import java.util.Set;
  * More detailed description.
  *
  * @author Mikael Malmqvist
+ * @modified Daniel Eineving 2014-05-12
  */
 public class GameRenderer extends Renderer{
 
@@ -211,18 +212,18 @@ public class GameRenderer extends Renderer{
 
                 // Colorizes every second square with a different gray based on the tableBack
                 if(n % 2 == 0) {
-                    playerGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/LIGHT_water.png"))))));
-                    playerGrid[(i*10)+j].setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/LIGHT_water.png")))));
-                    aimGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/LIGHT_water.png"))))));
-                    aimGrid[(i*10)+j].setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/LIGHT_water.png")))));
+                    playerGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/LIGHT_water.png"))))));
+                    playerGrid[(i*10)+j].setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/LIGHT_water.png")))));
+                    aimGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/LIGHT_water.png"))))));
+                    aimGrid[(i*10)+j].setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/LIGHT_water.png")))));
 
                     // playerGrid[(i*10)+j].setBackground(skin.newDrawable("tableBack"));
                     // aimGrid[(i*10)+j].setBackground(skin.newDrawable("tableBack3"));
                 } else {
-                    playerGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/DARK_water.png"))))));
-                    playerGrid[(i*10)+j].setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/DARK_water.png")))));
-                    aimGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/DARK_water.png"))))));
-                    aimGrid[(i*10)+j].setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/DARK_water.png")))));
+                    playerGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/DARK_water.png"))))));
+                    playerGrid[(i*10)+j].setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/DARK_water.png")))));
+                    aimGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/DARK_water.png"))))));
+                    aimGrid[(i*10)+j].setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/DARK_water.png")))));
 
                     // playerGrid[(i*10)+j].setBackground(skin.newDrawable("tableBack3"));
                     // aimGrid[(i*10)+j].setBackground(skin.newDrawable("tableBack"));
@@ -270,7 +271,7 @@ public class GameRenderer extends Renderer{
 
         skin.add(land, new Texture(flagPixmap));
         //flag.setBackground(skin.newDrawable(land));
-        flag.setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal(nationality.getPath())))));
+        flag.setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath(nationality.getPath())))));
 
         landLabel.setText(land);
 
@@ -291,7 +292,7 @@ public class GameRenderer extends Renderer{
     public void placeShipsOnPlayerGrid(int i, int j) {
         // Finds where in grid a player has placed ships
         if(currentModel.getShipArray()[(i*10)+j] == 1){
-            //playerGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/miss.png"))))));
+            //playerGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("assets/textures/miss.png"))))));
 
             drawOwnShips(i, j);
 
@@ -311,25 +312,25 @@ public class GameRenderer extends Renderer{
 
         ShipButton.Direction direction = ((GameModel) currentModel).getRotationMap().get(new Coordinate(i+1, j+1));
 
-        String path = "desktop/src/main/java/assets/textures/" + direction + "_";
+        String path = "assets/textures/" + direction + "_";
 
         if(twoSet.contains(new Coordinate(i+1, j+1))){
-            playerGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal(path + "ship_small_body_" + two + ".png"))))));
+            playerGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath(path + "ship_small_body_" + two + ".png"))))));
             two++;
         }
 
         if(threeSet.contains(new Coordinate(i+1, j+1))){
-            playerGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal(path + "ship_medium_body_" + three + ".png"))))));
+            playerGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath(path + "ship_medium_body_" + three + ".png"))))));
             three++;
         }
 
         if(fourSet.contains(new Coordinate(i+1, j+1))){
-            playerGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal(path + "ship_large_body_" + four + ".png"))))));
+            playerGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath(path + "ship_large_body_" + four + ".png"))))));
             four++;
         }
 
         if(fiveSet.contains(new Coordinate(i+1, j+1))){
-            playerGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal(path + "ship_huge_body_" + five + ".png"))))));
+            playerGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath(path + "ship_huge_body_" + five + ".png"))))));
             five++;
         }
     }
@@ -362,7 +363,7 @@ public class GameRenderer extends Renderer{
      */
     public void setMiss(int x, int y) {
 
-        aimGrid[(x-1)*10 + (y-1)].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/miss.png"))))));
+        aimGrid[(x-1)*10 + (y-1)].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/miss.png"))))));
 
     }
 
@@ -373,7 +374,7 @@ public class GameRenderer extends Renderer{
      */
     public void setHit(int x, int y) {
 
-        aimGrid[(x-1)*10 + (y-1)].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/explosion.png"))))));
+        aimGrid[(x-1)*10 + (y-1)].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/explosion.png"))))));
 
     }
 

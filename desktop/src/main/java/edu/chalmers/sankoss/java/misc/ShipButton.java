@@ -18,7 +18,7 @@ public class ShipButton extends ImageButton {
     private static float lastPosition = 100;
 
     public ShipButton() {
-        super(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/HORIZONTAL_ship_large_body.png")))));
+        super(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/HORIZONTAL_ship_large_body.png")))));
 
         direction = Direction.HORIZONTAL;
         length = 2;
@@ -28,7 +28,7 @@ public class ShipButton extends ImageButton {
     }
 
     public ShipButton(int length) {
-        super(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/HORIZONTAL_ship_large_body.png")))));
+        super(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/HORIZONTAL_ship_large_body.png")))));
 
         direction = Direction.HORIZONTAL;
         setLength(length);
@@ -55,13 +55,13 @@ public class ShipButton extends ImageButton {
      */
     public void updateTexture() {
         if (length == 3 || length == 4) {
-            setStyle(new ImageButtonStyle(null, null, null, new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/" + direction + "_ship_medium_body.png")))), null, null));
+            setStyle(new ImageButtonStyle(null, null, null, new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/" + direction + "_ship_medium_body.png")))), null, null));
 
         } else if (length == 2) {
-            setStyle(new ImageButtonStyle(null, null, null, new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/" + direction + "_ship_small_body.png")))), null, null));
+            setStyle(new ImageButtonStyle(null, null, null, new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/" + direction + "_ship_small_body.png")))), null, null));
 
         } else {
-            setStyle(new ImageButtonStyle(null, null, null, new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/" + direction + "_ship_large_body.png")))), null, null));
+            setStyle(new ImageButtonStyle(null, null, null, new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/" + direction + "_ship_large_body.png")))), null, null));
 
         }
     }

@@ -22,6 +22,7 @@ import java.util.Map;
  *
  * @author Mikael Malmqvist
  * @date 3/24/14
+ * @modified Daniel Eineving 2014-05-12
  */
 public class LobbyRenderer extends Renderer {
 
@@ -38,9 +39,9 @@ public class LobbyRenderer extends Renderer {
     private List roomList;
     private Skin skin;
 
-    //Image for edit button
-    SpriteDrawable imagePen = new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/pen.png"))));
-    SpriteDrawable imageCheck = new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/check.png"))));
+    //Image for edit button	
+    SpriteDrawable imagePen = new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/pen.png"))));
+    SpriteDrawable imageCheck = new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/check.png"))));
 
     protected List.ListStyle listStyle;
 
