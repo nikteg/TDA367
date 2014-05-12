@@ -19,11 +19,14 @@ import edu.chalmers.sankoss.java.renderers.WaitingRenderer;
  */
 public class WaitingScreen extends AbstractScreen<WaitingRenderer> {
 
+    PlacementScreen placementScreen;
+
     public WaitingScreen(SankossController controller, SankossGame game) {
         super(controller, game);
         model = new Waiting();
         model.getClient().addListener(new WaitingListener());
         renderer = new WaitingRenderer(model);
+        placementScreen = new PlacementScreen(controller, game);
         create();
     }
 
@@ -51,11 +54,17 @@ public class WaitingScreen extends AbstractScreen<WaitingRenderer> {
             }
 
         }
+
+        @Override
+        public void startedGame(Long gameID) {
+            controller.changeScreen(placementScreen);
+        }
     }
 
     @Override
     public void show() {
-
+        // Sets the stage as input source
+        controller.changeInput(stage);
     }
 
     @Override
@@ -69,9 +78,6 @@ public class WaitingScreen extends AbstractScreen<WaitingRenderer> {
     @Override
     public void create() {
         super.create();
-
-        // Sets the stage as input source
-        controller.changeInput(stage);
 
         renderer.drawControllers(this);
 
@@ -114,7 +120,6 @@ public class WaitingScreen extends AbstractScreen<WaitingRenderer> {
      */
     public void startGame() {
         model.getClient().startGame(model.getClient().getRoomID());
-        controller.changeScreen(new PlacementScreen(controller, game));
     }
 
     public void jumpToLobby() {

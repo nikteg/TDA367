@@ -228,7 +228,7 @@ public class SankossServer {
                      * Security check.
                      * Make sure that the message was sent from the creator.
                      */
-                    if (room.getPlayers().get(0).equals(player.getBasePlayer())) {
+                    if (room.getPlayers().get(0).getID().equals(player.getBasePlayer().getID())) {
 
                         List<Player> gamePlayers = new ArrayList<Player>();
 
@@ -508,7 +508,7 @@ public class SankossServer {
 
                         game.removePlayerWithID(player.getID());
                         for (Player opponent : game.getPlayers()) {
-                            getPlayerConnectionFromID(opponent.getID()).sendTCP(new Disconnect(player));
+                            getPlayerConnectionFromID(opponent.getID()).sendTCP(new Disconnect(player.getBasePlayer()));
                         }
 
                         break;

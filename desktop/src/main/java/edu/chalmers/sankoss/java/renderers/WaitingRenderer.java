@@ -66,6 +66,8 @@ public class WaitingRenderer extends Renderer {
     // TODO Should be fixed
     public void setHost(boolean host) {
         waitingLabel.setText(host ? "Waiting for opponent to join" : "Waiting for host to start the game...");
+        if (!host)
+            table.removeActor(startGameBtn);
     }
 
     @Override
@@ -109,9 +111,8 @@ public class WaitingRenderer extends Renderer {
         table.setHeight(800);
         table.setWidth(1200);
         table.pad(8f);
-        table.debug();
-
         //table.debug();
+
         cancelBtn.addListener(((WaitingScreen)screen).getCancelButtonListener());
     }
 

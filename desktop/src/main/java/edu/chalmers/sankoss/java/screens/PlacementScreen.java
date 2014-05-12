@@ -77,6 +77,10 @@ public class PlacementScreen extends AbstractScreen {
     @Override
     public void show() {
 
+        // Sets the stage as input source
+        controller.changeInput(stage);
+
+        nameLabel.setText(model.getClient().getPlayer().getName());
     }
 
     /**
@@ -117,8 +121,6 @@ public class PlacementScreen extends AbstractScreen {
         skin.add("default", font);
 
 
-        // Sets the stage as input source
-        controller.changeInput(stage);
 
         labelStyle.font = skin.getFont("default");
 

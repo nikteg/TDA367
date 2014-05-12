@@ -212,6 +212,7 @@ public class LobbyScreen extends AbstractScreen<LobbyRenderer> {
         } else {
             String name = renderer.getNameField().getText();
             model.getClient().getPlayer().setName(name);
+            model.getClient().playerChangeName(name);
             renderer.getNameField().setDisabled(true);
             stage.unfocus(renderer.getNameField());
             renderer.getNameField().setRightAligned(true);

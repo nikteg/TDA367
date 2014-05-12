@@ -112,7 +112,6 @@ public class SankossClient {
 
                 if (object instanceof StartedGame) {
                     StartedGame msg = (StartedGame) object;
-
                     gameID = msg.getGameID();
 
                     for (ISankossClientListener listener : listeners) {
