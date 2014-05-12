@@ -30,6 +30,7 @@ import java.util.HashSet;
  *
  * @author Mikael Malmqvist
  * @date 3/24/14
+ * @modified Daniel Eineving 2014-05-12
  */
 public class PlacementScreen extends AbstractScreen {
 
@@ -394,7 +395,7 @@ public class PlacementScreen extends AbstractScreen {
                                     }
 
                                     // Path to ship texture
-                                    String path = "desktop/src/main/java/assets/textures/HORIZONTAL_";
+                                    String path = "assets/textures/HORIZONTAL_";
 
                                     // Adds ship to grid visually
                                     System.out.println("Added ship at: ");
@@ -419,9 +420,9 @@ public class PlacementScreen extends AbstractScreen {
                                         }
 
                                         childrenArray = children.toArray();
-                                        ((ImageButton)childrenArray[0]).setStyle(new ImageButton.ImageButtonStyle(null, null, null, new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal(path)))), null, null));
+                                        ((ImageButton)childrenArray[0]).setStyle(new ImageButton.ImageButtonStyle(null, null, null, new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath(path)))), null, null));
                                         System.out.println(i + ", " + (j+n));
-                                        path = "desktop/src/main/java/assets/textures/HORIZONTAL_";
+                                        path = "assets/textures/HORIZONTAL_";
 
                                         // Marks the select coordinate as occupied
                                         model.addToShipArray(i, (j+n));
@@ -464,7 +465,7 @@ public class PlacementScreen extends AbstractScreen {
                                         e.getStackTrace();
                                     }
 
-                                    String path = "desktop/src/main/java/assets/textures/VERTICAL_";
+                                    String path = "assets/textures/VERTICAL_";
 
                                     // Adds ship to grid visually
                                     System.out.println("Added ship at: ");
@@ -489,9 +490,9 @@ public class PlacementScreen extends AbstractScreen {
                                         }
 
                                         childrenArray = children.toArray();
-                                        ((ImageButton)childrenArray[0]).setStyle(new ImageButton.ImageButtonStyle(null, null, null, new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal(path)))), null, null));
+                                        ((ImageButton)childrenArray[0]).setStyle(new ImageButton.ImageButtonStyle(null, null, null, new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath(path)))), null, null));
                                         System.out.println((i+n) + 1 + ", " + (j+1));
-                                        path = "desktop/src/main/java/assets/textures/VERTICAL_";
+                                        path = "assets/textures/VERTICAL_";
 
                                         // Marks the select coordinate as occupied
                                         model.addToShipArray((i+n), j);
