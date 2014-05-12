@@ -19,9 +19,6 @@ import edu.chalmers.sankoss.java.renderers.WaitingRenderer;
  */
 public class WaitingScreen extends AbstractScreen<WaitingRenderer> {
 
-    /**
-     * @inheritdoc
-     */
     public WaitingScreen(SankossController controller, SankossGame game) {
         super(controller, game);
         model = new Waiting();
@@ -40,12 +37,19 @@ public class WaitingScreen extends AbstractScreen<WaitingRenderer> {
 
     }
 
+    public void setHost(boolean host) {
+        renderer.setHost(host);
+    }
+
     private class WaitingListener extends SankossClientListener {
 
         @Override
         public void joinedRoom(BasePlayer player) {
-            renderer.getWaitingLabel().setText(player.getName() + " has joined your room!");
-            renderer.getStartGameBtn().setDisabled(false);
+            if (!player.getID().equals(model.getClient().getPlayer().getID())) {
+                renderer.getWaitingLabel().setText(player.getName() + " has joined your room!");
+                renderer.getStartGameBtn().setDisabled(false);
+            }
+
         }
     }
 
@@ -98,6 +102,7 @@ public class WaitingScreen extends AbstractScreen<WaitingRenderer> {
 
         @Override
         public void changed(ChangeEvent event, Actor actor) {
+            System.out.println("FISK");
             jumpToLobby();
         }
 

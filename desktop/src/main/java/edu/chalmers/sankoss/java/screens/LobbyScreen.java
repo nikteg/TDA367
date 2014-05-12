@@ -1,7 +1,5 @@
 package edu.chalmers.sankoss.java.screens;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -31,6 +29,8 @@ public class LobbyScreen extends AbstractScreen<LobbyRenderer> {
     private Map<Long, Room> gameRooms;
 
 
+    private WaitingScreen waitingScreen;
+
     /**
      * @inheritdoc
      */
@@ -39,6 +39,7 @@ public class LobbyScreen extends AbstractScreen<LobbyRenderer> {
         model = new Lobby();
         model.getClient().addListener(new LobbyListener());
         renderer = new LobbyRenderer(model);
+        waitingScreen = new WaitingScreen(controller, game);
         create();
 
     }
@@ -63,6 +64,11 @@ public class LobbyScreen extends AbstractScreen<LobbyRenderer> {
 
         public void joinedRoom(BasePlayer player) {
             System.out.println("SERVER: " + player.getName() + " joined!");
+
+            if (player.getID().equals(model.getClient().getPlayer().getID())) {
+                waitingScreen.setHost(false);
+                controller.changeScreen(waitingScreen);
+            }
         }
 
         public void startedGame(Long gameID) {
@@ -72,6 +78,9 @@ public class LobbyScreen extends AbstractScreen<LobbyRenderer> {
         @Override
         public void createdRoom(Long roomID) {
             System.out.println("You hosted room #" + roomID);
+
+            waitingScreen.setHost(true);
+            controller.changeScreen(waitingScreen);
         }
     }
 
@@ -175,7 +184,7 @@ public class LobbyScreen extends AbstractScreen<LobbyRenderer> {
         @Override
         public void changed(ChangeEvent event, Actor actor) {
             startHosting();
-            jumpToWaiting();
+            //jumpToWaiting();
         }
     }
 
@@ -188,7 +197,7 @@ public class LobbyScreen extends AbstractScreen<LobbyRenderer> {
     }
 
     public void jumpToWaiting() {
-        controller.changeScreen(new WaitingScreen(controller, game));
+        //controller.changeScreen(new WaitingScreen(controller, game));
     }
 
     /**

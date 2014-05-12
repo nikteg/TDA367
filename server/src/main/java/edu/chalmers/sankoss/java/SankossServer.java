@@ -189,6 +189,8 @@ public class SankossServer {
 
                     JoinedRoom joinedRoom = new JoinedRoom(player.getBasePlayer());
 
+                    System.out.println(joinedRoom.getPlayer().getName());
+
                     // Should be one player in the room, but doing it this way will support more players
                     for (BasePlayer roomPlayer : room.getPlayers()) {
                         getPlayerConnectionFromID(roomPlayer.getID()).sendTCP(joinedRoom);
@@ -442,8 +444,13 @@ public class SankossServer {
 
                     LOGGER.log(Level.INFO, String.format("%s is now known as %s", player.getName(), msg.getName()));
 
+                    System.out.println("TRYING CHANGED NAME" + msg.getName());
+
                     String name = msg.getName();
-                    if (name.matches("\\w{1,16}")) {
+                    // TODO Should be regex...
+                    //if (name.matches("\\w{1,16}")) {
+                    if (name.length() < 16) {
+                        System.out.println("CHANGED NAME" + msg.getName());
                         player.setName(msg.getName());
                         connection.sendTCP(new PlayerChangedName(player.getBasePlayer()));
                     } else {
