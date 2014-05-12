@@ -9,8 +9,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import edu.chalmers.sankoss.core.BasePlayer;
 import edu.chalmers.sankoss.core.Coordinate;
-import edu.chalmers.sankoss.core.Player;
 import edu.chalmers.sankoss.java.misc.ShipButton;
 import edu.chalmers.sankoss.java.models.GameModel;
 import edu.chalmers.sankoss.java.models.ScreenModel;
@@ -35,7 +35,7 @@ public class GameRenderer extends Renderer{
     private Table[] playerGrid = new Table[100];
     private Table[] aimGrid = new Table[100];
     private ShipButton follow = null;
-    private Player.Nationality nationality;
+    private BasePlayer.Nationality nationality;
 
 	private SpriteBatch batch = new SpriteBatch();
     private Skin skin = new Skin();
@@ -281,11 +281,11 @@ public class GameRenderer extends Renderer{
 
     }
 
-    public Player.Nationality getNationality() {
+    public BasePlayer.Nationality getNationality() {
         return nationality;
     }
 
-    public void setNationality(Player.Nationality nationality) {
+    public void setNationality(BasePlayer.Nationality nationality) {
         this.nationality = nationality;
     }
 

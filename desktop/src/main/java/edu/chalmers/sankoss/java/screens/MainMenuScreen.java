@@ -52,7 +52,6 @@ public class MainMenuScreen extends AbstractScreen {
         public void createdRoom(Long roomID) {
             System.out.println("SERVER: " + model.getClient().getPlayer().getName() + " created room #" + roomID);
         }
-
     }
 
     /**

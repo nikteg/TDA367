@@ -1,6 +1,7 @@
 package edu.chalmers.sankoss.java.web;
 
-import edu.chalmers.sankoss.core.Player;
+import edu.chalmers.sankoss.core.BasePlayer;
+import edu.chalmers.sankoss.java.Player;
 import edu.chalmers.sankoss.core.Room;
 import edu.chalmers.sankoss.java.Game;
 import edu.chalmers.sankoss.java.JsonTransformerRoute;
@@ -12,7 +13,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static spark.Spark.get;
 import static spark.Spark.setPort;
@@ -77,13 +77,10 @@ public class WebServer implements Runnable, PropertyChangeListener {
         if (evt.getPropertyName().equals("playerConnected") || evt.getPropertyName().equals("playerDisconnected")) {
             players.clear();
 
-            for (Map.Entry<Player, SankossServer.PlayerConnection> entry : server.getPlayers().entrySet()) {
-                Player player = entry.getKey();
-                SankossServer.PlayerConnection connection = entry.getValue();
+            for (SankossServer.PlayerConnection playerConnection : server.getPlayerConnections()) {
+                String address = playerConnection.getRemoteAddressTCP().toString().contains("127.0.0.1") ? "Bot" : playerConnection.getRemoteAddressTCP().toString();
 
-                String address = connection.getRemoteAddressTCP().toString().contains("127.0.0.1") ? "Bot" : connection.getRemoteAddressTCP().toString();
-
-                players.add(new WebPlayer(player.getID(), player.getName(), address));
+                players.add(new WebPlayer(playerConnection.getPlayer().getID(), playerConnection.getPlayer().getName(), address));
             }
         }
 
@@ -93,7 +90,7 @@ public class WebServer implements Runnable, PropertyChangeListener {
             for (Room room : server.getRooms().values()) {
                 WebRoom webRoom = new WebRoom(room.getID());
 
-                for (Player player : room.getPlayers()) {
+                for (BasePlayer player : room.getPlayers()) {
                     for (WebPlayer webPlayer : players) {
                         if (webPlayer.getID().equals(player.getID())) {
                             webRoom.addPlayer(webPlayer);

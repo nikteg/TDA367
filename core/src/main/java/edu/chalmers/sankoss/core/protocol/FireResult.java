@@ -5,7 +5,7 @@ package edu.chalmers.sankoss.core.protocol;
  * @author Fredrik Thune
  *
  */
-public class FireResult extends Fire{
+public class FireResult extends Fire {
     private boolean isHit;
 
     public FireResult() {

@@ -9,7 +9,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
-import edu.chalmers.sankoss.core.Player;
+import edu.chalmers.sankoss.core.BasePlayer;
+import edu.chalmers.sankoss.java.client.SankossClientPlayer;
 import edu.chalmers.sankoss.java.misc.ShipButton;
 import edu.chalmers.sankoss.java.models.Placement;
 import edu.chalmers.sankoss.java.models.ScreenModel;
@@ -30,7 +31,7 @@ public class PlacementRenderer extends Renderer{
 	private final int GRID_SIDE=10;
     private java.awt.Color color = java.awt.Color.WHITE;
     private String land = "USA";
-    private Player.Nationality nationality = Player.Nationality.USA;
+    private BasePlayer.Nationality nationality = BasePlayer.Nationality.USA;
     private final int WIDTH_OF_SQUARE = 50;
     private final int HEIGHT_OF_SQUARE = 50;
     private Table[] grid = new Table[100];
@@ -70,9 +71,9 @@ public class PlacementRenderer extends Renderer{
     }
 
 
-    public void switchNationality(Player player, Boolean next) {
+    public void switchNationality(SankossClientPlayer player, Boolean next) {
 
-        Player.Nationality nationality = next ? player.getNationality().getNext() : player.getNationality().getLast();
+        BasePlayer.Nationality nationality = next ? player.getNationality().getNext() : player.getNationality().getLast();
 
         player.setNationality(nationality);
         color = nationality.getColor();
@@ -325,7 +326,7 @@ public class PlacementRenderer extends Renderer{
         fiveShip.update();
     }
 
-    public void setNationality(Player.Nationality nationality) {
+    public void setNationality(BasePlayer.Nationality nationality) {
         this.nationality = nationality;
     }
 

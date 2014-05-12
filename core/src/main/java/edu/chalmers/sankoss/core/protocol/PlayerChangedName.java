@@ -3,26 +3,20 @@ package edu.chalmers.sankoss.core.protocol;
 import edu.chalmers.sankoss.core.BasePlayer;
 
 /**
- * 
- * @author Fredrik Thune
- * 
+ * Created by nikteg on 30/04/14.
  */
-public class JoinedRoom {
+public class PlayerChangedName {
     private BasePlayer player;
 
-    public JoinedRoom() {
+    public PlayerChangedName() {
 
     }
 
-    public JoinedRoom(BasePlayer player) {
+    public PlayerChangedName(BasePlayer player) {
         this.player = player;
     }
 
     public BasePlayer getPlayer() {
         return player;
-    }
-
-    public void setPlayer(BasePlayer player) {
-        this.player = player;
     }
 }

@@ -3,7 +3,7 @@ package edu.chalmers.sankoss.java.screens;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import edu.chalmers.sankoss.core.Player;
+import edu.chalmers.sankoss.core.BasePlayer;
 import edu.chalmers.sankoss.java.SankossController;
 import edu.chalmers.sankoss.java.SankossGame;
 import edu.chalmers.sankoss.java.client.SankossClientListener;
@@ -19,14 +19,14 @@ import edu.chalmers.sankoss.java.renderers.WaitingRenderer;
  */
 public class WaitingScreen extends AbstractScreen<WaitingRenderer> {
 
-    /**
-     * @inheritdoc
-     */
+    PlacementScreen placementScreen;
+
     public WaitingScreen(SankossController controller, SankossGame game) {
         super(controller, game);
         model = new Waiting();
         model.getClient().addListener(new WaitingListener());
         renderer = new WaitingRenderer(model);
+        placementScreen = new PlacementScreen(controller, game);
         create();
     }
 
@@ -40,18 +40,31 @@ public class WaitingScreen extends AbstractScreen<WaitingRenderer> {
 
     }
 
+    public void setHost(boolean host) {
+        renderer.setHost(host);
+    }
+
     private class WaitingListener extends SankossClientListener {
 
         @Override
-        public void joinedRoom(Player player) {
-            renderer.getWaitingLabel().setText(player.getName() + " has joined your room!");
-            renderer.getStartGameBtn().setDisabled(false);
+        public void joinedRoom(BasePlayer player) {
+            if (!player.getID().equals(model.getClient().getPlayer().getID())) {
+                renderer.getWaitingLabel().setText(player.getName() + " has joined your room!");
+                renderer.getStartGameBtn().setDisabled(false);
+            }
+
+        }
+
+        @Override
+        public void startedGame(Long gameID) {
+            controller.changeScreen(placementScreen);
         }
     }
 
     @Override
     public void show() {
-
+        // Sets the stage as input source
+        controller.changeInput(stage);
     }
 
     @Override
@@ -65,9 +78,6 @@ public class WaitingScreen extends AbstractScreen<WaitingRenderer> {
     @Override
     public void create() {
         super.create();
-
-        // Sets the stage as input source
-        controller.changeInput(stage);
 
         renderer.drawControllers(this);
 
@@ -98,6 +108,7 @@ public class WaitingScreen extends AbstractScreen<WaitingRenderer> {
 
         @Override
         public void changed(ChangeEvent event, Actor actor) {
+            System.out.println("FISK");
             jumpToLobby();
         }
 
@@ -109,7 +120,6 @@ public class WaitingScreen extends AbstractScreen<WaitingRenderer> {
      */
     public void startGame() {
         model.getClient().startGame(model.getClient().getRoomID());
-        controller.changeScreen(new PlacementScreen(controller, game));
     }
 
     public void jumpToLobby() {

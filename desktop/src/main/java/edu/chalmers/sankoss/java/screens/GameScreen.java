@@ -6,8 +6,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.SnapshotArray;
+import edu.chalmers.sankoss.core.BasePlayer;
 import edu.chalmers.sankoss.core.Coordinate;
-import edu.chalmers.sankoss.core.Player;
 import edu.chalmers.sankoss.core.Ship;
 import edu.chalmers.sankoss.java.SankossController;
 import edu.chalmers.sankoss.java.SankossGame;
@@ -66,7 +66,7 @@ public class GameScreen extends AbstractScreen {
     private class GameListener extends SankossClientListener {
 
         @Override
-        public void fireResult(Long gameID, Player target, Coordinate coordinate, boolean hit) {
+        public void fireResult(Long gameID, BasePlayer target, Coordinate coordinate, boolean hit) {
 
             if(hit && !target.equals(model.getClient().getPlayer())) {
                 System.out.println("You shot at " + coordinate.getX() + ", " + coordinate.getY() + ". HIT!");
@@ -87,7 +87,7 @@ public class GameScreen extends AbstractScreen {
         }
 
         @Override
-        public void destroyedShip(Player player, Ship ship) {
+        public void destroyedShip(BasePlayer player, Ship ship) {
             System.out.println("Ship size " + ship.getSize() + " belonging to " + player.getName() + " has been destroyed!!!!");
         }
     }

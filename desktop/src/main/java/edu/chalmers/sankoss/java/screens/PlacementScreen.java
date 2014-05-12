@@ -11,8 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.SnapshotArray;
+import edu.chalmers.sankoss.core.BasePlayer;
 import edu.chalmers.sankoss.core.Coordinate;
-import edu.chalmers.sankoss.core.Player;
 import edu.chalmers.sankoss.core.Ship;
 import edu.chalmers.sankoss.core.exceptions.IllegalShipCoordinatesException;
 import edu.chalmers.sankoss.java.SankossController;
@@ -29,6 +29,7 @@ import java.util.HashSet;
  * Handles game logic when placing ships, almost like a controller.
  *
  * @author Mikael Malmqvist
+ * @modified Fredrik Thune
  * @date 3/24/14
  * @modified Daniel Eineving 2014-05-12
  */
@@ -64,7 +65,7 @@ public class PlacementScreen extends AbstractScreen {
         }
 
         @Override
-        public void playerIsReady(Player player) {
+        public void playerIsReady(BasePlayer player) {
             System.out.println("SERVER: " + model.getClient().getPlayer().getName() + " is ready!");
             ((Placement)model).setReadyBtnState(Placement.ReadyBtnState.ENTER);
             ((PlacementRenderer)renderer).setReadyBtn(Placement.ReadyBtnState.ENTER);
@@ -77,6 +78,10 @@ public class PlacementScreen extends AbstractScreen {
     @Override
     public void show() {
 
+        // Sets the stage as input source
+        controller.changeInput(stage);
+
+        nameLabel.setText(model.getClient().getPlayer().getName());
     }
 
     /**
@@ -117,8 +122,6 @@ public class PlacementScreen extends AbstractScreen {
         skin.add("default", font);
 
 
-        // Sets the stage as input source
-        controller.changeInput(stage);
 
         labelStyle.font = skin.getFont("default");
 
@@ -306,8 +309,7 @@ public class PlacementScreen extends AbstractScreen {
     public void readyClicked() {
 
         // If all your boats are on the board
-        if(model.getClient().getPlayer().getFleet().size() == model.getNumberOfShips()){
-
+        if(model.getClient().getPlayer().getFleet().getShips().size() == model.getNumberOfShips()){
             determineReady();
             setReadyOrEnter();
 
@@ -348,6 +350,7 @@ public class PlacementScreen extends AbstractScreen {
     public void placeShip(Actor actor) {
         // Checks if a follow-button exists
         if(((PlacementRenderer)renderer).getFollow() != null){
+
 
             // Loops through grid
             for(int i = 0; i < 10; i++) {
@@ -427,8 +430,9 @@ public class PlacementScreen extends AbstractScreen {
                                         // Marks the select coordinate as occupied
                                         model.addToShipArray(i, (j+n));
 
+                                        //TODO WHY??
                                         // Adds to players fleet
-                                        model.getClient().getPlayer().addUsedCoordiante(new Coordinate((i + 1), (j + n + 1)));
+                                        //model.getClient().getPlayer().addUsedCoordiante(new Coordinate((i + 1), (j + n + 1)));
                                     }
 
                                     // Removes placed ship from ship panel
@@ -454,6 +458,9 @@ public class PlacementScreen extends AbstractScreen {
                                     Coordinate start = new Coordinate((i+1), (j+1));
                                     Coordinate end = new Coordinate((i+(((PlacementRenderer)renderer).getFollow().getLength())), (j +1));
 
+                                            //TODO Why???
+                                            // Adds to players fleet
+                                            //model.getClient().getPlayer().addUsedCoordiante(new Coordinate((i + n + 1), (j + 1)));
                                     // Creates new key in ShipMap for a set of coordinates
                                     createKey(end.getX() - start.getX() + 1);
 
@@ -497,8 +504,9 @@ public class PlacementScreen extends AbstractScreen {
                                         // Marks the select coordinate as occupied
                                         model.addToShipArray((i+n), j);
 
+                                        //TODO WHY?
                                         // Adds to players fleet
-                                        model.getClient().getPlayer().addUsedCoordiante(new Coordinate((i + n + 1), (j + 1)));
+                                        //model.getClient().getPlayer().addUsedCoordiante(new Coordinate((i + n + 1), (j + 1)));
                                     }
 
                                     // Removes placed ship from ship panel

@@ -1,13 +1,14 @@
-package edu.chalmers.sankoss.core;
-
+package edu.chalmers.sankoss.java;
 import static org.junit.Assert.*;
 
 import java.util.LinkedList;
 import java.util.List;
 
+import edu.chalmers.sankoss.core.BasePlayer;
+import edu.chalmers.sankoss.core.Coordinate;
+import edu.chalmers.sankoss.core.Ship;
 import org.junit.Test;
 
-import edu.chalmers.sankoss.core.Player.Nationality;
 
 /**
  * jUnitTest class for the class Player
@@ -64,11 +65,11 @@ public class PlayerTest {
 		Player player1 = new Player((long) 314158979, "Daniel");
 		Player player2 = new Player((long) 133713372, "Mikael");
 
-		player1.setNationality(Nationality.JAPAN);
-		player2.setNationality(Nationality.GERMANY);
+		player1.setNationality(BasePlayer.Nationality.JAPAN);
+		player2.setNationality(BasePlayer.Nationality.GERMANY);
 
-		assertTrue(player1.getNationality().equals(Nationality.JAPAN));
-		assertTrue(player2.getNationality().equals(Nationality.GERMANY));
+		assertTrue(player1.getNationality().equals(BasePlayer.Nationality.JAPAN));
+		assertTrue(player2.getNationality().equals(BasePlayer.Nationality.GERMANY));
 	}
 
 	@Test
@@ -82,11 +83,11 @@ public class PlayerTest {
 		Player player1 = new Player((long) 314158979, "Daniel");
 		Player player2 = new Player((long) 133713372, "Mikael");
 
-		player1.setNationality(Nationality.JAPAN);
-		player2.setNationality(Nationality.GERMANY);
+		player1.setNationality(BasePlayer.Nationality.JAPAN);
+		player2.setNationality(BasePlayer.Nationality.GERMANY);
 
-		assertTrue(player1.getNationality().equals(Nationality.JAPAN));
-		assertTrue(player2.getNationality().equals(Nationality.GERMANY));
+		assertTrue(player1.getNationality().equals(BasePlayer.Nationality.JAPAN));
+		assertTrue(player2.getNationality().equals(BasePlayer.Nationality.GERMANY));
 	}
 
 	@Test
