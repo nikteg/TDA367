@@ -30,6 +30,7 @@ public abstract class ScreenModel {
         client.addListener(new SankossClientListener() {
             @Override
             public void connected(Long playerID) {
+                client.getPlayer().setName("Player #" + playerID);
                 client.playerChangeName(client.getPlayer().getName());
             }
         });

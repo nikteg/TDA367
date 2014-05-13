@@ -18,6 +18,7 @@ import java.util.Map;
  * Handles game logic in lobby, almost like a controller.
  *
  * @author Mikael Malmqvist
+ * @modified Fredrik Thune
  * @date 3/24/14
  */
 public class LobbyScreen extends AbstractScreen<LobbyRenderer> {
@@ -90,7 +91,8 @@ public class LobbyScreen extends AbstractScreen<LobbyRenderer> {
      */
     @Override
     public void show() {
-
+        // Sets the stage as input source
+        controller.changeInput(stage);
     }
 
     /**
@@ -110,12 +112,9 @@ public class LobbyScreen extends AbstractScreen<LobbyRenderer> {
     public void create() {
         super.create();
 
-        // Sets the stage as input source
-        controller.changeInput(stage);
-
         renderer.drawControllers(this);
 
-        model.getClient().fetchRooms();
+        //model.getClient().fetchRooms();
 
         stage.addActor(renderer.getTable());
         stage.draw();

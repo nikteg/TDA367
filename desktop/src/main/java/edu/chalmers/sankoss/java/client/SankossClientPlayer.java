@@ -14,7 +14,6 @@ public class SankossClientPlayer extends BasePlayer{
 
     public SankossClientPlayer(Long playerID) {
         super(playerID);
-        setName("Player #" + playerID);
     }
 
     public Fleet getFleet() {
