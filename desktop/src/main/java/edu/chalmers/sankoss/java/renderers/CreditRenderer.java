@@ -1,11 +1,16 @@
 package edu.chalmers.sankoss.java.renderers;
 
+import java.util.LinkedList;
+
+import net.java.games.input.LinuxJoystickPOV;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -27,8 +32,11 @@ public class CreditRenderer extends Renderer {
 
 	private TextButton backBtb;
 	private Label creditLabel;
+	private LinkedList<Label> labels;
 
 	private Skin skin;
+
+	private static final int LINE_SPACING = 40;
 
 	/**
 	 * @inheritdoc
@@ -65,7 +73,6 @@ public class CreditRenderer extends Renderer {
 		labelStyle.font = skin.getFont("default");
 
 		backBtb = new TextButton("Back", btnStyle);
-		creditLabel = new Label("Here we have credits", labelStyle);
 
 		setButton();
 
@@ -74,8 +81,40 @@ public class CreditRenderer extends Renderer {
 
 		actorPanel.addActor(backBtb);
 
+		setLabels();
+
 		backBtb.addListener(((CreditScreen) screen).getBackButtonListener());
 
+	}
+
+	/**
+	 * Sets the labels and makes them move
+	 */
+	private void setLabels() {
+		labels = new LinkedList<Label>();
+
+		labels.add(0, new Label("Sankoss", labelStyle));
+		labels.add(1, new Label("TDA367 Group 9", labelStyle));
+		labels.add(2, new Label("Daniel 'Eineving' Eineving", labelStyle));
+		labels.add(3, new Label("Mikael 'Laxen' Malmqvist", labelStyle));
+		labels.add(4, new Label("Niklas 'Bipshark' Tegnander", labelStyle));
+		labels.add(5, new Label("Fredrik 'Asphalt' Thune", labelStyle));
+		labels.add(6,
+				new Label("Chalmers University of Technology", labelStyle));
+		labels.add(7, new Label("Spring 2014", labelStyle));
+
+		Label temp;
+		for (int i = 0; i < labels.size(); i++) {
+			temp = labels.get(i);
+
+			temp.setY(-i * temp.getHeight() - i * LINE_SPACING);
+			temp.setX((1200 - temp.getWidth()) / 2);
+
+			temp.addAction(Actions.moveTo((1200 - temp.getWidth()) / 2, 2000
+					- i * temp.getHeight() - i * LINE_SPACING, 45));
+
+			actorPanel.addActor(temp);
+		}
 	}
 
 	private void setButton() {
