@@ -41,6 +41,9 @@ public abstract class AbstractScreen<R extends Renderer> implements Screen, Appl
     public AbstractScreen(SankossController controller, SankossGame game) {
         this.controller = controller;
         this.game = game;
+        
+        //TODO Needs reset?
+        stage = new Stage();
 
     }
 
@@ -70,6 +73,8 @@ public abstract class AbstractScreen<R extends Renderer> implements Screen, Appl
      */
     @Override
     public void resize(int width, int height) {
+    	System.out.println("resize @ AbstractScreen");
+    	System.out.println(width + " " + height);
         stage.setViewport( width, height, true );
     }
 
