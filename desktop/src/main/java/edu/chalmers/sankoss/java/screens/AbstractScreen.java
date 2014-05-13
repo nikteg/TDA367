@@ -73,8 +73,6 @@ public abstract class AbstractScreen<R extends Renderer> implements Screen, Appl
      */
     @Override
     public void resize(int width, int height) {
-    	System.out.println("resize @ AbstractScreen");
-    	System.out.println(width + " " + height);
         stage.setViewport( width, height, true );
     }
 

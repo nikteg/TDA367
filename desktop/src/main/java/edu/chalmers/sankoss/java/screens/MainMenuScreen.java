@@ -239,7 +239,7 @@ public class MainMenuScreen extends AbstractScreen<MainMenuRenderer> {
 
     public void jumpToCredits() {
     	System.out.println("jumpToCredits @ mmScreen");
-        controller.changeScreen(new CreditScreen(controller, game, this));
+        controller.changeScreen(new CreditScreen(controller, game));
     }
 
     public void jumpToLobby() {

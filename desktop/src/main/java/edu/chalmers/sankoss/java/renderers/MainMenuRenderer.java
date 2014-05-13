@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
+
 import edu.chalmers.sankoss.java.models.ScreenModel;
 import edu.chalmers.sankoss.java.screens.AbstractScreen;
 import edu.chalmers.sankoss.java.screens.MainMenuScreen;
@@ -89,9 +90,7 @@ public class MainMenuRenderer extends Renderer{
 
 
     public void drawControllers(AbstractScreen screen) {
-
-        System.out.println();
-
+    	
         skin = new Skin();
 
         this.screen = screen;
