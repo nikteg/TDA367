@@ -8,6 +8,7 @@ public class BasePlayer {
     private Long playerID = (long) -1;
     private String name = "Unnamed";
     private Nationality nationality = Nationality.USA;
+    private boolean myTurn;
 
     public BasePlayer() {
 
@@ -26,6 +27,14 @@ public class BasePlayer {
         this.playerID = playerID;
         this.name = name;
         this.nationality = nationality;
+    }
+
+    public boolean getMyTurn() {
+        return myTurn;
+    }
+
+    public void setMyTurn(boolean myTurn) {
+        this.myTurn = myTurn;
     }
 
     public Long getID() {
@@ -99,5 +108,18 @@ public class BasePlayer {
 
     public void setNationality(Nationality nationality) {
         this.nationality = nationality;
+    }
+
+    @Override
+    public boolean equals(Object player) {
+        if(player != null) {
+            if(player instanceof BasePlayer) {
+                return (((BasePlayer) player).getID() == this.getID()
+                        && ((BasePlayer) player).getName().equals(this.getName()));
+            }
+
+        }
+
+        return false;
     }
 }

@@ -53,7 +53,7 @@ public class MainMenuScreen extends AbstractScreen<MainMenuRenderer> {
 
         public void fetchedRooms(Map<Long, Room> fetchedRooms) {
             rooms = fetchedRooms.values().toArray();
-            jumpToLobby();
+
         }
 
         public void createdRoom(Long roomID) {
@@ -134,7 +134,7 @@ public class MainMenuScreen extends AbstractScreen<MainMenuRenderer> {
         @Override
         public void changed(ChangeEvent event, Actor actor) {
             model.getClient().fetchRooms();
-            //jumpToLobby();
+            jumpToLobby();
         }
     }
 

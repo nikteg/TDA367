@@ -66,10 +66,11 @@ public class LobbyScreen extends AbstractScreen<LobbyRenderer> {
         public void joinedRoom(BasePlayer player) {
             System.out.println("SERVER: " + player.getName() + " joined!");
 
-            if (player.getID().equals(model.getClient().getPlayer().getID())) {
+            /*if (player.equals(model.getClient().getPlayer())) {
+                System.out.println("BUMP");
                 waitingScreen.setHost(false);
                 controller.changeScreen(waitingScreen);
-            }
+            }*/
         }
 
         public void startedGame(Long gameID) {
@@ -183,7 +184,7 @@ public class LobbyScreen extends AbstractScreen<LobbyRenderer> {
         @Override
         public void changed(ChangeEvent event, Actor actor) {
             startHosting();
-            //jumpToWaiting();
+            jumpToWaiting();
         }
     }
 
@@ -196,7 +197,7 @@ public class LobbyScreen extends AbstractScreen<LobbyRenderer> {
     }
 
     public void jumpToWaiting() {
-        //controller.changeScreen(new WaitingScreen(controller, game));
+        controller.changeScreen(new WaitingScreen(controller, game));
     }
 
     /**
@@ -241,9 +242,8 @@ public class LobbyScreen extends AbstractScreen<LobbyRenderer> {
      * Method for joining a game.
      */
     public void joinGame() {
-        String buttonText = "" + renderer.getJoinBtn().getText();
 
-        if(buttonText.equals("Join") && gameRooms.size() > 0) {
+        if(gameRooms.size() > 0) {
 
             // Retrives selected name and matches with room
             String roomName = renderer.getRoomList().getSelection();
@@ -251,11 +251,10 @@ public class LobbyScreen extends AbstractScreen<LobbyRenderer> {
             Room roomToJoin = model.getRoomByName(roomName, gameRooms);
             model.getClient().joinRoom(roomToJoin.getID());
 
-            renderer.getJoinBtn().setText("Joined");
+            System.out.println("BUMP");
+            waitingScreen.setHost(false);
+            controller.changeScreen(waitingScreen);
 
-
-        } else if(buttonText.equals("Enter Game") && model.getClient().getGameID() != null) {
-            controller.changeScreen(new PlacementScreen(controller, game));
         }
     }
 }

@@ -54,6 +54,9 @@ public class GameRenderer extends Renderer{
     private Label opponentNameLabel;
     private Label playerBoardLabel;;
     private Label aimBoardLabel;
+    private Label yourTurnLabel;
+    private Label oppTurnLabel;
+
 
     int two = 1;
     int three = 0;
@@ -89,6 +92,8 @@ public class GameRenderer extends Renderer{
                middlePanel.getHeight() - 50);
         playerBoardLabel.setPosition(width - (playerBoardLabel.getWidth()/2) - 10 - (playerBoard.getWidth()/2), middlePanel.getHeight() - 50);
 
+        yourTurnLabel.setX((width - yourTurnLabel.getWidth()) / 2);
+        oppTurnLabel.setX((width - oppTurnLabel.getWidth())/2);
 
     }
 
@@ -98,6 +103,14 @@ public class GameRenderer extends Renderer{
 
     public Table[] getAimGrid() {
         return aimGrid;
+    }
+
+    public Label getYourTurnLabel() {
+        return yourTurnLabel;
+    }
+
+    public Label getOppTurnLabel() {
+        return oppTurnLabel;
     }
 
     public TextButton.TextButtonStyle getBtnStyle() {
@@ -173,6 +186,23 @@ public class GameRenderer extends Renderer{
         opponentNameLabel.setX(10);
         opponentNameLabel.setY(55);
 
+        String yourTurn = "";
+        String oppTurn = currentModel.getClient().getOpponents().get(0).getName() + "'s turn!";
+
+        if(currentModel.getClient().getPlayer().getMyTurn()){
+            yourTurn = "Your turn!";
+            oppTurn = "";
+        }
+
+        yourTurnLabel = new Label(yourTurn, labelStyle);
+        yourTurnLabel.setX((Gdx.graphics.getWidth() - yourTurnLabel.getWidth()) / 2);
+        yourTurnLabel.setY(playerTable.getHeight()-yourTurnLabel.getHeight());
+
+        oppTurnLabel = new Label(oppTurn, labelStyle);
+        oppTurnLabel.setX((Gdx.graphics.getWidth() - oppTurnLabel.getWidth()) / 2);
+        oppTurnLabel.setY(5);
+
+
         btnStyle = new TextButton.TextButtonStyle();
 
         land = currentModel.getClient().getPlayer().getNationality().getLandName();
@@ -245,7 +275,9 @@ public class GameRenderer extends Renderer{
         middlePanel.addActor(aimBoard);
 
         topTable.addActor(opponentNameLabel);
+        topTable.addActor(oppTurnLabel);
 
+        playerTable.addActor(yourTurnLabel);
 
         actorPanel.addActor(playerTable);
         actorPanel.addActor(middlePanel);
