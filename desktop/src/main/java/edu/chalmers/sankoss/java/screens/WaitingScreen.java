@@ -46,11 +46,20 @@ public class WaitingScreen extends AbstractScreen<WaitingRenderer> {
 
     private class WaitingListener extends SankossClientListener {
 
+        /**
+         * Method for joining room.
+         * Determines if you are the joining player or not and does
+         * runs needed code based on this.
+         * @param player the joining player.
+         */
         @Override
         public void joinedRoom(BasePlayer player) {
             if (!player.getID().equals(model.getClient().getPlayer().getID())) {
                 renderer.getWaitingLabel().setText(player.getName() + " has joined your room!");
                 renderer.getStartGameBtn().setDisabled(false);
+
+                // Sets your turn if you're hosting
+                model.getClient().getPlayer().setMyTurn(true);
             }
 
         }
@@ -108,7 +117,6 @@ public class WaitingScreen extends AbstractScreen<WaitingRenderer> {
 
         @Override
         public void changed(ChangeEvent event, Actor actor) {
-            System.out.println("FISK");
             jumpToLobby();
         }
 

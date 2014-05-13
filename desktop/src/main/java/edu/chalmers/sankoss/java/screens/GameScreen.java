@@ -68,9 +68,20 @@ public class GameScreen extends AbstractScreen {
 
             //TODO show hits and misses on your board as well!
 
+            // If you WERE the target
+            // TODO: Put most logic in here instead and call external methods
+            if(target.equals(model.getClient().getPlayer())) {
+                ((GameRenderer)renderer).getYourTurnLabel().setText("Your Turn!");
+                ((GameRenderer)renderer).getOppTurnLabel().setText("");
+            } else {
+                ((GameRenderer)renderer).getYourTurnLabel().setText("");
+                ((GameRenderer)renderer).getOppTurnLabel().setText(model.getClient().getOpponents().get(0).getName() + "'s turn!");
+            }
+
             if(hit && !target.equals(model.getClient().getPlayer())) {
                 System.out.println("You shot at " + coordinate.getX() + ", " + coordinate.getY() + ". HIT!");
                 hit(coordinate);
+
 
             } else if(!target.equals(model.getClient().getPlayer())){
 
@@ -146,6 +157,7 @@ public class GameScreen extends AbstractScreen {
         ((GameRenderer) renderer).getOpponentNameLabel().setText(model.getClient().getOpponents().get(0).getName());
         stage.addActor(renderer.getActorPanel());
         stage.draw();
+
 
     }
 
