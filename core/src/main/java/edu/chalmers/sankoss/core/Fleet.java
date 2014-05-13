@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class Fleet {
     private ArrayList<Ship> ships = new ArrayList<Ship>();
-    private int size = 4; // TODO will be 5
+    private int size = 5;
 
     public Fleet() {
     }
