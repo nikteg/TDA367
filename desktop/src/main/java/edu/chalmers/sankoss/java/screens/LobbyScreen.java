@@ -184,7 +184,7 @@ public class LobbyScreen extends AbstractScreen<LobbyRenderer> {
         @Override
         public void changed(ChangeEvent event, Actor actor) {
             startHosting();
-            jumpToWaiting();
+
         }
     }
 

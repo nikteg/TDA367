@@ -8,7 +8,7 @@ public class BasePlayer {
     private Long playerID = (long) -1;
     private String name = "Unnamed";
     private Nationality nationality = Nationality.USA;
-    private boolean myTurn;
+    private boolean myTurn = false;
 
     public BasePlayer() {
 

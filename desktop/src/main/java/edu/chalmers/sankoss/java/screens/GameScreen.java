@@ -158,8 +158,6 @@ public class GameScreen extends AbstractScreen {
         stage.addActor(renderer.getActorPanel());
         stage.draw();
 
-        // Determines if it's your turn to start or not
-        model.getClient().getPlayer().setMyTurn(!model.getClient().getOpponents().get(0).getMyTurn());
 
     }
 
