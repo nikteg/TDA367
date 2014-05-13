@@ -18,14 +18,19 @@ import java.util.Map;
  * Handles game logic at the main menu, almost like a controller.
  *
  * @author Mikael Malmqvist
+ * @modified Fredrik Thune
  * @date 3/24/14
  */
-public class MainMenuScreen extends AbstractScreen {
+public class MainMenuScreen extends AbstractScreen<MainMenuRenderer> {
 
     private String roomName;
     private Long lastRoomID;
     private Map<Long, Room> gameRooms;
     private Object[] rooms = new Object[0];
+
+    private LobbyScreen lobbyScreen;
+
+
 
     /**
      * @inheritdoc
@@ -35,7 +40,7 @@ public class MainMenuScreen extends AbstractScreen {
         model = new MainMenu();
         model.getClient().addListener(new MainMenuListener());
         renderer = new MainMenuRenderer(model);
-
+        lobbyScreen = new LobbyScreen(controller, game);
         create();
 
     }
@@ -43,16 +48,17 @@ public class MainMenuScreen extends AbstractScreen {
     private class MainMenuListener extends SankossClientListener {
         public void connected(Long playerID) {
             System.out.print("SERVER: Client connected");
+            renderer.getMultiPlayerBtn().setDisabled(false);
         }
 
         public void fetchedRooms(Map<Long, Room> fetchedRooms) {
             rooms = fetchedRooms.values().toArray();
+            jumpToLobby();
         }
 
         public void createdRoom(Long roomID) {
             System.out.println("SERVER: " + model.getClient().getPlayer().getName() + " created room #" + roomID);
         }
-
     }
 
     /**
@@ -60,7 +66,8 @@ public class MainMenuScreen extends AbstractScreen {
      */
     @Override
     public void show() {
-
+        // Sets the stage as input source
+        controller.changeInput(stage);
     }
 
     /**
@@ -82,9 +89,6 @@ public class MainMenuScreen extends AbstractScreen {
         // Defines variables for visuals
         super.create();
         renderer.drawControllers(this);
-
-        // Sets the stage as input source
-        controller.changeInput(stage);
 
         stage.addActor(renderer.getActorPanel());
         stage.draw();
@@ -129,7 +133,8 @@ public class MainMenuScreen extends AbstractScreen {
 
         @Override
         public void changed(ChangeEvent event, Actor actor) {
-            jumpToLobby();
+            model.getClient().fetchRooms();
+            //jumpToLobby();
         }
     }
 
@@ -236,6 +241,7 @@ public class MainMenuScreen extends AbstractScreen {
     }
 
     public void jumpToLobby() {
-        controller.changeScreen(new LobbyScreen(controller, game));
+        controller.changeScreen(lobbyScreen);
+
     }
 }

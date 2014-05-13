@@ -63,6 +63,13 @@ public class WaitingRenderer extends Renderer {
 
     }
 
+    // TODO Should be fixed
+    public void setHost(boolean host) {
+        waitingLabel.setText(host ? "Waiting for opponent to join" : "Waiting for host to start the game...");
+        if (!host)
+            table.removeActor(startGameBtn);
+    }
+
     @Override
     public void drawControllers(AbstractScreen screen) {
         this.screen = screen;
@@ -88,7 +95,7 @@ public class WaitingRenderer extends Renderer {
 
         cancelBtn = new TextButton("Cancel", btnStyle);
 
-        waitingLabel = new Label("Waiting for opponent to join!", labelStyle);
+        waitingLabel = new Label("Waiting for player to join...", labelStyle);
 
         waitingLabel.addAction(Actions.forever(
                 Actions.sequence(
@@ -104,8 +111,8 @@ public class WaitingRenderer extends Renderer {
         table.setHeight(800);
         table.setWidth(1200);
         table.pad(8f);
-
         //table.debug();
+
         cancelBtn.addListener(((WaitingScreen)screen).getCancelButtonListener());
     }
 
@@ -135,6 +142,7 @@ public class WaitingRenderer extends Renderer {
         btnStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
         btnStyle.checked = skin.newDrawable("white", Color.DARK_GRAY);
         btnStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
+        btnStyle.fontColor = Color.WHITE;
         btnStyle.disabledFontColor = Color.GRAY;
         btnStyle.disabled = skin.newDrawable("white", Color.DARK_GRAY);
 

@@ -3,10 +3,7 @@ package edu.chalmers.sankoss.java.client;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import edu.chalmers.sankoss.core.Coordinate;
-import edu.chalmers.sankoss.core.Network;
-import edu.chalmers.sankoss.core.Player;
-import edu.chalmers.sankoss.core.Ship;
+import edu.chalmers.sankoss.core.*;
 import edu.chalmers.sankoss.core.protocol.*;
 
 import java.io.IOException;
@@ -15,11 +12,13 @@ import java.util.List;
 
 /**
  * @author Niklas Tegnander
+ * @modified Fredrik Thune
  */
 public class SankossClient {
     private Client client;
-    private Player player;
-    private List<Player> opponents = new ArrayList<Player>();
+    private SankossClientPlayer player  = new SankossClientPlayer((long)-1);;
+
+    private List<BasePlayer> opponents = new ArrayList<BasePlayer>();
     private Long gameID;
     private Long roomID;
     private String host;
@@ -58,7 +57,8 @@ public class SankossClient {
                 if (object instanceof Connected) {
                     Connected msg = (Connected) object;
 
-                    player = new Player(msg.getPlayerID());
+                    //player = new SankossClientPlayer(msg.getPlayerID());
+                    player.setID(msg.getPlayerID());
 
                     for (ISankossClientListener listener : listeners) {
                         listener.connected(msg.getPlayerID());
@@ -101,7 +101,7 @@ public class SankossClient {
                 if (object instanceof JoinedRoom) {
                     JoinedRoom msg = (JoinedRoom) object;
 
-                    if (msg.getPlayer().equals(player))
+                    if (msg.getPlayer().equals(player.getBasePlayer()))
                         return;
 
                     for (ISankossClientListener listener : listeners) {
@@ -113,11 +113,10 @@ public class SankossClient {
 
                 if (object instanceof StartedGame) {
                     StartedGame msg = (StartedGame) object;
-
                     gameID = msg.getGameID();
 
                     for (ISankossClientListener listener : listeners) {
-                        listener.startedGame(gameID, msg.getPlayers());
+                        listener.startedGame(gameID);
                     }
 
                     return;
@@ -170,6 +169,16 @@ public class SankossClient {
 
                     return;
                 }
+
+                if (object instanceof PlayerChangedName) {
+                    PlayerChangedName msg = (PlayerChangedName) object;
+
+                    for (ISankossClientListener listener : listeners) {
+                        listener.playerChangedName(msg.getPlayer());
+                    }
+
+                    return;
+                }
             }
 
             public void disconnected(Connection connection) {
@@ -181,11 +190,11 @@ public class SankossClient {
         }));
     }
 
-    public Player getPlayer() {
+    public SankossClientPlayer getPlayer() {
         return player;
     }
 
-    public List<Player> getOpponents() {
+    public List<BasePlayer> getOpponents() {
         return opponents;
     }
 
@@ -239,13 +248,19 @@ public class SankossClient {
         client.close();
     }
 
+    public void playerChangeName(String name) {
+        if (client == null) return;
+
+        client.sendTCP(new PlayerChangeName(name));
+    }
+
     public void fetchRooms() {
         if (client == null) return;
 
         client.sendTCP(new FetchRooms());
     }
 
-    public void fire(Long gameID, Player target, Coordinate coordinate) {
+    public void fire(Long gameID, BasePlayer target, Coordinate coordinate) {
         if (client == null) return;
 
         client.sendTCP(new Fire(gameID, target, coordinate));
@@ -258,10 +273,10 @@ public class SankossClient {
         client.sendTCP(new JoinRoom(roomID));
     }
 
-    public void playerReady(Long gameID, List<Ship> fleet) {
+    public void playerReady(Long gameID, Fleet fleet) {
         if (client == null) return;
 
-        client.sendTCP(new PlayerReady(gameID, fleet));
+        client.sendTCP(new PlayerReady(gameID, fleet.getShips()));
     }
 
     public void startGame(Long roomID) {

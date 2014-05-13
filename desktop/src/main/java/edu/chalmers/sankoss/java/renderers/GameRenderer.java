@@ -9,8 +9,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import edu.chalmers.sankoss.core.BasePlayer;
 import edu.chalmers.sankoss.core.Coordinate;
-import edu.chalmers.sankoss.core.Player;
 import edu.chalmers.sankoss.java.misc.ShipButton;
 import edu.chalmers.sankoss.java.models.GameModel;
 import edu.chalmers.sankoss.java.models.ScreenModel;
@@ -24,6 +24,7 @@ import java.util.Set;
  * More detailed description.
  *
  * @author Mikael Malmqvist
+ * @modified Daniel Eineving 2014-05-12
  */
 public class GameRenderer extends Renderer{
 
@@ -34,7 +35,7 @@ public class GameRenderer extends Renderer{
     private Table[] playerGrid = new Table[100];
     private Table[] aimGrid = new Table[100];
     private ShipButton follow = null;
-    private Player.Nationality nationality;
+    private BasePlayer.Nationality nationality;
 
 	private SpriteBatch batch = new SpriteBatch();
     private Skin skin = new Skin();
@@ -49,14 +50,13 @@ public class GameRenderer extends Renderer{
 
 	// controllers
     private Table flag;
-	private Label headerLabel;
     private Label landLabel;
     private Label opponentNameLabel;
     private Label playerBoardLabel;;
     private Label aimBoardLabel;
 
     int two = 1;
-    int three = 1;
+    int three = 0;
     int four = 1;
     int five = 1;
 
@@ -105,7 +105,6 @@ public class GameRenderer extends Renderer{
     }
 
     public void drawControllers(AbstractScreen screen) {
-        //skin = new Skin();
 
         actorPanel = new WidgetGroup();
 
@@ -168,7 +167,7 @@ public class GameRenderer extends Renderer{
         labelStyle.font = skin.getFont("default");
         landLabel = new Label(land, labelStyle);
         landLabel.setX(60);
-        landLabel.setY(0);
+        landLabel.setY(landLabel.getHeight());
 
         opponentNameLabel = new Label("Opponent's name", labelStyle);
         opponentNameLabel.setX(10);
@@ -190,13 +189,11 @@ public class GameRenderer extends Renderer{
         aimBoard = new Table();
         aimBoard.setWidth(500);
         aimBoard.setHeight(500);
-        //aimBoard.setBackground(skin.newDrawable("tableBack2"));
         aimBoard.setPosition(10, (middlePanel.getHeight() - aimBoard.getHeight())/2);
 
         playerBoard = new Table();
         playerBoard.setWidth(500);
         playerBoard.setHeight(500);
-        //playerBoard.setBackground(skin.newDrawable("tableBack2"));
         playerBoard.setPosition((middlePanel.getWidth() - playerBoard.getWidth() - 10), (middlePanel.getHeight() - playerBoard.getHeight())/2);
 
         int n = 0;
@@ -211,21 +208,17 @@ public class GameRenderer extends Renderer{
 
                 // Colorizes every second square with a different gray based on the tableBack
                 if(n % 2 == 0) {
-                    playerGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/LIGHT_water.png"))))));
-                    playerGrid[(i*10)+j].setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/LIGHT_water.png")))));
-                    aimGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/LIGHT_water.png"))))));
-                    aimGrid[(i*10)+j].setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/LIGHT_water.png")))));
+                    playerGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/LIGHT_water.png"))))));
+                    playerGrid[(i*10)+j].setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/LIGHT_water.png")))));
+                    aimGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/LIGHT_water.png"))))));
+                    aimGrid[(i*10)+j].setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/LIGHT_water.png")))));
 
-                    // playerGrid[(i*10)+j].setBackground(skin.newDrawable("tableBack"));
-                    // aimGrid[(i*10)+j].setBackground(skin.newDrawable("tableBack3"));
                 } else {
-                    playerGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/DARK_water.png"))))));
-                    playerGrid[(i*10)+j].setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/DARK_water.png")))));
-                    aimGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/DARK_water.png"))))));
-                    aimGrid[(i*10)+j].setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/DARK_water.png")))));
+                    playerGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/DARK_water.png"))))));
+                    playerGrid[(i*10)+j].setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/DARK_water.png")))));
+                    aimGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/DARK_water.png"))))));
+                    aimGrid[(i*10)+j].setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/DARK_water.png")))));
 
-                    // playerGrid[(i*10)+j].setBackground(skin.newDrawable("tableBack3"));
-                    // aimGrid[(i*10)+j].setBackground(skin.newDrawable("tableBack"));
                 }
 
                 // Adds grid to middlePanel and add a textButton to it
@@ -269,8 +262,7 @@ public class GameRenderer extends Renderer{
         flagPixmap.fill();
 
         skin.add(land, new Texture(flagPixmap));
-        //flag.setBackground(skin.newDrawable(land));
-        flag.setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal(nationality.getPath())))));
+        flag.setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath(nationality.getPath())))));
 
         landLabel.setText(land);
 
@@ -280,19 +272,17 @@ public class GameRenderer extends Renderer{
 
     }
 
-    public Player.Nationality getNationality() {
+    public BasePlayer.Nationality getNationality() {
         return nationality;
     }
 
-    public void setNationality(Player.Nationality nationality) {
+    public void setNationality(BasePlayer.Nationality nationality) {
         this.nationality = nationality;
     }
 
     public void placeShipsOnPlayerGrid(int i, int j) {
         // Finds where in grid a player has placed ships
-        if(currentModel.getShipArray()[(i*10)+j] == 1){
-            //playerGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/miss.png"))))));
-
+        if(currentModel.getShipArray()[(i*10)+j] == 1) {
             drawOwnShips(i, j);
 
         }
@@ -311,25 +301,26 @@ public class GameRenderer extends Renderer{
 
         ShipButton.Direction direction = ((GameModel) currentModel).getRotationMap().get(new Coordinate(i+1, j+1));
 
-        String path = "desktop/src/main/java/assets/textures/" + direction + "_";
+        String path = "assets/textures/" + direction + "_";
 
         if(twoSet.contains(new Coordinate(i+1, j+1))){
-            playerGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal(path + "ship_small_body_" + two + ".png"))))));
+            playerGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath(path + "ship_small_body_" + two + ".png"))))));
             two++;
         }
 
         if(threeSet.contains(new Coordinate(i+1, j+1))){
-            playerGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal(path + "ship_medium_body_" + three + ".png"))))));
-            three++;
+            three = (three % 3) + 1;
+            playerGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath(path + "ship_medium_body_" + three + ".png"))))));
+
         }
 
         if(fourSet.contains(new Coordinate(i+1, j+1))){
-            playerGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal(path + "ship_large_body_" + four + ".png"))))));
+            playerGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath(path + "ship_large_body_" + four + ".png"))))));
             four++;
         }
 
         if(fiveSet.contains(new Coordinate(i+1, j+1))){
-            playerGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal(path + "ship_huge_body_" + five + ".png"))))));
+            playerGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath(path + "ship_huge_body_" + five + ".png"))))));
             five++;
         }
     }
@@ -352,7 +343,6 @@ public class GameRenderer extends Renderer{
             setMiss(x, y);
         }
 
-        //aimGrid[x + y].addActor(new TextButton(str, btnStyle));
     }
 
     /**
@@ -362,7 +352,7 @@ public class GameRenderer extends Renderer{
      */
     public void setMiss(int x, int y) {
 
-        aimGrid[(x-1)*10 + (y-1)].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/miss.png"))))));
+        aimGrid[(x-1)*10 + (y-1)].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/miss.png"))))));
 
     }
 
@@ -373,7 +363,7 @@ public class GameRenderer extends Renderer{
      */
     public void setHit(int x, int y) {
 
-        aimGrid[(x-1)*10 + (y-1)].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/explosion.png"))))));
+        aimGrid[(x-1)*10 + (y-1)].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/explosion.png"))))));
 
     }
 
@@ -434,25 +424,6 @@ public class GameRenderer extends Renderer{
     // TODO: Put this code somewhere else! Method is a loop - it's a trap!
     @Override
     public void render() {
-    	/*Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-        Gdx.gl.glClearColor(0.09f, 0.28f, 0.5f, 1);
-        Skin skin = new Skin();
-        
-        BitmapFont font = new BitmapFont();
-        font.scale(1); // Sets font's scale relative to current scale
-
-        // Adds font to skin
-        skin.add("default", font);
-        
-        Label.LabelStyle lblStyle = new Label.LabelStyle();
-        lblStyle.font = skin.getFont("default");
-        
-        headerLabel = new Label("BATTLURUSHIPURU!!!", lblStyle);
-
-        batch.begin();
-        headerLabel.setPosition(0, 510);
-        headerLabel.draw(batch, 1);
-        batch.end();*/
 
         // ShipButton to follow cursor
         if(follow != null) {

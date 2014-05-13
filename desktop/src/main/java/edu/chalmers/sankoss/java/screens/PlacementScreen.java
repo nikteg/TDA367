@@ -11,8 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.SnapshotArray;
+import edu.chalmers.sankoss.core.BasePlayer;
 import edu.chalmers.sankoss.core.Coordinate;
-import edu.chalmers.sankoss.core.Player;
 import edu.chalmers.sankoss.core.Ship;
 import edu.chalmers.sankoss.core.exceptions.IllegalShipCoordinatesException;
 import edu.chalmers.sankoss.java.SankossController;
@@ -29,7 +29,9 @@ import java.util.HashSet;
  * Handles game logic when placing ships, almost like a controller.
  *
  * @author Mikael Malmqvist
+ * @modified Fredrik Thune
  * @date 3/24/14
+ * @modified Daniel Eineving 2014-05-12
  */
 public class PlacementScreen extends AbstractScreen {
 
@@ -63,7 +65,7 @@ public class PlacementScreen extends AbstractScreen {
         }
 
         @Override
-        public void playerIsReady(Player player) {
+        public void playerIsReady(BasePlayer player) {
             System.out.println("SERVER: " + model.getClient().getPlayer().getName() + " is ready!");
             ((Placement)model).setReadyBtnState(Placement.ReadyBtnState.ENTER);
             ((PlacementRenderer)renderer).setReadyBtn(Placement.ReadyBtnState.ENTER);
@@ -76,6 +78,10 @@ public class PlacementScreen extends AbstractScreen {
     @Override
     public void show() {
 
+        // Sets the stage as input source
+        controller.changeInput(stage);
+
+        nameLabel.setText(model.getClient().getPlayer().getName());
     }
 
     /**
@@ -115,9 +121,10 @@ public class PlacementScreen extends AbstractScreen {
         // Adds font to skin
         skin.add("default", font);
 
-
-        // Sets the stage as input source
-        controller.changeInput(stage);
+        createKey(2);
+        createKey(3);
+        createKey(4);
+        createKey(5);
 
         labelStyle.font = skin.getFont("default");
 
@@ -305,8 +312,7 @@ public class PlacementScreen extends AbstractScreen {
     public void readyClicked() {
 
         // If all your boats are on the board
-        if(model.getClient().getPlayer().getFleet().size() == model.getNumberOfShips()){
-
+        if(model.getClient().getPlayer().getFleet().getShips().size() == model.getNumberOfShips()){
             determineReady();
             setReadyOrEnter();
 
@@ -348,6 +354,7 @@ public class PlacementScreen extends AbstractScreen {
         // Checks if a follow-button exists
         if(((PlacementRenderer)renderer).getFollow() != null){
 
+
             // Loops through grid
             for(int i = 0; i < 10; i++) {
                 for(int j = 0; j < 10; j++){
@@ -383,7 +390,7 @@ public class PlacementScreen extends AbstractScreen {
                                     Coordinate end = new Coordinate((i+1), (j +((PlacementRenderer)renderer).getFollow().getLength()));
 
                                     // Creates new key in ShipMap for a set of coordinates
-                                    createKey(end.getY() - start.getY() + 1);
+                                    //createKey(end.getY() - start.getY() + 1);
 
                                     // Adds ships with start and end coordinate to player's fleet
                                     try {
@@ -394,7 +401,7 @@ public class PlacementScreen extends AbstractScreen {
                                     }
 
                                     // Path to ship texture
-                                    String path = "desktop/src/main/java/assets/textures/HORIZONTAL_";
+                                    String path = "assets/textures/HORIZONTAL_";
 
                                     // Adds ship to grid visually
                                     System.out.println("Added ship at: ");
@@ -419,15 +426,16 @@ public class PlacementScreen extends AbstractScreen {
                                         }
 
                                         childrenArray = children.toArray();
-                                        ((ImageButton)childrenArray[0]).setStyle(new ImageButton.ImageButtonStyle(null, null, null, new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal(path)))), null, null));
+                                        ((ImageButton)childrenArray[0]).setStyle(new ImageButton.ImageButtonStyle(null, null, null, new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath(path)))), null, null));
                                         System.out.println(i + ", " + (j+n));
-                                        path = "desktop/src/main/java/assets/textures/HORIZONTAL_";
+                                        path = "assets/textures/HORIZONTAL_";
 
                                         // Marks the select coordinate as occupied
                                         model.addToShipArray(i, (j+n));
 
+                                        //TODO WHY??
                                         // Adds to players fleet
-                                        model.getClient().getPlayer().addUsedCoordiante(new Coordinate((i + 1), (j + n + 1)));
+                                        //model.getClient().getPlayer().addUsedCoordiante(new Coordinate((i + 1), (j + n + 1)));
                                     }
 
                                     // Removes placed ship from ship panel
@@ -453,6 +461,9 @@ public class PlacementScreen extends AbstractScreen {
                                     Coordinate start = new Coordinate((i+1), (j+1));
                                     Coordinate end = new Coordinate((i+(((PlacementRenderer)renderer).getFollow().getLength())), (j +1));
 
+                                            //TODO Why???
+                                            // Adds to players fleet
+                                            //model.getClient().getPlayer().addUsedCoordiante(new Coordinate((i + n + 1), (j + 1)));
                                     // Creates new key in ShipMap for a set of coordinates
                                     createKey(end.getX() - start.getX() + 1);
 
@@ -464,7 +475,7 @@ public class PlacementScreen extends AbstractScreen {
                                         e.getStackTrace();
                                     }
 
-                                    String path = "desktop/src/main/java/assets/textures/VERTICAL_";
+                                    String path = "assets/textures/VERTICAL_";
 
                                     // Adds ship to grid visually
                                     System.out.println("Added ship at: ");
@@ -489,15 +500,16 @@ public class PlacementScreen extends AbstractScreen {
                                         }
 
                                         childrenArray = children.toArray();
-                                        ((ImageButton)childrenArray[0]).setStyle(new ImageButton.ImageButtonStyle(null, null, null, new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal(path)))), null, null));
+                                        ((ImageButton)childrenArray[0]).setStyle(new ImageButton.ImageButtonStyle(null, null, null, new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath(path)))), null, null));
                                         System.out.println((i+n) + 1 + ", " + (j+1));
-                                        path = "desktop/src/main/java/assets/textures/VERTICAL_";
+                                        path = "assets/textures/VERTICAL_";
 
                                         // Marks the select coordinate as occupied
                                         model.addToShipArray((i+n), j);
 
+                                        //TODO WHY?
                                         // Adds to players fleet
-                                        model.getClient().getPlayer().addUsedCoordiante(new Coordinate((i + n + 1), (j + 1)));
+                                        //model.getClient().getPlayer().addUsedCoordiante(new Coordinate((i + n + 1), (j + 1)));
                                     }
 
                                     // Removes placed ship from ship panel

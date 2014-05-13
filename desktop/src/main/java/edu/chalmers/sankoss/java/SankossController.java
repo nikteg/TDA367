@@ -48,7 +48,7 @@ public class SankossController{
         // setMainMenuScreen();
         changeScreen(new MainMenuScreen(this, this.sankossGame));
         screen.getModel().connectClient();
-        screen.getModel().setNumberOfShips(4);
+        screen.getModel().setNumberOfShips(5);
     }
 
     // TODO: Remove this method

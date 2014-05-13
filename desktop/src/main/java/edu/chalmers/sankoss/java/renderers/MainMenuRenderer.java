@@ -89,6 +89,9 @@ public class MainMenuRenderer extends Renderer{
 
 
     public void drawControllers(AbstractScreen screen) {
+
+        System.out.println();
+
         skin = new Skin();
 
         this.screen = screen;
@@ -119,6 +122,7 @@ public class MainMenuRenderer extends Renderer{
 
         float x = (800 - WIDTH_OF_BUTTON)/2;
         multiPlayerBtn.setPosition(x, 600/2 + 120);
+        multiPlayerBtn.setDisabled(true);
         optionBtn.setPosition(x, height/2);
         creditsBtn.setPosition(x, height/2 - 120);
         exitBtn.setPosition(x, 600/2 - 240);
@@ -169,6 +173,9 @@ public class MainMenuRenderer extends Renderer{
         btnStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
         btnStyle.checked = skin.newDrawable("white", Color.DARK_GRAY);
         btnStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
+        btnStyle.fontColor = Color.WHITE;
+        btnStyle.disabledFontColor = Color.GRAY;
+        btnStyle.disabled = skin.newDrawable("white", Color.DARK_GRAY);
 
         skin.add("default", btnStyle);
 
@@ -178,5 +185,6 @@ public class MainMenuRenderer extends Renderer{
         statusLabel.setText(str);
 
     }
+
 
 }

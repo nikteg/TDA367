@@ -9,7 +9,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
-import edu.chalmers.sankoss.core.Player;
+import edu.chalmers.sankoss.core.BasePlayer;
+import edu.chalmers.sankoss.java.client.SankossClientPlayer;
 import edu.chalmers.sankoss.java.misc.ShipButton;
 import edu.chalmers.sankoss.java.models.Placement;
 import edu.chalmers.sankoss.java.models.ScreenModel;
@@ -30,7 +31,7 @@ public class PlacementRenderer extends Renderer{
 	private final int GRID_SIDE=10;
     private java.awt.Color color = java.awt.Color.WHITE;
     private String land = "USA";
-    private Player.Nationality nationality = Player.Nationality.USA;
+    private BasePlayer.Nationality nationality = BasePlayer.Nationality.USA;
     private final int WIDTH_OF_SQUARE = 50;
     private final int HEIGHT_OF_SQUARE = 50;
     private Table[] grid = new Table[100];
@@ -57,7 +58,8 @@ public class PlacementRenderer extends Renderer{
 
     // ships
     private ShipButton twoShip;
-    private ShipButton threeShip;
+    private ShipButton threeShip1;
+    private ShipButton threeShip2;
     private ShipButton fourShip;
     private ShipButton fiveShip;
 	
@@ -70,9 +72,9 @@ public class PlacementRenderer extends Renderer{
     }
 
 
-    public void switchNationality(Player player, Boolean next) {
+    public void switchNationality(SankossClientPlayer player, Boolean next) {
 
-        Player.Nationality nationality = next ? player.getNationality().getNext() : player.getNationality().getLast();
+        BasePlayer.Nationality nationality = next ? player.getNationality().getNext() : player.getNationality().getLast();
 
         player.setNationality(nationality);
         color = nationality.getColor();
@@ -206,12 +208,12 @@ public class PlacementRenderer extends Renderer{
 
                 // Adds button to be clicked when placing ships in the placement grid
                 if(n % 2 == 0) {
-                    grid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/LIGHT_water.png"))))));
-                    grid[(i*10)+j].setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/LIGHT_water.png")))));
+                    grid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/LIGHT_water.png"))))));
+                    grid[(i*10)+j].setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/LIGHT_water.png")))));
 
                 } else {
-                    grid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/DARK_water.png"))))));
-                    grid[(i*10)+j].setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/DARK_water.png")))));
+                    grid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/DARK_water.png"))))));
+                    grid[(i*10)+j].setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/DARK_water.png")))));
 
                 }
 
@@ -248,8 +250,10 @@ public class PlacementRenderer extends Renderer{
         // Ships to be placed in grid
         twoShip = new ShipButton(2);
         twoShip.addListener(((PlacementScreen) screen).getShip2Listener());
-        threeShip = new ShipButton(3);
-        threeShip.addListener(((PlacementScreen) screen).getShip2Listener());
+        threeShip1 = new ShipButton(3);
+        threeShip1.addListener(((PlacementScreen) screen).getShip2Listener());
+        threeShip2 = new ShipButton(3);
+        threeShip2.addListener(((PlacementScreen) screen).getShip2Listener());
         fourShip = new ShipButton(4);
         fourShip.addListener(((PlacementScreen) screen).getShip2Listener());
         fiveShip = new ShipButton(5);
@@ -257,7 +261,8 @@ public class PlacementRenderer extends Renderer{
 
         topTable.addActor(rotateBtn);
         topTable.addActor(twoShip);
-        topTable.addActor(threeShip);
+        topTable.addActor(threeShip1);
+        topTable.addActor(threeShip2);
         topTable.addActor(fourShip);
         topTable.addActor(fiveShip);
 
@@ -320,12 +325,13 @@ public class PlacementRenderer extends Renderer{
      */
     public void updateShips() {
         twoShip.update();
-        threeShip.update();
+        threeShip1.update();
+        threeShip2.update();
         fourShip.update();
         fiveShip.update();
     }
 
-    public void setNationality(Player.Nationality nationality) {
+    public void setNationality(BasePlayer.Nationality nationality) {
         this.nationality = nationality;
     }
 
@@ -376,12 +382,14 @@ public class PlacementRenderer extends Renderer{
     public void rotateShips() {
         if(twoShip.getDirection() == ShipButton.Direction.HORIZONTAL) {
             twoShip.setDirection(ShipButton.Direction.VERTICAL);
-            threeShip.setDirection(ShipButton.Direction.VERTICAL);
+            threeShip1.setDirection(ShipButton.Direction.VERTICAL);
+            threeShip2.setDirection(ShipButton.Direction.VERTICAL);
             fourShip.setDirection(ShipButton.Direction.VERTICAL);
             fiveShip.setDirection(ShipButton.Direction.VERTICAL);
         } else {
             twoShip.setDirection(ShipButton.Direction.HORIZONTAL);
-            threeShip.setDirection(ShipButton.Direction.HORIZONTAL);
+            threeShip1.setDirection(ShipButton.Direction.HORIZONTAL);
+            threeShip2.setDirection(ShipButton.Direction.HORIZONTAL);
             fourShip.setDirection(ShipButton.Direction.HORIZONTAL);
             fiveShip.setDirection(ShipButton.Direction.HORIZONTAL);
 

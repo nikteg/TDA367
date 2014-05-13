@@ -3,6 +3,7 @@ package edu.chalmers.sankoss.java.models;
 import edu.chalmers.sankoss.core.Room;
 import edu.chalmers.sankoss.java.Settings;
 import edu.chalmers.sankoss.java.client.SankossClient;
+import edu.chalmers.sankoss.java.client.SankossClientListener;
 
 import java.io.IOException;
 import java.util.Map;
@@ -26,7 +27,13 @@ public abstract class ScreenModel {
     protected static int[] shipArray;
 
     public ScreenModel() {
-
+        client.addListener(new SankossClientListener() {
+            @Override
+            public void connected(Long playerID) {
+                client.getPlayer().setName("Player #" + playerID);
+                client.playerChangeName(client.getPlayer().getName());
+            }
+        });
     }
 
     public ScreenModel(String host) {
