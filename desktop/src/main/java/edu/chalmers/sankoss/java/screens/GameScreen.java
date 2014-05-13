@@ -47,20 +47,18 @@ public class GameScreen extends AbstractScreen {
         model = new GameModel(shipMap, rotationMap);
         model.getClient().addListener(new GameListener());
         renderer = new GameRenderer(model);
-        //((GameRenderer)renderer).setNationality(model.getClient().getPlayer().getNationality());
 
         create();
     }
 
     public void hit(Coordinate coordinate) {
+        // TODO Determine if you was hit or if opponent was hit
         ((GameModel) model).setHitOrMiss(coordinate.getX(), coordinate.getY(), "HIT");
-        //((GameRenderer)renderer).setHitOrMiss((coordinate.getX()-1)*10, coordinate.getY(), "HIT");
 
     }
 
     public void miss(Coordinate coordinate) {
         ((GameModel) model).setHitOrMiss(coordinate.getX(), coordinate.getY(), "MISS");
-        //((GameRenderer)renderer).setHitOrMiss((coordinate.getX()-1)*10, coordinate.getY(), "MISS");
     }
 
     private class GameListener extends SankossClientListener {
@@ -68,19 +66,15 @@ public class GameScreen extends AbstractScreen {
         @Override
         public void fireResult(Long gameID, BasePlayer target, Coordinate coordinate, boolean hit) {
 
+            //TODO show hits and misses on your board as well!
+
             if(hit && !target.equals(model.getClient().getPlayer())) {
                 System.out.println("You shot at " + coordinate.getX() + ", " + coordinate.getY() + ". HIT!");
-                // ((GameRenderer)renderer).getAimGrid()[(coordinate.getX()-1)*10 + (coordinate.getY()-1)].addActor(new TextButton("HIT", ((GameRenderer)renderer).getBtnStyle()));
-                //((GameRenderer)renderer).getAimGrid()[(coordinate.getX()-1)*10 + (coordinate.getY()-1)].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/explosion.png"))))));
-                //((GameRenderer)renderer).setHitOrMiss((coordinate.getX()-1)*10, coordinate.getY(), "HIT");
                 hit(coordinate);
 
             } else if(!target.equals(model.getClient().getPlayer())){
 
                 System.out.println("You shot at " + coordinate.getX() + ", " + coordinate.getY() + ". Miss..");
-                // ((GameRenderer)renderer).getAimGrid()[(coordinate.getX()-1)*10 + (coordinate.getY()-1)].addActor(new TextButton("MISS", ((GameRenderer)renderer).getBtnStyle()));
-                //((GameRenderer)renderer).getAimGrid()[(coordinate.getX()-1)*10 + (coordinate.getY()-1)].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("desktop/src/main/java/assets/textures/miss.png"))))));
-                //((GameRenderer)renderer).setHitOrMiss((coordinate.getX()-1)*10, coordinate.getY(), "MISS");
                 miss(coordinate);
             }
 

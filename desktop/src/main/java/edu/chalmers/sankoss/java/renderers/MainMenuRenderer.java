@@ -89,6 +89,9 @@ public class MainMenuRenderer extends Renderer{
 
 
     public void drawControllers(AbstractScreen screen) {
+
+        System.out.println();
+
         skin = new Skin();
 
         this.screen = screen;

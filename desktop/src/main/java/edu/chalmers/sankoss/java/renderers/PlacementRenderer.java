@@ -58,7 +58,8 @@ public class PlacementRenderer extends Renderer{
 
     // ships
     private ShipButton twoShip;
-    private ShipButton threeShip;
+    private ShipButton threeShip1;
+    private ShipButton threeShip2;
     private ShipButton fourShip;
     private ShipButton fiveShip;
 	
@@ -249,8 +250,10 @@ public class PlacementRenderer extends Renderer{
         // Ships to be placed in grid
         twoShip = new ShipButton(2);
         twoShip.addListener(((PlacementScreen) screen).getShip2Listener());
-        threeShip = new ShipButton(3);
-        threeShip.addListener(((PlacementScreen) screen).getShip2Listener());
+        threeShip1 = new ShipButton(3);
+        threeShip1.addListener(((PlacementScreen) screen).getShip2Listener());
+        threeShip2 = new ShipButton(3);
+        threeShip2.addListener(((PlacementScreen) screen).getShip2Listener());
         fourShip = new ShipButton(4);
         fourShip.addListener(((PlacementScreen) screen).getShip2Listener());
         fiveShip = new ShipButton(5);
@@ -258,7 +261,8 @@ public class PlacementRenderer extends Renderer{
 
         topTable.addActor(rotateBtn);
         topTable.addActor(twoShip);
-        topTable.addActor(threeShip);
+        topTable.addActor(threeShip1);
+        topTable.addActor(threeShip2);
         topTable.addActor(fourShip);
         topTable.addActor(fiveShip);
 
@@ -321,7 +325,8 @@ public class PlacementRenderer extends Renderer{
      */
     public void updateShips() {
         twoShip.update();
-        threeShip.update();
+        threeShip1.update();
+        threeShip2.update();
         fourShip.update();
         fiveShip.update();
     }
@@ -377,12 +382,14 @@ public class PlacementRenderer extends Renderer{
     public void rotateShips() {
         if(twoShip.getDirection() == ShipButton.Direction.HORIZONTAL) {
             twoShip.setDirection(ShipButton.Direction.VERTICAL);
-            threeShip.setDirection(ShipButton.Direction.VERTICAL);
+            threeShip1.setDirection(ShipButton.Direction.VERTICAL);
+            threeShip2.setDirection(ShipButton.Direction.VERTICAL);
             fourShip.setDirection(ShipButton.Direction.VERTICAL);
             fiveShip.setDirection(ShipButton.Direction.VERTICAL);
         } else {
             twoShip.setDirection(ShipButton.Direction.HORIZONTAL);
-            threeShip.setDirection(ShipButton.Direction.HORIZONTAL);
+            threeShip1.setDirection(ShipButton.Direction.HORIZONTAL);
+            threeShip2.setDirection(ShipButton.Direction.HORIZONTAL);
             fourShip.setDirection(ShipButton.Direction.HORIZONTAL);
             fiveShip.setDirection(ShipButton.Direction.HORIZONTAL);
 

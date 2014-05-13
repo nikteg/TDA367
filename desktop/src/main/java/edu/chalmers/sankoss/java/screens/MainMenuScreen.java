@@ -36,6 +36,7 @@ public class MainMenuScreen extends AbstractScreen {
         model.getClient().addListener(new MainMenuListener());
         renderer = new MainMenuRenderer(model);
 
+
         create();
 
     }

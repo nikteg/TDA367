@@ -121,7 +121,10 @@ public class PlacementScreen extends AbstractScreen {
         // Adds font to skin
         skin.add("default", font);
 
-
+        createKey(2);
+        createKey(3);
+        createKey(4);
+        createKey(5);
 
         labelStyle.font = skin.getFont("default");
 
@@ -387,7 +390,7 @@ public class PlacementScreen extends AbstractScreen {
                                     Coordinate end = new Coordinate((i+1), (j +((PlacementRenderer)renderer).getFollow().getLength()));
 
                                     // Creates new key in ShipMap for a set of coordinates
-                                    createKey(end.getY() - start.getY() + 1);
+                                    //createKey(end.getY() - start.getY() + 1);
 
                                     // Adds ships with start and end coordinate to player's fleet
                                     try {
