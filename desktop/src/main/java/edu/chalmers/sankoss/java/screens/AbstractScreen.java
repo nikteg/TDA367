@@ -41,6 +41,9 @@ public abstract class AbstractScreen<R extends Renderer> implements Screen, Appl
     public AbstractScreen(SankossController controller, SankossGame game) {
         this.controller = controller;
         this.game = game;
+        
+        //TODO Needs reset?
+        stage = new Stage();
 
     }
 

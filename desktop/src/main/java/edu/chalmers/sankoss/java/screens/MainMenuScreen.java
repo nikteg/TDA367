@@ -29,6 +29,7 @@ public class MainMenuScreen extends AbstractScreen<MainMenuRenderer> {
     private Object[] rooms = new Object[0];
 
     private LobbyScreen lobbyScreen;
+    
 
 
 
@@ -41,6 +42,7 @@ public class MainMenuScreen extends AbstractScreen<MainMenuRenderer> {
         model.getClient().addListener(new MainMenuListener());
         renderer = new MainMenuRenderer(model);
         lobbyScreen = new LobbyScreen(controller, game);
+
         create();
 
     }
@@ -102,7 +104,6 @@ public class MainMenuScreen extends AbstractScreen<MainMenuRenderer> {
     public void resize(int width, int height) {
         super.resize(width, height);
         renderer.resize(width, height);
-
     }
 
     public JoinButtonListener getJoinButtonListener() {
@@ -237,7 +238,8 @@ public class MainMenuScreen extends AbstractScreen<MainMenuRenderer> {
     }
 
     public void jumpToCredits() {
-        // TODO: Jump to credit screen
+    	System.out.println("jumpToCredits @ mmScreen");
+        controller.changeScreen(new CreditScreen(controller, game));
     }
 
     public void jumpToLobby() {
