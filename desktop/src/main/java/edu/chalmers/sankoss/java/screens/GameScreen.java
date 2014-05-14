@@ -66,11 +66,11 @@ public class GameScreen extends AbstractScreen {
         @Override
         public void fireResult(Long gameID, BasePlayer target, Coordinate coordinate, boolean hit) {
 
-            //TODO show hits and misses on your board as well!
-
-            // If you WERE the target
             // TODO: Put most logic in here instead and call external methods
             if(target.equals(model.getClient().getPlayer())) {
+                //Shows the enemy's hit on your board      	
+            	((GameRenderer)renderer).setEnemyTarget(coordinate, hit);
+            	
                 ((GameRenderer)renderer).getYourTurnLabel().setText("Your Turn!");
                 ((GameRenderer)renderer).getOppTurnLabel().setText("");
             } else {

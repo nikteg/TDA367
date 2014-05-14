@@ -32,6 +32,8 @@ public class GameRenderer extends Renderer{
     private String land;
     private final int WIDTH_OF_SQUARE = 50;
     private final int HEIGHT_OF_SQUARE = 50;
+    
+    //TODO Why is this vectors? They Should be matrixes ( [][] )
     private Table[] playerGrid = new Table[100];
     private Table[] aimGrid = new Table[100];
     private ShipButton follow = null;
@@ -463,6 +465,15 @@ public class GameRenderer extends Renderer{
             follow.setY(follow.getY()-Gdx.input.getDeltaY());
         }
 
-      
     }
+    
+    public void setEnemyTarget(Coordinate coordinate,  boolean hit){
+    	if(hit){
+    		 playerGrid[(coordinate.getX())*10 + coordinate.getY()].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/explosion.png"))))));
+    	}
+    	else{
+   		 	playerGrid[(coordinate.getX())*10 + coordinate.getY()].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/miss.png"))))));
+    	}
+    }
+    
 }
