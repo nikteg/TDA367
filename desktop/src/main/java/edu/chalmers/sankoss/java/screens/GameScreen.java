@@ -73,19 +73,21 @@ public class GameScreen extends AbstractScreen {
             if(target.equals(model.getClient().getPlayer())) {
                 ((GameRenderer)renderer).getYourTurnLabel().setText("Your Turn!");
                 ((GameRenderer)renderer).getOppTurnLabel().setText("");
+                model.getClient().getPlayer().setMyTurn(true);
+
             } else {
                 ((GameRenderer)renderer).getYourTurnLabel().setText("");
                 ((GameRenderer)renderer).getOppTurnLabel().setText(model.getClient().getOpponents().get(0).getName() + "'s turn!");
             }
 
             if(hit && !target.equals(model.getClient().getPlayer())) {
-                System.out.println("You shot at " + coordinate.getX() + ", " + coordinate.getY() + ". HIT!");
+                //System.out.println("You shot at " + coordinate.getX() + ", " + coordinate.getY() + ". HIT!");
                 hit(coordinate);
 
 
             } else if(!target.equals(model.getClient().getPlayer())){
 
-                System.out.println("You shot at " + coordinate.getX() + ", " + coordinate.getY() + ". Miss..");
+                //System.out.println("You shot at " + coordinate.getX() + ", " + coordinate.getY() + ". Miss..");
                 miss(coordinate);
             }
 
@@ -192,32 +194,37 @@ public class GameScreen extends AbstractScreen {
      * @param actor grid to be shot at.
      */
     public void shoot(Actor actor) {
-        // Loops through grid
-        for(int i = 0; i < 10; i++) {
-            for(int j = 0; j < 10; j++){
 
-                // gets array of 1 button from every table in grid (1 table per square in grid)
-                SnapshotArray<Actor> children = ((GameRenderer)renderer).getAimGrid()[(i*10)+j].getChildren();
-                Actor[] childrenArray = children.toArray();
+        if(model.getClient().getPlayer().getMyTurn()){
+            // Loops through grid
+            for(int i = 0; i < 10; i++) {
+                for(int j = 0; j < 10; j++){
 
-                if(childrenArray.length > 0){
-                    // Matches button with clicked one
-                    if(childrenArray[0].equals(actor)) {
-                        model.getClient().fire(model.getClient().getGameID(), model.getClient().getOpponents().get(0), new Coordinate(i+1, j+1));
+                    // gets array of 1 button from every table in grid (1 table per square in grid)
+                    SnapshotArray<Actor> children = ((GameRenderer)renderer).getAimGrid()[(i*10)+j].getChildren();
+                    Actor[] childrenArray = children.toArray();
 
+                    if(childrenArray.length > 0){
+                        // Matches button with clicked one
+                        if(childrenArray[0].equals(actor)) {
+                            model.getClient().fire(model.getClient().getGameID(), model.getClient().getOpponents().get(0), new Coordinate(i+1, j+1));
+
+                        }
                     }
                 }
             }
-        }
 
-        // Delay to get thread to catch up
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            e.getStackTrace();
-        }
+            // Delay to get thread to catch up
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.getStackTrace();
+            }
 
-        ((GameRenderer)renderer).setHitOrMiss(((GameModel)model).getX(), ((GameModel)model).getY(), ((GameModel)model).getHitMsg());
+            ((GameRenderer)renderer).setHitOrMiss(((GameModel)model).getX(), ((GameModel)model).getY(), ((GameModel)model).getHitMsg());
+
+            model.getClient().getPlayer().setMyTurn(false);
+        }
 
     }
 }
