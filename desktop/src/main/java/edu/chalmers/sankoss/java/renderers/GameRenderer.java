@@ -58,6 +58,9 @@ public class GameRenderer extends Renderer{
     private Label aimBoardLabel;
     private Label yourTurnLabel;
     private Label oppTurnLabel;
+    
+    private ImageButton explosion = new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/explosion.png")))));
+    private ImageButton miss = new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/miss.png")))));
 
 
     int two = 1;
@@ -466,13 +469,17 @@ public class GameRenderer extends Renderer{
         }
 
     }
-    
+    /**
+     * Displays the enemy's target and result on given coordinate
+     * @param coordinate
+     * @param hit
+     */
     public void setEnemyTarget(Coordinate coordinate,  boolean hit){
     	if(hit){
-    		 playerGrid[(coordinate.getX())*10 + coordinate.getY()].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/explosion.png"))))));
+    		 playerGrid[(coordinate.getX()-1)*10 + coordinate.getY()-1].addActor(explosion);
     	}
     	else{
-   		 	playerGrid[(coordinate.getX())*10 + coordinate.getY()].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/miss.png"))))));
+   		 	playerGrid[(coordinate.getX()-1)*10   + coordinate.getY()-1].addActor(miss);
     	}
     }
     
