@@ -95,6 +95,11 @@ public class PlacementRenderer extends Renderer{
         readyBtn.setX(width - readyBtn.getWidth());
 
 
+        fiveShip.setY(50 + twoShip.getWidth() + 5);
+        fiveShip.setX(Gdx.graphics.getWidth() / 2 + 250);
+
+        twoShip.setY(50);
+        twoShip.setX(Gdx.graphics.getWidth() / 2 + 250);
     }
 
     public Table[] getGrid() {
@@ -250,21 +255,35 @@ public class PlacementRenderer extends Renderer{
         // Ships to be placed in grid
         twoShip = new ShipButton(2);
         twoShip.addListener(((PlacementScreen) screen).getShip2Listener());
+        twoShip.setY(50);
+        twoShip.setX(Gdx.graphics.getWidth() / 2 + 250);
+
         threeShip1 = new ShipButton(3);
         threeShip1.addListener(((PlacementScreen) screen).getShip2Listener());
+        threeShip1.setY(50);
+        threeShip1.setX(25);
+        
         threeShip2 = new ShipButton(3);
         threeShip2.addListener(((PlacementScreen) screen).getShip2Listener());
+        threeShip2.setY(50 + threeShip1.getWidth() + 5);
+        threeShip2.setX(threeShip1.getWidth() + 5);
+
         fourShip = new ShipButton(4);
         fourShip.addListener(((PlacementScreen) screen).getShip2Listener());
+        fourShip.setY(50 + threeShip1.getWidth()*2 + 5);
+        fourShip.setX(25);
+
         fiveShip = new ShipButton(5);
         fiveShip.addListener(((PlacementScreen) screen).getShip2Listener());
+        fiveShip.setY(50 + twoShip.getWidth() + 5);
+        fiveShip.setX(Gdx.graphics.getWidth() / 2 + 250);
 
         topTable.addActor(rotateBtn);
-        topTable.addActor(twoShip);
-        topTable.addActor(threeShip1);
-        topTable.addActor(threeShip2);
-        topTable.addActor(fourShip);
-        topTable.addActor(fiveShip);
+        middlePanel.addActor(twoShip);
+        middlePanel.addActor(threeShip1);
+        middlePanel.addActor(threeShip2);
+        middlePanel.addActor(fourShip);
+        middlePanel.addActor(fiveShip);
 
         playerTable.addActor(nextBtn);
         playerTable.addActor(backBtn);
@@ -424,9 +443,8 @@ public class PlacementRenderer extends Renderer{
 
         // ShipButton to follow cursor
         if(follow != null) {
-            follow.setX(Gdx.input.getX() + 10);
-            // follow.setY(follow.getY()-Gdx.input.getDeltaY());
-            follow.setY(Gdx.input.getY()*(-1) + 10);
+            follow.setX(Gdx.input.getX() + 1);
+            follow.setY(Gdx.input.getY()*(-1) + playerTable.getHeight() + 414);
         }
         //Writes the grid as texures
 

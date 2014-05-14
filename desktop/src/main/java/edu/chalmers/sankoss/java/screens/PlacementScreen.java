@@ -389,8 +389,6 @@ public class PlacementScreen extends AbstractScreen {
                                     Coordinate start = new Coordinate((i+1), (j+1));
                                     Coordinate end = new Coordinate((i+1), (j +((PlacementRenderer)renderer).getFollow().getLength()));
 
-                                    // Creates new key in ShipMap for a set of coordinates
-                                    //createKey(end.getY() - start.getY() + 1);
 
                                     // Adds ships with start and end coordinate to player's fleet
                                     try {
@@ -432,14 +430,10 @@ public class PlacementScreen extends AbstractScreen {
 
                                         // Marks the select coordinate as occupied
                                         model.addToShipArray(i, (j+n));
-
-                                        //TODO WHY??
-                                        // Adds to players fleet
-                                        //model.getClient().getPlayer().addUsedCoordiante(new Coordinate((i + 1), (j + n + 1)));
                                     }
 
                                     // Removes placed ship from ship panel
-                                    ((PlacementRenderer)renderer).getTopTable().removeActor(((PlacementRenderer)renderer).getFollow());
+                                    ((PlacementRenderer)renderer).getMiddlePanel().removeActor(((PlacementRenderer)renderer).getFollow());
                                     ((PlacementRenderer)renderer).setFollow(null);
                                 }
 
@@ -460,12 +454,6 @@ public class PlacementScreen extends AbstractScreen {
                                     // Sets start and end coordinate
                                     Coordinate start = new Coordinate((i+1), (j+1));
                                     Coordinate end = new Coordinate((i+(((PlacementRenderer)renderer).getFollow().getLength())), (j +1));
-
-                                            //TODO Why???
-                                            // Adds to players fleet
-                                            //model.getClient().getPlayer().addUsedCoordiante(new Coordinate((i + n + 1), (j + 1)));
-                                    // Creates new key in ShipMap for a set of coordinates
-                                    createKey(end.getX() - start.getX() + 1);
 
                                     // Adds ships with start and end coordinate to player's fleet
                                     try {
@@ -506,14 +494,10 @@ public class PlacementScreen extends AbstractScreen {
 
                                         // Marks the select coordinate as occupied
                                         model.addToShipArray((i+n), j);
-
-                                        //TODO WHY?
-                                        // Adds to players fleet
-                                        //model.getClient().getPlayer().addUsedCoordiante(new Coordinate((i + n + 1), (j + 1)));
                                     }
 
                                     // Removes placed ship from ship panel
-                                    ((PlacementRenderer)renderer).getTopTable().removeActor(((PlacementRenderer)renderer).getFollow());
+                                    ((PlacementRenderer)renderer).getMiddlePanel().removeActor(((PlacementRenderer)renderer).getFollow());
                                     ((PlacementRenderer)renderer).setFollow(null);
                                 }
 
@@ -527,6 +511,7 @@ public class PlacementScreen extends AbstractScreen {
         }
     }
 
+    // Does this even run?
     /**
      * Method for ship following the cursor.
      * @param actor ship that will follow.
@@ -534,8 +519,8 @@ public class PlacementScreen extends AbstractScreen {
     public void followCursor(Actor actor) {
         // If there's a ship following the cursor, place it where it's at
         if(((PlacementRenderer)renderer).getFollow() != null) {
-            ((PlacementRenderer)renderer).getFollow().setX(Gdx.input.getX());
-            ((PlacementRenderer)renderer).getFollow().setY(((PlacementRenderer)renderer).getFollow().getY()-Gdx.input.getDeltaY());
+            ((PlacementRenderer)renderer).getFollow().setX(((PlacementRenderer) renderer).getFollow().getX());
+            ((PlacementRenderer)renderer).getFollow().setY(((PlacementRenderer) renderer).getFollow().getY());
             ((PlacementRenderer)renderer).setFollow(null);
 
         } else { // If no ship is following the cursor, let clicked ship follow cursor
