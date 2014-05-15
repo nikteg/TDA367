@@ -304,6 +304,10 @@ public class GameRenderer extends Renderer{
 
     }
 
+    public Table getAimGridSquare(int i, int j) {
+        return aimGrid[(i*10) + j];
+    }
+
     public BasePlayer.Nationality getNationality() {
         return nationality;
     }

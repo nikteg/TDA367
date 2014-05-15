@@ -206,10 +206,17 @@ public class GameScreen extends AbstractScreen {
 
         // If you are the loser
         if(((GameModel)model).getLoser().equals(model.getClient().getPlayer())) {
-            System.out.println("Loser!");
+            // TODO: Implement you are loser
+            ((GameRenderer)renderer).getYourTurnLabel().setText("You lost!");
+            ((GameRenderer)renderer).getOppTurnLabel().setText("");
         } else {
-            System.out.println("Winner!");
+            // TODO: Implement you are winner
+            ((GameRenderer)renderer).getYourTurnLabel().setText("You won!");
+            ((GameRenderer)renderer).getOppTurnLabel().setText("");
         }
+
+        // Disables shooting
+        model.getClient().getPlayer().setMyTurn(false);
     }
 
     public ShootBtnListener getShootBtnListener() {
@@ -244,21 +251,24 @@ public class GameScreen extends AbstractScreen {
                         if(childrenArray[0].equals(actor)) {
                             model.getClient().fire(model.getClient().getGameID(), model.getClient().getOpponents().get(0), new Coordinate(i+1, j+1));
 
+                            System.out.println("RUN");
+                            // Disables button, so player can't shoot there again
+                            actor.removeListener(getShootBtnListener());
+
+                            // Delay to get thread to catch up
+                            try {
+                                Thread.sleep(100);
+                            } catch (InterruptedException e) {
+                                e.getStackTrace();
+                            }
+
+                            ((GameRenderer)renderer).setHitOrMiss(((GameModel)model).getX(), ((GameModel)model).getY(), ((GameModel)model).getHitMsg());
+                            model.getClient().getPlayer().setMyTurn(false);
                         }
                     }
                 }
             }
 
-            // Delay to get thread to catch up
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.getStackTrace();
-            }
-
-            ((GameRenderer)renderer).setHitOrMiss(((GameModel)model).getX(), ((GameModel)model).getY(), ((GameModel)model).getHitMsg());
-
-            model.getClient().getPlayer().setMyTurn(false);
 
 
         }
