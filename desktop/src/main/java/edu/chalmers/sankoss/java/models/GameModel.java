@@ -24,6 +24,10 @@ public class GameModel extends ScreenModel{
     private int oppShipsDestroyed;
     private boolean gameOver;
     private BasePlayer loser;
+    
+    //TODO Only provisional
+    private Coordinate enemyTarget;
+    private boolean enemyHit;
 
     public GameModel(Map<Integer, Set<Coordinate>> shipMap, Map<Coordinate, ShipButton.Direction> rotationMap) {
         this.shipMap = shipMap;
@@ -117,6 +121,19 @@ public class GameModel extends ScreenModel{
 
     public int getY() {
         return y;
+    }
+    
+    public void setEnemyTarget(Coordinate target, boolean hit){
+    	this.enemyTarget = target;
+    	this.enemyHit = hit;
+    }
+    
+    public Coordinate getEnemyTargetCoordinate(){
+    	return enemyTarget;
+    }
+    
+    public boolean enemyHit(){
+    	return enemyHit;
     }
 
     /**
