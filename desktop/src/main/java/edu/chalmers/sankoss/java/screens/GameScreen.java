@@ -51,16 +51,6 @@ public class GameScreen extends AbstractScreen {
         create();
     }
 
-    public void hit(Coordinate coordinate) {
-        // TODO Determine if you was hit or if opponent was hit
-        ((GameModel) model).setHitOrMiss(coordinate.getX(), coordinate.getY(), "HIT");
-
-    }
-
-    public void miss(Coordinate coordinate) {
-        ((GameModel) model).setHitOrMiss(coordinate.getX(), coordinate.getY(), "MISS");
-    }
-
     private class GameListener extends SankossClientListener {
 
         @Override
@@ -80,15 +70,9 @@ public class GameScreen extends AbstractScreen {
                 ((GameRenderer)renderer).getOppTurnLabel().setText(model.getClient().getOpponents().get(0).getName() + "'s turn!");
             }
 
-            if(hit && !target.equals(model.getClient().getPlayer())) {
-                //System.out.println("You shot at " + coordinate.getX() + ", " + coordinate.getY() + ". HIT!");
-                hit(coordinate);
+            if(!target.equals(model.getClient().getPlayer())) {
+                ((GameModel) model).getHitMap().put(coordinate, hit);
 
-
-            } else if(!target.equals(model.getClient().getPlayer())){
-
-                //System.out.println("You shot at " + coordinate.getX() + ", " + coordinate.getY() + ". Miss..");
-                miss(coordinate);
             }
 
         }
@@ -262,7 +246,8 @@ public class GameScreen extends AbstractScreen {
                                 e.getStackTrace();
                             }
 
-                            ((GameRenderer)renderer).setHitOrMiss(((GameModel)model).getX(), ((GameModel)model).getY(), ((GameModel)model).getHitMsg());
+                            // ((GameRenderer)renderer).setHitOrMiss(((GameModel)model).getX(), ((GameModel)model).getY(), ((GameModel)model).getHitMsg());
+                            ((GameRenderer)renderer).setHitOrMiss(new Coordinate(i+1, j+1));
                             model.getClient().getPlayer().setMyTurn(false);
                         }
                     }

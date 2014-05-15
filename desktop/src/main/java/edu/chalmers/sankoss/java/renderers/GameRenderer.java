@@ -196,7 +196,7 @@ public class GameRenderer extends Renderer{
 
         yourTurnLabel = new Label(yourTurn, labelStyle);
         yourTurnLabel.setX((Gdx.graphics.getWidth() - yourTurnLabel.getWidth()) / 2);
-        yourTurnLabel.setY(playerTable.getHeight()-yourTurnLabel.getHeight());
+        yourTurnLabel.setY(playerTable.getHeight()-yourTurnLabel.getHeight()-10);
 
         oppTurnLabel = new Label(oppTurn, labelStyle);
         oppTurnLabel.setX((Gdx.graphics.getWidth() - oppTurnLabel.getWidth()) / 2);
@@ -366,17 +366,18 @@ public class GameRenderer extends Renderer{
     /**
      * Determines whether to call hit or miss method for
      * drawing explosion or hole.
-     * @param x X-coordinate.
-     * @param y Y-coordinate.
-     * @param str Tells if hit or miss.
+     * @param coordinate
      */
-    public void setHitOrMiss(int x, int y, String str) {
+    public void setHitOrMiss(Coordinate coordinate) {
 
-        if(str.equals("HIT")) {
-            setHit(x, y);
+        if(((GameModel)currentModel).getHitMap().get(coordinate)) {
 
-        } else if (str.equals("MISS")) {
-            setMiss(x, y);
+            // If it's a hit
+            setHit(coordinate.getX(), coordinate.getY());
+        } else {
+
+            // If it's a miss
+            setMiss(coordinate.getX(), coordinate.getY());
         }
 
     }
