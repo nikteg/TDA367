@@ -92,11 +92,10 @@ public class PlacementRenderer extends Renderer{
         rotateBtn.setX(topTable.getWidth() - rotateBtn.getWidth());
         readyBtn.setX(width - readyBtn.getWidth());
 
-
-        fiveShip.setY(50 + twoShip.getWidth() + 5);
+        fiveShip.setY(playerTable.getHeight() + 50 + twoShip.getWidth() + 5);
         fiveShip.setX(Gdx.graphics.getWidth() / 2 + 250);
 
-        twoShip.setY(50);
+        twoShip.setY(playerTable.getHeight() + 50);
         twoShip.setX(Gdx.graphics.getWidth() / 2 + 250);
     }
 
@@ -256,35 +255,30 @@ public class PlacementRenderer extends Renderer{
         // Ships to be placed in grid
         twoShip = new ShipButton(2);
         twoShip.addListener(((PlacementScreen) screen).getShip2Listener());
-        twoShip.setY(50);
+        twoShip.setY(playerTable.getHeight() + 50 + playerTable.getHeight());
         twoShip.setX(Gdx.graphics.getWidth() / 2 + 250);
 
         threeShip1 = new ShipButton(3);
         threeShip1.addListener(((PlacementScreen) screen).getShip2Listener());
-        threeShip1.setY(50);
+        threeShip1.setY(50 + playerTable.getHeight());
         threeShip1.setX(25);
-        
+
         threeShip2 = new ShipButton(3);
         threeShip2.addListener(((PlacementScreen) screen).getShip2Listener());
-        threeShip2.setY(50 + threeShip1.getWidth() + 5);
+        threeShip2.setY(playerTable.getHeight() + 50 + threeShip1.getWidth() + 5);
         threeShip2.setX(threeShip1.getWidth() + 5);
 
         fourShip = new ShipButton(4);
         fourShip.addListener(((PlacementScreen) screen).getShip2Listener());
-        fourShip.setY(50 + threeShip1.getWidth()*2 + 5);
+        fourShip.setY(playerTable.getHeight() + 50 + threeShip1.getWidth()*2 + 5);
         fourShip.setX(25);
 
         fiveShip = new ShipButton(5);
         fiveShip.addListener(((PlacementScreen) screen).getShip2Listener());
-        fiveShip.setY(50 + twoShip.getWidth() + 5);
+        fiveShip.setY(playerTable.getHeight()*2 + 50 + twoShip.getWidth() + 5);
         fiveShip.setX(Gdx.graphics.getWidth() / 2 + 250);
 
         topTable.addActor(rotateBtn);
-        middlePanel.addActor(twoShip);
-        middlePanel.addActor(threeShip1);
-        middlePanel.addActor(threeShip2);
-        middlePanel.addActor(fourShip);
-        middlePanel.addActor(fiveShip);
 
         playerTable.addActor(nextBtn);
         playerTable.addActor(backBtn);
@@ -300,6 +294,12 @@ public class PlacementRenderer extends Renderer{
         actorPanel.addActor(playerTable);
         actorPanel.addActor(middlePanel);
         actorPanel.addActor(topTable);
+
+        actorPanel.addActor(twoShip);
+        actorPanel.addActor(threeShip1);
+        actorPanel.addActor(threeShip2);
+        actorPanel.addActor(fourShip);
+        actorPanel.addActor(fiveShip);
     }
 
     /**
@@ -431,7 +431,7 @@ public class PlacementRenderer extends Renderer{
         // ShipButton to follow cursor
         if(follow != null) {
             follow.setX(Gdx.input.getX() + 1);
-            follow.setY(Gdx.input.getY()*(-1) + playerTable.getHeight() + 414);
+            follow.setY((Gdx.graphics.getHeight() - Gdx.input.getY()) - 25);
         }
 
     }
