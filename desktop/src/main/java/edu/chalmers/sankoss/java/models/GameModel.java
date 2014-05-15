@@ -5,6 +5,7 @@ import edu.chalmers.sankoss.core.Coordinate;
 import edu.chalmers.sankoss.core.Room;
 import edu.chalmers.sankoss.java.misc.ShipButton;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -17,9 +18,7 @@ public class GameModel extends ScreenModel{
 
     private Map<Coordinate, ShipButton.Direction> rotationMap;
     private Map<Integer, Set<Coordinate>> shipMap;
-    private String hitMsg = "";
-    private int x;
-    private int y;
+    private Map<Coordinate, Boolean> hitMap;
     private int yourShipsDestroyed;
     private int oppShipsDestroyed;
     private boolean gameOver;
@@ -35,6 +34,7 @@ public class GameModel extends ScreenModel{
         yourShipsDestroyed = 0;
         oppShipsDestroyed = 0;
 
+        hitMap = new HashMap<Coordinate, Boolean>();
     }
 
     public void incrementShipsDestroyed(BasePlayer player) {
@@ -46,6 +46,10 @@ public class GameModel extends ScreenModel{
         } else {
             oppShipsDestroyed++;
         }
+    }
+
+    public Map<Coordinate, Boolean> getHitMap() {
+        return hitMap;
     }
 
     public int getYourShipsDestroyed() {
@@ -104,38 +108,6 @@ public class GameModel extends ScreenModel{
     public Room getRoomByName(String roomName, Map<Long, Room> rooms) {
         return null;
     }
-
-    public void setHitOrMiss(int x, int y, String msg) {
-        hitMsg = msg;
-        this.x = x;
-        this.y = y;
-    }
-
-    public String getHitMsg() {
-        return hitMsg;
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-    
-    public void setEnemyTarget(Coordinate target, boolean hit){
-    	this.enemyTarget = target;
-    	this.enemyHit = hit;
-    }
-    
-    public Coordinate getEnemyTargetCoordinate(){
-    	return enemyTarget;
-    }
-    
-    public boolean enemyHit(){
-    	return enemyHit;
-    }
-
     /**
      * @inheritdoc
      */
