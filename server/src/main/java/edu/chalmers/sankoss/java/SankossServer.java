@@ -74,10 +74,16 @@ public class SankossServer {
 
             /**
              * Executed when the server receives a new client connection.
-             * @param connection client connection
+             * @param c client connection
              */
-            public void connected(Connection connection) {
+            public void connected(Connection c) {
+                PlayerConnection connection = (PlayerConnection) c;
+                connection.setPlayer(new Player((long) connection.getID()));
 
+                LOGGER.log(Level.INFO, String.format("%s connected as #%d", connection.getRemoteAddressTCP(), connection.getID()));
+
+                connection.sendTCP(new Connected(connection.getPlayer().getBasePlayer()));
+                pcs.firePropertyChange("playerConnected", null, null);
             }
 
             /**
@@ -89,22 +95,6 @@ public class SankossServer {
             public void received(Connection c, Object object) {
                 PlayerConnection connection = (PlayerConnection) c;
                 Player player = connection.getPlayer();
-
-                /**
-                 * Create new player instance and map it to their connection.
-                 * When the new player instance is created, its ID is sent to the client.
-                 * This package should be received as soon as the client has connected!
-                 */
-                if (object instanceof Connect) {
-                    connection.setPlayer(new Player((long) connection.getID()));
-
-                    LOGGER.log(Level.INFO, String.format("%s connected as #%d", connection.getRemoteAddressTCP(), connection.getID()));
-
-                    connection.sendTCP(new Connected((long) connection.getID()));
-                    pcs.firePropertyChange("playerConnected", null, null);
-
-                    return;
-                }
 
                 /**
                  * Nothing below this line will be executed if no player has been created for the client.
@@ -442,7 +432,7 @@ public class SankossServer {
                 if (object instanceof PlayerChangeName) {
                     PlayerChangeName msg = (PlayerChangeName) object;
 
-                    LOGGER.log(Level.INFO, String.format("%s is now known as %s", player.getName(), msg.getName()));
+
 
                     System.out.println("TRYING CHANGED NAME" + msg.getName());
 
@@ -450,7 +440,7 @@ public class SankossServer {
                     // TODO Should be regex...
                     //if (name.matches("\\w{1,16}")) {
                     if (name.length() < 16) {
-                        System.out.println("CHANGED NAME" + msg.getName());
+                        LOGGER.log(Level.INFO, String.format("%s is now known as %s", player.getName(), msg.getName()));
                         player.setName(msg.getName());
                         connection.sendTCP(new PlayerChangedName(player.getBasePlayer()));
                     } else {
@@ -550,7 +540,12 @@ public class SankossServer {
     }
 
     public List<PlayerConnection> getPlayerConnections() {
-        return Arrays.asList((PlayerConnection[])server.getConnections());
+        List<PlayerConnection> list = new ArrayList<PlayerConnection>();
+        for (Connection con : server.getConnections()) {
+            list.add((PlayerConnection)con);
+        }
+
+        return list;
     }
 
     public Map<Long, Room> getRooms() {

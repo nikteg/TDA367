@@ -9,10 +9,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import edu.chalmers.sankoss.java.models.ScreenModel;
-import edu.chalmers.sankoss.java.renderers.Renderer;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import edu.chalmers.sankoss.java.SankossController;
 import edu.chalmers.sankoss.java.SankossGame;
+import edu.chalmers.sankoss.java.models.ScreenModel;
+import edu.chalmers.sankoss.java.renderers.Renderer;
 
 /**
  * Abstraction of Screen implementation.
@@ -43,8 +44,7 @@ public abstract class AbstractScreen<R extends Renderer> implements Screen, Appl
         this.game = game;
         
         //TODO Needs reset?
-        stage = new Stage();
-
+        stage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
     }
 
     public ScreenModel getModel() {
@@ -60,7 +60,7 @@ public abstract class AbstractScreen<R extends Renderer> implements Screen, Appl
     public void render(float delta) {
         renderer.render();
 
-        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        stage.act(delta);
         Table.drawDebug(stage);
 
         stage.draw();
@@ -73,7 +73,7 @@ public abstract class AbstractScreen<R extends Renderer> implements Screen, Appl
      */
     @Override
     public void resize(int width, int height) {
-        stage.setViewport( width, height, true );
+        stage.getViewport().update(width, height);
     }
 
     /**

@@ -2,16 +2,12 @@ package edu.chalmers.sankoss.java.renderers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
-
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import edu.chalmers.sankoss.java.models.ScreenModel;
 import edu.chalmers.sankoss.java.screens.AbstractScreen;
 import edu.chalmers.sankoss.java.screens.MainMenuScreen;
@@ -40,6 +36,8 @@ public class MainMenuRenderer extends Renderer{
     private Label statusLabel;
     private Skin skin;
 
+    private Table table;
+
     // Dimensions of buttons
     private final int WIDTH_OF_BUTTON = 600;
     private final int HEIGHT_OF_BUTTON = 100;
@@ -61,22 +59,8 @@ public class MainMenuRenderer extends Renderer{
 
     @Override
     public void resize(int width, int height) {
-
-        // Centers the controllers based on new window size
-        float x = (width - WIDTH_OF_BUTTON)/2;
-        multiPlayerBtn.setPosition(x, height/2 + 120);
-        optionBtn.setPosition(x, height/2);
-        creditsBtn.setPosition(x, height/2 - 120);
-        exitBtn.setPosition(x, height/2 - 240);
-
-        battleLabel.setX((width - battleLabel.getWidth()) / 2);
-        battleLabel.setY(height/2 + 240);
-        statusLabel.setX(0);
-        statusLabel.setY(0);
-
-        if(startGameBtn != null) {
-            startGameBtn.setPosition(width - startGameBtn.getWidth(), 0);
-        }
+        table.setWidth(width);
+        table.setHeight(height);
     }
 
     /**
@@ -84,7 +68,7 @@ public class MainMenuRenderer extends Renderer{
      */
     @Override
     public void render() {
-        Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glClearColor(0.09f, 0.28f, 0.2f, 1);
     }
 
@@ -92,6 +76,8 @@ public class MainMenuRenderer extends Renderer{
     public void drawControllers(AbstractScreen screen) {
     	
         skin = new Skin();
+
+        table = new Table();
 
         this.screen = screen;
 
@@ -119,12 +105,12 @@ public class MainMenuRenderer extends Renderer{
         statusLabel.setY(0);
 
 
-        float x = (800 - WIDTH_OF_BUTTON)/2;
-        multiPlayerBtn.setPosition(x, 600/2 + 120);
+        //float x = (Gdx.graphics.getWidth() - WIDTH_OF_BUTTON)/2;
+        //multiPlayerBtn.setPosition(x, 600/2 + 120);
         multiPlayerBtn.setDisabled(true);
-        optionBtn.setPosition(x, height/2);
-        creditsBtn.setPosition(x, height/2 - 120);
-        exitBtn.setPosition(x, 600/2 - 240);
+        //optionBtn.setPosition(x, height/2);
+        //creditsBtn.setPosition(x, height/2 - 120);
+        //exitBtn.setPosition(x, 600/2 - 240);
 
         statusLabel.addAction(Actions.forever(
                 Actions.sequence(
@@ -133,13 +119,16 @@ public class MainMenuRenderer extends Renderer{
                 )
         ));
 
-        // Adds actors to table
-        actorPanel.addActor(multiPlayerBtn);
-        actorPanel.addActor(creditsBtn);
-        actorPanel.addActor(optionBtn);
-        actorPanel.addActor(exitBtn);
-        actorPanel.addActor(battleLabel);
-        actorPanel.addActor(statusLabel);
+        table.add(multiPlayerBtn);
+        table.row();
+        table.add(optionBtn);
+        table.row();
+        table.add(creditsBtn);
+        table.row();
+        table.add(exitBtn);
+
+        table.pad(8);
+        table.debug();
 
         multiPlayerBtn.addListener(((MainMenuScreen)screen).getJoinButtonListener());
         optionBtn.addListener(((MainMenuScreen)screen).getOptionsButtonListener());
@@ -186,4 +175,7 @@ public class MainMenuRenderer extends Renderer{
     }
 
 
+    public Table getTable() {
+        return table;
+    }
 }

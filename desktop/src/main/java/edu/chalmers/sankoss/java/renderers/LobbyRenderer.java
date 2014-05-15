@@ -2,7 +2,7 @@ package edu.chalmers.sankoss.java.renderers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -40,8 +40,8 @@ public class LobbyRenderer extends Renderer {
     private Skin skin;
 
     //Image for edit button	
-    SpriteDrawable imagePen = new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/pen.png"))));
-    SpriteDrawable imageCheck = new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/check.png"))));
+    SpriteDrawable imagePen = new SpriteDrawable(new Sprite(new Texture(Gdx.files.local("assets/textures/pen.png"))));
+    SpriteDrawable imageCheck = new SpriteDrawable(new Sprite(new Texture(Gdx.files.local("assets/textures/check.png"))));
 
     protected List.ListStyle listStyle;
 
@@ -62,6 +62,8 @@ public class LobbyRenderer extends Renderer {
      */
     public LobbyRenderer(ScreenModel currentModel) {
         super(currentModel);
+
+        //System.out.println(Gdx.files.local("assets/textures/pen.png").toString());
     }
 
     public TextButton getJoinBtn() {
@@ -76,7 +78,7 @@ public class LobbyRenderer extends Renderer {
 
     @Override
     public void render() {
-        Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glClearColor(0.09f, 0.28f, 0.2f, 1);
 
     }
@@ -94,7 +96,7 @@ public class LobbyRenderer extends Renderer {
         // Configures necessary attributes for buttons
         setButtons();
 
-        roomList = new List(new String[]{}, listStyle);
+        roomList = new List(listStyle);
 
         textFieldStyle.font = skin.getFont("textField");
         btnStyle.font = skin.getFont("default");

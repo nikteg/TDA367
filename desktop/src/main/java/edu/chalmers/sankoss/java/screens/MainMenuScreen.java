@@ -93,6 +93,7 @@ public class MainMenuScreen extends AbstractScreen<MainMenuRenderer> {
         renderer.drawControllers(this);
 
         stage.addActor(renderer.getActorPanel());
+        stage.addActor(renderer.getTable());
         stage.draw();
 
     }

@@ -47,12 +47,18 @@
             <artifactId>ini4j</artifactId>
             <version>0.5.2</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
+            <version>3.0</version>
+        </dependency>
 	</dependencies>
 
 	<build>
 		<resources>
 			<resource>
-				<directory>../assets</directory>
+				<directory>assets</directory>
 			</resource>
 		</resources>
 

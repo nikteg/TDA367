@@ -1,9 +1,12 @@
-package edu.chalmers.sankoss.java.client;
+package edu.chalmers.sankoss.java2.client;
 
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import edu.chalmers.sankoss.core.*;
+import edu.chalmers.sankoss.core.BasePlayer;
+import edu.chalmers.sankoss.core.Coordinate;
+import edu.chalmers.sankoss.core.Fleet;
+import edu.chalmers.sankoss.core.Network;
 import edu.chalmers.sankoss.core.protocol.*;
 
 import java.io.IOException;
@@ -16,26 +19,17 @@ import java.util.List;
  */
 public class SankossClient {
     private Client client;
-    private SankossClientPlayer player  = new SankossClientPlayer((long)-1);;
+    private SankossClientPlayer player;
 
     private List<BasePlayer> opponents = new ArrayList<BasePlayer>();
     private Long gameID;
     private Long roomID;
-    private String host;
-    private int timeout;
     private boolean ready = false;
 
     private List<ISankossClientListener> listeners = new ArrayList<ISankossClientListener>();
 
-    public SankossClient(String host, int timeout) {
-        this.host = host;
-        this.timeout = timeout;
-
+    public SankossClient() {
         initialize();
-    }
-
-    public SankossClient(String host) {
-        this(host, 5000);
     }
 
     public void setReady(boolean ready) {
@@ -57,13 +51,11 @@ public class SankossClient {
                 if (object instanceof Connected) {
                     Connected msg = (Connected) object;
 
-                    //player = new SankossClientPlayer(msg.getPlayerID());
-                    //player.setID(msg.getPlayerID());
+                    player = new SankossClientPlayer(msg.getBasePlayer().getID());
 
                     for (ISankossClientListener listener : listeners) {
-                        //listener.connected(msg.getPlayerID());
+                        listener.connected(msg.getBasePlayer());
                     }
-
 
                     return;
                 }
@@ -72,8 +64,6 @@ public class SankossClient {
 
                 if (object instanceof FetchedRooms) {
                     FetchedRooms msg = (FetchedRooms) object;
-
-                    System.out.println(msg.getRooms().toString());
 
                     for (ISankossClientListener listener : listeners) {
                         listener.fetchedRooms(msg.getRooms());
@@ -173,6 +163,9 @@ public class SankossClient {
                 if (object instanceof PlayerChangedName) {
                     PlayerChangedName msg = (PlayerChangedName) object;
 
+                    if (msg.getPlayer() == null)
+                        throw new IllegalArgumentException("Invalid name");
+
                     for (ISankossClientListener listener : listeners) {
                         listener.playerChangedName(msg.getPlayer());
                     }
@@ -206,12 +199,10 @@ public class SankossClient {
         return roomID;
     }
 
-    public String getHost() {
-        return host;
-    }
+    public boolean isConnected() {
+        if (client == null) return false;
 
-    public void setHost(String host) {
-        this.host = host;
+        return client.isConnected();
     }
 
     public void addListener(ISankossClientListener listener) {
@@ -222,12 +213,18 @@ public class SankossClient {
         listeners.remove(listener);
     }
 
-    public void connect() throws IOException {
+    public void connect(String host) throws IOException {
+        connect(host, Network.PORT);
+    }
+
+    public void connect(String host, int port) throws IOException {
+        connect(host, port, Network.TIMEOUT);
+    }
+
+    public void connect(String host, int port, int timeout) throws IOException {
         if (client == null) return;
 
-        client.connect(timeout, host, Network.PORT);
-
-        //client.sendTCP(new Connect());
+        client.connect(timeout, host, port);
     }
 
     public void createRoom(String name, String password) {

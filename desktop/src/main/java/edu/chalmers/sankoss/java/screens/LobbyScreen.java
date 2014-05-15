@@ -84,6 +84,11 @@ public class LobbyScreen extends AbstractScreen<LobbyRenderer> {
             waitingScreen.setHost(true);
             controller.changeScreen(waitingScreen);
         }
+
+        @Override
+        public void playerChangedName(BasePlayer player) {
+            renderer.setNameLabel(model.getClient().getPlayer().getName());
+        }
     }
 
 
@@ -246,7 +251,7 @@ public class LobbyScreen extends AbstractScreen<LobbyRenderer> {
         if(gameRooms.size() > 0) {
 
             // Retrives selected name and matches with room
-            String roomName = renderer.getRoomList().getSelection();
+            String roomName = renderer.getRoomList().getSelected().toString();
 
             Room roomToJoin = model.getRoomByName(roomName, gameRooms);
             model.getClient().joinRoom(roomToJoin.getID());

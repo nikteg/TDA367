@@ -12,12 +12,13 @@ import edu.chalmers.sankoss.core.protocol.*;
  */
 public class Network {
     public static final int PORT = 30401;
-    
+    public static final int TIMEOUT = 5000;
+
     public static void register(EndPoint endPoint) {
         Kryo kryo = endPoint.getKryo();
         kryo.register(BasePlayer.class);
         kryo.register(BasePlayer.Nationality.class);
-        kryo.register(Connect.class);
+        //kryo.register(Connect.class);
         kryo.register(Connected.class);
         kryo.register(Coordinate.class);
         kryo.register(CreateAI.class);

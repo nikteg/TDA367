@@ -1,18 +1,12 @@
 package edu.chalmers.sankoss.java.screens;
 
-import java.util.prefs.BackingStoreException;
-
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
-
 import edu.chalmers.sankoss.java.SankossController;
 import edu.chalmers.sankoss.java.SankossGame;
-import edu.chalmers.sankoss.java.models.MainMenu;
 import edu.chalmers.sankoss.java.renderers.CreditRenderer;
-import edu.chalmers.sankoss.java.renderers.MainMenuRenderer;
-import edu.chalmers.sankoss.java.client.SankossClientListener;
 
 public class CreditScreen extends AbstractScreen<CreditRenderer> {
 
@@ -62,10 +56,23 @@ public class CreditScreen extends AbstractScreen<CreditRenderer> {
 		super.create();
 		renderer.drawControllers(this);
 
-		stage.addActor(renderer.getActorPanel());
+		stage.addActor(renderer.getTable());
+        stage.addActor(renderer.getCreditsLabel());
 		stage.draw();
-
+        Table.drawDebug(stage);
 	}
+
+    @Override
+    public void render(float delta) {
+        super.render(delta);
+
+        if (renderer.getCreditsLabel().getY() < Gdx.graphics.getHeight()) {
+            renderer.getCreditsLabel().setY(renderer.getCreditsLabel().getY() + (100f * Gdx.graphics.getDeltaTime()));
+        } else {
+            controller.changeScreen(new MainMenuScreen(controller, game));
+        }
+
+    }
 
 	/**
 	 * @inheritdoc
