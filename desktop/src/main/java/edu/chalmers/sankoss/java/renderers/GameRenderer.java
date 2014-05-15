@@ -32,6 +32,8 @@ public class GameRenderer extends Renderer{
     private String land;
     private final int WIDTH_OF_SQUARE = 50;
     private final int HEIGHT_OF_SQUARE = 50;
+    
+    //TODO Why is this vectors? They Should be matrixes ( [][] )
     private Table[] playerGrid = new Table[100];
     private Table[] aimGrid = new Table[100];
     private ShipButton follow = null;
@@ -56,6 +58,9 @@ public class GameRenderer extends Renderer{
     private Label aimBoardLabel;
     private Label yourTurnLabel;
     private Label oppTurnLabel;
+    
+    private ImageButton explosion = new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/explosion.png")))));
+    private ImageButton miss = new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/miss.png")))));
 
 
     int two = 1;
@@ -370,7 +375,7 @@ public class GameRenderer extends Renderer{
      */
     public void setHitOrMiss(Coordinate coordinate) {
 
-        if(((GameModel)currentModel).getHitMap().get(coordinate)) {
+        if(((GameModel)currentModel).getPlayerHitMap().get(coordinate)) {
 
             // If it's a hit
             setHit(coordinate.getX(), coordinate.getY());
@@ -402,6 +407,29 @@ public class GameRenderer extends Renderer{
 
         aimGrid[(x-1)*10 + (y-1)].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/explosion.png"))))));
 
+    }
+    /**
+     * Adds a hit or miss icon where the enemy has made his/her shoot
+     * @param coordinate
+     */
+    public void setEnemyHitOrMiss(Coordinate coordinate) {
+    	System.out.println("SetEnemyHitOrMiss @ GameRenderer");
+    	final Coordinate temp = coordinate;
+    	Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+            	if(((GameModel)currentModel).getEnemyHitMap().get(temp)) {
+                	playerGrid[(temp.getX()-1)*10 + (temp.getY()-1)].addActor(
+                			new ImageButton(new SpriteDrawable(new Sprite(
+                					new Texture(Gdx.files.classpath("assets/textures/explosion.png"))))));
+                } else {
+                	playerGrid[(temp.getX()-1)*10 + (temp.getY()-1)].addActor(
+                			new ImageButton(new SpriteDrawable(new Sprite(
+                					new Texture(Gdx.files.classpath("assets/textures/miss.png"))))));
+                }
+            }
+         });
+        
     }
 
     /**
@@ -468,6 +496,19 @@ public class GameRenderer extends Renderer{
             follow.setY(follow.getY()-Gdx.input.getDeltaY());
         }
 
-      
     }
+    /**
+     * Displays the enemy's target and result on given coordinate
+     * @param coordinate
+     * @param hit
+     */
+    public void setEnemyTarget(Coordinate coordinate,  boolean hit){
+    	if(hit){
+    		 playerGrid[(coordinate.getX()-1)*10 + coordinate.getY()-1].addActor(explosion);
+    	}
+    	else{
+   		 	playerGrid[(coordinate.getX()-1)*10   + coordinate.getY()-1].addActor(miss);
+    	}
+    }
+    
 }

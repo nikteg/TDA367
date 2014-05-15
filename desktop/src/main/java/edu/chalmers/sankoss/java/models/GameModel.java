@@ -18,11 +18,16 @@ public class GameModel extends ScreenModel{
 
     private Map<Coordinate, ShipButton.Direction> rotationMap;
     private Map<Integer, Set<Coordinate>> shipMap;
-    private Map<Coordinate, Boolean> hitMap;
+    private Map<Coordinate, Boolean> playerHitMap;
+    private Map<Coordinate, Boolean> enemyHitMap;
     private int yourShipsDestroyed;
     private int oppShipsDestroyed;
     private boolean gameOver;
     private BasePlayer loser;
+    
+    //TODO Only provisional
+    private Coordinate enemyTarget;
+    private boolean enemyHit;
 
     public GameModel(Map<Integer, Set<Coordinate>> shipMap, Map<Coordinate, ShipButton.Direction> rotationMap) {
         this.shipMap = shipMap;
@@ -30,7 +35,8 @@ public class GameModel extends ScreenModel{
         yourShipsDestroyed = 0;
         oppShipsDestroyed = 0;
 
-        hitMap = new HashMap<Coordinate, Boolean>();
+        playerHitMap = new HashMap<Coordinate, Boolean>();
+        enemyHitMap = new HashMap<Coordinate, Boolean>();
     }
 
     public void incrementShipsDestroyed(BasePlayer player) {
@@ -44,8 +50,11 @@ public class GameModel extends ScreenModel{
         }
     }
 
-    public Map<Coordinate, Boolean> getHitMap() {
-        return hitMap;
+    public Map<Coordinate, Boolean> getPlayerHitMap() {
+        return playerHitMap;
+    }
+    public Map<Coordinate, Boolean> getEnemyHitMap() {
+        return enemyHitMap;
     }
 
     public int getYourShipsDestroyed() {
@@ -104,7 +113,6 @@ public class GameModel extends ScreenModel{
     public Room getRoomByName(String roomName, Map<Long, Room> rooms) {
         return null;
     }
-
     /**
      * @inheritdoc
      */

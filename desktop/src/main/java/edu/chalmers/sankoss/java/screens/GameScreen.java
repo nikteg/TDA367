@@ -56,11 +56,13 @@ public class GameScreen extends AbstractScreen {
         @Override
         public void fireResult(Long gameID, BasePlayer target, Coordinate coordinate, boolean hit) {
 
-            //TODO show hits and misses on your board as well!
-
-            // If you WERE the target
             // TODO: Put most logic in here instead and call external methods
             if(target.equals(model.getClient().getPlayer())) {
+                //Shows the enemy's hit on your board      	
+            	System.out.println("Gamescreen doing stuff");
+            	((GameModel) model).getEnemyHitMap().put(coordinate, hit);
+            	((GameRenderer)renderer).setEnemyHitOrMiss(coordinate); //TODO Works but should be remade immediately
+            	
                 ((GameRenderer)renderer).getYourTurnLabel().setText("Your Turn!");
                 ((GameRenderer)renderer).getOppTurnLabel().setText("");
                 model.getClient().getPlayer().setMyTurn(true);
@@ -71,7 +73,7 @@ public class GameScreen extends AbstractScreen {
             }
 
             if(!target.equals(model.getClient().getPlayer())) {
-                ((GameModel) model).getHitMap().put(coordinate, hit);
+                ((GameModel) model).getPlayerHitMap().put(coordinate, hit);
 
             }
 
@@ -208,6 +210,14 @@ public class GameScreen extends AbstractScreen {
     }
 
     private class ShootBtnListener extends ChangeListener {
+
+        @Override
+        public void changed(ChangeEvent event, Actor actor) {
+            shoot(actor);
+        }
+    }
+    
+    private class EnemyShootListener extends ChangeListener {
 
         @Override
         public void changed(ChangeEvent event, Actor actor) {
