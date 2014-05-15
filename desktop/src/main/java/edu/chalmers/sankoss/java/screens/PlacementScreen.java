@@ -58,6 +58,9 @@ public class PlacementScreen extends AbstractScreen {
         create();
     }
 
+    /**
+     * Listener class to handle calls from the server.
+     */
     private class PlacementListener extends SankossClientListener {
         @Override
         public void gameReady() {
