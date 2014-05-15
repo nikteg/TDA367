@@ -96,7 +96,31 @@ public class GameScreen extends AbstractScreen {
         @Override
         public void destroyedShip(BasePlayer player, Ship ship) {
             System.out.println("Ship size " + ship.getSize() + " belonging to " + player.getName() + " has been destroyed!!!!");
+
+            updateShipsDestroyed(player);
+            ((GameModel)model).updateGameOverStatus();
+            checkGameOver();
+
         }
+    }
+
+    /**
+     * Method for checking if game is over.
+     * The model determines this.
+     */
+    public void checkGameOver() {
+        if(((GameModel)model).getGameOver()){
+            gameIsOver();
+        }
+    }
+
+    /**
+     * Method for updating how many ships has been destroyed.
+     * This method is only run when a ship has been destroyed.
+     * @param player the player the destroyed ship belongs to.
+     */
+    public void updateShipsDestroyed(BasePlayer player) {
+        ((GameModel)model).incrementShipsDestroyed(player);
     }
 
     /**
@@ -177,6 +201,17 @@ public class GameScreen extends AbstractScreen {
 
     }
 
+    public void gameIsOver() {
+        System.out.println("Game is Over");
+
+        // If you are the loser
+        if(((GameModel)model).getLoser().equals(model.getClient().getPlayer())) {
+            System.out.println("Loser!");
+        } else {
+            System.out.println("Winner!");
+        }
+    }
+
     public ShootBtnListener getShootBtnListener() {
         return new ShootBtnListener();
     }
@@ -224,6 +259,8 @@ public class GameScreen extends AbstractScreen {
             ((GameRenderer)renderer).setHitOrMiss(((GameModel)model).getX(), ((GameModel)model).getY(), ((GameModel)model).getHitMsg());
 
             model.getClient().getPlayer().setMyTurn(false);
+
+
         }
 
     }
