@@ -73,19 +73,21 @@ public class GameScreen extends AbstractScreen {
             	
                 ((GameRenderer)renderer).getYourTurnLabel().setText("Your Turn!");
                 ((GameRenderer)renderer).getOppTurnLabel().setText("");
+                model.getClient().getPlayer().setMyTurn(true);
+
             } else {
                 ((GameRenderer)renderer).getYourTurnLabel().setText("");
                 ((GameRenderer)renderer).getOppTurnLabel().setText(model.getClient().getOpponents().get(0).getName() + "'s turn!");
             }
 
             if(hit && !target.equals(model.getClient().getPlayer())) {
-                System.out.println("You shot at " + coordinate.getX() + ", " + coordinate.getY() + ". HIT!");
+                //System.out.println("You shot at " + coordinate.getX() + ", " + coordinate.getY() + ". HIT!");
                 hit(coordinate);
 
 
             } else if(!target.equals(model.getClient().getPlayer())){
 
-                System.out.println("You shot at " + coordinate.getX() + ", " + coordinate.getY() + ". Miss..");
+                //System.out.println("You shot at " + coordinate.getX() + ", " + coordinate.getY() + ". Miss..");
                 miss(coordinate);
             }
 
@@ -94,7 +96,31 @@ public class GameScreen extends AbstractScreen {
         @Override
         public void destroyedShip(BasePlayer player, Ship ship) {
             System.out.println("Ship size " + ship.getSize() + " belonging to " + player.getName() + " has been destroyed!!!!");
+
+            updateShipsDestroyed(player);
+            ((GameModel)model).updateGameOverStatus();
+            checkGameOver();
+
         }
+    }
+
+    /**
+     * Method for checking if game is over.
+     * The model determines this.
+     */
+    public void checkGameOver() {
+        if(((GameModel)model).getGameOver()){
+            gameIsOver();
+        }
+    }
+
+    /**
+     * Method for updating how many ships has been destroyed.
+     * This method is only run when a ship has been destroyed.
+     * @param player the player the destroyed ship belongs to.
+     */
+    public void updateShipsDestroyed(BasePlayer player) {
+        ((GameModel)model).incrementShipsDestroyed(player);
     }
 
     /**
@@ -175,6 +201,24 @@ public class GameScreen extends AbstractScreen {
 
     }
 
+    public void gameIsOver() {
+        System.out.println("Game is Over");
+
+        // If you are the loser
+        if(((GameModel)model).getLoser().equals(model.getClient().getPlayer())) {
+            // TODO: Implement you are loser
+            ((GameRenderer)renderer).getYourTurnLabel().setText("You lost!");
+            ((GameRenderer)renderer).getOppTurnLabel().setText("");
+        } else {
+            // TODO: Implement you are winner
+            ((GameRenderer)renderer).getYourTurnLabel().setText("You won!");
+            ((GameRenderer)renderer).getOppTurnLabel().setText("");
+        }
+
+        // Disables shooting
+        model.getClient().getPlayer().setMyTurn(false);
+    }
+
     public ShootBtnListener getShootBtnListener() {
         return new ShootBtnListener();
     }
@@ -200,32 +244,42 @@ public class GameScreen extends AbstractScreen {
      * @param actor grid to be shot at.
      */
     public void shoot(Actor actor) {
-        // Loops through grid
-        for(int i = 0; i < 10; i++) {
-            for(int j = 0; j < 10; j++){
 
-                // gets array of 1 button from every table in grid (1 table per square in grid)
-                SnapshotArray<Actor> children = ((GameRenderer)renderer).getAimGrid()[(i*10)+j].getChildren();
-                Actor[] childrenArray = children.toArray();
+        if(model.getClient().getPlayer().getMyTurn()){
+            // Loops through grid
+            for(int i = 0; i < 10; i++) {
+                for(int j = 0; j < 10; j++){
 
-                if(childrenArray.length > 0){
-                    // Matches button with clicked one
-                    if(childrenArray[0].equals(actor)) {
-                        model.getClient().fire(model.getClient().getGameID(), model.getClient().getOpponents().get(0), new Coordinate(i+1, j+1));
+                    // gets array of 1 button from every table in grid (1 table per square in grid)
+                    SnapshotArray<Actor> children = ((GameRenderer)renderer).getAimGrid()[(i*10)+j].getChildren();
+                    Actor[] childrenArray = children.toArray();
 
+                    if(childrenArray.length > 0){
+                        // Matches button with clicked one
+                        if(childrenArray[0].equals(actor)) {
+                            model.getClient().fire(model.getClient().getGameID(), model.getClient().getOpponents().get(0), new Coordinate(i+1, j+1));
+
+                            System.out.println("RUN");
+                            // Disables button, so player can't shoot there again
+                            actor.removeListener(getShootBtnListener());
+
+                            // Delay to get thread to catch up
+                            try {
+                                Thread.sleep(100);
+                            } catch (InterruptedException e) {
+                                e.getStackTrace();
+                            }
+
+                            ((GameRenderer)renderer).setHitOrMiss(((GameModel)model).getX(), ((GameModel)model).getY(), ((GameModel)model).getHitMsg());
+                            model.getClient().getPlayer().setMyTurn(false);
+                        }
                     }
                 }
             }
-        }
 
-        // Delay to get thread to catch up
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            e.getStackTrace();
-        }
 
-        ((GameRenderer)renderer).setHitOrMiss(((GameModel)model).getX(), ((GameModel)model).getY(), ((GameModel)model).getHitMsg());
+
+        }
 
     }
 }

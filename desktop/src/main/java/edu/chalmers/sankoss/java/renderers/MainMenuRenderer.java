@@ -88,7 +88,11 @@ public class MainMenuRenderer extends Renderer{
         Gdx.gl.glClearColor(0.09f, 0.28f, 0.2f, 1);
     }
 
-
+    /**
+     * Method for drawing controllers.
+     * Called by the active Screen.
+     * @param screen active Screen.
+     */
     public void drawControllers(AbstractScreen screen) {
     	
         skin = new Skin();

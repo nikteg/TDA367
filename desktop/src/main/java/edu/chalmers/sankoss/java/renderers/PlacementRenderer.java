@@ -18,14 +18,13 @@ import edu.chalmers.sankoss.java.screens.AbstractScreen;
 import edu.chalmers.sankoss.java.screens.PlacementScreen;
 
 /**
- * Description of class.
- * More detailed description.
+ * Renderer for the placement of ships.
+ * This class will handle all rendering
+ * called by the PlacementScreen.
  *
  * @author Mikael Malmqvist
  */
 public class PlacementRenderer extends Renderer{
-
-    // private Sprite box= new Sprite(new Texture("src/main/java/edu/chalmers/sankoss/java/texures/testSquare.png"));
 
     private int windowWidth;
 	private final int GRID_SIDE=10;
@@ -48,7 +47,6 @@ public class PlacementRenderer extends Renderer{
 
 	// controllers
     private Table flag;
-	private Label headerLabel;
     private Label landLabel;
     private Label placeShipsLabel;
     private TextButton nextBtn;
@@ -95,6 +93,11 @@ public class PlacementRenderer extends Renderer{
         readyBtn.setX(width - readyBtn.getWidth());
 
 
+        fiveShip.setY(50 + twoShip.getWidth() + 5);
+        fiveShip.setX(Gdx.graphics.getWidth() / 2 + 250);
+
+        twoShip.setY(50);
+        twoShip.setX(Gdx.graphics.getWidth() / 2 + 250);
     }
 
     public Table[] getGrid() {
@@ -111,7 +114,6 @@ public class PlacementRenderer extends Renderer{
         flagPixmap.fill();
 
         skin.add(land, new Texture(flagPixmap));
-        //flag.setBackground(skin.newDrawable(land));
         flag.setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal(nationality.getPath())))));
 
         landLabel.setText(land);
@@ -122,6 +124,10 @@ public class PlacementRenderer extends Renderer{
 
     }
 
+    /**
+     * Method for drawing controllers.
+     * @param screen is the active Screen.
+     */
     public void drawControllers(AbstractScreen screen) {
 
         actorPanel = new WidgetGroup();
@@ -250,21 +256,35 @@ public class PlacementRenderer extends Renderer{
         // Ships to be placed in grid
         twoShip = new ShipButton(2);
         twoShip.addListener(((PlacementScreen) screen).getShip2Listener());
+        twoShip.setY(50);
+        twoShip.setX(Gdx.graphics.getWidth() / 2 + 250);
+
         threeShip1 = new ShipButton(3);
         threeShip1.addListener(((PlacementScreen) screen).getShip2Listener());
+        threeShip1.setY(50);
+        threeShip1.setX(25);
+        
         threeShip2 = new ShipButton(3);
         threeShip2.addListener(((PlacementScreen) screen).getShip2Listener());
+        threeShip2.setY(50 + threeShip1.getWidth() + 5);
+        threeShip2.setX(threeShip1.getWidth() + 5);
+
         fourShip = new ShipButton(4);
         fourShip.addListener(((PlacementScreen) screen).getShip2Listener());
+        fourShip.setY(50 + threeShip1.getWidth()*2 + 5);
+        fourShip.setX(25);
+
         fiveShip = new ShipButton(5);
         fiveShip.addListener(((PlacementScreen) screen).getShip2Listener());
+        fiveShip.setY(50 + twoShip.getWidth() + 5);
+        fiveShip.setX(Gdx.graphics.getWidth() / 2 + 250);
 
         topTable.addActor(rotateBtn);
-        topTable.addActor(twoShip);
-        topTable.addActor(threeShip1);
-        topTable.addActor(threeShip2);
-        topTable.addActor(fourShip);
-        topTable.addActor(fiveShip);
+        middlePanel.addActor(twoShip);
+        middlePanel.addActor(threeShip1);
+        middlePanel.addActor(threeShip2);
+        middlePanel.addActor(fourShip);
+        middlePanel.addActor(fiveShip);
 
         playerTable.addActor(nextBtn);
         playerTable.addActor(backBtn);
@@ -321,7 +341,8 @@ public class PlacementRenderer extends Renderer{
     }
 
     /**
-     * Method for updating all ships in game
+     * Method for updating all ships in game.
+     * Will update textures and Dimensions of all ships.
      */
     public void updateShips() {
         twoShip.update();
@@ -377,7 +398,7 @@ public class PlacementRenderer extends Renderer{
     }
 
     /**
-     * Method for switching between Horizontal and Vertical ships
+     * Method for switching between Horizontal and Vertical ships.
      */
     public void rotateShips() {
         if(twoShip.getDirection() == ShipButton.Direction.HORIZONTAL) {
@@ -399,47 +420,19 @@ public class PlacementRenderer extends Renderer{
 
     }
 
-    // TODO: Put this code somewhere else! Method is a loop and takes a lot of resources - it's a trap!
+    /**
+     * Render method which is run continuously throughout
+     * the application.
+     * This method takes a lot of resources.
+     */
     @Override
     public void render() {
-    	/*Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-        Gdx.gl.glClearColor(0.09f, 0.28f, 0.5f, 1);
-        Skin skin = new Skin();
-        
-        BitmapFont font = new BitmapFont();
-        font.scale(1); // Sets font's scale relative to current scale
-
-        // Adds font to skin
-        skin.add("default", font);
-        
-        Label.LabelStyle lblStyle = new Label.LabelStyle();
-        lblStyle.font = skin.getFont("default");
-        
-        headerLabel = new Label("BATTLURUSHIPURU!!!", lblStyle);
-
-        batch.begin();
-        headerLabel.setPosition(0, 510);
-        headerLabel.draw(batch, 1);
-        batch.end();*/
 
         // ShipButton to follow cursor
         if(follow != null) {
-            follow.setX(Gdx.input.getX() + 10);
-            // follow.setY(follow.getY()-Gdx.input.getDeltaY());
-            follow.setY(Gdx.input.getY()*(-1) + 10);
+            follow.setX(Gdx.input.getX() + 1);
+            follow.setY(Gdx.input.getY()*(-1) + playerTable.getHeight() + 414);
         }
-        //Writes the grid as texures
 
-        /*batch.begin();
-        for(int y = 0; y < GRID_SIDE; y++){
-            for(int x = 0; x < GRID_SIDE; x++){
-                box.setX(windowWidth/2 - box.getWidth()*5 + box.getWidth()*x);
-                box.setY(y * 50);
-                box.draw(batch);
-             }
-         }
-         batch.end();*/
-
-      
     }
 }

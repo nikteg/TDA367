@@ -46,7 +46,7 @@ public class ShipButton extends ImageButton {
     public void update() {
         updateTexture();
         updateDimensions();
-        updatePosition();
+        //updatePosition();
 
     }
 
