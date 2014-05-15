@@ -375,7 +375,7 @@ public class GameRenderer extends Renderer{
      */
     public void setHitOrMiss(Coordinate coordinate) {
 
-        if(((GameModel)currentModel).getHitMap().get(coordinate)) {
+        if(((GameModel)currentModel).getPlayerHitMap().get(coordinate)) {
 
             // If it's a hit
             setHit(coordinate.getX(), coordinate.getY());
@@ -407,6 +407,29 @@ public class GameRenderer extends Renderer{
 
         aimGrid[(x-1)*10 + (y-1)].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/explosion.png"))))));
 
+    }
+    /**
+     * Adds a hit or miss icon where the enemy has made his/her shoot
+     * @param coordinate
+     */
+    public void setEnemyHitOrMiss(Coordinate coordinate) {
+    	System.out.println("SetEnemyHitOrMiss @ GameRenderer");
+    	final Coordinate temp = coordinate;
+    	Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+            	if(((GameModel)currentModel).getEnemyHitMap().get(temp)) {
+                	playerGrid[(temp.getX()-1)*10 + (temp.getY()-1)].addActor(
+                			new ImageButton(new SpriteDrawable(new Sprite(
+                					new Texture(Gdx.files.classpath("assets/textures/explosion.png"))))));
+                } else {
+                	playerGrid[(temp.getX()-1)*10 + (temp.getY()-1)].addActor(
+                			new ImageButton(new SpriteDrawable(new Sprite(
+                					new Texture(Gdx.files.classpath("assets/textures/miss.png"))))));
+                }
+            }
+         });
+        
     }
 
     /**

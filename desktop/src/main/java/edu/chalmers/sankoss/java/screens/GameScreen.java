@@ -59,7 +59,9 @@ public class GameScreen extends AbstractScreen {
             // TODO: Put most logic in here instead and call external methods
             if(target.equals(model.getClient().getPlayer())) {
                 //Shows the enemy's hit on your board      	
-            	((GameRenderer)renderer).setEnemyTarget(coordinate, hit);
+            	System.out.println("Gamescreen doing stuff");
+            	((GameModel) model).getEnemyHitMap().put(coordinate, hit);
+            	((GameRenderer)renderer).setEnemyHitOrMiss(coordinate); //TODO Works but should be remade immediately
             	
                 ((GameRenderer)renderer).getYourTurnLabel().setText("Your Turn!");
                 ((GameRenderer)renderer).getOppTurnLabel().setText("");
@@ -71,7 +73,7 @@ public class GameScreen extends AbstractScreen {
             }
 
             if(!target.equals(model.getClient().getPlayer())) {
-                ((GameModel) model).getHitMap().put(coordinate, hit);
+                ((GameModel) model).getPlayerHitMap().put(coordinate, hit);
 
             }
 
