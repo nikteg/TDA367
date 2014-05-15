@@ -1,7 +1,5 @@
 package edu.chalmers.sankoss.java2.renderers;
 
-import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -14,14 +12,13 @@ import java.beans.PropertyChangeListener;
  */
 public abstract class AbstractRenderer implements PropertyChangeListener {
 
-    private Camera camera = new OrthographicCamera(800, 600);
-    private Stage stage = new Stage(new ExtendViewport(800, 600, camera));
+    private Stage stage = new Stage(new ExtendViewport(800, 600));
     private Table table = new Table();
     public SpriteBatch batch = new SpriteBatch();
 
     public AbstractRenderer() {
-        table.setWidth(800);
-        table.setHeight(600);
+        table.setWidth(getStage().getWidth());
+        table.setHeight(getStage().getHeight());
     }
 
     public void create() {
@@ -41,7 +38,7 @@ public abstract class AbstractRenderer implements PropertyChangeListener {
     }
 
     public void resize(int width, int height) {
-
+        getStage().getViewport().update(width, height, false);
     }
 
     public abstract void render(float delta);

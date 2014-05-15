@@ -58,7 +58,7 @@ public abstract class AbstractScreen<R extends AbstractRenderer, M extends Abstr
 
     @Override
     public final void resize(int width, int height) {
-        renderer.getStage().getViewport().update((width / 2) * 2, (height / 2) * 2, false);
+        renderer.resize(width, height);
     }
 
     @Override
@@ -89,6 +89,7 @@ public abstract class AbstractScreen<R extends AbstractRenderer, M extends Abstr
 
     @Override
     public boolean keyDown(int keycode) {
+        getRenderer().getStage().keyDown(keycode);
         return false;
     }
 
@@ -104,11 +105,15 @@ public abstract class AbstractScreen<R extends AbstractRenderer, M extends Abstr
 
     @Override
     public boolean touchDown(int x, int y, int pointer, int button) {
+        getRenderer().getStage().touchDown(x, y, pointer, button);
+
         return false;
     }
 
     @Override
     public boolean touchUp(int x, int y, int pointer, int button) {
+        getRenderer().getStage().touchUp(x, y, pointer, button);
+
         return false;
     }
 

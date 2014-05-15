@@ -17,8 +17,13 @@ public class MainMenuScreen extends AbstractScreen<MainMenuRenderer, MainMenuMod
         SankossGame.getInstance().getClient().addListener(new SankossClientListener() {
             @Override
             public void connected(BasePlayer player) {
-                //getRenderer().enableMultiPlayer();
+                getRenderer().setMultiPlayerDisabled(false);
                 System.out.println("ENABLE MULTIPLAYER");
+            }
+
+            @Override
+            public void disconnected() {
+                getRenderer().setMultiPlayerDisabled(true);
             }
         });
     }
@@ -30,6 +35,8 @@ public class MainMenuScreen extends AbstractScreen<MainMenuRenderer, MainMenuMod
 
     @Override
     public boolean keyDown(int keycode) {
+        super.keyDown(keycode);
+
         if (keycode == Input.Keys.SPACE) {
             SankossGame.Screens.LOBBY.show();
         }

@@ -19,7 +19,7 @@ public class SankossGame extends Game {
     private static SankossGame instance = new SankossGame();
     private SankossClient client = new SankossClient();
 
-    private static Skin skin;
+    private Skin skin;
 
     private SankossGame() {
         //
@@ -54,7 +54,7 @@ public class SankossGame extends Game {
         return client;
     }
 
-    public static Skin getSkin() {
+    public Skin getSkin() {
         return skin;
     }
 
