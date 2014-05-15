@@ -4,13 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import edu.chalmers.sankoss.core.Player;
 import edu.chalmers.sankoss.core.Room;
-import edu.chalmers.sankoss.java.Models.MainMenu;
-import edu.chalmers.sankoss.java.Renderers.MainMenuRenderer;
 import edu.chalmers.sankoss.java.SankossController;
 import edu.chalmers.sankoss.java.SankossGame;
 import edu.chalmers.sankoss.java.client.SankossClientListener;
+import edu.chalmers.sankoss.java.models.MainMenu;
+import edu.chalmers.sankoss.java.renderers.MainMenuRenderer;
 
 import java.util.Map;
 
@@ -19,14 +18,20 @@ import java.util.Map;
  * Handles game logic at the main menu, almost like a controller.
  *
  * @author Mikael Malmqvist
+ * @modified Fredrik Thune
  * @date 3/24/14
  */
-public class MainMenuScreen extends AbstractScreen {
+public class MainMenuScreen extends AbstractScreen<MainMenuRenderer> {
 
     private String roomName;
     private Long lastRoomID;
     private Map<Long, Room> gameRooms;
     private Object[] rooms = new Object[0];
+
+    private LobbyScreen lobbyScreen;
+    
+
+
 
     /**
      * @inheritdoc
@@ -36,6 +41,7 @@ public class MainMenuScreen extends AbstractScreen {
         model = new MainMenu();
         model.getClient().addListener(new MainMenuListener());
         renderer = new MainMenuRenderer(model);
+        lobbyScreen = new LobbyScreen(controller, game);
 
         create();
 
@@ -44,19 +50,16 @@ public class MainMenuScreen extends AbstractScreen {
     private class MainMenuListener extends SankossClientListener {
         public void connected(Long playerID) {
             System.out.print("SERVER: Client connected");
+            renderer.getMultiPlayerBtn().setDisabled(false);
         }
 
         public void fetchedRooms(Map<Long, Room> fetchedRooms) {
             rooms = fetchedRooms.values().toArray();
+
         }
 
         public void createdRoom(Long roomID) {
             System.out.println("SERVER: " + model.getClient().getPlayer().getName() + " created room #" + roomID);
-        }
-
-        public void joinedRoom(Player player) {
-            ((MainMenuRenderer)renderer).setStatusLabel(player.getName() + " has joined your room!");
-            ((MainMenuRenderer)renderer).createStartButton();
         }
     }
 
@@ -65,7 +68,8 @@ public class MainMenuScreen extends AbstractScreen {
      */
     @Override
     public void show() {
-
+        // Sets the stage as input source
+        controller.changeInput(stage);
     }
 
     /**
@@ -88,9 +92,6 @@ public class MainMenuScreen extends AbstractScreen {
         super.create();
         renderer.drawControllers(this);
 
-        // Sets the stage as input source
-        controller.changeInput(stage);
-
         stage.addActor(renderer.getActorPanel());
         stage.draw();
 
@@ -103,7 +104,6 @@ public class MainMenuScreen extends AbstractScreen {
     public void resize(int width, int height) {
         super.resize(width, height);
         renderer.resize(width, height);
-
     }
 
     public JoinButtonListener getJoinButtonListener() {
@@ -118,68 +118,57 @@ public class MainMenuScreen extends AbstractScreen {
         return new HelpButtonListener();
     }
 
-    public StartButtonListener getStartButtonListener() {
-        return new StartButtonListener();
+    public OptionsButtonListener getOptionsButtonListener() {
+        return new OptionsButtonListener();
     }
 
-    private class StartButtonListener extends ChangeListener{
+    public CreditButtonListener getCreditsButtonListener() {
+        return new CreditButtonListener();
+    }
 
-        @Override
-        public void changed(ChangeEvent event, Actor actor) {
-            // TODO: START GAME
-            model.getClient().startGame(model.getClient().getRoomID());
-            controller.changeScreen(new PlacementScreen(controller, game));
-        }
+    public ExitButtonListener getExitButtonListener() {
+        return new ExitButtonListener();
     }
 
     private class JoinButtonListener extends ChangeListener{
 
         @Override
         public void changed(ChangeEvent event, Actor actor) {
-
-            controller.changeScreen(new LobbyScreen(controller, game));
+            model.getClient().fetchRooms();
+            jumpToLobby();
         }
+    }
+
+    private class CreditButtonListener extends ChangeListener {
+
+        @Override
+        public void changed(ChangeEvent event, Actor actor) {
+            jumpToCredits();
+        }
+    }
+
+    private class OptionsButtonListener extends ChangeListener {
+
+        @Override
+        public void changed(ChangeEvent event, Actor actor) {
+            jumpToOptions();
+        }
+    }
+
+    private class ExitButtonListener extends ChangeListener {
+
+        @Override
+        public void changed(ChangeEvent event, Actor actor) {
+            exitApplication();
+        }
+
     }
 
     private class HostButtonListener extends ChangeListener{
 
         @Override
         public void changed(ChangeEvent event, Actor actor) {
-            model.getClient().fetchRooms();
-
-            Gdx.input.getTextInput(new Input.TextInputListener() {
-
-                // Gets user input
-                @Override
-                public void input(String roomName) {
-                    boolean same = false;
-
-                    for(int i = 0; i < rooms.length; i++) {
-                        if(((Room)rooms[i]).getName().equals(roomName)) {
-                            same = true;
-                        }
-                    }
-
-                    if(same) {
-                        //TODO: Display better error msg
-                        System.out.println("ERROR: Room already exists!");
-                    } else {
-                        ((MainMenuRenderer)renderer).setStatusLabel("Waiting for opponent to join " + roomName + "..");
-                        model.getClient().createRoom(roomName, ""); //Roomname and password
-
-
-                        if(lastRoomID != null) model.getClient().removeRoom(lastRoomID);
-
-                        lastRoomID = model.getClient().getRoomID();
-                    }
-
-                }
-
-                @Override
-                public void canceled() {
-                    // nothing..
-                }
-            }, "Enter room name:", "");
+            startHosting();
 
         }
     }
@@ -189,8 +178,72 @@ public class MainMenuScreen extends AbstractScreen {
         @Override
         public void changed(ChangeEvent event, Actor actor) {
 
-            // controller.changeScreen(new PlacementScreen(controller, game));
-            controller.changeScreen(new InGameScreen(controller, game));
+
         }
+    }
+
+    public void exitApplication() {
+        model.getClient().disconnect();
+        System.exit(0);
+    }
+
+    //TODO REMOVE SINCE IT WONT BE RUN ANY MORE, DUE TO NEW MENU SYSTEM
+    /**
+     * Method for hosting a game.
+     */
+    public void startHosting() {
+        model.getClient().fetchRooms();
+
+        Gdx.input.getTextInput(new Input.TextInputListener() {
+
+            // Gets user input
+            @Override
+            public void input(String roomName) {
+                boolean same = false;
+
+                for(int i = 0; i < rooms.length; i++) {
+                    if(((Room)rooms[i]).getName().equals(roomName)) {
+                        same = true;
+                    }
+                }
+
+                if(same) {
+                    //TODO: Display better error msg
+                    System.out.println("ERROR: Room already exists!");
+                } else {
+                    ((MainMenuRenderer)renderer).setStatusLabel("Waiting for opponent to join " + roomName + "..");
+                    model.getClient().createRoom(roomName, ""); //Roomname and password
+
+
+                    if(lastRoomID != null) model.getClient().removeRoom(lastRoomID);
+
+                    lastRoomID = model.getClient().getRoomID();
+
+                    // Disables join and host button
+                    ((MainMenuRenderer)renderer).getMultiPlayerBtn().removeListener(((MainMenuRenderer)renderer).getMultiPlayerBtn().getListeners().first());
+                    //((MainMenuRenderer)renderer).getCreditsBtn().removeListener(((MainMenuRenderer)renderer).getCreditsBtn().getListeners().first());
+                }
+
+            }
+
+            @Override
+            public void canceled() {
+                // nothing..
+            }
+        }, "Enter room name:", "");
+    }
+
+    public void jumpToOptions() {
+        // TODO: Jump to options screen
+    }
+
+    public void jumpToCredits() {
+    	System.out.println("jumpToCredits @ mmScreen");
+        controller.changeScreen(new CreditScreen(controller, game));
+    }
+
+    public void jumpToLobby() {
+        controller.changeScreen(lobbyScreen);
+
     }
 }

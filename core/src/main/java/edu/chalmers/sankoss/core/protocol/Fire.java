@@ -1,7 +1,7 @@
 package edu.chalmers.sankoss.core.protocol;
 
+import edu.chalmers.sankoss.core.BasePlayer;
 import edu.chalmers.sankoss.core.Coordinate;
-import edu.chalmers.sankoss.core.Player;
 
 /**
  * 
@@ -10,13 +10,13 @@ import edu.chalmers.sankoss.core.Player;
  */
 public class Fire {
     private Long gameID;
-    private Player target;
+    private BasePlayer target;
     private Coordinate coordinate;
 
     public Fire() {
     }
 
-    public Fire(Long gameID, Player target, Coordinate coordinate) {
+    public Fire(Long gameID, BasePlayer target, Coordinate coordinate) {
         this.gameID = gameID;
         this.target = target;
         this.coordinate = coordinate;
@@ -30,11 +30,11 @@ public class Fire {
         this.gameID = gameID;
     }
 
-    public Player getTarget() {
+    public BasePlayer getTarget() {
         return target;
     }
 
-    public void setTarget(Player target) {
+    public void setTarget(BasePlayer target) {
         this.target = target;
     }
 

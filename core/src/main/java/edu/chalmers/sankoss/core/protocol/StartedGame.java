@@ -1,6 +1,6 @@
 package edu.chalmers.sankoss.core.protocol;
 
-import edu.chalmers.sankoss.core.Player;
+import edu.chalmers.sankoss.core.BasePlayer;
 
 import java.util.List;
 
@@ -11,13 +11,11 @@ import java.util.List;
  */
 public class StartedGame {
     private Long gameID;
-    private List<Player> players;
     public StartedGame() {
     }
 
-    public StartedGame(Long gameID, List<Player> players) {
+    public StartedGame(Long gameID) {
         this.gameID = gameID;
-        this.players = players;
     }
 
     public Long getGameID() {
@@ -26,13 +24,5 @@ public class StartedGame {
 
     public void setGameID(Long gameID) {
         this.gameID = gameID;
-    }
-
-    public List<Player> getPlayers() {
-        return players;
-    }
-
-    public void setPlayers(List<Player> players) {
-        this.players = players;
     }
 }

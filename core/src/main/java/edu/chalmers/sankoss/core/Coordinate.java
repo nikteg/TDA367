@@ -21,6 +21,7 @@ public class Coordinate {
 	public Coordinate(int x, int y){
 		//TODO Throw exception?
 		if(x<1 || 10<x || y<1 || 10<y){
+            System.out.println("X: " + x + ", Y: " + y + " - INVALID COORDINATES.");
 			throw new IllegalArgumentException();
 		}
 		this.x=x;

@@ -1,18 +1,15 @@
 package edu.chalmers.sankoss.java.screens;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import edu.chalmers.sankoss.core.Coordinate;
-import edu.chalmers.sankoss.core.Player;
+import edu.chalmers.sankoss.core.BasePlayer;
 import edu.chalmers.sankoss.core.Room;
-import edu.chalmers.sankoss.core.Ship;
-import edu.chalmers.sankoss.java.Models.Lobby;
-import edu.chalmers.sankoss.java.Renderers.LobbyRenderer;
 import edu.chalmers.sankoss.java.SankossController;
 import edu.chalmers.sankoss.java.SankossGame;
 import edu.chalmers.sankoss.java.client.SankossClientListener;
+import edu.chalmers.sankoss.java.models.Lobby;
+import edu.chalmers.sankoss.java.renderers.LobbyRenderer;
 
 import java.util.Map;
 
@@ -21,9 +18,10 @@ import java.util.Map;
  * Handles game logic in lobby, almost like a controller.
  *
  * @author Mikael Malmqvist
+ * @modified Fredrik Thune
  * @date 3/24/14
  */
-public class LobbyScreen extends AbstractScreen {
+public class LobbyScreen extends AbstractScreen<LobbyRenderer> {
 
     // private Lobby lobby;
     private Object[] keys;
@@ -31,6 +29,8 @@ public class LobbyScreen extends AbstractScreen {
     private String[] roomNames;
     private Map<Long, Room> gameRooms;
 
+
+    private WaitingScreen waitingScreen;
 
     /**
      * @inheritdoc
@@ -40,6 +40,7 @@ public class LobbyScreen extends AbstractScreen {
         model = new Lobby();
         model.getClient().addListener(new LobbyListener());
         renderer = new LobbyRenderer(model);
+        waitingScreen = new WaitingScreen(controller, game);
         create();
 
     }
@@ -59,15 +60,29 @@ public class LobbyScreen extends AbstractScreen {
 
             model.setRoomMap(gameRooms);
 
-            ((LobbyRenderer)renderer).setList(rooms);
+            renderer.setList(rooms);
         }
 
-        public void joinedRoom(Player player) {
+        public void joinedRoom(BasePlayer player) {
             System.out.println("SERVER: " + player.getName() + " joined!");
+
+            /*if (player.equals(model.getClient().getPlayer())) {
+                System.out.println("BUMP");
+                waitingScreen.setHost(false);
+                controller.changeScreen(waitingScreen);
+            }*/
         }
 
-        public void startedGame(Long gameID, java.util.List<Player> players) {
+        public void startedGame(Long gameID) {
             ((LobbyRenderer)renderer).getJoinBtn().setText("Enter Game");
+        }
+
+        @Override
+        public void createdRoom(Long roomID) {
+            System.out.println("You hosted room #" + roomID);
+
+            waitingScreen.setHost(true);
+            controller.changeScreen(waitingScreen);
         }
     }
 
@@ -77,7 +92,8 @@ public class LobbyScreen extends AbstractScreen {
      */
     @Override
     public void show() {
-
+        // Sets the stage as input source
+        controller.changeInput(stage);
     }
 
     /**
@@ -97,15 +113,13 @@ public class LobbyScreen extends AbstractScreen {
     public void create() {
         super.create();
 
-        // Sets the stage as input source
-        controller.changeInput(stage);
-
         renderer.drawControllers(this);
 
-        model.getClient().fetchRooms();
+        //model.getClient().fetchRooms();
 
-        stage.addActor(renderer.getActorPanel());
+        stage.addActor(renderer.getTable());
         stage.draw();
+        Table.drawDebug(stage);
 
     }
 
@@ -132,56 +146,114 @@ public class LobbyScreen extends AbstractScreen {
         return new EditButtonListener();
     }
 
+    public HostButtonListener getHostButtonListener() {
+        return new HostButtonListener();
+    }
+
     private class JoinButtonListener extends ChangeListener{
+
         @Override
         public void changed(ChangeEvent event, Actor actor) {
-
-            String buttonText = "" + ((LobbyRenderer)renderer).getJoinBtn().getText();
-
-            if(buttonText.equals("Ask to join")) {
-                // Retrives selected name and matches with room
-                String roomName = ((LobbyRenderer)renderer).getRoomList().getSelection();
-
-                Room roomToJoin = model.getRoomByName(roomName, gameRooms);
-
-                model.getClient().joinRoom(roomToJoin.getID());
-
-                ((LobbyRenderer)renderer).getJoinBtn().setText("Joined");
-                //controller.changeScreen(new PlacementScreen(controller, game));
-
-            } else if(buttonText.equals("Enter Game") && model.getClient().getGameID() != null) {
-                controller.changeScreen(new PlacementScreen(controller, game));
-            }
-
+            joinGame();
         }
     }
 
     private class CancelButtonListener extends ChangeListener{
+
         @Override
         public void changed(ChangeEvent event, Actor actor) {
+            jumpToMainMenu();
+        }
+
+        public void jumpToMainMenu() {
             controller.changeScreen(new MainMenuScreen(controller, game));
         }
     }
 
+    // TODO: REDO COMPLETELY
     private class EditButtonListener extends ChangeListener{
+
         @Override
         public void changed(ChangeEvent event, Actor actor) {
-            Gdx.input.getTextInput(new Input.TextInputListener() {
+            changeName();
+        }
+    }
 
-                // Gets user input
-                @Override
-                public void input(String name) {
-                    // TODO: DO WE NEED TO CHECK IF PLAYERS HAVE SAME NAME?!?
-                    model.getClient().getPlayer().setName(name);
-                    ((LobbyRenderer)renderer).setNameLabel(name);
+    private class HostButtonListener extends ChangeListener{
 
-                }
+        @Override
+        public void changed(ChangeEvent event, Actor actor) {
+            startHosting();
 
-                @Override
-                public void canceled() {
-                    // nothing..
-                }
-            }, "Enter new name:", "");
+        }
+    }
+
+    /**
+     * Method for hosting a room.
+     */
+    public void startHosting() {
+        model.getClient().createRoom(model.getClient().getPlayer().getName() + "'s Room", ""); //Roomname and password
+
+    }
+
+    public void jumpToWaiting() {
+        controller.changeScreen(new WaitingScreen(controller, game));
+    }
+
+    /**
+     * Method for changing player's name.
+     */
+    public void changeName() {
+        if (renderer.getNameField().isDisabled()) {
+            stage.setKeyboardFocus(renderer.getNameField());
+            renderer.getNameField().setDisabled(false);
+            renderer.getNameField().selectAll();
+            renderer.getNameField().setRightAligned(false);
+        } else {
+            String name = renderer.getNameField().getText();
+            model.getClient().getPlayer().setName(name);
+            model.getClient().playerChangeName(name);
+            renderer.getNameField().setDisabled(true);
+            stage.unfocus(renderer.getNameField());
+            renderer.getNameField().setRightAligned(true);
+        }
+
+/*
+        Gdx.input.getTextInput(new Input.TextInputListener() {
+
+            // Gets user input
+            @Override
+            public void input(String name) {
+
+                model.getClient().getPlayer().setName(name);
+                ((LobbyRenderer)renderer).setNameLabel(name);
+
+            }
+
+            @Override
+            public void canceled() {
+                // nothing..
+            }
+        }, "Enter new name:", "");
+        */
+    }
+
+    /**
+     * Method for joining a game.
+     */
+    public void joinGame() {
+
+        if(gameRooms.size() > 0) {
+
+            // Retrives selected name and matches with room
+            String roomName = renderer.getRoomList().getSelection();
+
+            Room roomToJoin = model.getRoomByName(roomName, gameRooms);
+            model.getClient().joinRoom(roomToJoin.getID());
+
+            System.out.println("BUMP");
+            waitingScreen.setHost(false);
+            controller.changeScreen(waitingScreen);
 
         }
     }

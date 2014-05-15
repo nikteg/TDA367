@@ -22,4 +22,5 @@ public class JoinRoom {
     public void setRoomID(Long roomID) {
         this.roomID = roomID;
     }
+
 }

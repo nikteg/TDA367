@@ -1,6 +1,6 @@
 package edu.chalmers.sankoss.core.protocol;
 
-import edu.chalmers.sankoss.core.Player;
+import edu.chalmers.sankoss.core.BasePlayer;
 import edu.chalmers.sankoss.core.Ship;
 
 /**
@@ -9,22 +9,22 @@ import edu.chalmers.sankoss.core.Ship;
  *
  */
 public class DestroyedShip {
-    private Player player;
+    private BasePlayer player;
     private Ship ship;
 
     public DestroyedShip() {
     }
 
-    public DestroyedShip(Player player, Ship ship) {
+    public DestroyedShip(BasePlayer player, Ship ship) {
         this.player = player;
         this.ship = ship;
     }
 
-    public Player getPlayer() {
+    public BasePlayer getPlayer() {
         return player;
     }
 
-    public void setPlayer(Player player) {
+    public void setPlayer(BasePlayer player) {
         this.player = player;
     }
 

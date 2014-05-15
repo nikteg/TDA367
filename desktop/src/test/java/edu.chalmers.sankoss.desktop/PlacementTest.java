@@ -1,4 +1,4 @@
-package edu.chalmers.sankoss.java.Models;
+package edu.chalmers.sankoss.java.models;
 
 import org.junit.Test;
 

@@ -9,8 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import edu.chalmers.sankoss.java.Models.ScreenModel;
-import edu.chalmers.sankoss.java.Renderers.Renderer;
+import edu.chalmers.sankoss.java.models.ScreenModel;
+import edu.chalmers.sankoss.java.renderers.Renderer;
 import edu.chalmers.sankoss.java.SankossController;
 import edu.chalmers.sankoss.java.SankossGame;
 
@@ -20,10 +20,10 @@ import edu.chalmers.sankoss.java.SankossGame;
  * @author Mikael Malmqvist
  * @date 3/31/14
  */
-public abstract class AbstractScreen implements Screen, ApplicationListener {
+public abstract class AbstractScreen<R extends Renderer> implements Screen, ApplicationListener {
 
     protected ScreenModel model;
-    protected Renderer renderer;
+    protected R renderer;
     protected SankossGame game;
     protected SankossController controller;
 
@@ -41,6 +41,9 @@ public abstract class AbstractScreen implements Screen, ApplicationListener {
     public AbstractScreen(SankossController controller, SankossGame game) {
         this.controller = controller;
         this.game = game;
+        
+        //TODO Needs reset?
+        stage = new Stage();
 
     }
 
@@ -88,9 +91,6 @@ public abstract class AbstractScreen implements Screen, ApplicationListener {
     @Override
     public abstract void hide();
 
-
-
-    // BELOW WE DEFINE METHODS FOR APPLICATIONLISTENER
 
     /**
      * Method to run upon creation of instance.
