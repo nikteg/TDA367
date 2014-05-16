@@ -81,8 +81,6 @@ public class GameScreen extends AbstractScreen {
 
         @Override
         public void destroyedShip(BasePlayer player, Ship ship) {
-            System.out.println("Ship size " + ship.getSize() + " belonging to " + player.getName() + " has been destroyed!!!!");
-
             updateShipsDestroyed(player);
             ((GameModel)model).updateGameOverStatus();
             checkGameOver();
@@ -188,7 +186,6 @@ public class GameScreen extends AbstractScreen {
     }
 
     public void gameIsOver() {
-        System.out.println("Game is Over");
 
         // If you are the loser
         if(((GameModel)model).getLoser().equals(model.getClient().getPlayer())) {
@@ -245,7 +242,6 @@ public class GameScreen extends AbstractScreen {
                         if(childrenArray[0].equals(actor)) {
                             model.getClient().fire(model.getClient().getGameID(), model.getClient().getOpponents().get(0), new Coordinate(i+1, j+1));
 
-                            System.out.println("RUN");
                             // Disables button, so player can't shoot there again
                             actor.removeListener(getShootBtnListener());
 
@@ -256,15 +252,12 @@ public class GameScreen extends AbstractScreen {
                                 e.getStackTrace();
                             }
 
-                            // ((GameRenderer)renderer).setHitOrMiss(((GameModel)model).getX(), ((GameModel)model).getY(), ((GameModel)model).getHitMsg());
                             ((GameRenderer)renderer).setHitOrMiss(new Coordinate(i+1, j+1));
                             model.getClient().getPlayer().setMyTurn(false);
                         }
                     }
                 }
             }
-
-
 
         }
 
