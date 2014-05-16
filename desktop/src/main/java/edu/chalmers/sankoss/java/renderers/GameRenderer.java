@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import edu.chalmers.sankoss.core.BasePlayer;
@@ -28,7 +27,6 @@ import java.util.Set;
  */
 public class GameRenderer extends Renderer{
 
-    private java.awt.Color color = java.awt.Color.WHITE;
     private String land;
     private final int WIDTH_OF_SQUARE = 50;
     private final int HEIGHT_OF_SQUARE = 50;
@@ -39,7 +37,6 @@ public class GameRenderer extends Renderer{
     private ShipButton follow = null;
     private BasePlayer.Nationality nationality;
 
-	private SpriteBatch batch = new SpriteBatch();
     private Skin skin = new Skin();
 
     // Containers

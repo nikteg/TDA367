@@ -138,28 +138,6 @@ public class PlacementScreen extends AbstractScreen {
 
         ((PlacementRenderer) renderer).getPlayerTable().addActor(nameLabel);
 
-        //TODO I am testing
-        /*Pixmap pixmap = new Pixmap(new FileHandle("src/main/java/edu/chalmers/sankoss/java/texures/testSquare.png"));
-        skin.add("gridTile", new Texture(pixmap));
-		
-		gridPanel= new WidgetGroup();
-		
-		//Stage stage = new Stage(GRID_SIDE,GRID_SIDE, false, batch);
-		ImageButton[][] gridButton = new ImageButton[GRID_SIDE][GRID_SIDE];
-		for(int y = 0; y < GRID_SIDE; y++){
-			for(int x = 0; x < GRID_SIDE; x++){
-				
-				System.out.println("Doing stuff");
-				gridButton[x][y]= new ImageButton(skin.getDrawable("gridTile"));
-				gridButton[x][y].setSize(GRID_TILE_SIDE, GRID_TILE_SIDE);
-				gridPanel.addActor(gridButton[x][y]); 
-				gridButton[x][y].setPosition(x*GRID_TILE_SIDE, y*GRID_TILE_SIDE);
-			}
-		}
-
-		stage.addActor(gridPanel);*/
-        /*stage.addActor(((PlacementRenderer) renderer).getPlayerTable());
-        stage.addActor(((PlacementRenderer) renderer).getTopTable());*/
         stage.addActor(renderer.getActorPanel());
         stage.draw();
 
@@ -436,7 +414,7 @@ public class PlacementScreen extends AbstractScreen {
                                     }
 
                                     // Removes placed ship from ship panel
-                                    ((PlacementRenderer)renderer).getMiddlePanel().removeActor(((PlacementRenderer)renderer).getFollow());
+                                    renderer.getActorPanel().removeActor(((PlacementRenderer)renderer).getFollow());
                                     ((PlacementRenderer)renderer).setFollow(null);
                                 }
 
@@ -500,7 +478,7 @@ public class PlacementScreen extends AbstractScreen {
                                     }
 
                                     // Removes placed ship from ship panel
-                                    ((PlacementRenderer)renderer).getMiddlePanel().removeActor(((PlacementRenderer)renderer).getFollow());
+                                    renderer.getActorPanel().removeActor(((PlacementRenderer)renderer).getFollow());
                                     ((PlacementRenderer)renderer).setFollow(null);
                                 }
 
