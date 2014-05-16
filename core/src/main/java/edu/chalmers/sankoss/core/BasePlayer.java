@@ -16,6 +16,7 @@ public class BasePlayer {
 
     public BasePlayer(Long playerID) {
         this.playerID = playerID;
+        this.name = "Player #" + playerID;
     }
 
     public BasePlayer(Long playerID, String name) {

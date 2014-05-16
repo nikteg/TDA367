@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class SankossClient {
     private Client client;
-    private SankossClientPlayer player  = new SankossClientPlayer((long)-1);;
+    private SankossClientPlayer player;
 
     private List<BasePlayer> opponents = new ArrayList<BasePlayer>();
     private Long gameID;
@@ -57,8 +57,7 @@ public class SankossClient {
                 if (object instanceof Connected) {
                     Connected msg = (Connected) object;
 
-                    //player = new SankossClientPlayer(msg.getPlayerID());
-                    player.setID(msg.getPlayerID());
+                    player = new SankossClientPlayer(msg.getPlayerID());
 
                     for (ISankossClientListener listener : listeners) {
                         listener.connected(msg.getPlayerID());
@@ -72,8 +71,6 @@ public class SankossClient {
 
                 if (object instanceof FetchedRooms) {
                     FetchedRooms msg = (FetchedRooms) object;
-
-                    System.out.println(msg.getRooms().toString());
 
                     for (ISankossClientListener listener : listeners) {
                         listener.fetchedRooms(msg.getRooms());
@@ -226,8 +223,6 @@ public class SankossClient {
         if (client == null) return;
 
         client.connect(timeout, host, Network.PORT);
-
-        client.sendTCP(new Connect());
     }
 
     public void createRoom(String name, String password) {

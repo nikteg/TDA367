@@ -74,10 +74,18 @@ public class SankossServer {
 
             /**
              * Executed when the server receives a new client connection.
-             * @param connection client connection
+             * @param c client connection
              */
-            public void connected(Connection connection) {
+            public void connected(Connection c) {
+                PlayerConnection connection = (PlayerConnection) c;
+                connection.setPlayer(new Player((long) connection.getID()));
 
+                LOGGER.log(Level.INFO, String.format("%s connected as #%d", connection.getRemoteAddressTCP(), connection.getID()));
+
+                connection.sendTCP(new Connected(connection.getPlayer().getID()));
+                pcs.firePropertyChange("playerConnected", null, null);
+
+                return;
             }
 
             /**
