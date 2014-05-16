@@ -5,6 +5,6 @@ package edu.chalmers.sankoss.java.models;
  * More detailed description.
  *
  */
-public class GameModel extends AbstractModel {
+public class PlacementModel extends AbstractModel {
 
 }

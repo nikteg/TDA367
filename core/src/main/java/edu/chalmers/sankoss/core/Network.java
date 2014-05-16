@@ -17,7 +17,6 @@ public class Network {
         Kryo kryo = endPoint.getKryo();
         kryo.register(BasePlayer.class);
         kryo.register(BasePlayer.Nationality.class);
-        kryo.register(Connect.class);
         kryo.register(Connected.class);
         kryo.register(Coordinate.class);
         kryo.register(CreateAI.class);

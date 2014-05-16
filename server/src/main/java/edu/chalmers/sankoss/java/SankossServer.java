@@ -99,22 +99,6 @@ public class SankossServer {
                 Player player = connection.getPlayer();
 
                 /**
-                 * Create new player instance and map it to their connection.
-                 * When the new player instance is created, its ID is sent to the client.
-                 * This package should be received as soon as the client has connected!
-                 */
-                if (object instanceof Connect) {
-                    connection.setPlayer(new Player((long) connection.getID()));
-
-                    LOGGER.log(Level.INFO, String.format("%s connected as #%d", connection.getRemoteAddressTCP(), connection.getID()));
-
-                    connection.sendTCP(new Connected((long) connection.getID()));
-                    pcs.firePropertyChange("playerConnected", null, null);
-
-                    return;
-                }
-
-                /**
                  * Nothing below this line will be executed if no player has been created for the client.
                  * This makes sure that not everyone can manipulate the server with messages.
                  */

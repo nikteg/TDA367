@@ -57,6 +57,7 @@ public class SankossClient {
                 if (object instanceof Connected) {
                     Connected msg = (Connected) object;
 
+
                     player = new SankossClientPlayer(msg.getPlayerID());
 
                     for (ISankossClientListener listener : listeners) {
@@ -223,6 +224,10 @@ public class SankossClient {
         if (client == null) return;
 
         client.connect(timeout, host, Network.PORT);
+    }
+
+    public boolean isConnected() {
+        return client.isConnected();
     }
 
     public void createRoom(String name, String password) {

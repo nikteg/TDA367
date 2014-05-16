@@ -13,11 +13,11 @@ import java.util.Set;
  * @author Mikael Malmqvist
  * @date 3/24/14
  */
-public class Lobby extends ScreenModel {
+public class LobbyModel extends AbstractModel {
     private Map<Long, Room> roomMap = new HashMap<Long, Room>();
     private String[] names = new String[0];
 
-    public Lobby() {
+    public LobbyModel() {
         this.roomMap = new HashMap<Long, Room>();
     }
 

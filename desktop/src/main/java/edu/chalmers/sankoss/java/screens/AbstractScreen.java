@@ -1,18 +1,10 @@
 package edu.chalmers.sankoss.java.screens;
 
-import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import edu.chalmers.sankoss.java.models.ScreenModel;
-import edu.chalmers.sankoss.java.renderers.Renderer;
-import edu.chalmers.sankoss.java.SankossController;
-import edu.chalmers.sankoss.java.SankossGame;
+import edu.chalmers.sankoss.java.models.AbstractModel;
+import edu.chalmers.sankoss.java.renderers.AbstractRenderer;
 
 /**
  * Abstraction of Screen implementation.
@@ -20,35 +12,29 @@ import edu.chalmers.sankoss.java.SankossGame;
  * @author Mikael Malmqvist
  * @date 3/31/14
  */
-public abstract class AbstractScreen<R extends Renderer> implements Screen, ApplicationListener {
+public abstract class AbstractScreen<R extends AbstractRenderer, M extends AbstractModel> implements Screen, InputProcessor {
 
-    protected ScreenModel model;
+    protected M model;
     protected R renderer;
-    protected SankossGame game;
-    protected SankossController controller;
 
-    protected Stage stage;
-    protected Skin skin;
-    protected SpriteBatch batch;
-    protected TextButton.TextButtonStyle btnStyle;
-    protected static Label.LabelStyle labelStyle;
-
-    /**
-     * This will keep a reference of the main game.
-     * @param game reference to the SankossGame class
-     * @param controller reference to the SankossController class
-     */
-    public AbstractScreen(SankossController controller, SankossGame game) {
-        this.controller = controller;
-        this.game = game;
-        
-        //TODO Needs reset?
-        stage = new Stage();
+    public AbstractScreen() {
 
     }
 
-    public ScreenModel getModel() {
+    public M getModel() {
         return model;
+    }
+
+    public void setModel(M model) {
+        this.model = model;
+    }
+
+    public R getRenderer() {
+        return renderer;
+    }
+
+    public void setRenderer(R renderer) {
+        this.renderer = renderer;
     }
 
     /**
@@ -58,13 +44,11 @@ public abstract class AbstractScreen<R extends Renderer> implements Screen, Appl
      */
     @Override
     public void render(float delta) {
-        renderer.render();
-
-        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-        Table.drawDebug(stage);
-
-        stage.draw();
+        renderer.render(delta);
+        update(delta);
     }
+
+    public abstract void update(float delta);
 
     /**
      * Resizes necessary variables to fit.
@@ -73,7 +57,7 @@ public abstract class AbstractScreen<R extends Renderer> implements Screen, Appl
      */
     @Override
     public void resize(int width, int height) {
-        stage.setViewport( width, height, true );
+        renderer.resize(width, height);
     }
 
     /**
@@ -83,29 +67,15 @@ public abstract class AbstractScreen<R extends Renderer> implements Screen, Appl
      * model and renderer.
      */
     @Override
-    public abstract void show();
+    public void show() {
+        Gdx.input.setInputProcessor(this);
+    }
 
     /**
      * Method called when this Screen is no longer the active Screen.
      */
     @Override
-    public abstract void hide();
-
-
-    /**
-     * Method to run upon creation of instance.
-     * Configs visual controllers and sets listeners.
-     */
-    @Override
-    public void create() {
-        batch = new SpriteBatch();
-        stage = new Stage();
-        skin = new Skin();
-        labelStyle = new Label.LabelStyle();
-    }
-
-    @Override
-    public void render() {
+    public void hide() {
 
     }
 
@@ -121,9 +91,63 @@ public abstract class AbstractScreen<R extends Renderer> implements Screen, Appl
 
     @Override
     public void dispose() {
-        stage.dispose();
-        skin.dispose();
+        renderer.dispose();
+        model.dispose();
     }
 
 
+    @Override
+    public boolean keyDown(int keyCode) {
+        renderer.getStage().keyDown(keyCode);
+
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keyCode) {
+        renderer.getStage().keyUp(keyCode);
+
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        renderer.getStage().keyTyped(character);
+
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int x, int y, int pointer, int button) {
+        renderer.getStage().touchDown(x, y, pointer, button);
+
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(int x, int y, int pointer, int button) {
+        renderer.getStage().touchUp(x, y, pointer, button);
+
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int x, int y, int pointer) {
+        renderer.getStage().touchDragged(x, y, pointer);
+
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int x, int y) {
+        renderer.getStage().mouseMoved(x, y);
+
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(int amount) {
+        renderer.getStage().scrolled(amount);
+        return false;
+    }
 }
