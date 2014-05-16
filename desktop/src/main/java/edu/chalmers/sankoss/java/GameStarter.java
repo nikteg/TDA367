@@ -23,7 +23,7 @@ public class GameStarter {
         LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
 
         cfg.title = "Battleships";
-        cfg.useGL20 = true;
+        cfg.vSyncEnabled = true;
         cfg.width = 1200;
         cfg.height = 800;
         LwjglApplication application = new LwjglApplication(new SankossGame(), cfg);

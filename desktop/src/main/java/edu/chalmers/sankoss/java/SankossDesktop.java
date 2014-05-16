@@ -7,7 +7,7 @@ public class SankossDesktop {
 	public static void main (String[] args) {
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
         cfg.title = "Battleships";
-        cfg.useGL20 = true;
+        cfg.vSyncEnabled = true;
         cfg.width = 800;
         cfg.height = 600;
 
