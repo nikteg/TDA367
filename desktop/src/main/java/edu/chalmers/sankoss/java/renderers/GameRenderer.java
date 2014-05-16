@@ -54,8 +54,6 @@ public class GameRenderer extends Renderer{
     private Table flag;
     private Label landLabel;
     private Label opponentNameLabel;
-    private Label playerBoardLabel;;
-    private Label aimBoardLabel;
     private Label yourTurnLabel;
     private Label oppTurnLabel;
     
@@ -92,10 +90,6 @@ public class GameRenderer extends Renderer{
         playerBoard.setPosition((middlePanel.getWidth() - playerBoard.getWidth() - 10),
                 (middlePanel.getHeight() - playerBoard.getHeight())/2);
         ships.setWidth(width - 200);
-
-        aimBoardLabel.setPosition(10 + (aimBoard.getWidth() - aimBoardLabel.getWidth())/2,
-               middlePanel.getHeight() - 50);
-        playerBoardLabel.setPosition(width - (playerBoardLabel.getWidth()/2) - 10 - (playerBoard.getWidth()/2), middlePanel.getHeight() - 50);
 
         yourTurnLabel.setX((width - yourTurnLabel.getWidth()) / 2);
         oppTurnLabel.setX((width - oppTurnLabel.getWidth())/2);
@@ -271,11 +265,6 @@ public class GameRenderer extends Renderer{
             aimBoard.row();
         }
 
-        aimBoardLabel = new Label("Aim board", labelStyle);
-        playerBoardLabel = new Label("Your board", labelStyle);
-
-        middlePanel.addActor(playerBoardLabel);
-        middlePanel.addActor(aimBoardLabel);
         middlePanel.addActor(playerBoard);
         middlePanel.addActor(aimBoard);
 
