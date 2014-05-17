@@ -4,27 +4,27 @@ package edu.chalmers.sankoss.core;
  * @author Niklas Tegnander
  * @modified Fredrik Thune
  */
-public class BasePlayer {
+public class CorePlayer {
     private Long playerID = (long) -1;
     private String name = "Unnamed";
     private Nationality nationality = Nationality.USA;
     private boolean myTurn = false;
 
-    public BasePlayer() {
+    public CorePlayer() {
 
     }
 
-    public BasePlayer(Long playerID) {
+    public CorePlayer(Long playerID) {
         this.playerID = playerID;
         this.name = "Player #" + playerID;
     }
 
-    public BasePlayer(Long playerID, String name) {
+    public CorePlayer(Long playerID, String name) {
         this.name = name;
         this.playerID = playerID;
     }
 
-    public BasePlayer(Long playerID, String name, Nationality nationality) {
+    public CorePlayer(Long playerID, String name, Nationality nationality) {
         this.playerID = playerID;
         this.name = name;
         this.nationality = nationality;
@@ -114,9 +114,9 @@ public class BasePlayer {
     @Override
     public boolean equals(Object player) {
         if(player != null) {
-            if(player instanceof BasePlayer) {
-                return (((BasePlayer) player).getID() == this.getID()
-                        && ((BasePlayer) player).getName().equals(this.getName()));
+            if(player instanceof CorePlayer) {
+                return (((CorePlayer) player).getID() == this.getID()
+                        && ((CorePlayer) player).getName().equals(this.getName()));
             }
 
         }
