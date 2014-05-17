@@ -24,6 +24,7 @@ public class SankossClient {
     private String host;
     private int timeout;
     private boolean ready = false;
+    private boolean hosting = false;
 
     private List<ISankossClientListener> listeners = new ArrayList<ISankossClientListener>();
 
@@ -57,13 +58,11 @@ public class SankossClient {
                 if (object instanceof Connected) {
                     Connected msg = (Connected) object;
 
-
                     player = new SankossClientPlayer(msg.getPlayerID());
 
                     for (ISankossClientListener listener : listeners) {
                         listener.connected(msg.getPlayerID());
                     }
-
 
                     return;
                 }
@@ -88,6 +87,7 @@ public class SankossClient {
 
 
                     roomID = msg.getRoomID();
+                    hosting = true;
 
                     for (ISankossClientListener listener : listeners) {
                         listener.createdRoom(roomID);
@@ -99,8 +99,9 @@ public class SankossClient {
                 if (object instanceof JoinedRoom) {
                     JoinedRoom msg = (JoinedRoom) object;
 
-                    if (msg.getPlayer().equals(player.getBasePlayer()))
-                        return;
+                    if (msg.getPlayer().equals(player.getBasePlayer())) {
+                        hosting = false;
+                    }
 
                     for (ISankossClientListener listener : listeners) {
                         listener.joinedRoom(msg.getPlayer());
@@ -112,6 +113,8 @@ public class SankossClient {
                 if (object instanceof StartedGame) {
                     StartedGame msg = (StartedGame) object;
                     gameID = msg.getGameID();
+
+                    hosting = false;
 
                     for (ISankossClientListener listener : listeners) {
                         listener.startedGame(gameID);
@@ -186,6 +189,10 @@ public class SankossClient {
                 }
             }
         }));
+    }
+
+    public boolean isHosting() {
+        return hosting;
     }
 
     public SankossClientPlayer getPlayer() {
