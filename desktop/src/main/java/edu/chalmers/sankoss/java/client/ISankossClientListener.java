@@ -2,23 +2,25 @@ package edu.chalmers.sankoss.java.client;
 
 import edu.chalmers.sankoss.core.*;
 
-import java.util.List;
 import java.util.Map;
 
 /**
- * Created by nikteg on 14/04/14.
+ * @author Niklas Tegnander
  */
 public interface ISankossClientListener {
-    public void connected(Long playerID);
+    public void connected();
     public void fetchedRooms(Map<Long, Room> rooms);
-    public void createdRoom(Long roomID);
-    public void joinedRoom(BasePlayer player);
+    public void createdRoom(Room room);
+    public void joinedRoom(CorePlayer player);
     public void startedGame(Long gameID);
     public void gameReady();
-    public void playerIsReady(BasePlayer player);
+    public void playerIsReady(CorePlayer player);
     public void turn();
-    public void fireResult(Long gameID, BasePlayer target, Coordinate coordinate, boolean hit);
-    public void destroyedShip(BasePlayer player, Ship ship);
+    public void fireResult(CorePlayer target, Coordinate coordinate, boolean hit);
+    public void destroyedShip(CorePlayer player, Ship ship);
     public void disconnected();
-    public void playerChangedName(BasePlayer player);
+    public void playerChangedName(CorePlayer player);
+    public void leftGame(CorePlayer player);
+    public void leftRoom(CorePlayer player);
+    public void removedRoom();
 }

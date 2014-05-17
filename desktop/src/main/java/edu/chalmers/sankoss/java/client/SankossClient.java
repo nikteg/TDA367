@@ -18,25 +18,16 @@ public class SankossClient {
     private Client client;
     private SankossClientPlayer player;
 
-    private List<BasePlayer> opponents = new ArrayList<BasePlayer>();
+    private List<CorePlayer> opponents = new ArrayList<CorePlayer>();
     private Long gameID;
-    private Long roomID;
-    private String host;
-    private int timeout;
+    private Room room;
     private boolean ready = false;
     private boolean hosting = false;
 
     private List<ISankossClientListener> listeners = new ArrayList<ISankossClientListener>();
 
-    public SankossClient(String host, int timeout) {
-        this.host = host;
-        this.timeout = timeout;
-
+    public SankossClient() {
         initialize();
-    }
-
-    public SankossClient(String host) {
-        this(host, 5000);
     }
 
     public void setReady(boolean ready) {
@@ -58,10 +49,10 @@ public class SankossClient {
                 if (object instanceof Connected) {
                     Connected msg = (Connected) object;
 
-                    player = new SankossClientPlayer(msg.getPlayerID());
+                    player = new SankossClientPlayer(msg.getPlayer());
 
                     for (ISankossClientListener listener : listeners) {
-                        listener.connected(msg.getPlayerID());
+                        listener.connected();
                     }
 
                     return;
@@ -82,15 +73,15 @@ public class SankossClient {
                 if (object instanceof CreatedRoom) {
                     CreatedRoom msg = (CreatedRoom) object;
 
-                    if (msg.getRoomID() == null)
+                    if (msg.getRoom() == null)
                         throw new IllegalArgumentException("Invalid name or password format.");
 
 
-                    roomID = msg.getRoomID();
+                    room = msg.getRoom();
                     hosting = true;
 
                     for (ISankossClientListener listener : listeners) {
-                        listener.createdRoom(roomID);
+                        listener.createdRoom(room);
                     }
 
                     return;
@@ -99,9 +90,7 @@ public class SankossClient {
                 if (object instanceof JoinedRoom) {
                     JoinedRoom msg = (JoinedRoom) object;
 
-                    if (msg.getPlayer().equals(player.getBasePlayer())) {
-                        hosting = false;
-                    }
+                    room = msg.getRoom();
 
                     for (ISankossClientListener listener : listeners) {
                         listener.joinedRoom(msg.getPlayer());
@@ -155,7 +144,7 @@ public class SankossClient {
                     FireResult msg = (FireResult) object;
 
                     for (ISankossClientListener listener : listeners) {
-                        listener.fireResult(msg.getGameID(), msg.getTarget(), msg.getCoordinate(), msg.isHit());
+                        listener.fireResult(msg.getTarget(), msg.getCoordinate(), msg.isHit());
                     }
 
                     return;
@@ -180,6 +169,37 @@ public class SankossClient {
 
                     return;
                 }
+
+                if (object instanceof RemovedRoom) {
+                    RemovedRoom msg = (RemovedRoom) object;
+
+                    for (ISankossClientListener listener : listeners) {
+                        listener.removedRoom();
+                    }
+
+                    return;
+                }
+
+                if (object instanceof LeftGame) {
+                    LeftGame msg = (LeftGame) object;
+
+                    for (ISankossClientListener listener : listeners) {
+                        listener.leftGame(msg.getPlayer());
+                    }
+
+                    return;
+                }
+
+                if (object instanceof LeftRoom) {
+                    LeftRoom msg = (LeftRoom) object;
+
+                    for (ISankossClientListener listener : listeners) {
+                        listener.leftRoom(msg.getPlayer());
+                    }
+
+                    return;
+                }
+
             }
 
             public void disconnected(Connection connection) {
@@ -192,14 +212,14 @@ public class SankossClient {
     }
 
     public boolean isHosting() {
-        return hosting;
+        return room != null && ((room.getPlayers().size() > 0) && (room.getPlayers().get(0).getID().equals(player.getID())));
     }
 
     public SankossClientPlayer getPlayer() {
         return player;
     }
 
-    public List<BasePlayer> getOpponents() {
+    public List<CorePlayer> getOpponents() {
         return opponents;
     }
 
@@ -207,16 +227,8 @@ public class SankossClient {
         return gameID;
     }
 
-    public Long getRoomID() {
-        return roomID;
-    }
-
-    public String getHost() {
-        return host;
-    }
-
-    public void setHost(String host) {
-        this.host = host;
+    public Room getRoom() {
+        return room;
     }
 
     public void addListener(ISankossClientListener listener) {
@@ -227,10 +239,17 @@ public class SankossClient {
         listeners.remove(listener);
     }
 
-    public void connect() throws IOException {
+    public void connect(String hostname) throws IOException {
+        connect(hostname, Network.PORT);
+    }
+
+    public void connect(String hostname, int port) throws IOException {
         if (client == null) return;
 
-        client.connect(timeout, host, Network.PORT);
+        /**
+         * 5 second timeout.
+         */
+        client.connect(5000, hostname, port);
     }
 
     public boolean isConnected() {
@@ -241,6 +260,10 @@ public class SankossClient {
         if (client == null) return;
 
         client.sendTCP(new CreateRoom(name, password));
+    }
+
+    public void createRoom(String name) {
+        createRoom(name, "");
     }
 
     public void removeRoom(Long roomID) {
@@ -267,7 +290,7 @@ public class SankossClient {
         client.sendTCP(new FetchRooms());
     }
 
-    public void fire(Long gameID, BasePlayer target, Coordinate coordinate) {
+    public void fire(CorePlayer target, Coordinate coordinate) {
         if (client == null) return;
 
         client.sendTCP(new Fire(gameID, target, coordinate));
@@ -276,20 +299,41 @@ public class SankossClient {
     public void joinRoom(Long roomID) {
         if (client == null) return;
 
-        System.out.println("CLIENT: Trying to join #" + roomID);
         client.sendTCP(new JoinRoom(roomID));
     }
 
-    public void playerReady(Long gameID, Fleet fleet) {
+    public void playerReady(Fleet fleet) {
         if (client == null) return;
 
         client.sendTCP(new PlayerReady(gameID, fleet.getShips()));
     }
 
-    public void startGame(Long roomID) {
+    public void startGame() {
         if (client == null) return;
 
-        client.sendTCP(new StartGame(roomID));
+        client.sendTCP(new StartGame(room.getID()));
+    }
+
+    public void leaveGame() {
+        if (client == null) return;
+
+        client.sendTCP(new LeaveGame(gameID));
+
+        /**
+         * Nullifies game when game has been left
+         */
+        gameID = null;
+    }
+
+    public void leaveRoom() {
+        if (client == null) return;
+
+        client.sendTCP(new LeaveRoom(room.getID()));
+
+        /**
+         * Nullifies room when room has been left
+         */
+        room = null;
     }
 
     @Override
