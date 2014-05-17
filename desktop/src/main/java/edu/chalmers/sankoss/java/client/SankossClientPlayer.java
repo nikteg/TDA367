@@ -1,12 +1,12 @@
 package edu.chalmers.sankoss.java.client;
 
-import edu.chalmers.sankoss.core.BasePlayer;
+import edu.chalmers.sankoss.core.CorePlayer;
 import edu.chalmers.sankoss.core.Fleet;
 
 /**
  * @author Fredrik Thune
  */
-public class SankossClientPlayer extends BasePlayer{
+public class SankossClientPlayer extends CorePlayer {
     private Fleet fleet = new Fleet();
 
     public SankossClientPlayer() {
@@ -14,6 +14,10 @@ public class SankossClientPlayer extends BasePlayer{
 
     public SankossClientPlayer(Long playerID) {
         super(playerID);
+    }
+
+    public SankossClientPlayer(CorePlayer player) {
+        super(player.getID(), player.getName());
     }
 
     public Fleet getFleet() {
@@ -24,7 +28,7 @@ public class SankossClientPlayer extends BasePlayer{
         this.fleet = fleet;
     }
 
-    public BasePlayer getBasePlayer() {
-        return new BasePlayer(getID(), getName(), getNationality());
+    public CorePlayer getCorePlayer() {
+        return new CorePlayer(getID(), getName(), getNationality());
     }
 }

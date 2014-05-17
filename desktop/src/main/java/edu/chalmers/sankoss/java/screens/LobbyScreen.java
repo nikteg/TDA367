@@ -1,7 +1,7 @@
 package edu.chalmers.sankoss.java.screens;
 
 import com.badlogic.gdx.Gdx;
-import edu.chalmers.sankoss.core.BasePlayer;
+import edu.chalmers.sankoss.core.CorePlayer;
 import edu.chalmers.sankoss.core.Room;
 import edu.chalmers.sankoss.java.SankossGame;
 import edu.chalmers.sankoss.java.Screens;
@@ -36,8 +36,8 @@ public class LobbyScreen extends AbstractScreen<LobbyRenderer, LobbyModel> {
             }
 
             @Override
-            public void createdRoom(Long roomID) {
-                Gdx.app.debug("LobbyScreen", "Room #" + roomID + " was created");
+            public void createdRoom(Room room) {
+                Gdx.app.debug("LobbyScreen", "Room #" + room.getID() + " was created");
 
                 Gdx.app.postRunnable(new Runnable() {
 
@@ -49,7 +49,7 @@ public class LobbyScreen extends AbstractScreen<LobbyRenderer, LobbyModel> {
             }
 
             @Override
-            public void joinedRoom(BasePlayer player) {
+            public void joinedRoom(CorePlayer player) {
                 if (player.getID().equals(SankossGame.getInstance().getClient().getPlayer().getID())) {
                     Gdx.app.postRunnable(new Runnable() {
 
