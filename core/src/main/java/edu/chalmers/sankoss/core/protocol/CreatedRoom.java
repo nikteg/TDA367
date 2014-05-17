@@ -1,25 +1,27 @@
 package edu.chalmers.sankoss.core.protocol;
 
+import edu.chalmers.sankoss.core.Room;
+
 /**
  *
  * @author Fredrik Thune
  *
  */
 public class CreatedRoom {
-    private Long roomID;
+    private Room room;
 
     public CreatedRoom() {
     }
 
-    public CreatedRoom(Long roomID) {
-        this.roomID = roomID;
+    public CreatedRoom(Room room) {
+        this.room = room;
     }
 
-    public Long getRoomID() {
-        return roomID;
+    public Room getRoom() {
+        return room;
     }
 
-    public void setRoomID(Long roomID) {
-        this.roomID = roomID;
+    public void setRoom(Room room) {
+        this.room = room;
     }
 }
