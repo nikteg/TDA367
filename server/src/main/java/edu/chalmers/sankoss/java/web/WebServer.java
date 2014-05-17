@@ -35,13 +35,12 @@ public class WebServer implements Runnable, PropertyChangeListener {
         server.addPropertyChangeListener(this);
     }
 
-    public WebServer(SankossServer sankossServer) {
+    public WebServer(SankossServer server) {
+        this(server, 8080);
     }
 
     @Override
     public void run() {
-        if (server == null) return;
-
         setPort(port);
 
         get(new JsonTransformerRoute("/players") {
@@ -74,13 +73,13 @@ public class WebServer implements Runnable, PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+        if (server == null) return;
+
         if (evt.getPropertyName().equals("playerConnected") || evt.getPropertyName().equals("playerDisconnected")) {
             players.clear();
 
             for (SankossServer.PlayerConnection playerConnection : server.getPlayerConnections()) {
-                String address = playerConnection.getRemoteAddressTCP().toString().contains("127.0.0.1") ? "Bot" : playerConnection.getRemoteAddressTCP().toString();
-
-                players.add(new WebPlayer(playerConnection.getPlayer().getID(), playerConnection.getPlayer().getName(), address));
+                players.add(new WebPlayer(playerConnection.getPlayer().getID(), playerConnection.getPlayer().getName(), playerConnection.getRemoteAddressTCP().toString()));
             }
         }
 
