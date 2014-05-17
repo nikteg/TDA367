@@ -55,7 +55,7 @@ public class SankossGame extends Game {
     public void create () {
         Gdx.app.setLogLevel(Application.LOG_DEBUG);
 
-        client = new SankossClient("localhost");
+        client = new SankossClient(Settings.HOSTNAME);
         skin = new Skin(Gdx.files.internal("uiskin.json"));
 
         Screens.MAIN_MENU.show();

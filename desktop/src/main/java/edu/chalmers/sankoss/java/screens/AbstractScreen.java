@@ -69,6 +69,8 @@ public abstract class AbstractScreen<R extends AbstractRenderer, M extends Abstr
     @Override
     public void show() {
         Gdx.input.setInputProcessor(this);
+
+        Gdx.app.debug("AbstractScreen", "Changed input processor to " + this.getClass());
     }
 
     /**

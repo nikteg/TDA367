@@ -9,6 +9,7 @@ import edu.chalmers.sankoss.java.screens.*;
 public enum Screens {
     MAIN_MENU (new MainMenuScreen()),
     LOBBY (new LobbyScreen()),
+    WAITING (new WaitingScreen()),
     PLACEMENT (new PlacementScreen()),
     GAME (new GameScreen()),
     CREDITS (new CreditScreen());
