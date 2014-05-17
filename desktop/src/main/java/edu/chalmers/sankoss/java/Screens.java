@@ -4,7 +4,7 @@ import com.badlogic.gdx.Screen;
 import edu.chalmers.sankoss.java.screens.*;
 
 /**
- * Created by nikteg on 16/05/14.
+ * @author Niklas Tegnander
  */
 public enum Screens {
     MAIN_MENU (new MainMenuScreen()),
