@@ -55,13 +55,13 @@ public class SankossGame extends Game {
     public void create () {
         Gdx.app.setLogLevel(Application.LOG_DEBUG);
 
-        client = new SankossClient(Settings.HOSTNAME);
+        client = new SankossClient();
         skin = new Skin(Gdx.files.internal("uiskin.json"));
 
         Screens.MAIN_MENU.show();
 
         try {
-            client.connect();
+            client.connect(Settings.HOSTNAME);
         } catch (IOException e) {
             Gdx.app.debug("SankossGame", "Could not connect to server");
         } finally {
