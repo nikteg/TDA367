@@ -1,7 +1,7 @@
 package edu.chalmers.sankoss.java.models;
 
 import com.badlogic.gdx.Gdx;
-import edu.chalmers.sankoss.core.BasePlayer;
+import edu.chalmers.sankoss.core.CorePlayer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class WaitingModel extends AbstractModel {
     private boolean hosting = false;
-    private List<BasePlayer> players = new ArrayList<BasePlayer>();
+    private List<CorePlayer> players = new ArrayList<CorePlayer>();
 
     public boolean isHosting() {
         return hosting;
@@ -29,21 +29,37 @@ public class WaitingModel extends AbstractModel {
         Gdx.app.debug("WaitingModel", "Hosting set to " + hosting);
     }
 
-    public void addPlayer(BasePlayer player) {
-        players.add(player);
+    public boolean addPlayer(CorePlayer player) {
+        if (players.add(player)) {
+            Gdx.app.debug("WaitingModel", "Added player #" + player.getID());
 
-        setChanged();
-        notifyObservers("player");
+            setChanged();
+            notifyObservers("player_joined");
+
+            return true;
+        }
+
+        return false;
     }
 
-    public void removePlayer(BasePlayer player) {
-        players.remove(player);
+    public boolean removePlayer(CorePlayer player) {
+        for (CorePlayer removingPlayer : players) {
+            if (removingPlayer.getID().equals(player.getID())) {
+                players.remove(removingPlayer);
 
-        setChanged();
-        notifyObservers("player");
+                Gdx.app.debug("WaitingModel", "Removed player #" + player.getID());
+
+                setChanged();
+                notifyObservers("player_left");
+
+                return true;
+            }
+        }
+
+       return false;
     }
 
-    public List<BasePlayer> getPlayers() {
+    public List<CorePlayer> getPlayers() {
         return players;
     }
 }

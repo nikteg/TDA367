@@ -7,8 +7,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.sun.org.apache.xpath.internal.SourceTree;
 import edu.chalmers.sankoss.java.SankossGame;
 import edu.chalmers.sankoss.java.Screens;
+import edu.chalmers.sankoss.java.client.SankossClient;
 import edu.chalmers.sankoss.java.models.WaitingModel;
 
 import java.util.Observable;
@@ -46,12 +48,14 @@ public class WaitingRenderer extends AbstractRenderer {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 if (SankossGame.getInstance().getClient().isHosting()) {
-                    SankossGame.getInstance().getClient().removeRoom(SankossGame.getInstance().getClient().getRoomID());
+                    SankossGame.getInstance().getClient().removeRoom(SankossGame.getInstance().getClient().getRoom().getID());
 
                     Gdx.app.debug("WaitingRenderer", "Removing hosted room");
+                } else {
+                    SankossGame.getInstance().getClient().leaveRoom();
                 }
 
-                // TODO send leave room message?
+
 
                 Screens.LOBBY.show();
             }
@@ -60,7 +64,7 @@ public class WaitingRenderer extends AbstractRenderer {
         btnStart.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                SankossGame.getInstance().getClient().startGame(SankossGame.getInstance().getClient().getRoomID()); // TODO fix start game method?
+                SankossGame.getInstance().getClient().startGame();
             }
         });
     }
@@ -86,12 +90,17 @@ public class WaitingRenderer extends AbstractRenderer {
                 lblWaiting.setText("Waiting for the host to start the game...");
             }
         }
-
-        if (arg.equals("player")) {
-            if (model.getPlayers().size() > 0 && model.isHosting()) {
+        if (model.isHosting()) {
+            if (arg.equals("player_joined")) {
+                System.out.println("NUMBER OF PLAYER IN ROOMEN " + model.getPlayers().size());
                 btnStart.setDisabled(false);
                 lblWaiting.setText(model.getPlayers().get(0).getName() + " has joined the room!");
+            } else if (arg.equals("player_left")) {
+                btnStart.setDisabled(true);
+                lblWaiting.setText("Player left. Waiting for players to join...");
             }
+
         }
+
     }
 }

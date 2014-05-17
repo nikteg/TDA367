@@ -1,7 +1,9 @@
 package edu.chalmers.sankoss.java.screens;
 
-import edu.chalmers.sankoss.core.BasePlayer;
+import com.badlogic.gdx.Gdx;
+import edu.chalmers.sankoss.core.CorePlayer;
 import edu.chalmers.sankoss.java.SankossGame;
+import edu.chalmers.sankoss.java.Screens;
 import edu.chalmers.sankoss.java.client.SankossClientListener;
 import edu.chalmers.sankoss.java.models.WaitingModel;
 import edu.chalmers.sankoss.java.renderers.WaitingRenderer;
@@ -23,14 +25,27 @@ public class WaitingScreen extends AbstractScreen<WaitingRenderer, WaitingModel>
         SankossGame.getInstance().getClient().addListener(new SankossClientListener() {
             /* DO STUFF */
 
+            //TODO Create method in interface when YOU has successfully joined
             @Override
-            public void joinedRoom(BasePlayer player) {
+            public void joinedRoom(CorePlayer player) {
                 getModel().addPlayer(player);
             }
 
-            /**
-             * Should check if a player left the room...
-             */
+            @Override
+            public void leftRoom(CorePlayer player) {
+                getModel().removePlayer(player);
+            }
+
+            @Override
+            public void removedRoom() {
+                Gdx.app.postRunnable(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        Screens.LOBBY.show();
+                    }
+                });
+            }
         });
     }
 

@@ -1,5 +1,6 @@
 package edu.chalmers.sankoss.java.screens;
 
+import edu.chalmers.sankoss.core.CorePlayer;
 import edu.chalmers.sankoss.java.SankossGame;
 import edu.chalmers.sankoss.java.client.SankossClientListener;
 import edu.chalmers.sankoss.java.models.MainMenuModel;
@@ -23,7 +24,7 @@ public class MainMenuScreen extends AbstractScreen<MainMenuRenderer, MainMenuMod
             /* DO STUFF */
 
             @Override
-            public void connected(Long playerID) {
+            public void connected() {
                 getModel().setConnected(true);
             }
         });
