@@ -2,7 +2,10 @@ package edu.chalmers.sankoss.java.renderers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -21,6 +24,7 @@ import java.util.Observable;
  */
 public class MainMenuRenderer extends AbstractRenderer {
 
+    Image logo = new Image(new Texture(Gdx.files.internal("logo.png")));
     TextButton btnMultiPlayer = new TextButton("Multiplayer", SankossGame.getInstance().getSkin());
     TextButton btnOptions = new TextButton("Options", SankossGame.getInstance().getSkin());
     TextButton btnCredits = new TextButton("Credits", SankossGame.getInstance().getSkin());
@@ -29,15 +33,20 @@ public class MainMenuRenderer extends AbstractRenderer {
     public MainMenuRenderer(Observable observable) {
         super(observable);
 
-        float BUTTON_WIDTH = 600f;
+        btnMultiPlayer.pad(8f);
+        btnOptions.pad(8f);
+        btnCredits.pad(8f);
+        btnExit.pad(8f);
 
-        getTable().add(btnMultiPlayer).width(BUTTON_WIDTH).pad(8f);
+        getTable().add(logo);
         getTable().row();
-        getTable().add(btnOptions).width(BUTTON_WIDTH).pad(8f);
+        getTable().add(btnMultiPlayer).fillX().pad(8f);
         getTable().row();
-        getTable().add(btnCredits).width(BUTTON_WIDTH).pad(8f);
+        getTable().add(btnOptions).fillX().pad(8f);
         getTable().row();
-        getTable().add(btnExit).width(BUTTON_WIDTH).pad(8f);
+        getTable().add(btnCredits).fillX().pad(8f);
+        getTable().row();
+        getTable().add(btnExit).fillX().pad(8f);
         getTable().row();
         //getTable().debug();
         getStage().addActor(getTable());
@@ -47,6 +56,21 @@ public class MainMenuRenderer extends AbstractRenderer {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 Screens.LOBBY.show();
+            }
+        });
+        btnOptions.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Dialog dialog = new Dialog("Message", SankossGame.getInstance().getSkin()) {
+
+                    {
+                        text("Not implemented yet");
+                        button("OK");
+                    }
+                };
+
+                dialog.setMovable(false);
+                dialog.show(getStage());
             }
         });
         btnExit.addListener(new ChangeListener() {
