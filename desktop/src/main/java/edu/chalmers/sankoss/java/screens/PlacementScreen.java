@@ -14,11 +14,10 @@ import edu.chalmers.sankoss.java.renderers.PlacementRenderer;
  * @date 3/24/14
  * @modified Daniel Eineving 2014-05-12
  */
-public class PlacementScreen extends AbstractScreen<PlacementRenderer, PlacementModel> {
+public class PlacementScreen extends AbstractScreen<PlacementModel, PlacementRenderer> {
 
-    public PlacementScreen() {
-        setModel(new PlacementModel());
-        setRenderer(new PlacementRenderer(getModel()));
+    public PlacementScreen(Class<PlacementModel> model, Class<PlacementRenderer> renderer) {
+        super(model, renderer);
 
         SankossGame.getInstance().getClient().addListener(new SankossClientListener() {
             /* DO STUFF */

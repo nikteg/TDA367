@@ -1,23 +1,39 @@
 package edu.chalmers.sankoss.java.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import edu.chalmers.sankoss.java.SankossGame;
 import edu.chalmers.sankoss.java.models.AbstractModel;
 import edu.chalmers.sankoss.java.renderers.AbstractRenderer;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.Observable;
 
 /**
  * Abstraction of Screen implementation.
  *
  * @author Mikael Malmqvist
+ * @modified Niklas Tegnander
  * @date 3/31/14
  */
-public abstract class AbstractScreen<R extends AbstractRenderer, M extends AbstractModel> implements Screen, InputProcessor {
+public abstract class AbstractScreen<M extends AbstractModel, R extends AbstractRenderer> implements Screen, InputProcessor {
 
-    protected M model;
-    protected R renderer;
+    private M model;
+    private R renderer;
 
-    public AbstractScreen() {
+    private AbstractScreen() {
+
+    }
+
+    public AbstractScreen(Class<M> model, Class<R> renderer) {
+        try {
+            setModel(model.newInstance());
+            setRenderer(renderer.getConstructor(Observable.class).newInstance(getModel()));
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+            Gdx.app.debug("AbstractScreen", e.getMessage());
+        }
 
     }
 
@@ -25,7 +41,7 @@ public abstract class AbstractScreen<R extends AbstractRenderer, M extends Abstr
         return model;
     }
 
-    public void setModel(M model) {
+    private void setModel(M model) {
         this.model = model;
     }
 
@@ -33,7 +49,7 @@ public abstract class AbstractScreen<R extends AbstractRenderer, M extends Abstr
         return renderer;
     }
 
-    public void setRenderer(R renderer) {
+    private void setRenderer(R renderer) {
         this.renderer = renderer;
     }
 
@@ -101,6 +117,10 @@ public abstract class AbstractScreen<R extends AbstractRenderer, M extends Abstr
     @Override
     public boolean keyDown(int keyCode) {
         renderer.getStage().keyDown(keyCode);
+
+        if (keyCode == Input.Keys.ESCAPE) {
+            SankossGame.getInstance().exitApplication();
+        }
 
         return false;
     }

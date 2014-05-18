@@ -19,11 +19,10 @@ import java.util.Map;
  * @modified Fredrik Thune, Niklas Tegnander
  * @date 3/24/14
  */
-public class LobbyScreen extends AbstractScreen<LobbyRenderer, LobbyModel> {
+public class LobbyScreen extends AbstractScreen<LobbyModel, LobbyRenderer> {
 
-    public LobbyScreen() {
-        setModel(new LobbyModel());
-        setRenderer(new LobbyRenderer(getModel()));
+    public LobbyScreen(Class<LobbyModel> model, Class<LobbyRenderer> renderer) {
+        super(model, renderer);
 
         SankossGame.getInstance().getClient().addListener(new SankossClientListener() {
             /* DO STUFF */

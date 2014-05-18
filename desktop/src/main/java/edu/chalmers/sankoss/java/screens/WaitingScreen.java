@@ -16,11 +16,10 @@ import edu.chalmers.sankoss.java.renderers.WaitingRenderer;
  * @modified Niklas Tegnander
  * @date 5/5/14
  */
-public class WaitingScreen extends AbstractScreen<WaitingRenderer, WaitingModel> {
+public class WaitingScreen extends AbstractScreen<WaitingModel, WaitingRenderer> {
 
-    public WaitingScreen() {
-        setModel(new WaitingModel());
-        setRenderer(new WaitingRenderer(getModel()));
+    public WaitingScreen(Class<WaitingModel> model, Class<WaitingRenderer> renderer) {
+        super(model, renderer);
 
         SankossGame.getInstance().getClient().addListener(new SankossClientListener() {
             /* DO STUFF */

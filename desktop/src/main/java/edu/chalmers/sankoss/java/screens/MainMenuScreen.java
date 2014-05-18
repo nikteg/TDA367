@@ -1,6 +1,5 @@
 package edu.chalmers.sankoss.java.screens;
 
-import edu.chalmers.sankoss.core.CorePlayer;
 import edu.chalmers.sankoss.java.SankossGame;
 import edu.chalmers.sankoss.java.client.SankossClientListener;
 import edu.chalmers.sankoss.java.models.MainMenuModel;
@@ -14,11 +13,10 @@ import edu.chalmers.sankoss.java.renderers.MainMenuRenderer;
  * @modified Fredrik Thune, Niklas Tegnander
  * @date 3/24/14
  */
-public class MainMenuScreen extends AbstractScreen<MainMenuRenderer, MainMenuModel> {
+public class MainMenuScreen extends AbstractScreen<MainMenuModel, MainMenuRenderer> {
 
-    public MainMenuScreen() {
-        setModel(new MainMenuModel());
-        setRenderer(new MainMenuRenderer(getModel()));
+    public MainMenuScreen(Class<MainMenuModel> model, Class<MainMenuRenderer> renderer) {
+        super(model, renderer);
 
         SankossGame.getInstance().getClient().addListener(new SankossClientListener() {
             /* DO STUFF */

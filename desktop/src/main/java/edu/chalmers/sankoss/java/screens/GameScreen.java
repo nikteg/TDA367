@@ -12,11 +12,10 @@ import edu.chalmers.sankoss.java.renderers.GameRenderer;
  * @author Mikael Malmqvist
  * @date 3/24/14
  */
-public class GameScreen extends AbstractScreen<GameRenderer, GameModel> {
+public class GameScreen extends AbstractScreen<GameModel, GameRenderer> {
 
-    public GameScreen() {
-        setModel(new GameModel());
-        setRenderer(new GameRenderer(getModel()));
+    public GameScreen(Class<GameModel> model, Class<GameRenderer> renderer) {
+        super(model, renderer);
 
         SankossGame.getInstance().getClient().addListener(new SankossClientListener() {
             /* DO STUFF */
