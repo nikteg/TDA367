@@ -32,7 +32,9 @@ public abstract class AbstractScreen<M extends AbstractModel, R extends Abstract
             setModel(model.newInstance());
             setRenderer(renderer.getConstructor(Observable.class).newInstance(getModel()));
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
-            Gdx.app.debug("AbstractScreen", e.getMessage());
+            Gdx.app.debug("AbstractScreen", e.getMessage() );
+            //e.printStackTrace();
+            e.getCause().printStackTrace();
         }
 
     }
