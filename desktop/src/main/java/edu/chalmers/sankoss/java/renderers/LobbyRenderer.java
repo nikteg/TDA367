@@ -49,6 +49,9 @@ public class LobbyRenderer extends AbstractRenderer {
             public void changed(ChangeEvent event, Actor actor) {
                 Room room = (Room) lstRooms.getSelected();
 
+                if (room == null)
+                    return;
+
                 Gdx.app.debug("LobbyRenderer", "Joining room '" + room.getName() + "'");
 
                 SankossGame.getInstance().getClient().joinRoom(room.getID());
