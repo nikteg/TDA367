@@ -17,8 +17,6 @@ import edu.chalmers.sankoss.core.Coordinate;
  */
 public class GridImage extends Table {
 
-    //private Table imageTable = new Table();
-
     public GridImage() {
         super();
 
@@ -30,23 +28,19 @@ public class GridImage extends Table {
     }
 
 
-
+    /**
+     * Method for adding an actor in the grid.
+     * Intended to be a hit or miss image.
+     * @param actor Actor to be added to grid.
+     * @param coordinate position to add actor.
+     */
     public void add(Actor actor, Coordinate coordinate) {
         this.addActor(actor);
         actor.setWidth(32);
         actor.setHeight(32);
 
-        //imageTable.addActor(actor);
-
-        /*
-        int gridX = (int)((crosshair.getX() - grid1.getX()) / 32) + 1;
-        int gridY = (int)((crosshair.getY() - (grid1.getY() + grid1.getHeight())) / 32) * (-1);
-         */
-
         actor.setX((coordinate.getX() - 1) * 32);
         actor.setY(this.getHeight() - ((coordinate.getY()) * 32));
-
-        System.out.println(Gdx.input.getX() + " - " + actor.getX());
 
 
     }
