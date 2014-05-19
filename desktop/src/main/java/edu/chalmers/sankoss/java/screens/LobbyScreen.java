@@ -70,7 +70,7 @@ public class LobbyScreen extends AbstractScreen<LobbyModel, LobbyRenderer> {
     @Override
     public void show() {
         super.show();
-
+        getModel().setName(SankossGame.getInstance().getClient().getPlayer().getName());
         SankossGame.getInstance().getClient().fetchRooms();
     }
 }

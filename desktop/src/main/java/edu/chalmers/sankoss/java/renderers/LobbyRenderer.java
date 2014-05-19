@@ -2,14 +2,16 @@ package edu.chalmers.sankoss.java.renderers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.List;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import edu.chalmers.sankoss.core.Room;
 import edu.chalmers.sankoss.java.SankossGame;
 import edu.chalmers.sankoss.java.Screens;
+import edu.chalmers.sankoss.java.models.GameModel;
 import edu.chalmers.sankoss.java.models.LobbyModel;
 
 import java.util.Collection;
@@ -24,6 +26,12 @@ import java.util.Observable;
  * @modified Daniel Eineving 2014-05-12
  */
 public class LobbyRenderer extends AbstractRenderer {
+    TextureRegionDrawable penTexture = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("textures/pen.png"))));
+    TextureRegionDrawable checkTexture = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("textures/check.png"))));
+    private ImageButton editBtn = new ImageButton(penTexture, null, checkTexture);
+
+    private Label infoLabel = new Label("Join or host a game", SankossGame.getInstance().getSkin());
+    private TextField nameField;
 
     private List<Room> lstRooms = new List<Room>(SankossGame.getInstance().getSkin());
     private TextButton btnHost = new TextButton("Host", SankossGame.getInstance().getSkin());
@@ -35,12 +43,32 @@ public class LobbyRenderer extends AbstractRenderer {
 
         getTable().pad(8f);
 
-        getTable().add(lstRooms).colspan(3).expand().fill();
+        nameField = new TextField("", SankossGame.getInstance().getSkin());
+        nameField.setDisabled(true);
+        nameField.setMaxLength(16);
+        nameField.setRightAligned(true);
+
+        getTable().add(infoLabel).expandX().left().fillX().top();
+        getTable().add(nameField).expandX().right().top().width(250);
+        getTable().add(editBtn).right().fillX().top().width(44f).height(44f);
+
         getTable().row();
-        getTable().add(btnBack);
-        getTable().add(btnHost);
-        getTable().add(btnJoin);
-        //getTable().debug();
+
+        getTable().add(lstRooms).colspan(3).expand().fill().padTop(8).padBottom(8);
+
+        getTable().row();
+
+
+        getTable().add(btnBack).expandX().left().bottom();
+        Table joinHostTable = new Table();
+
+        joinHostTable.add(btnHost);
+        joinHostTable.add(btnJoin).padLeft(8);
+
+        getTable().add(joinHostTable).expandX().right().bottom().colspan(2);
+
+
+        getTable().debug();
 
         getStage().addActor(getTable());
 
@@ -71,6 +99,25 @@ public class LobbyRenderer extends AbstractRenderer {
                 Screens.MAIN_MENU.show();
             }
         });
+
+        editBtn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent changeEvent, Actor actor) {
+                if (nameField.isDisabled()) {
+                    getStage().setKeyboardFocus(nameField);
+                    nameField.setDisabled(false);
+                    nameField.selectAll();
+                    nameField.setRightAligned(false);
+                } else {
+                    String name = nameField.getText();
+                    SankossGame.getInstance().getClient().getPlayer().setName(name);
+                    SankossGame.getInstance().getClient().playerChangeName(name);
+                    nameField.setDisabled(true);
+                    getStage().unfocus(nameField);
+                    nameField.setRightAligned(true);
+                }
+            }
+        });
     }
 
     @Override
@@ -89,6 +136,8 @@ public class LobbyRenderer extends AbstractRenderer {
 
             Collection<Room> values = ((LobbyModel) object).getRooms().values();
             lstRooms.setItems(values.toArray(new Room[values.size()]));
+        } else if (arg.equals("nameChange")) {
+            nameField.setText(((LobbyModel) object).getName());
         }
     }
 }

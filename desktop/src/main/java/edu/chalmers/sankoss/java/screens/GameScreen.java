@@ -19,6 +19,8 @@ public class GameScreen extends AbstractScreen<GameModel, GameRenderer> {
 
         SankossGame.getInstance().getClient().addListener(new SankossClientListener() {
             /* DO STUFF */
+
+
         });
     }
 
@@ -26,4 +28,6 @@ public class GameScreen extends AbstractScreen<GameModel, GameRenderer> {
     public void update(float delta) {
 
     }
+
+
 }
