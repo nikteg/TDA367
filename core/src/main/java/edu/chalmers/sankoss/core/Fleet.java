@@ -11,17 +11,17 @@ import java.util.List;
  */
 public class Fleet {
     private ArrayList<Ship> ships = new ArrayList<Ship>();
-    private int size = 5;
+    private int numberOfShips = 5;
 
     public Fleet() {
     }
 
     public Fleet(int size) {
-        this.size = size;
+        this.numberOfShips = size;
     }
 
     public boolean add(Ship ship) {
-        return (((ships.size() + 1) <= size) && validate(ship) && ships.add(ship));
+        return (((ships.size() + 1) <= numberOfShips) && validate(ship) && ships.add(ship));
     }
 
     public boolean remove(Ship ship) {
