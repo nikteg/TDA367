@@ -85,5 +85,15 @@ public class SankossClientListener implements ISankossClientListener {
 
     }
 
+    @Override
+    public void looser() {
+
+    }
+
+    @Override
+    public void winner() {
+
+    }
+
 
 }

@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import edu.chalmers.sankoss.core.Coordinate;
 import edu.chalmers.sankoss.core.CorePlayer;
+import edu.chalmers.sankoss.java.SankossGame;
 import edu.chalmers.sankoss.java.misc.GridImage;
 import edu.chalmers.sankoss.java.misc.PlayerPanel;
 import edu.chalmers.sankoss.java.models.GameModel;
@@ -59,8 +60,8 @@ public class GameRenderer extends AbstractRenderer {
         getTable().add(playerPanel).colspan(2).expandX().fill().height(100f);
 
         getStage().addActor(getTable());
-
         getStage().addActor(crosshair);
+
         //getTable().debug();
 
         grid1.addListener(new InputListener() {
@@ -83,21 +84,19 @@ public class GameRenderer extends AbstractRenderer {
 
                 // KEEP BELOW
                 // sends shooting message and disables clicking
-                //SankossGame.getInstance().getClient().fire(SankossGame.getInstance().getClient().getOpponents().get(0), new Coordinate(gridX, gridY));
-                //grid1.setTouchable(Touchable.disabled);
-
+                SankossGame.getInstance().getClient().fire(SankossGame.getInstance().getClient().getOpponents().get(0), new Coordinate(gridX, gridY));
+                grid1.setTouchable(Touchable.disabled);
                 model.addToList(new Coordinate(gridX, gridY));
 
-                // REMOVE BELOW
-                //Image miss = new Image(getMissTexture());
-                //((GridImage)getGrid1()).add(miss, new Coordinate(gridX, gridY));
-
-                System.out.println("shot at " + gridX + ", " + gridY);
 
             }
 
 
         });
+
+        // Starts out as disabled. When Server randomly calls turn, someone will
+        // enable their grid
+        grid1.setTouchable(Touchable.disabled);
 
     }
 
@@ -144,7 +143,24 @@ public class GameRenderer extends AbstractRenderer {
 
         // If you've shot at enemy
         if(arg.equals("yourShots")) {
-            grid1.add(new Image(new Texture("textures/explosion.png")), model.getYourShots().get(model.getYourShots().size() - 1));
+            //grid1.add(new Image(new Texture("textures/explosion.png")), model.getYourShots().get(model.getYourShots().size() - 1));
+        }
+
+        // When game is over
+        if(arg.equals("won")) {
+            grid1.setTouchable(Touchable.disabled);
+
+            ((PlayerPanel)playerPanel).setTurnLabelText("You Won");
+            ((PlayerPanel)opponentPanel).setTurnLabelText("");
+        }
+
+        // When game is over
+        if(arg.equals("lost")) {
+            grid1.setTouchable(Touchable.disabled);
+
+            ((PlayerPanel)playerPanel).setTurnLabelText("You Lost");
+            ((PlayerPanel)opponentPanel).setTurnLabelText("");
+
         }
     }
 

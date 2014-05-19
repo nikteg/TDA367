@@ -22,7 +22,7 @@ public class PlayerPanel extends Table {
 
         lblName = new Label(name, SankossGame.getInstance().getSkin());
         imgNationality = new Image(new Texture(nationality.getPath()));
-        turnLabel = new Label("Your turn!", SankossGame.getInstance().getSkin());
+        turnLabel = new Label("", SankossGame.getInstance().getSkin());
 
         Pixmap pix = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pix.setColor(Color.GRAY);

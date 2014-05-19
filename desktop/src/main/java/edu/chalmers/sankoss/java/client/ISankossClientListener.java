@@ -23,4 +23,6 @@ public interface ISankossClientListener {
     public void leftGame(CorePlayer player);
     public void leftRoom(CorePlayer player);
     public void removedRoom();
+    public void looser();
+    public void winner();
 }

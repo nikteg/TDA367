@@ -12,6 +12,7 @@ import java.util.List;
  */
 public class GameModel extends AbstractModel {
     private boolean myTurn;
+    private boolean won;
     private List<Coordinate> yourShots = new ArrayList<Coordinate>();
 
     public GameModel() {
@@ -36,6 +37,16 @@ public class GameModel extends AbstractModel {
         return myTurn;
     }
 
+    public void setWon(boolean won) {
+        this.won = won;
+
+        setChanged();
+        if(won) {
+            notifyObservers("won");
+        } else {
+            notifyObservers("lost");
+        }
+    }
 
     public List<Coordinate> getYourShots () {
         return yourShots;
