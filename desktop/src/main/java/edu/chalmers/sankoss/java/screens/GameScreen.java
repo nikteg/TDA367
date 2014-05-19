@@ -7,7 +7,7 @@ import edu.chalmers.sankoss.java.renderers.GameRenderer;
 
 /**
  * Screen used when placing the ships.
- * Handles game logic when placing ships, almost like a controller.
+ * Handles game logic, like a controller.
  *
  * @author Mikael Malmqvist
  * @date 3/24/14
@@ -38,4 +38,5 @@ public class GameScreen extends AbstractScreen<GameModel, GameRenderer> {
     public void update(float delta) {
 
     }
+
 }

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import edu.chalmers.sankoss.core.CorePlayer;
@@ -34,8 +35,18 @@ public class GameRenderer extends AbstractRenderer {
     public GameRenderer(Observable observable) {
         super(observable);
 
+        corshair.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y, int pointer, int button) {  // If left mouse button was pressed
+                return true;
+            }
+
+        });
+
         corshair.setWidth(32);
         corshair.setHeight(32);
+
+        Gdx.input.setInputProcessor(getStage());
 
         getTable().add(opponentPanel).colspan(2).expandX().fill().height(100f);
         getTable().row();
@@ -48,6 +59,42 @@ public class GameRenderer extends AbstractRenderer {
 
         getStage().addActor(corshair);
         //getTable().debug();
+
+        grid1.addListener(new InputListener() {
+
+            @Override
+            public boolean touchDown(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y, int pointer, int button) {  // If left mouse button was pressed
+
+                if (button == 0) {
+                    shotAt(x, y);
+                }
+
+                return false;
+
+            }
+
+            public void shotAt(float x, float y) {
+                System.out.println("shot at: " + x + ", " + y);
+            }
+        });
+
+        /*
+        @Override
+    public boolean touchDown(int x, int y, int pointer, int button) {
+        super.touchDown(x, y, pointer, button);
+
+        // If left mouse button was pressed
+        if(button == 0) {
+            shotAt(x, y);
+        }
+
+        return false;
+    }
+
+    public void shotAt(int x, int y) {
+
+    }
+         */
     }
 
     public void updateYourTurn() {
@@ -66,9 +113,9 @@ public class GameRenderer extends AbstractRenderer {
         Table.drawDebug(getStage());
 
         if(isInside(corshair, grid1))
-            corshair.setVisible(false);
-        else
             corshair.setVisible(true);
+        else
+            corshair.setVisible(false);
 
         textureXOffset = ((int)container.getWidth()/32) / 2 * 32;
         textureYOffset = ((int)container.getHeight()/32) / 2 * 32;
@@ -108,8 +155,8 @@ public class GameRenderer extends AbstractRenderer {
         int corshairYMax = corshairY + corshairHeight;
         int gridYMax = gridY + gridHeight;
 
-        if ((gridX >= corshairX && gridXMax <= corshairXMax) || (corshairX >= gridX && corshairXMax <= gridXMax)) {
-            if ((gridY >= corshairY && gridYMax <= corshairYMax) || (corshairY >= gridY && corshairYMax <= gridYMax)) {
+        if ((gridX > corshairX && gridXMax < corshairXMax) || (corshairX >= gridX && corshairXMax <= gridXMax)) {
+            if ((gridY > corshairY && gridYMax < corshairYMax) || (corshairY >= gridY && corshairYMax <= gridYMax)) {
                 return true;
             }
         }
