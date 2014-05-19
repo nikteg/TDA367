@@ -27,6 +27,22 @@ public class GameScreen extends AbstractScreen<GameModel, GameRenderer> {
          */
         SankossGame.getInstance().getClient().addListener(new SankossClientListener() {
 
+            /**
+             * Method to run if player has won.
+             */
+            @Override
+            public void winner() {
+                getModel().setWon(true);
+            }
+
+            /**
+             * Method to run if player has lost.
+             */
+            @Override
+            public void looser() {
+                getModel().setWon(false);
+            }
+
             @Override
             public void destroyedShip(CorePlayer player, Ship ship) {
                 super.destroyedShip(player, ship);
