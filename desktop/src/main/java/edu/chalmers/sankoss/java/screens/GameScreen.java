@@ -3,6 +3,7 @@ package edu.chalmers.sankoss.java.screens;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import edu.chalmers.sankoss.core.Coordinate;
 import edu.chalmers.sankoss.core.CorePlayer;
+import edu.chalmers.sankoss.core.Ship;
 import edu.chalmers.sankoss.java.SankossGame;
 import edu.chalmers.sankoss.java.client.SankossClientListener;
 import edu.chalmers.sankoss.java.misc.GridImage;
@@ -25,6 +26,11 @@ public class GameScreen extends AbstractScreen<GameModel, GameRenderer> {
          * Listener for GameScreen.
          */
         SankossGame.getInstance().getClient().addListener(new SankossClientListener() {
+
+            @Override
+            public void destroyedShip(CorePlayer player, Ship ship) {
+                super.destroyedShip(player, ship);
+            }
 
             /**
              * Sets to your turn when getting
@@ -51,7 +57,7 @@ public class GameScreen extends AbstractScreen<GameModel, GameRenderer> {
                     shotAtYou(coordinate, hit);
 
                 } else {
-                    shotAtOpponent(coordinate, hit);
+                    shotAtOpponent(hit);
                 }
 
             }
@@ -66,37 +72,37 @@ public class GameScreen extends AbstractScreen<GameModel, GameRenderer> {
         }
     }
 
-    public void shotAtOpponent(Coordinate coordinate, boolean hit) {
+    public void shotAtOpponent(boolean hit) {
         if(hit) {
-            opponentWereHit(coordinate);
+            opponentWereHit();
         } else {
-            opponentWereMissed(coordinate);
+            opponentWereMissed();
         }
     }
 
     public void youWereHit(Coordinate coordinate) {
 
         Image hit = new Image(getRenderer().getHitTexture());
-        ((GridImage)getRenderer().getGrid1()).add(hit, coordinate);
+        ((GridImage)getRenderer().getGrid2()).add(hit, coordinate);
 
     }
 
     public void youWereMissed(Coordinate coordinate) {
 
         Image miss = new Image(getRenderer().getMissTexture());
-        ((GridImage)getRenderer().getGrid1()).add(miss, coordinate);
+        ((GridImage)getRenderer().getGrid2()).add(miss, coordinate);
     }
 
-    public void opponentWereHit(Coordinate coordinate) {
+    public void opponentWereHit() {
 
         Image hit = new Image(getRenderer().getHitTexture());
-        ((GridImage)getRenderer().getGrid2()).add(hit, coordinate);
+        ((GridImage)getRenderer().getGrid1()).add(hit, getModel().getYourShots().get(getModel().getYourShots().size() - 1));
     }
 
-    public void opponentWereMissed(Coordinate coordinate) {
+    public void opponentWereMissed() {
 
         Image miss = new Image(getRenderer().getHitTexture());
-        ((GridImage)getRenderer().getGrid2()).add(miss, coordinate);
+        ((GridImage)getRenderer().getGrid1()).add(miss, getModel().getYourShots().get(getModel().getYourShots().size() - 1));
     }
 
     @Override
