@@ -72,7 +72,7 @@ public class WebServer implements Runnable, PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent evt) {
         if (server == null) return;
 
-        if (evt.getPropertyName().equals("playerConnected") || evt.getPropertyName().equals("playerDisconnected")) {
+        if (evt.getPropertyName().equals("playerConnected") || evt.getPropertyName().equals("playerDisconnected") || evt.getPropertyName().equals("playerChangedName")) {
             players.clear();
 
             for (SankossServer.PlayerConnection playerConnection : server.getPlayerConnections()) {

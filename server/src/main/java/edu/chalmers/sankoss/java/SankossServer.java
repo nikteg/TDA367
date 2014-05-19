@@ -513,6 +513,8 @@ public class SankossServer {
                         System.out.println("CHANGED NAME" + msg.getName());
                         player.setName(msg.getName());
                         connection.sendTCP(new PlayerChangedName(player.getCorePlayer()));
+
+                        pcs.firePropertyChange("playerChangedName", null, null);
                     } else {
                         connection.sendTCP(new PlayerChangedName());
                     }
