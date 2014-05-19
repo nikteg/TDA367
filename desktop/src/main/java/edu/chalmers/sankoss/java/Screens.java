@@ -14,7 +14,7 @@ public enum Screens {
     WAITING (new WaitingScreen(WaitingModel.class, WaitingRenderer.class)),
     PLACEMENT (new PlacementScreen(PlacementModel.class, PlacementRenderer.class)),
     GAME (new GameScreen(GameModel.class, GameRenderer.class)),
-    CREDITS (new CreditScreen(CreditModel.class, CreditRenderer.class));
+    CREDITS (new CreditsScreen(CreditsModel.class, CreditsRenderer.class));
 
     private Screen screen;
 

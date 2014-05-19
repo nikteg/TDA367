@@ -17,10 +17,20 @@ public class GameScreen extends AbstractScreen<GameModel, GameRenderer> {
     public GameScreen(Class<GameModel> model, Class<GameRenderer> renderer) {
         super(model, renderer);
 
+        /**
+         * Listener for GameScreen.
+         */
         SankossGame.getInstance().getClient().addListener(new SankossClientListener() {
-            /* DO STUFF */
 
+            /**
+             * Sets to your turn when getting
+             * this package call.
+             */
+            @Override
+            public void turn() {
+                getModel().setMyTurn(true);
 
+            }
         });
     }
 
