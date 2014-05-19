@@ -1,9 +1,11 @@
 package edu.chalmers.sankoss.java.screens;
 
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import edu.chalmers.sankoss.core.Coordinate;
 import edu.chalmers.sankoss.core.CorePlayer;
 import edu.chalmers.sankoss.java.SankossGame;
 import edu.chalmers.sankoss.java.client.SankossClientListener;
+import edu.chalmers.sankoss.java.misc.GridImage;
 import edu.chalmers.sankoss.java.models.GameModel;
 import edu.chalmers.sankoss.java.renderers.GameRenderer;
 
@@ -74,22 +76,27 @@ public class GameScreen extends AbstractScreen<GameModel, GameRenderer> {
 
     public void youWereHit(Coordinate coordinate) {
 
-        getRenderer().drawPlayerWereHit(coordinate);
+        Image hit = new Image(getRenderer().getHitTexture());
+        ((GridImage)getRenderer().getGrid1()).add(hit, coordinate);
+
     }
 
     public void youWereMissed(Coordinate coordinate) {
 
-        getRenderer().drawPlayerWereMissed(coordinate);
+        Image miss = new Image(getRenderer().getMissTexture());
+        ((GridImage)getRenderer().getGrid1()).add(miss, coordinate);
     }
 
     public void opponentWereHit(Coordinate coordinate) {
 
-        getRenderer().drawOpponentWereHit(coordinate);
+        Image hit = new Image(getRenderer().getHitTexture());
+        ((GridImage)getRenderer().getGrid2()).add(hit, coordinate);
     }
 
     public void opponentWereMissed(Coordinate coordinate) {
 
-        getRenderer().drawOpponentWereMissed(coordinate);
+        Image miss = new Image(getRenderer().getHitTexture());
+        ((GridImage)getRenderer().getGrid2()).add(miss, coordinate);
     }
 
     @Override

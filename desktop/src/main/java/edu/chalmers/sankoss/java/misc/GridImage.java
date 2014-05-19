@@ -4,7 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Container;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import edu.chalmers.sankoss.core.Coordinate;
 
@@ -14,24 +15,17 @@ import edu.chalmers.sankoss.core.Coordinate;
  *
  * @author Mikael Malmqvist
  */
-public class GridImage extends Container {
+public class GridImage extends Table {
 
     //private Table imageTable = new Table();
 
     public GridImage() {
         super();
 
-        this.prefWidth(320f);
-        this.prefHeight(320f);
-        this.minHeight(320f);
-        this.minWidth(320f);
-        this.maxHeight(320f);
-        this.maxWidth(320f);
-
         this.setSize(320f, 320f);
+        this.setTouchable(Touchable.enabled);
 
         // Sets background
-        // this.background(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("textures/grid.png")))));
         this.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("textures/grid.png")))));
     }
 
@@ -44,9 +38,16 @@ public class GridImage extends Container {
 
         //imageTable.addActor(actor);
 
-        actor.setX(this.getX() + coordinate.getX()*32);
-        actor.setY(this.getY() + this.getHeight() - coordinate.getY()*32);
+        /*
+        int gridX = (int)((crosshair.getX() - grid1.getX()) / 32) + 1;
+        int gridY = (int)((crosshair.getY() - (grid1.getY() + grid1.getHeight())) / 32) * (-1);
+         */
 
-        System.out.println("actor y: " + actor.getY());
+        actor.setX((coordinate.getX() - 1) * 32);
+        actor.setY(this.getHeight() - ((coordinate.getY()) * 32));
+
+        System.out.println(Gdx.input.getX() + " - " + actor.getX());
+
+
     }
 }

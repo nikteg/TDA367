@@ -36,12 +36,15 @@ public class GameRenderer extends AbstractRenderer {
     private Actor playerPanel = new PlayerPanel("T0ng", CorePlayer.Nationality.JAPAN, PlayerPanel.Alignment.RIGHT);
     private Table container = new Table();
 
+    private GameModel model;
+
     private int textureXOffset;
     private int textureYOffset;
 
     public GameRenderer(Observable observable) {
         super(observable);
 
+        model = (GameModel) observable;
         crosshair.setTouchable(Touchable.disabled);
         crosshair.setWidth(32);
         crosshair.setHeight(32);
@@ -78,13 +81,22 @@ public class GameRenderer extends AbstractRenderer {
                 int gridY = (int)((crosshair.getY() - (grid1.getY() + grid1.getHeight())) / 32) * (-1);
 
 
+                // KEEP BELOW
                 // sends shooting message and disables clicking
                 //SankossGame.getInstance().getClient().fire(SankossGame.getInstance().getClient().getOpponents().get(0), new Coordinate(gridX, gridY));
                 //grid1.setTouchable(Touchable.disabled);
-                drawPlayerWereHit(new Coordinate(1, 1));
+
+                model.addToList(new Coordinate(gridX, gridY));
+
+                // REMOVE BELOW
+                //Image miss = new Image(getMissTexture());
+                //((GridImage)getGrid1()).add(miss, new Coordinate(gridX, gridY));
+
                 System.out.println("shot at " + gridX + ", " + gridY);
 
             }
+
+
         });
 
     }
@@ -129,6 +141,11 @@ public class GameRenderer extends AbstractRenderer {
             updateYourTurn((GameModel)object);
 
         }
+
+        // If you've shot at enemy
+        if(arg.equals("yourShots")) {
+            grid1.add(new Image(new Texture("textures/explosion.png")), model.getYourShots().get(model.getYourShots().size() - 1));
+        }
     }
 
     /**
@@ -170,28 +187,20 @@ public class GameRenderer extends AbstractRenderer {
         return (Gdx.input.getY() - (int)(Gdx.graphics.getHeight() - grid1.getY() - grid1.getHeight()));
     }
 
-    public void drawOpponentWereHit(Coordinate coordinate) {
-
-        Image hit = new Image(hitTexture);
-        grid2.add(hit, coordinate);
+    public Table getGrid1() {
+        return grid1;
     }
 
-    public void drawOpponentWereMissed(Coordinate coordinate) {
-
-        Image miss = new Image(hitTexture);
-        grid2.add(miss, coordinate);
+    public Table getGrid2() {
+        return grid2;
     }
 
-    public void drawPlayerWereHit(Coordinate coordinate) {
-
-        Image hit = new Image(hitTexture);
-        grid1.add(hit, coordinate);
+    public Texture getHitTexture() {
+        return hitTexture;
     }
 
-    public void drawPlayerWereMissed(Coordinate coordinate) {
-
-        Image miss = new Image(hitTexture);
-        grid1.add(miss, coordinate);
+    public Texture getMissTexture() {
+        return  missTexture;
     }
 
 
