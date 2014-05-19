@@ -1,4 +1,4 @@
-package edu.chalmers.sankoss.java.renderers;
+package edu.chalmers.sankoss.java.mvc;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;

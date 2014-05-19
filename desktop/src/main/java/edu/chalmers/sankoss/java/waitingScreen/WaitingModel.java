@@ -1,7 +1,9 @@
-package edu.chalmers.sankoss.java.models;
+package edu.chalmers.sankoss.java.waitingScreen;
 
 import com.badlogic.gdx.Gdx;
+
 import edu.chalmers.sankoss.core.CorePlayer;
+import edu.chalmers.sankoss.java.mvc.AbstractModel;
 
 import java.util.ArrayList;
 import java.util.List;

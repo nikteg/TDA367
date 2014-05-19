@@ -1,6 +1,8 @@
-package edu.chalmers.sankoss.java.models;
+package edu.chalmers.sankoss.java.mainMenu;
 
 import com.badlogic.gdx.Gdx;
+
+import edu.chalmers.sankoss.java.mvc.AbstractModel;
 
 /**
  * Description of class.

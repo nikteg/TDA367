@@ -5,7 +5,9 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+
 import edu.chalmers.sankoss.java.client.SankossClient;
+import edu.chalmers.sankoss.java.mvc.Screens;
 
 import java.io.IOException;
 

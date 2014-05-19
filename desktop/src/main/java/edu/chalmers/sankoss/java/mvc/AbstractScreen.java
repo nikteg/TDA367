@@ -1,12 +1,11 @@
-package edu.chalmers.sankoss.java.screens;
+package edu.chalmers.sankoss.java.mvc;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+
 import edu.chalmers.sankoss.java.SankossGame;
-import edu.chalmers.sankoss.java.models.AbstractModel;
-import edu.chalmers.sankoss.java.renderers.AbstractRenderer;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Observable;

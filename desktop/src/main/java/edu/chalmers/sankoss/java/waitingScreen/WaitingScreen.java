@@ -1,12 +1,12 @@
-package edu.chalmers.sankoss.java.screens;
+package edu.chalmers.sankoss.java.waitingScreen;
 
 import com.badlogic.gdx.Gdx;
+
 import edu.chalmers.sankoss.core.CorePlayer;
 import edu.chalmers.sankoss.java.SankossGame;
-import edu.chalmers.sankoss.java.Screens;
 import edu.chalmers.sankoss.java.client.SankossClientListener;
-import edu.chalmers.sankoss.java.models.WaitingModel;
-import edu.chalmers.sankoss.java.renderers.WaitingRenderer;
+import edu.chalmers.sankoss.java.mvc.AbstractScreen;
+import edu.chalmers.sankoss.java.mvc.Screens;
 
 /**
  * Screen to be placed in when hosting a game and

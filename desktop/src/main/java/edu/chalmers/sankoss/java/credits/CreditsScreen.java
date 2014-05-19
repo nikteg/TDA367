@@ -1,9 +1,8 @@
-package edu.chalmers.sankoss.java.screens;
+package edu.chalmers.sankoss.java.credits;
 
 import edu.chalmers.sankoss.java.SankossGame;
 import edu.chalmers.sankoss.java.client.SankossClientListener;
-import edu.chalmers.sankoss.java.models.CreditsModel;
-import edu.chalmers.sankoss.java.renderers.CreditsRenderer;
+import edu.chalmers.sankoss.java.mvc.AbstractScreen;
 
 public class CreditsScreen extends AbstractScreen<CreditsModel, CreditsRenderer> {
 

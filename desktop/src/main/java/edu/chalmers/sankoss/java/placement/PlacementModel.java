@@ -1,4 +1,4 @@
-package edu.chalmers.sankoss.java.models;
+package edu.chalmers.sankoss.java.placement;
 
 import java.awt.List;
 
@@ -6,6 +6,7 @@ import edu.chalmers.sankoss.core.CorePlayer;
 import edu.chalmers.sankoss.core.Fleet;
 import edu.chalmers.sankoss.core.Ship;
 import edu.chalmers.sankoss.java.SankossGame;
+import edu.chalmers.sankoss.java.mvc.AbstractModel;
 
 /**
  * @author Daniel Eineving

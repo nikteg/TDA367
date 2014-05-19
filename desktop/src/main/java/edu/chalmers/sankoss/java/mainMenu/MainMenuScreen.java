@@ -1,11 +1,11 @@
-package edu.chalmers.sankoss.java.screens;
+package edu.chalmers.sankoss.java.mainMenu;
 
 import com.badlogic.gdx.Input;
+
 import edu.chalmers.sankoss.java.SankossGame;
-import edu.chalmers.sankoss.java.Screens;
 import edu.chalmers.sankoss.java.client.SankossClientListener;
-import edu.chalmers.sankoss.java.models.MainMenuModel;
-import edu.chalmers.sankoss.java.renderers.MainMenuRenderer;
+import edu.chalmers.sankoss.java.mvc.AbstractScreen;
+import edu.chalmers.sankoss.java.mvc.Screens;
 
 /**
  * Screen used at the main menu.

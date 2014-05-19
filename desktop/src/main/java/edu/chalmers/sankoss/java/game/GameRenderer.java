@@ -1,4 +1,4 @@
-package edu.chalmers.sankoss.java.renderers;
+package edu.chalmers.sankoss.java.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -8,12 +8,13 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+
 import edu.chalmers.sankoss.core.Coordinate;
 import edu.chalmers.sankoss.core.CorePlayer;
 import edu.chalmers.sankoss.java.SankossGame;
 import edu.chalmers.sankoss.java.misc.GridImage;
 import edu.chalmers.sankoss.java.misc.PlayerPanel;
-import edu.chalmers.sankoss.java.models.GameModel;
+import edu.chalmers.sankoss.java.mvc.AbstractRenderer;
 
 import java.util.Observable;
 

@@ -1,14 +1,13 @@
-package edu.chalmers.sankoss.java.screens;
+package edu.chalmers.sankoss.java.placement;
 
 import com.badlogic.gdx.Gdx;
 
 import edu.chalmers.sankoss.core.CorePlayer;
 import edu.chalmers.sankoss.core.Ship;
 import edu.chalmers.sankoss.java.SankossGame;
-import edu.chalmers.sankoss.java.Screens;
 import edu.chalmers.sankoss.java.client.SankossClientListener;
-import edu.chalmers.sankoss.java.models.PlacementModel;
-import edu.chalmers.sankoss.java.renderers.PlacementRenderer;
+import edu.chalmers.sankoss.java.mvc.AbstractScreen;
+import edu.chalmers.sankoss.java.mvc.Screens;
 
 /**
  * Screen used when placing the ships. Handles game logic when placing ships,

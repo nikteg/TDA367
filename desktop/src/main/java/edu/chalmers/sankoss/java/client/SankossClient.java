@@ -3,9 +3,10 @@ package edu.chalmers.sankoss.java.client;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+
 import edu.chalmers.sankoss.core.*;
 import edu.chalmers.sankoss.core.protocol.*;
-import edu.chalmers.sankoss.java.models.GameModel;
+import edu.chalmers.sankoss.java.game.GameModel;
 
 import java.io.IOException;
 import java.util.ArrayList;

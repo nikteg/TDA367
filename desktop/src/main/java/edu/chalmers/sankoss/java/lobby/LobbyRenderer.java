@@ -1,4 +1,4 @@
-package edu.chalmers.sankoss.java.renderers;
+package edu.chalmers.sankoss.java.lobby;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -8,11 +8,12 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+
 import edu.chalmers.sankoss.core.Room;
 import edu.chalmers.sankoss.java.SankossGame;
-import edu.chalmers.sankoss.java.Screens;
-import edu.chalmers.sankoss.java.models.GameModel;
-import edu.chalmers.sankoss.java.models.LobbyModel;
+import edu.chalmers.sankoss.java.game.GameModel;
+import edu.chalmers.sankoss.java.mvc.AbstractRenderer;
+import edu.chalmers.sankoss.java.mvc.Screens;
 
 import java.util.Collection;
 import java.util.Observable;
