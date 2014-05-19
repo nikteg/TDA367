@@ -4,6 +4,7 @@ import java.awt.List;
 
 import edu.chalmers.sankoss.core.Fleet;
 import edu.chalmers.sankoss.core.Ship;
+import edu.chalmers.sankoss.java.SankossGame;
 
 /**
  * @author Daniel Eineving
