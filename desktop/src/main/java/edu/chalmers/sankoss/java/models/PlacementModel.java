@@ -14,6 +14,7 @@ public class PlacementModel extends AbstractModel {
 	private boolean opponentReady;
 	private Fleet fleet = new Fleet();
 	private CorePlayer.Nationality nationality = CorePlayer.Nationality.USA;
+	private boolean userReady = false;
 
 	public void setOpponentReady(boolean ready) {
 		this.opponentReady = ready;
@@ -31,13 +32,19 @@ public class PlacementModel extends AbstractModel {
 		return fleet;
 	}
 
-	public String getFlagPath() {
-		return nationality.getPath();
+	public CorePlayer.Nationality getNationality() {
+		return nationality;
 	}
 
 	public void setNationality(CorePlayer.Nationality nationality) {
 		this.nationality = nationality;
 		setChanged();
 		notifyObservers("NationalityChanged");
+	}
+	public boolean isUserReady(){
+		return userReady;
+	}
+	public void setUserReady(boolean ready){
+		this.userReady = ready;
 	}
 }
