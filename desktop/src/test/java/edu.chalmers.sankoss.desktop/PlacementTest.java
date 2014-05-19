@@ -1,5 +1,8 @@
-package edu.chalmers.sankoss.java.models;
+package edu.chalmers.sankoss.desktop;
 
+import edu.chalmers.sankoss.core.CorePlayer;
+import edu.chalmers.sankoss.core.Fleet;
+import edu.chalmers.sankoss.core.Ship;
 import org.junit.Test;
 
 /**
@@ -10,11 +13,42 @@ import org.junit.Test;
  */
 public class PlacementTest {
     @Test
-    public void testSwitchReadyBtnState() throws Exception {
-        /*PlacementModel.ReadyBtnState readyBtnState = PlacementModel.ReadyBtnState.READY;
+    public void testSetOpponentReady() throws Exception {
+        boolean opponentReady = true;
 
-        readyBtnState = readyBtnState.getNext();
+        assert(opponentReady);
+    }
 
-        assert(readyBtnState == PlacementModel.ReadyBtnState.WAITING);*/
+    @Test
+    public void testIsOpponentReady() throws Exception {
+        boolean opponentReady = true;
+
+        assert(opponentReady);
+    }
+
+    @Test
+    public void testAddShip() throws Exception {
+        Fleet fleet = new Fleet();
+        Ship ship = new Ship();
+        System.out.println(fleet.add(ship));
+
+        assert(fleet.getShip(0).equals(ship));
+    }
+
+    @Test
+    public void testGetFlagPath() throws Exception {
+        CorePlayer player = new CorePlayer();
+        player.setNationality(CorePlayer.Nationality.USA);
+
+        assert (player.getNationality().getPath().equals("textures/USA.png"));
+
+    }
+
+    @Test
+    public void testSetNationality() throws Exception {
+        CorePlayer player = new CorePlayer();
+        player.setNationality(CorePlayer.Nationality.USA);
+
+        assert (player.getNationality().equals(CorePlayer.Nationality.USA));
     }
 }
