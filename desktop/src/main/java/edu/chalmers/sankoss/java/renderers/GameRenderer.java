@@ -33,15 +33,27 @@ public class GameRenderer extends AbstractRenderer {
     private Actor playerPanel = new PlayerPanel("TOng", CorePlayer.Nationality.JAPAN, PlayerPanel.Alignment.RIGHT);
     private Table container = new Table();
 
+    private TextureRegionDrawable greenTextureBackground;
+    private TextureRegionDrawable redTextureBackground;
+    private int textureXOffset;
+    private int textureYOffset;
+
     public GameRenderer(Observable observable) {
         super(observable);
 
         Pixmap pix = new Pixmap(32, 32, Pixmap.Format.RGBA8888);
+
         pix.setColor(0, 1f,0.2f,0.5f);
         pix.fill();
-        container.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(pix))));
-        container.setWidth(32f);
-        container.setHeight(32f);
+        greenTextureBackground = new TextureRegionDrawable(new TextureRegion(new Texture(pix)));
+
+        pix.setColor(0.8f, 0, 0f, 0.5f);
+        pix.fill();
+        redTextureBackground = new TextureRegionDrawable(new TextureRegion(new Texture(pix)));
+
+        container.setBackground(greenTextureBackground);
+        container.setWidth(1*32f);
+        container.setHeight(3*32f);
         container.setX(50f);
         container.setY(50f);
 
@@ -66,15 +78,62 @@ public class GameRenderer extends AbstractRenderer {
         getStage().act(delta);
         getStage().draw();
         Table.drawDebug(getStage());
-        //TODO Musen ska vara i mitten av blocket /3 är fel
-        //if (container.getX() < grid1.getX() || container.getY() > grid1.getY()+grid1.getHeight() || )
-        container.setX(((Gdx.input.getX() - (int)grid1.getX() - (int)container.getWidth()/3 / 32) * 32 + grid1.getX());
-        container.setY(((Gdx.graphics.getHeight() - Gdx.input.getY() - (int)grid1.getY()) / 32) * 32 + grid1.getY());
+        
+        if(isOverlapping(container, grid1))
+            container.setBackground(greenTextureBackground);
+        else
+            container.setBackground(redTextureBackground);
+
+        textureXOffset = ((int)container.getWidth()/32) / 2 * 32;
+        textureYOffset = ((int)container.getHeight()/32) / 2 * 32;
+
+        container.setX(((mouseOnGridX()) / 32) * 32 + grid1.getX() - textureXOffset);
+        container.setY((((int)grid1.getHeight()-mouseOnGridY()) / 32) * 32 + grid1.getY() - textureYOffset);
     }
 
     @Override
     public void update(Observable object, Object arg) {
 
+    }
+
+    public int mouseOnGridX() {
+        return Gdx.input.getX() - (int)grid1.getX();
+    }
+
+    public int mouseOnGridY() {
+        return (Gdx.input.getY() - (int)(Gdx.graphics.getHeight() - grid1.getY() - grid1.getHeight()));
+    }
+
+    public boolean isOverlapping(Actor act1, Actor act2) {
+        int x1 = (int)act1.getX();
+        int y1 = (int)act1.getY();
+        int w1 = (int)act1.getWidth();
+        int h1 = (int)act1.getHeight();
+
+        int x2 = (int)act2.getX();
+        int y2 = (int)act2.getY();
+        int w2 = (int)act2.getWidth();
+        int h2 = (int)act2.getHeight();
+
+        int xCollision = 0;
+        int yCollision = 0;
+        int x1Max = x1 + w1;
+        int x2Max = x2 + w2;
+        int y1Max = y1 + h1;
+        int y2Max = y2 + h2;
+        if (x2 >= x1 && x2 < x1Max) {
+            xCollision++;
+        } if (x1 >= x2 && x1 < x2Max) {
+            xCollision++;
+        } if (y2 >= y1 && y2 < y1Max) {
+            yCollision++;
+        } if (y1 >= y2 && y1 < y2Max) {
+            yCollision++;
+        }
+        if(xCollision>0 && yCollision>0){
+            return true;
+        }else
+            return false;
     }
 
 

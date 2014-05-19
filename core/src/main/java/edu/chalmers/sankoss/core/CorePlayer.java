@@ -51,10 +51,10 @@ public class CorePlayer {
     }
 
     public enum Nationality {
-        USA("USA", "assets/textures/USA.png"),
-        GERMANY("GER", "assets/textures/germany.png"),
-        JAPAN("JAP", "assets/textures/japan.png"),
-        ENGLAND("ENG", "assets/textures/england.png");
+        USA("USA", "textures/USA.png"),
+        GERMANY("GER", "textures/germany.png"),
+        JAPAN("JAP", "textures/japan.png"),
+        ENGLAND("ENG", "textures/england.png");
 
         private String landName;
         private java.awt.Color color;
