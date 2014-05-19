@@ -37,6 +37,7 @@ public class Network {
         kryo.register(LeaveRoom.class);
         kryo.register(LeftGame.class);
         kryo.register(LeftRoom.class);
+        kryo.register(Looser.class);
         kryo.register(PlayerChangedName.class);
         kryo.register(PlayerChangeName.class);
         kryo.register(PlayerIsReady.class);
@@ -48,5 +49,6 @@ public class Network {
         kryo.register(StartedGame.class);
         kryo.register(StartGame.class);
         kryo.register(Turn.class);
+        kryo.register(Winner.class);
     }
 }

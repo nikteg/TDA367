@@ -339,7 +339,7 @@ public class SankossServer {
                     Fire msg = (Fire) object;
 
                     // A player can't shoot at him/herself
-                    if (msg.getTarget().equals(player.getCorePlayer()))
+                    if (msg.getTarget().getID().equals(player.getCorePlayer().getID()))
                         return;
 
                     Game game;
@@ -355,10 +355,9 @@ public class SankossServer {
 
 
                     Ship targetShip;
+                    Player targetPlayer = getPlayerConnectionFromID(msg.getTarget().getID()).getPlayer();
                     try {
-                        Player targetPlayer = getPlayerConnectionFromID(msg.getTarget().getID()).getPlayer();
                         targetShip = game.fire(targetPlayer, msg.getCoordinate());
-
                     } catch (UsedCoordinateException e) {
                         log.info(String.format("#%d %s", player.getID(), e.getMessage()));
                         getPlayerConnectionFromID(player.getID()).sendTCP(new Turn());
@@ -379,6 +378,21 @@ public class SankossServer {
                             getPlayerConnectionFromID(gamePlayer.getID()).sendTCP(new DestroyedShip(msg.getTarget(), targetShip));
                         }
                     }
+
+                    if (targetPlayer.fleetIsDestoyed()) {
+                        for (Player gamePlayer : game.getPlayers()) {
+                            /**
+                             * Send message telling everyone who won and who lost
+                             */
+                            if (gamePlayer.getID().equals(targetPlayer.getID()))
+                                getPlayerConnectionFromID(gamePlayer.getID()).sendTCP(new Looser());
+                            else
+                                getPlayerConnectionFromID(gamePlayer.getID()).sendTCP(new Winner());
+
+                        }
+                    }
+
+
                     game.changeAttacker();
 
                     getPlayerConnectionFromID(game.getAttacker().getID()).sendTCP(new Turn());
