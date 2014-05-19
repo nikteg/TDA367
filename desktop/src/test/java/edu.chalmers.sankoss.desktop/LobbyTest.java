@@ -1,4 +1,4 @@
-package edu.chalmers.sankoss.java.models;
+package edu.chalmers.sankoss.desktop;
 
 import edu.chalmers.sankoss.core.Room;
 import org.junit.Test;
