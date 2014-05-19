@@ -23,7 +23,7 @@ import java.util.Observable;
  * This class will handle all rendering
  * called by the PlacementScreen.
  *
- * @author Mikael Malmqvist
+ * @author Daniel Eineving
  */
 public class PlacementRenderer extends AbstractRenderer {
 
@@ -32,6 +32,7 @@ public class PlacementRenderer extends AbstractRenderer {
 	TextButton btnPreviousFlag = new TextButton("<", SankossGame.getInstance().getSkin());
 	Image grid = new Image(new Texture(Gdx.files.internal("textures/grid.png")));
 	Image flag = new Image();
+	Table bottomTable = new Table();
 	
     public PlacementRenderer(Observable observable) {
         super(observable);
@@ -48,11 +49,16 @@ public class PlacementRenderer extends AbstractRenderer {
         
         flag.setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture(model.getFlagPath()))));
         
-        getTable().add(flag);
-        getTable().add(btnReady).fillX().pad(8f);
+        bottomTable.add(flag).pad(8f).colspan(2);
         
-        getTable().add(btnNextFlag).pad(8f).bottom().left().expand();
-        getTable().add(btnPreviousFlag.pad(8f));
+        getTable().row();
+        bottomTable.add(btnNextFlag).pad(8f).fillX();
+        bottomTable.add(btnPreviousFlag).pad(8f);
+        
+//        bottomTable.add(btnReady).fillX().pad(8f);
+        
+        
+        getTable().add(bottomTable).bottom().expand();
         getStage().addActor(getTable());
         
         
