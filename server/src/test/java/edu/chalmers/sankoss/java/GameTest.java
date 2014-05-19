@@ -112,4 +112,47 @@ public class GameTest {
 
     }
 
+    @Test
+    public void testWinning() {
+        Player player1 = new Player(new Long(1), "player1");
+        Player player2 = new Player(new Long(2), "player2");
+
+        List<Ship> fleet = new ArrayList<Ship>();
+        try {
+            fleet.add(new Ship(new Coordinate(1,1), new Coordinate(1,3)));
+            fleet.add(new Ship(new Coordinate(2,1), new Coordinate(2,4)));
+        }
+        catch (IllegalShipCoordinatesException ignore) {
+            fail("Should not throw exception");
+        }
+        player1.setFleet(fleet);
+
+        List<Player> list = new ArrayList<Player>();
+        list.add(player1);
+        list.add(player2);
+
+        Game game = new Game(new Long(3), list);
+
+        game.setAttacker(player2);
+
+        try {
+            game.fire(player1, new Coordinate(1,1));
+            game.fire(player1, new Coordinate(1,2));
+            game.fire(player1, new Coordinate(1,3));
+
+            assertFalse(player1.fleetIsDestoyed());
+
+            game.fire(player1, new Coordinate(2,1));
+            game.fire(player1, new Coordinate(2,2));
+            game.fire(player1, new Coordinate(2,3));
+            game.fire(player1, new Coordinate(2,4));
+
+            assertTrue(player1.fleetIsDestoyed());
+        } catch (UsedCoordinateException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
 }
