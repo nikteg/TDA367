@@ -42,6 +42,10 @@ public class GridImage extends Table {
         actor.setX((coordinate.getX() - 1) * 32);
         actor.setY(this.getHeight() - ((coordinate.getY()) * 32));
 
+    }
+
+    public void remove(Coordinate coordinate) {
 
     }
+
 }

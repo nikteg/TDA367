@@ -30,6 +30,8 @@ public class GameRenderer extends AbstractRenderer {
     private Texture crosshairTexture = new Texture(Gdx.files.internal("textures/corshair.png"));
     private Texture hitTexture = new Texture(Gdx.files.internal("textures/explosion.png"));
     private Texture missTexture = new Texture(Gdx.files.internal("textures/miss.png"));
+    private Texture flagTexture = new Texture(Gdx.files.internal("textures/flag.png"));
+    private Texture flag2Texture = new Texture(Gdx.files.internal("textures/flag2.png"));
     private GridImage grid1 = new GridImage();
     private GridImage grid2 = new GridImage();
     private Image crosshair = new Image(crosshairTexture);
@@ -46,9 +48,11 @@ public class GameRenderer extends AbstractRenderer {
         super(observable);
 
         model = (GameModel) observable;
-        crosshair.setTouchable(Touchable.disabled);
         crosshair.setWidth(32);
         crosshair.setHeight(32);
+        // Crosshair always need to be disabled, else
+        // players wont be able to click grid
+        crosshair.setTouchable(Touchable.disabled);
 
         Gdx.input.setInputProcessor(getStage());
 
@@ -64,20 +68,42 @@ public class GameRenderer extends AbstractRenderer {
 
         //getTable().debug();
 
+        // Starts out as disabled. When Server randomly calls turn, someone will
+        // enable their grid
+        grid1.setTouchable(Touchable.enabled);
+        model.setMyTurn(true);
+
         grid1.addListener(new InputListener() {
 
             @Override
             public boolean touchDown(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y, int pointer, int button) {  // If left mouse button was pressed
 
+                // If left click
                 if (button == 0) {
-                    shot();
+                    //shot();
+
+                } else if (button == 1) {
+                    // If right click
+                    placeFlag();
                 }
 
                 return false;
 
             }
 
+            /**
+             * Method for adding or removing flags.
+             */
+            public void placeFlag() {
+
+                int gridX = (int)((crosshair.getX() - grid1.getX()) / 32) + 1;
+                int gridY = (int)((crosshair.getY() - (grid1.getY() + grid1.getHeight())) / 32) * (-1);
+
+                model.addOrRemoveFlags(new Coordinate(gridX, gridY));
+            }
+
             public void shot() {
+
                 int gridX = (int)((crosshair.getX() - grid1.getX()) / 32) + 1;
                 int gridY = (int)((crosshair.getY() - (grid1.getY() + grid1.getHeight())) / 32) * (-1);
 
@@ -86,7 +112,7 @@ public class GameRenderer extends AbstractRenderer {
                 // sends shooting message and disables clicking
                 SankossGame.getInstance().getClient().fire(SankossGame.getInstance().getClient().getOpponents().get(0), new Coordinate(gridX, gridY));
                 grid1.setTouchable(Touchable.disabled);
-                model.addToList(new Coordinate(gridX, gridY));
+                model.addToYourShots(new Coordinate(gridX, gridY));
 
 
             }
@@ -94,9 +120,6 @@ public class GameRenderer extends AbstractRenderer {
 
         });
 
-        // Starts out as disabled. When Server randomly calls turn, someone will
-        // enable their grid
-        grid1.setTouchable(Touchable.disabled);
 
     }
 
@@ -146,6 +169,10 @@ public class GameRenderer extends AbstractRenderer {
             //grid1.add(new Image(new Texture("textures/explosion.png")), model.getYourShots().get(model.getYourShots().size() - 1));
         }
 
+        if(arg.equals("addFlags")) {
+            updateFlagsToAdd();
+        }
+
         // When game is over
         if(arg.equals("won")) {
             grid1.setTouchable(Touchable.disabled);
@@ -161,6 +188,25 @@ public class GameRenderer extends AbstractRenderer {
             ((PlayerPanel)playerPanel).setTurnLabelText("You Lost");
             ((PlayerPanel)opponentPanel).setTurnLabelText("");
 
+        }
+    }
+
+    public void updateFlagsToAdd() {
+        if(model.getFlags() != null) {
+            Object[] coordinates = model.getFlags().keySet().toArray();
+            System.out.println("Length: " + coordinates.length);
+
+            for (int i = 0; i < coordinates.length; i++) {
+                grid1.add(model.getFlags().get(coordinates[i]), ((Coordinate)coordinates[i]));
+            }
+        }
+    }
+
+    public void updateFlagsToRemove() {
+        Object[] coordinates = model.getFlags().keySet().toArray();
+
+        for (int i = 0; i < model.getFlags().size(); i++) {
+            grid1.add(model.getFlags().get(model.getFlags().get(i)), ((Coordinate) coordinates[i]));
         }
     }
 
