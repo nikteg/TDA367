@@ -5,10 +5,14 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import edu.chalmers.sankoss.core.Coordinate;
 import edu.chalmers.sankoss.core.CorePlayer;
+import edu.chalmers.sankoss.java.misc.GridImage;
 import edu.chalmers.sankoss.java.misc.PlayerPanel;
+import edu.chalmers.sankoss.java.models.GameModel;
 
 import java.util.Observable;
 
@@ -20,13 +24,16 @@ import java.util.Observable;
  * @modified Daniel Eineving, Fredrik Thune
  */
 public class GameRenderer extends AbstractRenderer {
+    // Controllers
     private Texture gridTexture = new Texture(Gdx.files.internal("textures/grid.png"));
-    private Texture corshairTexture = new Texture(Gdx.files.internal("textures/corshair.png"));
-    private Image grid1 = new Image(gridTexture);
-    private Image grid2 = new Image(gridTexture);
-    private Image corshair = new Image(corshairTexture);
-    private Actor opponentPanel = new PlayerPanel("Kalle", CorePlayer.Nationality.GERMANY, PlayerPanel.Alignment.LEFT);
-    private Actor playerPanel = new PlayerPanel("TOng", CorePlayer.Nationality.JAPAN, PlayerPanel.Alignment.RIGHT);
+    private Texture crosshairTexture = new Texture(Gdx.files.internal("textures/corshair.png"));
+    private Texture hitTexture = new Texture(Gdx.files.internal("textures/explosion.png"));
+    private Texture missTexture = new Texture(Gdx.files.internal("textures/miss.png"));
+    private GridImage grid1 = new GridImage();
+    private GridImage grid2 = new GridImage();
+    private Image crosshair = new Image(crosshairTexture);
+    private Actor opponentPanel = new PlayerPanel("Hans Gunter", CorePlayer.Nationality.GERMANY, PlayerPanel.Alignment.LEFT);
+    private Actor playerPanel = new PlayerPanel("T0ng", CorePlayer.Nationality.JAPAN, PlayerPanel.Alignment.RIGHT);
     private Table container = new Table();
 
     private int textureXOffset;
@@ -35,16 +42,9 @@ public class GameRenderer extends AbstractRenderer {
     public GameRenderer(Observable observable) {
         super(observable);
 
-        corshair.addListener(new InputListener() {
-            @Override
-            public boolean touchDown(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y, int pointer, int button) {  // If left mouse button was pressed
-                return true;
-            }
-
-        });
-
-        corshair.setWidth(32);
-        corshair.setHeight(32);
+        crosshair.setTouchable(Touchable.disabled);
+        crosshair.setWidth(32);
+        crosshair.setHeight(32);
 
         Gdx.input.setInputProcessor(getStage());
 
@@ -57,7 +57,7 @@ public class GameRenderer extends AbstractRenderer {
 
         getStage().addActor(getTable());
 
-        getStage().addActor(corshair);
+        getStage().addActor(crosshair);
         //getTable().debug();
 
         grid1.addListener(new InputListener() {
@@ -66,41 +66,39 @@ public class GameRenderer extends AbstractRenderer {
             public boolean touchDown(com.badlogic.gdx.scenes.scene2d.InputEvent event, float x, float y, int pointer, int button) {  // If left mouse button was pressed
 
                 if (button == 0) {
-                    shotAt(x, y);
+                    shot();
                 }
 
                 return false;
 
             }
 
-            public void shotAt(float x, float y) {
-                System.out.println("shot at: " + x + ", " + y);
+            public void shot() {
+                int gridX = (int)((crosshair.getX() - grid1.getX()) / 32) + 1;
+                int gridY = (int)((crosshair.getY() - (grid1.getY() + grid1.getHeight())) / 32) * (-1);
+
+
+                // sends shooting message and disables clicking
+                //SankossGame.getInstance().getClient().fire(SankossGame.getInstance().getClient().getOpponents().get(0), new Coordinate(gridX, gridY));
+                //grid1.setTouchable(Touchable.disabled);
+                drawPlayerWereHit(new Coordinate(1, 1));
+                System.out.println("shot at " + gridX + ", " + gridY);
+
             }
         });
 
-        /*
-        @Override
-    public boolean touchDown(int x, int y, int pointer, int button) {
-        super.touchDown(x, y, pointer, button);
-
-        // If left mouse button was pressed
-        if(button == 0) {
-            shotAt(x, y);
-        }
-
-        return false;
     }
 
-    public void shotAt(int x, int y) {
-
-    }
-         */
-    }
-
-    public void updateYourTurn() {
+    public void updateYourTurn(GameModel model) {
         // If your turn
         ((PlayerPanel)opponentPanel).setTurnLabelText("");
         ((PlayerPanel)playerPanel).setTurnLabelText("Your Turn!");
+
+        enableShooting();
+    }
+
+    public void enableShooting() {
+        grid1.setTouchable(Touchable.enabled);
     }
 
     @Override
@@ -112,23 +110,24 @@ public class GameRenderer extends AbstractRenderer {
         getStage().draw();
         Table.drawDebug(getStage());
 
-        if(isInside(corshair, grid1))
-            corshair.setVisible(true);
+        if(isInside(crosshair, grid1))
+            crosshair.setVisible(true);
         else
-            corshair.setVisible(false);
+            crosshair.setVisible(false);
 
         textureXOffset = ((int)container.getWidth()/32) / 2 * 32;
         textureYOffset = ((int)container.getHeight()/32) / 2 * 32;
 
-        corshair.setX(((mouseOnGridX()) / 32) * 32 + grid1.getX() - textureXOffset);
-        corshair.setY((((int)grid1.getHeight()-mouseOnGridY()) / 32) * 32 + grid1.getY() - textureYOffset);
+        crosshair.setX(((mouseOnGridX()) / 32) * 32 + grid1.getX() - textureXOffset);
+        crosshair.setY((((int)grid1.getHeight()-mouseOnGridY()) / 32) * 32 + grid1.getY() - textureYOffset);
     }
 
     @Override
     public void update(Observable object, Object arg) {
         // Changed to your turn
         if(arg.equals("turn")) {
-            updateYourTurn();
+            updateYourTurn((GameModel)object);
+
         }
     }
 
@@ -171,7 +170,29 @@ public class GameRenderer extends AbstractRenderer {
         return (Gdx.input.getY() - (int)(Gdx.graphics.getHeight() - grid1.getY() - grid1.getHeight()));
     }
 
+    public void drawOpponentWereHit(Coordinate coordinate) {
 
+        Image hit = new Image(hitTexture);
+        grid2.add(hit, coordinate);
+    }
+
+    public void drawOpponentWereMissed(Coordinate coordinate) {
+
+        Image miss = new Image(hitTexture);
+        grid2.add(miss, coordinate);
+    }
+
+    public void drawPlayerWereHit(Coordinate coordinate) {
+
+        Image hit = new Image(hitTexture);
+        grid1.add(hit, coordinate);
+    }
+
+    public void drawPlayerWereMissed(Coordinate coordinate) {
+
+        Image miss = new Image(hitTexture);
+        grid1.add(miss, coordinate);
+    }
 
 
 }
