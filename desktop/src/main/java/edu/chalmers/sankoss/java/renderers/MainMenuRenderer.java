@@ -73,6 +73,12 @@ public class MainMenuRenderer extends AbstractRenderer {
                 dialog.show(getStage());
             }
         });
+        btnCredits.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Screens.CREDITS.show();
+            }
+        });
         btnExit.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
