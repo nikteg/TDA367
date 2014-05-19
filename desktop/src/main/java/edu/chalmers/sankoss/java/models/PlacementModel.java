@@ -27,8 +27,8 @@ public class PlacementModel extends AbstractModel {
 		fleet.add(ship);
 	}
 
-	public List getShips() {
-		return (List) fleet.getShips();
+	public Fleet getFleet() {
+		return fleet;
 	}
 
 	public String getFlagPath() {

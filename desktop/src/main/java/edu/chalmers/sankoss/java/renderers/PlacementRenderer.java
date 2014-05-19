@@ -14,9 +14,6 @@ import edu.chalmers.sankoss.core.CorePlayer;
 import edu.chalmers.sankoss.java.misc.PlayerPanel;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import edu.chalmers.sankoss.java.SankossGame;
 import edu.chalmers.sankoss.java.models.PlacementModel;
 
@@ -46,11 +43,12 @@ public class PlacementRenderer extends AbstractRenderer {
 	Image grid = new Image(new Texture(Gdx.files.internal("textures/grid.png")));
 	Image flag = new Image();
 	Table bottomTable = new Table();
+	PlacementModel model;
 
     public PlacementRenderer(Observable observable) {
         super(observable);
         
-        PlacementModel model = (PlacementModel) observable;
+        model = (PlacementModel) observable;
         
         btnReady.pad(8f);
         btnNextFlag.pad(8f);
@@ -78,10 +76,10 @@ public class PlacementRenderer extends AbstractRenderer {
         
         
         btnReady.addListener(new ChangeListener(){
+        	
 			@Override
 			public void changed(ChangeEvent arg0, Actor arg1) {
-				// TODO Auto-generated method stub
-				
+				SankossGame.getInstance().getClient().playerReady(model.getFleet());
 			}
 		});
         btnPreviousFlag.addListener(new ChangeListener(){
@@ -98,6 +96,8 @@ public class PlacementRenderer extends AbstractRenderer {
 				
 			}
 		});
+        
+        
         Pixmap pix = new Pixmap(32, 32, Pixmap.Format.RGBA8888);
 
         pix.setColor(0, 1f,0.2f,0.5f);
@@ -115,7 +115,7 @@ public class PlacementRenderer extends AbstractRenderer {
         container.setY(50f);
     }
 
-    @Override
+	@Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glClearColor(0.09f, 0.58f, 0.2f, 1);
