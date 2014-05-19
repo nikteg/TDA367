@@ -2,6 +2,7 @@ package edu.chalmers.sankoss.java.renderers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -11,6 +12,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import edu.chalmers.sankoss.core.CorePlayer;
 import edu.chalmers.sankoss.java.misc.PlayerPanel;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import edu.chalmers.sankoss.java.SankossGame;
+import edu.chalmers.sankoss.java.models.PlacementModel;
 
 import java.util.Observable;
 
@@ -19,12 +27,9 @@ import java.util.Observable;
  * This class will handle all rendering
  * called by the PlacementScreen.
  *
- * @author Mikael Malmqvist
+ * @author Daniel Eineving
  */
 public class PlacementRenderer extends AbstractRenderer {
-
-    private Texture gridTexture = new Texture(Gdx.files.internal("textures/grid.png"));
-    private Image grid = new Image(gridTexture);
     private Actor playerPanel = new PlayerPanel("Name", CorePlayer.Nationality.USA, PlayerPanel.Alignment.RIGHT);
     private Table container = new Table();
 
@@ -34,10 +39,65 @@ public class PlacementRenderer extends AbstractRenderer {
     // Offset for texture to follow cursor
     private int textureXOffset;
     private int textureYOffset;
+    
+    TextButton btnReady = new TextButton("Ready", SankossGame.getInstance().getSkin());
+	TextButton btnNextFlag = new TextButton(">", SankossGame.getInstance().getSkin());
+	TextButton btnPreviousFlag = new TextButton("<", SankossGame.getInstance().getSkin());
+	Image grid = new Image(new Texture(Gdx.files.internal("textures/grid.png")));
+	Image flag = new Image();
+	Table bottomTable = new Table();
 
     public PlacementRenderer(Observable observable) {
         super(observable);
-
+        
+        PlacementModel model = (PlacementModel) observable;
+        
+        btnReady.pad(8f);
+        btnNextFlag.pad(8f);
+        btnPreviousFlag.pad(8f);
+        
+        getTable().debug();
+        
+        getTable().add(grid);
+        getTable().row();
+        
+        flag.setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture(model.getFlagPath()))));
+        
+        bottomTable.add(flag).pad(8f).colspan(2);
+        
+        getTable().row();
+        bottomTable.add(btnNextFlag).pad(8f).fillX();
+        bottomTable.add(btnPreviousFlag).pad(8f);
+        
+//        bottomTable.add(btnReady).fillX().pad(8f);
+        
+        
+        getTable().add(bottomTable).bottom().expand();
+        getStage().addActor(getTable());
+        
+        
+        
+        btnReady.addListener(new ChangeListener(){
+			@Override
+			public void changed(ChangeEvent arg0, Actor arg1) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+        btnPreviousFlag.addListener(new ChangeListener(){
+			@Override
+			public void changed(ChangeEvent arg0, Actor arg1) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+        btnNextFlag.addListener(new ChangeListener(){
+			@Override
+			public void changed(ChangeEvent arg0, Actor arg1) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
         Pixmap pix = new Pixmap(32, 32, Pixmap.Format.RGBA8888);
 
         pix.setColor(0, 1f,0.2f,0.5f);
@@ -70,14 +130,19 @@ public class PlacementRenderer extends AbstractRenderer {
 
         container.setX(((mouseOnGridX()) / 32) * 32 + grid.getX() - textureXOffset);
         container.setY((((int)grid.getHeight()-mouseOnGridY()) / 32) * 32 + grid.getY() - textureYOffset);
-
+        
+        getStage().act(delta);
+        getStage().draw();
+        Table.drawDebug(getStage());
     }
 
     @Override
     public void update(Observable object, Object arg) {
-
+    	if(arg.equals("NationalityChanged")){
+    		flag.setDrawable(new TextureRegionDrawable(new TextureRegion(
+    				new Texture(((PlacementModel)object).getFlagPath()))));
+    	}
     }
-
     public boolean isOverlapping(Actor act1, Actor act2) {
         int x1 = (int)act1.getX();
         int y1 = (int)act1.getY();
