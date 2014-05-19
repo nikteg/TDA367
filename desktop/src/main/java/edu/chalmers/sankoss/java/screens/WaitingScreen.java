@@ -45,6 +45,7 @@ public class WaitingScreen extends AbstractScreen<WaitingModel, WaitingRenderer>
                     }
                 });
             }
+
         });
     }
 
@@ -56,7 +57,7 @@ public class WaitingScreen extends AbstractScreen<WaitingModel, WaitingRenderer>
     @Override
     public void show() {
         super.show();
-
+        getModel().resetPlayers();
         getModel().setHosting(SankossGame.getInstance().getClient().isHosting());
     }
 }
