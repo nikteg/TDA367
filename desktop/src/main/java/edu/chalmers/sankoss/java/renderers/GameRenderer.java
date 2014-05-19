@@ -23,8 +23,10 @@ import java.util.Observable;
  */
 public class GameRenderer extends AbstractRenderer {
     private Texture gridTexture = new Texture(Gdx.files.internal("textures/grid.png"));
+    private Texture corsHair = new Texture(Gdx.files.internal("textures/corshair.png"));
     private Image grid1 = new Image(gridTexture);
     private Image grid2 = new Image(gridTexture);
+    private Image corshair = new Image(corsHair);
     private Actor opponentPanel = new PlayerPanel("Kalle", CorePlayer.Nationality.GERMANY, PlayerPanel.Alignment.LEFT);
     private Actor playerPanel = new PlayerPanel("TOng", CorePlayer.Nationality.JAPAN, PlayerPanel.Alignment.RIGHT);
     private Table container = new Table();
@@ -36,6 +38,7 @@ public class GameRenderer extends AbstractRenderer {
 
     public GameRenderer(Observable observable) {
         super(observable);
+
 
         Pixmap pix = new Pixmap(32, 32, Pixmap.Format.RGBA8888);
 
@@ -68,6 +71,12 @@ public class GameRenderer extends AbstractRenderer {
         //getTable().debug();
     }
 
+    public void updateYourTurn() {
+        // If your turn
+        ((PlayerPanel)opponentPanel).setTurnLabelText("");
+        ((PlayerPanel)playerPanel).setTurnLabelText("Your Turn!");
+    }
+
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -91,7 +100,10 @@ public class GameRenderer extends AbstractRenderer {
 
     @Override
     public void update(Observable object, Object arg) {
-
+        // Changed to your turn
+        if(arg.equals("turn")) {
+            updateYourTurn();
+        }
     }
 
     public int mouseOnGridX() {

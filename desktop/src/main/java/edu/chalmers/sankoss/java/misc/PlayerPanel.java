@@ -3,29 +3,26 @@ package edu.chalmers.sankoss.java.misc;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import edu.chalmers.sankoss.core.CorePlayer;
 import edu.chalmers.sankoss.java.SankossGame;
-import edu.chalmers.sankoss.java.renderers.GameRenderer;
 
 public class PlayerPanel extends Table {
     private Label lblName;
     private Image imgNationality;
+    private Label turnLabel;
 
     public PlayerPanel(String name, CorePlayer.Nationality nationality, Alignment align) {
         super(SankossGame.getInstance().getSkin());
 
         lblName = new Label(name, SankossGame.getInstance().getSkin());
         imgNationality = new Image(new Texture(nationality.getPath()));
+        turnLabel = new Label("Your turn!", SankossGame.getInstance().getSkin());
 
         Pixmap pix = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pix.setColor(Color.GRAY);
@@ -36,8 +33,10 @@ public class PlayerPanel extends Table {
             align(Align.left);
             add(imgNationality).padRight(8f);
             add(lblName);
+            add(turnLabel).expandX().right().pad(8f);
         } else {
             align(Align.right);
+            add(turnLabel).expandX().left().pad(8f);
             add(lblName).padRight(8f);
             add(imgNationality);
         }
@@ -47,6 +46,14 @@ public class PlayerPanel extends Table {
 
         //debug();
 
+    }
+
+    public Label getTurnLabel() {
+        return turnLabel;
+    }
+
+    public void setTurnLabelText(String text) {
+        turnLabel.setText(text);
     }
 
 
