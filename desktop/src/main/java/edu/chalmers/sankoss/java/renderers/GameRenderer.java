@@ -18,26 +18,24 @@ import edu.chalmers.sankoss.java.models.GameModel;
 import java.util.Observable;
 
 /**
- * Description of class.
- * More detailed description.
+ * Renderer for Game Screen.
+ * Is listened to by GameModel.
  *
  * @author Mikael Malmqvist
  * @modified Daniel Eineving, Fredrik Thune
  */
 public class GameRenderer extends AbstractRenderer {
     // Controllers
-    private Texture gridTexture = new Texture(Gdx.files.internal("textures/grid.png"));
     private Texture crosshairTexture = new Texture(Gdx.files.internal("textures/corshair.png"));
     private Texture hitTexture = new Texture(Gdx.files.internal("textures/explosion.png"));
     private Texture missTexture = new Texture(Gdx.files.internal("textures/miss.png"));
-    private Texture flagTexture = new Texture(Gdx.files.internal("textures/flag.png"));
-    private Texture flag2Texture = new Texture(Gdx.files.internal("textures/flag2.png"));
     private GridImage grid1 = new GridImage();
     private GridImage grid2 = new GridImage();
     private Image crosshair = new Image(crosshairTexture);
     private Actor opponentPanel = new PlayerPanel("Hans Gunter", CorePlayer.Nationality.GERMANY, PlayerPanel.Alignment.LEFT);
     private Actor playerPanel = new PlayerPanel("T0ng", CorePlayer.Nationality.JAPAN, PlayerPanel.Alignment.RIGHT);
     private Table container = new Table();
+    private final float GRID_SQUARE = 32f;
 
     private GameModel model;
 
@@ -48,8 +46,9 @@ public class GameRenderer extends AbstractRenderer {
         super(observable);
 
         model = (GameModel) observable;
-        crosshair.setWidth(32);
-        crosshair.setHeight(32);
+        crosshair.setWidth(GRID_SQUARE);
+        crosshair.setHeight(GRID_SQUARE);
+
         // Crosshair always need to be disabled, else
         // players wont be able to click grid
         crosshair.setTouchable(Touchable.disabled);
@@ -96,8 +95,8 @@ public class GameRenderer extends AbstractRenderer {
              */
             public void placeFlag() {
 
-                int gridX = (int)((crosshair.getX() - grid1.getX()) / 32) + 1;
-                int gridY = (int)((crosshair.getY() - (grid1.getY() + grid1.getHeight())) / 32) * (-1);
+                int gridX = (int)((crosshair.getX() - grid1.getX()) / GRID_SQUARE) + 1;
+                int gridY = (int)((crosshair.getY() - (grid1.getY() + grid1.getHeight())) / GRID_SQUARE) * (-1);
 
                 model.addOrRemoveFlags(new Coordinate(gridX, gridY));
             }
@@ -105,7 +104,7 @@ public class GameRenderer extends AbstractRenderer {
             public void shot() {
 
                 int gridX = (int)((crosshair.getX() - grid1.getX()) / 32) + 1;
-                int gridY = (int)((crosshair.getY() - (grid1.getY() + grid1.getHeight())) / 32) * (-1);
+                int gridY = (int)((crosshair.getY() - (grid1.getY() + grid1.getHeight())) / GRID_SQUARE) * (-1);
 
 
                 // KEEP BELOW
@@ -120,6 +119,8 @@ public class GameRenderer extends AbstractRenderer {
 
         });
 
+        // Sets opponent in model
+        //getModel().setOpponent(SankossGame.getInstance().getClient().getOpponents().get(0));
 
     }
 
@@ -149,8 +150,8 @@ public class GameRenderer extends AbstractRenderer {
         else
             crosshair.setVisible(false);
 
-        textureXOffset = ((int)container.getWidth()/32) / 2 * 32;
-        textureYOffset = ((int)container.getHeight()/32) / 2 * 32;
+        textureXOffset = (int) ((container.getWidth()/GRID_SQUARE) / 2 * GRID_SQUARE);
+        textureYOffset = (int) ((container.getHeight()/GRID_SQUARE) / 2 * GRID_SQUARE);
 
         crosshair.setX(((mouseOnGridX()) / 32) * 32 + grid1.getX() - textureXOffset);
         crosshair.setY((((int)grid1.getHeight()-mouseOnGridY()) / 32) * 32 + grid1.getY() - textureYOffset);
@@ -213,28 +214,28 @@ public class GameRenderer extends AbstractRenderer {
     /**
      * Method for determine if mouse is on a valid position
      * or not.
-     * @param corshair Corshair to follow mouse in grid.
+     * @param crosshair crosshair to follow mouse in grid.
      * @param grid grid to shoot in.
      * @return
      */
-    public boolean isInside(Actor corshair, Actor grid) {
-        int corshairX = (int)corshair.getX();
-        int corshairY = (int)corshair.getY();
-        int corshairWidth = (int)corshair.getWidth();
-        int corshairHeight = (int)corshair.getHeight();
+    public boolean isInside(Actor crosshair, Actor grid) {
+        int crosshairX = (int)crosshair.getX();
+        int crosshairY = (int)crosshair.getY();
+        int crosshairWidth = (int)crosshair.getWidth();
+        int crosshairHeight = (int)crosshair.getHeight();
 
         int gridX = (int)grid.getX();
         int gridY = (int)grid.getY();
         int gridWidth = (int)grid.getWidth();
         int gridHeight = (int)grid.getHeight();
 
-        int corshairXMax = corshairX + corshairWidth;
+        int crosshairXMax = crosshairX + crosshairWidth;
         int gridXMax = gridX + gridWidth;
-        int corshairYMax = corshairY + corshairHeight;
+        int crosshairYMax = crosshairY + crosshairHeight;
         int gridYMax = gridY + gridHeight;
 
-        if ((gridX > corshairX && gridXMax < corshairXMax) || (corshairX >= gridX && corshairXMax <= gridXMax)) {
-            if ((gridY > corshairY && gridYMax < corshairYMax) || (corshairY >= gridY && corshairYMax <= gridYMax)) {
+        if ((gridX > crosshairX && gridXMax < crosshairXMax) || (crosshairX >= gridX && crosshairXMax <= gridXMax)) {
+            if ((gridY > crosshairY && gridYMax < crosshairYMax) || (crosshairY >= gridY && crosshairYMax <= gridYMax)) {
                 return true;
             }
         }

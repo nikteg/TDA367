@@ -15,7 +15,6 @@ import edu.chalmers.sankoss.java.renderers.GameRenderer;
  * Handles game logic, like a controller.
  *
  * @author Mikael Malmqvist
- * @date 3/24/14
  */
 public class GameScreen extends AbstractScreen<GameModel, GameRenderer> {
 
@@ -26,6 +25,7 @@ public class GameScreen extends AbstractScreen<GameModel, GameRenderer> {
          * Listener for GameScreen.
          */
         SankossGame.getInstance().getClient().addListener(new SankossClientListener() {
+
 
             /**
              * Method to run if player has won.
@@ -78,6 +78,7 @@ public class GameScreen extends AbstractScreen<GameModel, GameRenderer> {
 
             }
         });
+
     }
 
     public void shotAtYou(Coordinate coordinate, boolean hit) {

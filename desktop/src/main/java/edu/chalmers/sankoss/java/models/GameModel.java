@@ -2,6 +2,7 @@ package edu.chalmers.sankoss.java.models;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import edu.chalmers.sankoss.core.Coordinate;
+import edu.chalmers.sankoss.core.CorePlayer;
 import edu.chalmers.sankoss.java.misc.FlagImage;
 
 import java.util.ArrayList;
@@ -10,8 +11,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Description of class.
- * More detailed description.
+ * Model for GameScreen.
+ * Handles all data for the GameScreen and listens
+ * to the renderer.
  *
  */
 public class GameModel extends AbstractModel {
@@ -19,9 +21,18 @@ public class GameModel extends AbstractModel {
     private boolean won;
     private List<Coordinate> yourShots = new ArrayList<Coordinate>();
     private Map<Coordinate, Image> flags = new HashMap<Coordinate, Image>();
+    private CorePlayer opponent;
 
     public GameModel() {
         myTurn = false;
+    }
+
+    public void setOpponent(CorePlayer opponent) {
+        this.opponent = opponent;
+    }
+
+    public CorePlayer getOpponent() {
+        return this.opponent;
     }
 
     public void setMyTurn(boolean myTurn) {
