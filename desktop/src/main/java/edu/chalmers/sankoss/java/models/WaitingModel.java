@@ -62,4 +62,11 @@ public class WaitingModel extends AbstractModel {
     public List<CorePlayer> getPlayers() {
         return players;
     }
+
+    public void resetPlayers() {
+        players.clear();
+
+        setChanged();
+        notifyObservers("reset_Players");
+    }
 }

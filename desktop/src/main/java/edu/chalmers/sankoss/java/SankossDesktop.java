@@ -20,16 +20,6 @@ public class SankossDesktop {
          */
         Settings.loadSettings();
 
-        if (args.length > 0) {
-            if (args[0].equals("debug")) {
-                Settings.HOSTNAME = "localhost";
-            } else {
-                Settings.HOSTNAME = "sodapop.se";
-            }
-        } else {
-            Settings.HOSTNAME = "sodapop.se";
-        }
-
         LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
 
         cfg.title = "Battleships";

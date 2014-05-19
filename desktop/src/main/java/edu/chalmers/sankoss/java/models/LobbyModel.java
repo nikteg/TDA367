@@ -13,6 +13,18 @@ import java.util.Map;
  * @date 3/24/14
  */
 public class LobbyModel extends AbstractModel {
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+
+        setChanged();
+        notifyObservers("nameChange");
+    }
     private Map<Long, Room> rooms = new HashMap<Long, Room>();
 
     public Map<Long, Room> getRooms() {

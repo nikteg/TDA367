@@ -41,6 +41,14 @@ public class Player extends CorePlayer {
         this.fleet = fleet;
     }
 
+    public boolean fleetIsDestoyed() {
+        for (Ship ship : fleet) {
+            if (!ship.isDestroyed())
+                return false;
+        }
+        return true;
+    }
+
     public boolean isReady() {
 		return ready;
 	}

@@ -12,7 +12,7 @@ import java.io.IOException;
  */
 public class Settings {
     public static String HOSTNAME = "localhost";
-    public static int PORT = Network.PORT;
+    public static int PORT = Network.PORT; // TODO Should not be in network?
     private static Ini iniInstance = new Ini();
 
     public static void loadSettings() {
@@ -20,7 +20,7 @@ public class Settings {
             File file = new File("settings.ini");
 
             if (!file.exists()) {
-                file.createNewFile();
+                writeSettings(file);
             }
 
             loadSettings(file);
@@ -38,5 +38,12 @@ public class Settings {
 
         HOSTNAME = networkSection.get("hostname");
         PORT = Integer.parseInt(networkSection.get("port"));
+    }
+
+    public static void writeSettings(File file) throws IOException {
+        iniInstance.put("network", "hostname", HOSTNAME);
+        iniInstance.put("network", "port", PORT);
+
+        iniInstance.store(file);
     }
 }
