@@ -59,16 +59,16 @@ public class LobbyRenderer extends AbstractRenderer {
         getTable().row();
 
 
-        getTable().add(btnBack).expandX().left().bottom();
+        getTable().add(btnBack.pad(8f)).expandX().left().bottom().width(160);
         Table joinHostTable = new Table();
 
-        joinHostTable.add(btnHost);
-        joinHostTable.add(btnJoin).padLeft(8);
+        joinHostTable.add(btnHost.pad(8f)).width(160);
+        joinHostTable.add(btnJoin.pad(8f)).padLeft(8f).width(160);
 
         getTable().add(joinHostTable).expandX().right().bottom().colspan(2);
 
 
-        getTable().debug();
+        //getTable().debug();
 
         getStage().addActor(getTable());
 
