@@ -1,5 +1,7 @@
 package edu.chalmers.sankoss.java.screens;
 
+import edu.chalmers.sankoss.core.CorePlayer;
+import edu.chalmers.sankoss.core.Ship;
 import edu.chalmers.sankoss.java.SankossGame;
 import edu.chalmers.sankoss.java.Screens;
 import edu.chalmers.sankoss.java.client.SankossClientListener;
@@ -21,14 +23,19 @@ public class PlacementScreen extends AbstractScreen<PlacementModel, PlacementRen
         super(model, renderer);
 
         SankossGame.getInstance().getClient().addListener(new SankossClientListener() {
-
-        	public void opponentReady(){
-        		//TODO Show something
+        	@Override
+        	public void playerIsReady(CorePlayer player){
+        		getModel().setOpponentReady(true);
         	}
-        	public void opponentLeft(){
+        	@Override
+        	public void leftGame(CorePlayer player){
         		Screens.LOBBY.show();
         	}
         });
+    }
+    
+    public void shipPlaced(Ship ship){
+    	getModel().addShip(ship);
     }
 
     @Override
