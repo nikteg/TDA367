@@ -1,17 +1,13 @@
 package edu.chalmers.sankoss.java.renderers;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import edu.chalmers.sankoss.core.CorePlayer;
 import edu.chalmers.sankoss.java.misc.PlayerPanel;
@@ -115,25 +111,16 @@ public class GameRenderer extends AbstractRenderer {
         int w2 = (int)act2.getWidth();
         int h2 = (int)act2.getHeight();
 
-        int xCollision = 0;
-        int yCollision = 0;
         int x1Max = x1 + w1;
         int x2Max = x2 + w2;
         int y1Max = y1 + h1;
         int y2Max = y2 + h2;
-        if (x2 >= x1 && x2 < x1Max) {
-            xCollision++;
-        } if (x1 >= x2 && x1 < x2Max) {
-            xCollision++;
-        } if (y2 >= y1 && y2 < y1Max) {
-            yCollision++;
-        } if (y1 >= y2 && y1 < y2Max) {
-            yCollision++;
+        if ((x2 >= x1 && x2Max <= x1Max) || (x1 >= x2 && x1Max <= x2Max)) {
+          if ((y2 >= y1 && y2Max <= y1Max) || (y1 >= y2 && y1Max <= y2Max)) {
+              return true;
+          }
         }
-        if(xCollision>0 && yCollision>0){
-            return true;
-        }else
-            return false;
+        return false;
     }
 
 
