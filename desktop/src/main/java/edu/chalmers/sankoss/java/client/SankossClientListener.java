@@ -2,7 +2,6 @@ package edu.chalmers.sankoss.java.client;
 
 import edu.chalmers.sankoss.core.*;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -12,7 +11,7 @@ import java.util.Map;
 public class SankossClientListener implements ISankossClientListener {
 
     @Override
-    public void connected(Long playerID) {
+    public void connected() {
 
     }
 
@@ -22,12 +21,12 @@ public class SankossClientListener implements ISankossClientListener {
     }
 
     @Override
-    public void createdRoom(Long roomID) {
+    public void createdRoom(Room room) {
 
     }
 
     @Override
-    public void joinedRoom(BasePlayer player) {
+    public void joinedRoom(CorePlayer player) {
 
     }
 
@@ -42,7 +41,7 @@ public class SankossClientListener implements ISankossClientListener {
     }
 
     @Override
-    public void playerIsReady(BasePlayer player) {
+    public void playerIsReady(CorePlayer player) {
 
     }
 
@@ -52,12 +51,12 @@ public class SankossClientListener implements ISankossClientListener {
     }
 
     @Override
-    public void fireResult(Long gameID, BasePlayer target, Coordinate coordinate, boolean hit) {
+    public void fireResult(CorePlayer target, Coordinate coordinate, boolean hit) {
 
     }
 
     @Override
-    public void destroyedShip(BasePlayer player, Ship ship) {
+    public void destroyedShip(CorePlayer player, Ship ship) {
 
     }
 
@@ -67,7 +66,24 @@ public class SankossClientListener implements ISankossClientListener {
     }
 
     @Override
-    public void playerChangedName(BasePlayer player) {
+    public void playerChangedName(CorePlayer player) {
 
     }
+
+    @Override
+    public void leftGame(CorePlayer player) {
+
+    }
+
+    @Override
+    public void leftRoom(CorePlayer player) {
+
+    }
+
+    @Override
+    public void removedRoom() {
+
+    }
+
+
 }

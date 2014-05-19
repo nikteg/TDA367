@@ -1,9 +1,5 @@
 package edu.chalmers.sankoss.core.protocol;
 
-import edu.chalmers.sankoss.core.BasePlayer;
-
-import java.util.List;
-
 /**
  *
  * @author Fredrik Thune

@@ -13,7 +13,7 @@ public class Room {
     private Long id;
     private String name;
     private String password;
-    private List<BasePlayer> players = new ArrayList<BasePlayer>();
+    private List<CorePlayer> players = new ArrayList<CorePlayer>();
     
     public Room() {
         
@@ -49,17 +49,17 @@ public class Room {
         this.password = password;
     }
 
-    public List<BasePlayer> getPlayers() {
+    public List<CorePlayer> getPlayers() {
         return players;
     }
 
-    public void addPlayer(BasePlayer player) {
+    public void addPlayer(CorePlayer player) {
         players.add(player);
     }
 
     public boolean hasPlayerWithID(Long id) {
-        for (BasePlayer basePlayer : players) {
-            if (basePlayer.getID().equals(id))
+        for (CorePlayer corePlayer : players) {
+            if (corePlayer.getID().equals(id))
                 return true;
         }
 
@@ -71,9 +71,9 @@ public class Room {
     }
 
     public void removePlayerWithID(Long id) {
-        for (BasePlayer basePlayer : players) {
-            if (basePlayer.getID().equals(id)) {
-                players.remove(basePlayer);
+        for (CorePlayer corePlayer : players) {
+            if (corePlayer.getID().equals(id)) {
+                players.remove(corePlayer);
 
                 return;
             }

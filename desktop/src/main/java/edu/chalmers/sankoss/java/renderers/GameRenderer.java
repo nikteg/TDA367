@@ -1,500 +1,129 @@
 package edu.chalmers.sankoss.java.renderers;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
-import edu.chalmers.sankoss.core.BasePlayer;
-import edu.chalmers.sankoss.core.Coordinate;
-import edu.chalmers.sankoss.java.misc.ShipButton;
-import edu.chalmers.sankoss.java.models.GameModel;
-import edu.chalmers.sankoss.java.models.ScreenModel;
-import edu.chalmers.sankoss.java.screens.AbstractScreen;
-import edu.chalmers.sankoss.java.screens.GameScreen;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import edu.chalmers.sankoss.core.CorePlayer;
+import edu.chalmers.sankoss.java.misc.PlayerPanel;
 
-import java.util.Set;
+import java.util.Observable;
 
 /**
  * Description of class.
  * More detailed description.
  *
  * @author Mikael Malmqvist
- * @modified Daniel Eineving 2014-05-12
+ * @modified Daniel Eineving, Fredrik Thune
  */
-public class GameRenderer extends Renderer{
+public class GameRenderer extends AbstractRenderer {
+    private Texture gridTexture = new Texture(Gdx.files.internal("textures/grid.png"));
+    private Image grid1 = new Image(gridTexture);
+    private Image grid2 = new Image(gridTexture);
+    private Actor opponentPanel = new PlayerPanel("Kalle", CorePlayer.Nationality.GERMANY, PlayerPanel.Alignment.LEFT);
+    private Actor playerPanel = new PlayerPanel("TOng", CorePlayer.Nationality.JAPAN, PlayerPanel.Alignment.RIGHT);
+    private Table container = new Table();
 
-    private String land;
-    private final int WIDTH_OF_SQUARE = 50;
-    private final int HEIGHT_OF_SQUARE = 50;
-    
-    //TODO Why is this vectors? They Should be matrixes ( [][] )
-    private Table[] playerGrid = new Table[100];
-    private Table[] aimGrid = new Table[100];
-    private ShipButton follow = null;
-    private BasePlayer.Nationality nationality;
+    private TextureRegionDrawable greenTextureBackground;
+    private TextureRegionDrawable redTextureBackground;
+    private int textureXOffset;
+    private int textureYOffset;
 
-    private Skin skin = new Skin();
+    public GameRenderer(Observable observable) {
+        super(observable);
 
-    // Containers
-    private Table playerTable;
-    private Table topTable;
-    private Table middlePanel;
-    private WidgetGroup ships;
-    private Table playerBoard;
-    private Table aimBoard;
-
-	// controllers
-    private Table flag;
-    private Label landLabel;
-    private Label opponentNameLabel;
-    private Label yourTurnLabel;
-    private Label oppTurnLabel;
-    
-    private ImageButton explosion = new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/explosion.png")))));
-    private ImageButton miss = new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/miss.png")))));
+        Pixmap pix = new Pixmap(32, 32, Pixmap.Format.RGBA8888);
 
 
-    int two = 1;
-    int three = 0;
-    int four = 1;
-    int five = 1;
+        pix.setColor(0, 1f,0.2f,0.5f);
+        pix.fill();
+        greenTextureBackground = new TextureRegionDrawable(new TextureRegion(new Texture(pix)));
 
 
-    /**
-     * @inheritdoc
-     */
-    public GameRenderer(ScreenModel currentModel) {
-        super(currentModel);
-    }
+        pix.setColor(0.8f, 0, 0f, 0.5f);
+        pix.fill();
+        redTextureBackground = new TextureRegionDrawable(new TextureRegion(new Texture(pix)));
 
-    public Label getOpponentNameLabel() {
-        return opponentNameLabel;
+        container.setBackground(greenTextureBackground);
+        container.setWidth(1*32f);
+        container.setHeight(3*32f);
+        container.setX(50f);
+        container.setY(50f);
+
+        getTable().add(opponentPanel).colspan(2).expandX().fill().height(100f);
+        getTable().row();
+        getTable().add(grid1).pad(16f).expand();
+        getTable().add(grid2).pad(16f).expand();
+        getTable().row();
+        getTable().add(playerPanel).colspan(2).expandX().fill().height(100f);
+
+        getStage().addActor(getTable());
+
+        getStage().addActor(container);
+        //getTable().debug();
     }
 
     @Override
-    public void resize(int width, int height) {
-        playerTable.setWidth(width);
-        topTable.setWidth(width);
-        topTable.setY(height - 100);
-        middlePanel.setWidth(width);
-        middlePanel.setHeight(height - topTable.getHeight() - playerTable.getHeight());
-
-        aimBoard.setPosition(10, (middlePanel.getHeight() - aimBoard.getHeight())/2);
-        playerBoard.setPosition((middlePanel.getWidth() - playerBoard.getWidth() - 10),
-                (middlePanel.getHeight() - playerBoard.getHeight())/2);
-        ships.setWidth(width - 200);
-
-        yourTurnLabel.setX((width - yourTurnLabel.getWidth()) / 2);
-        oppTurnLabel.setX((width - oppTurnLabel.getWidth())/2);
-
-    }
-
-    public Table[] getPlayerGrid() {
-        return playerGrid;
-    }
-
-    public Table[] getAimGrid() {
-        return aimGrid;
-    }
-
-    public Label getYourTurnLabel() {
-        return yourTurnLabel;
-    }
-
-    public Label getOppTurnLabel() {
-        return oppTurnLabel;
-    }
-
-    public TextButton.TextButtonStyle getBtnStyle() {
-        return btnStyle;
-    }
-
-    public void drawControllers(AbstractScreen screen) {
-
-        actorPanel = new WidgetGroup();
-
-        // skin for playerTable
-        Pixmap tablePixmap = new Pixmap(800, 150, Pixmap.Format.RGBA8888);
-        tablePixmap.setColor(Color.DARK_GRAY);
-        tablePixmap.fill();
-        skin.add("tableBack", new Texture(tablePixmap));
-
-        Pixmap tablePixmap2 = new Pixmap(800, 150, Pixmap.Format.RGBA8888);
-        tablePixmap2.setColor(Color.LIGHT_GRAY);
-        tablePixmap2.fill();
-        skin.add("tableBack2", new Texture(tablePixmap2));
-
-        Pixmap tablePixmap3 = new Pixmap(800, 150, Pixmap.Format.RGBA8888);
-        tablePixmap3.setColor(Color.GRAY);
-        tablePixmap3.fill();
-        skin.add("tableBack3", new Texture(tablePixmap3));
-
-        // Panel with players info
-        playerTable = new Table();
-        playerTable.setHeight(150f);
-        playerTable.setWidth(800f);
-        playerTable.setBackground(skin.newDrawable("tableBack"));
-        playerTable.setPosition(0, 0);
-
-        // Panel with ships to be placed
-        topTable = new Table();
-        topTable.setHeight(100f);
-        topTable.setWidth(800f);
-        topTable.setBackground(skin.newDrawable("tableBack"));
-        topTable.setPosition(0, 500);
-
-        middlePanel = new Table();
-        middlePanel.setWidth(800);
-        middlePanel.setHeight(600 - topTable.getHeight() - playerTable.getHeight());
-        middlePanel.setBackground(skin.newDrawable("tableBack"));
-        middlePanel.setPosition(0, playerTable.getHeight());
-
-
-        // This is where ships to pick from will be
-        // TODO: REMOVE THIS?!
-        ships = new WidgetGroup();
-        ships.setHeight(100f);
-        ships.setWidth(600f);
-        ships.setPosition(200, 0);
-
-        flag = new Table();
-        flag.setHeight(80f);
-        flag.setWidth(170f);
-        flag.setX(10);
-        flag.setY(35);
-
-
-        BitmapFont font = new BitmapFont();
-        font.scale(1); // Sets font's scale relative to current scale
-
-        // Adds font to skin
-        skin.add("default", font);
-        labelStyle.font = skin.getFont("default");
-        landLabel = new Label(land, labelStyle);
-        landLabel.setX(60);
-        landLabel.setY(landLabel.getHeight());
-
-        opponentNameLabel = new Label("Opponent's name", labelStyle);
-        opponentNameLabel.setX(10);
-        opponentNameLabel.setY(55);
-
-        String yourTurn = "";
-        String oppTurn = currentModel.getClient().getOpponents().get(0).getName() + "'s turn!";
-
-        if(currentModel.getClient().getPlayer().getMyTurn()){
-            yourTurn = "Your turn!";
-            oppTurn = "";
-        }
-
-        yourTurnLabel = new Label(yourTurn, labelStyle);
-        yourTurnLabel.setX((Gdx.graphics.getWidth() - yourTurnLabel.getWidth()) / 2);
-        yourTurnLabel.setY(playerTable.getHeight()-yourTurnLabel.getHeight()-10);
-
-        oppTurnLabel = new Label(oppTurn, labelStyle);
-        oppTurnLabel.setX((Gdx.graphics.getWidth() - oppTurnLabel.getWidth()) / 2);
-        oppTurnLabel.setY(5);
-
-
-        btnStyle = new TextButton.TextButtonStyle();
-
-        land = currentModel.getClient().getPlayer().getNationality().getLandName();
-        nationality = currentModel.getClient().getPlayer().getNationality();
-
-        // Configs flags
-        setFlag();
-
-        // Configures necessary attributes for buttons
-        setButtons();
-
-        btnStyle.font = skin.getFont("default");
-
-        aimBoard = new Table();
-        aimBoard.setWidth(500);
-        aimBoard.setHeight(500);
-        aimBoard.setPosition(10, (middlePanel.getHeight() - aimBoard.getHeight())/2);
-
-        playerBoard = new Table();
-        playerBoard.setWidth(500);
-        playerBoard.setHeight(500);
-        playerBoard.setPosition((middlePanel.getWidth() - playerBoard.getWidth() - 10), (middlePanel.getHeight() - playerBoard.getHeight())/2);
-
-        int n = 0;
-
-        // Creates 10x10 grid
-        for (int i = 0; i < 10; i++){
-            for (int j = 0; j < 10; j++){
-                playerGrid[(i*10)+j] = new Table();
-                aimGrid[(i*10)+j] = new Table();
-
-                n++;
-
-                // Colorizes every second square with a different gray based on the tableBack
-                if(n % 2 == 0) {
-                    playerGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/LIGHT_water.png"))))));
-                    playerGrid[(i*10)+j].setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/LIGHT_water.png")))));
-                    aimGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/LIGHT_water.png"))))));
-                    aimGrid[(i*10)+j].setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/LIGHT_water.png")))));
-
-                } else {
-                    playerGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/DARK_water.png"))))));
-                    playerGrid[(i*10)+j].setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/DARK_water.png")))));
-                    aimGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/DARK_water.png"))))));
-                    aimGrid[(i*10)+j].setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/DARK_water.png")))));
-
-                }
-
-                // Adds grid to middlePanel and add a textButton to it
-                // This is needed to make it click-able
-                playerBoard.add(playerGrid[(i*10)+j]).width(WIDTH_OF_SQUARE).height(HEIGHT_OF_SQUARE);
-                aimBoard.add(aimGrid[(i*10)+j]).width(WIDTH_OF_SQUARE).height(HEIGHT_OF_SQUARE);
-
-                placeShipsOnPlayerGrid(i, j);
-
-                aimGrid[(i*10)+j].addListener(((GameScreen) screen).getShootBtnListener());
-
-            }
-            n++;
-            playerBoard.row();
-            aimBoard.row();
-        }
-
-        middlePanel.addActor(playerBoard);
-        middlePanel.addActor(aimBoard);
-
-        topTable.addActor(opponentNameLabel);
-        topTable.addActor(oppTurnLabel);
-
-        playerTable.addActor(yourTurnLabel);
-
-        actorPanel.addActor(playerTable);
-        actorPanel.addActor(middlePanel);
-        actorPanel.addActor(topTable);
-    }
-
-    /**
-     * Method to set flag depending on nationality.
-     */
-    public void setFlag() {
-
-        Pixmap flagPixmap = new Pixmap(200, 120, Pixmap.Format.RGBA8888);
-        flagPixmap.setColor(Color.WHITE);
-        flagPixmap.fill();
-
-        skin.add(land, new Texture(flagPixmap));
-        flag.setBackground(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath(nationality.getPath())))));
-
-        landLabel.setText(land);
-
-        playerTable.addActor(landLabel);
-        playerTable.addActor(flag);
-
-
-    }
-
-    public Table getAimGridSquare(int i, int j) {
-        return aimGrid[(i*10) + j];
-    }
-
-    public BasePlayer.Nationality getNationality() {
-        return nationality;
-    }
-
-    public void setNationality(BasePlayer.Nationality nationality) {
-        this.nationality = nationality;
-    }
-
-    public void placeShipsOnPlayerGrid(int i, int j) {
-        // Finds where in grid a player has placed ships
-        if(currentModel.getShipArray()[(i*10)+j] == 1) {
-            drawOwnShips(i, j);
-
-        }
-
-    }
-
-    /**
-     * Method for drawing specific ship visually.
-     */
-    public void drawOwnShips(int i, int j) {
-        // Path to ship texture
-        Set<Coordinate> twoSet = ((GameModel)currentModel).getShipMap().get(2);
-        Set<Coordinate> threeSet = ((GameModel)currentModel).getShipMap().get(3);
-        Set<Coordinate> fourSet = ((GameModel)currentModel).getShipMap().get(4);
-        Set<Coordinate> fiveSet = ((GameModel)currentModel).getShipMap().get(5);
-
-        ShipButton.Direction direction = ((GameModel) currentModel).getRotationMap().get(new Coordinate(i+1, j+1));
-
-        String path = "assets/textures/" + direction + "_";
-
-        if(twoSet.contains(new Coordinate(i+1, j+1))){
-            playerGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath(path + "ship_small_body_" + two + ".png"))))));
-            two++;
-        }
-
-        if(threeSet.contains(new Coordinate(i+1, j+1))){
-            three = (three % 3) + 1;
-            playerGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath(path + "ship_medium_body_" + three + ".png"))))));
-
-        }
-
-        if(fourSet.contains(new Coordinate(i+1, j+1))){
-            playerGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath(path + "ship_large_body_" + four + ".png"))))));
-            four++;
-        }
-
-        if(fiveSet.contains(new Coordinate(i+1, j+1))){
-            playerGrid[(i*10)+j].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath(path + "ship_huge_body_" + five + ".png"))))));
-            five++;
-        }
-    }
-
-
-
-    /**
-     * Determines whether to call hit or miss method for
-     * drawing explosion or hole.
-     * @param coordinate
-     */
-    public void setHitOrMiss(Coordinate coordinate) {
-
-        if(((GameModel)currentModel).getPlayerHitMap().get(coordinate)) {
-
-            // If it's a hit
-            setHit(coordinate.getX(), coordinate.getY());
-        } else {
-
-            // If it's a miss
-            setMiss(coordinate.getX(), coordinate.getY());
-        }
-
-    }
-
-    /**
-     * Draws a hole (miss) at given coordinates in grid.
-     * @param x X-coordinate.
-     * @param y Y-coordinate.
-     */
-    public void setMiss(int x, int y) {
-
-        aimGrid[(x-1)*10 + (y-1)].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/miss.png"))))));
-
-    }
-
-    /**
-     * Draws an explosion at given coordinates in grid.
-     * @param x X-coordinate.
-     * @param y Y-coordinate.
-     */
-    public void setHit(int x, int y) {
-
-        aimGrid[(x-1)*10 + (y-1)].addActor(new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.classpath("assets/textures/explosion.png"))))));
-
-    }
-    /**
-     * Adds a hit or miss icon where the enemy has made his/her shoot
-     * @param coordinate
-     */
-    public void setEnemyHitOrMiss(Coordinate coordinate) {
-    	System.out.println("SetEnemyHitOrMiss @ GameRenderer");
-    	final Coordinate temp = coordinate;
-    	Gdx.app.postRunnable(new Runnable() {
-            @Override
-            public void run() {
-            	if(((GameModel)currentModel).getEnemyHitMap().get(temp)) {
-                	playerGrid[(temp.getX()-1)*10 + (temp.getY()-1)].addActor(
-                			new ImageButton(new SpriteDrawable(new Sprite(
-                					new Texture(Gdx.files.classpath("assets/textures/explosion.png"))))));
-                } else {
-                	playerGrid[(temp.getX()-1)*10 + (temp.getY()-1)].addActor(
-                			new ImageButton(new SpriteDrawable(new Sprite(
-                					new Texture(Gdx.files.classpath("assets/textures/miss.png"))))));
-                }
-            }
-         });
+    public void render(float delta) {
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClearColor(0.09f, 0.58f, 0.2f, 1);
+
+        getStage().act(delta);
+        getStage().draw();
+        Table.drawDebug(getStage());
         
+        if(isOverlapping(container, grid1))
+            container.setBackground(greenTextureBackground);
+        else
+            container.setBackground(redTextureBackground);
+
+        textureXOffset = ((int)container.getWidth()/32) / 2 * 32;
+        textureYOffset = ((int)container.getHeight()/32) / 2 * 32;
+
+        container.setX(((mouseOnGridX()) / 32) * 32 + grid1.getX() - textureXOffset);
+        container.setY((((int)grid1.getHeight()-mouseOnGridY()) / 32) * 32 + grid1.getY() - textureYOffset);
     }
 
-    /**
-     * Makes default configuration for a menu button.
-     * Sets Pixmap, Skin, BitmapFont and btnStyle.
-     */
-    public void setButtons() {
-        Pixmap pixmap = new Pixmap(20, 10, Pixmap.Format.RGBA8888);
-        pixmap.setColor(Color.GRAY);
-        pixmap.fill();
-
-        // Adds Texture with pixmap to skin
-        skin.add("white", new Texture(pixmap));
-
-        BitmapFont font = new BitmapFont();
-        font.scale(1); // Sets font's scale relative to current scale
-
-        // Adds font to skin
-        skin.add("default", font);
-
-        // Configures how the Style of a button should behave and
-        // names is "white"
-        btnStyle.up = skin.newDrawable("white", Color.DARK_GRAY);
-        btnStyle.down = skin.newDrawable("white", Color.DARK_GRAY);
-        btnStyle.checked = skin.newDrawable("white", Color.DARK_GRAY);
-        btnStyle.over = skin.newDrawable("white", Color.LIGHT_GRAY);
-
-        skin.add("default", btnStyle);
-
-    }
-
-    public WidgetGroup getActorPanel() {
-        return actorPanel;
-    }
-
-    public Table getPlayerTable() {
-        return playerTable;
-    }
-
-    public Table getMiddlePanel() {
-        return middlePanel;
-    }
-
-    public Table getTopTable() {
-        return topTable;
-    }
-
-    public Table getFlag() {
-        return flag;
-    }
-
-    public Label getLandLabel() {
-        return landLabel;
-    }
-
-
-    // TODO: Put this code somewhere else! Method is a loop - it's a trap!
     @Override
-    public void render() {
+    public void update(Observable object, Object arg) {
 
-        // ShipButton to follow cursor
-        if(follow != null) {
-            follow.setX(Gdx.input.getX());
-            follow.setY(follow.getY()-Gdx.input.getDeltaY());
+    }
+
+    public int mouseOnGridX() {
+        return Gdx.input.getX() - (int)grid1.getX();
+    }
+
+    public int mouseOnGridY() {
+        return (Gdx.input.getY() - (int)(Gdx.graphics.getHeight() - grid1.getY() - grid1.getHeight()));
+    }
+
+    public boolean isOverlapping(Actor act1, Actor act2) {
+        int x1 = (int)act1.getX();
+        int y1 = (int)act1.getY();
+        int w1 = (int)act1.getWidth();
+        int h1 = (int)act1.getHeight();
+
+        int x2 = (int)act2.getX();
+        int y2 = (int)act2.getY();
+        int w2 = (int)act2.getWidth();
+        int h2 = (int)act2.getHeight();
+
+        int x1Max = x1 + w1;
+        int x2Max = x2 + w2;
+        int y1Max = y1 + h1;
+        int y2Max = y2 + h2;
+        if ((x2 >= x1 && x2Max <= x1Max) || (x1 >= x2 && x1Max <= x2Max)) {
+          if ((y2 >= y1 && y2Max <= y1Max) || (y1 >= y2 && y1Max <= y2Max)) {
+              return true;
+          }
         }
+        return false;
+    }
 
-    }
-    /**
-     * Displays the enemy's target and result on given coordinate
-     * @param coordinate
-     * @param hit
-     */
-    public void setEnemyTarget(Coordinate coordinate,  boolean hit){
-    	if(hit){
-    		 playerGrid[(coordinate.getX()-1)*10 + coordinate.getY()-1].addActor(explosion);
-    	}
-    	else{
-   		 	playerGrid[(coordinate.getX()-1)*10   + coordinate.getY()-1].addActor(miss);
-    	}
-    }
-    
+
 }

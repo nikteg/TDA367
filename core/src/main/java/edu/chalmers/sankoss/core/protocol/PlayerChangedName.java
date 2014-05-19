@@ -1,22 +1,22 @@
 package edu.chalmers.sankoss.core.protocol;
 
-import edu.chalmers.sankoss.core.BasePlayer;
+import edu.chalmers.sankoss.core.CorePlayer;
 
 /**
  * Created by nikteg on 30/04/14.
  */
 public class PlayerChangedName {
-    private BasePlayer player;
+    private CorePlayer player;
 
     public PlayerChangedName() {
 
     }
 
-    public PlayerChangedName(BasePlayer player) {
+    public PlayerChangedName(CorePlayer player) {
         this.player = player;
     }
 
-    public BasePlayer getPlayer() {
+    public CorePlayer getPlayer() {
         return player;
     }
 }

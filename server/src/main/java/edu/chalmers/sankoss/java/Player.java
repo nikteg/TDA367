@@ -1,6 +1,6 @@
 package edu.chalmers.sankoss.java;
 
-import edu.chalmers.sankoss.core.BasePlayer;
+import edu.chalmers.sankoss.core.CorePlayer;
 import edu.chalmers.sankoss.core.Coordinate;
 import edu.chalmers.sankoss.core.Ship;
 
@@ -13,7 +13,7 @@ import java.util.List;
  * @modified Fredrik Thune, Mikael Malmqvist
  * 
  */
-public class Player extends BasePlayer {
+public class Player extends CorePlayer {
     private List<Ship> fleet = new ArrayList<Ship>();
     private List<Coordinate> usedCoordinates = new ArrayList<Coordinate>();
     private boolean ready;
@@ -29,8 +29,8 @@ public class Player extends BasePlayer {
         super(id, name);
     }
 
-    public BasePlayer getBasePlayer() {
-        return new BasePlayer(getID(), getName(), getNationality());
+    public CorePlayer getCorePlayer() {
+        return new CorePlayer(getID(), getName(), getNationality());
     }
 
     public List<Ship> getFleet() {
