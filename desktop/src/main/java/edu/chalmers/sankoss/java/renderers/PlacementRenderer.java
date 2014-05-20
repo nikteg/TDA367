@@ -113,54 +113,37 @@ public class PlacementRenderer extends AbstractRenderer {
                     SankossGame.getInstance().getClient().playerReady(model.getFleet());
                 }
 
-                // Sends you are ready to opponent. Put this after check, where
-                // We tell the own player his ready
-                //SankossGame.getInstance().getClient().playerReady(temp);
-                // TODO: Call setReady in screen
-
 
 
 			}
 		});
 
 		btnPreviousFlag.addListener(new ChangeListener() {
+
+            /**
+             * Switches to previous flag.
+             * @param arg0
+             * @param arg1
+             */
 			@Override
 			public void changed(ChangeEvent arg0, Actor arg1) {
-				// TODO Can I do this?
 
-				if (model.getNationality().equals(
-						CorePlayer.Nationality.ENGLAND)) {
-					model.setNationality(CorePlayer.Nationality.USA);
-				} else if (model.getNationality().equals(
-						CorePlayer.Nationality.GERMANY)) {
-					model.setNationality(CorePlayer.Nationality.ENGLAND);
-				} else if (model.getNationality().equals(
-						CorePlayer.Nationality.JAPAN)) {
-					model.setNationality(CorePlayer.Nationality.GERMANY);
-				} else if (model.getNationality().equals(
-						CorePlayer.Nationality.USA)) {
-					model.setNationality(CorePlayer.Nationality.JAPAN);
-				}
+                model.setNationality(model.getNationality().getLast());
 
 			}
 		});
+
 		btnNextFlag.addListener(new ChangeListener() {
+
+            /**
+             * Switches to next flag.
+             * @param arg0
+             * @param arg1
+             */
 			@Override
 			public void changed(ChangeEvent arg0, Actor arg1) {
-				// TODO Can I do this?
-				if (model.getNationality().equals(
-						CorePlayer.Nationality.ENGLAND)) {
-					model.setNationality(CorePlayer.Nationality.GERMANY);
-				} else if (model.getNationality().equals(
-						CorePlayer.Nationality.GERMANY)) {
-					model.setNationality(CorePlayer.Nationality.JAPAN);
-				} else if (model.getNationality().equals(
-						CorePlayer.Nationality.JAPAN)) {
-					model.setNationality(CorePlayer.Nationality.USA);
-				} else if (model.getNationality().equals(
-						CorePlayer.Nationality.USA)) {
-					model.setNationality(CorePlayer.Nationality.ENGLAND);
-				}
+
+                model.setNationality(model.getNationality().getNext());
 			}
 		});
 
