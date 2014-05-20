@@ -26,6 +26,21 @@ public class GameScreen extends AbstractScreen<GameModel, GameRenderer> {
          */
         SankossGame.getInstance().getClient().addListener(new SankossClientListener() {
 
+            @Override
+            public void playerChangedNat(CorePlayer player) {
+
+            }
+
+
+            /**
+             * Method runs when opponent is set ready.
+             * Calls on update opponent visuals.
+             * @param player opponent player.
+             */
+            @Override
+            public void playerIsReady(CorePlayer player) {
+
+            }
 
             /**
              * Method to run if player has won.
@@ -81,6 +96,11 @@ public class GameScreen extends AbstractScreen<GameModel, GameRenderer> {
 
     }
 
+    public void updateOpponentVisuals() {
+
+        getRenderer().updateOpponentVisuals();
+    }
+
     public void shotAtYou(Coordinate coordinate, boolean hit) {
         if(hit) {
             youWereHit(coordinate);
@@ -120,6 +140,13 @@ public class GameScreen extends AbstractScreen<GameModel, GameRenderer> {
 
         Image miss = new Image(getRenderer().getHitTexture());
         ((GridImage)getRenderer().getGrid1()).add(miss, getModel().getYourShots().get(getModel().getYourShots().size() - 1));
+    }
+
+    @Override
+    public void show() {
+        super.show();
+
+        updateOpponentVisuals();
     }
 
     @Override

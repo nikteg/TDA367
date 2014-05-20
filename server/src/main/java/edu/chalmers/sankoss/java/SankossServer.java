@@ -521,6 +521,20 @@ public class SankossServer {
                     return;
                 }
 
+
+
+                if (object instanceof PlayerChangeNat) {
+                    PlayerChangeNat msg = (PlayerChangeNat) object;
+
+                    CorePlayer.Nationality nationality = msg.getNationality();
+                    System.out.println("CHANGED NATIONALITY" + msg.getNationality());
+                    player.setNationality(msg.getNationality());
+                    connection.sendTCP(new PlayerChangedNat(player.getCorePlayer()));
+
+                    pcs.firePropertyChange("playerChangedNat", null, null);
+                    return;
+                }
+
             }
 
             /**

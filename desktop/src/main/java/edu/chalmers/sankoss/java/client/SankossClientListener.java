@@ -71,6 +71,16 @@ public class SankossClientListener implements ISankossClientListener {
     }
 
     @Override
+    public void playerChangedNat(CorePlayer player) {
+
+    }
+
+    @Override
+    public void playerChangeNat(CorePlayer player) {
+
+    }
+
+    @Override
     public void leftGame(CorePlayer player) {
 
     }

@@ -118,8 +118,21 @@ public class GameRenderer extends AbstractRenderer {
 
         });
 
-        // Sets opponent in model
-        //getModel().setOpponent(SankossGame.getInstance().getClient().getOpponents().get(0));
+
+    }
+
+    /**
+     * Method for updating the visuals of representing
+     * the opponent.
+     */
+    public void updateOpponentVisuals() {
+
+        // Sets name
+        ((PlayerPanel)opponentPanel).setLblName(SankossGame.getInstance().getClient().getOpponents().get(0).getName());
+
+        // Sets Nationality
+        System.out.println("OPP NAT: " + SankossGame.getInstance().getClient().getOpponents().get(0).getNationality());
+        ((PlayerPanel)opponentPanel).setImgNationality(SankossGame.getInstance().getClient().getOpponents().get(0).getNationality());
 
     }
 

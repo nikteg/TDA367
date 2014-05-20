@@ -3,6 +3,7 @@ package edu.chalmers.sankoss.java.models;
 import edu.chalmers.sankoss.core.CorePlayer;
 import edu.chalmers.sankoss.core.Fleet;
 import edu.chalmers.sankoss.core.Ship;
+import edu.chalmers.sankoss.java.SankossGame;
 
 /**
  * @author Daniel Eineving
@@ -52,9 +53,19 @@ public class PlacementModel extends AbstractModel {
 	public void setUserReady(boolean ready){
 		this.userReady = ready;
 
+        updateNationality();
+
         setChanged();
         notifyObservers("playerReady");
 	}
+
+    /**
+     * Updates the client's player instance with correct nationality based on model.
+     */
+    public void updateNationality() {
+        SankossGame.getInstance().getClient().getPlayer().setNationality(nationality);
+        SankossGame.getInstance().getClient().playerChangeNat(nationality);
+    }
 
     public boolean getUserReady() {
         return userReady;

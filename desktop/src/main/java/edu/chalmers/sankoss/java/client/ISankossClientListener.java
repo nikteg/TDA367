@@ -20,6 +20,8 @@ public interface ISankossClientListener {
     public void destroyedShip(CorePlayer player, Ship ship);
     public void disconnected();
     public void playerChangedName(CorePlayer player);
+    public void playerChangedNat(CorePlayer player);
+    public void playerChangeNat(CorePlayer player);
     public void leftGame(CorePlayer player);
     public void leftRoom(CorePlayer player);
     public void removedRoom();

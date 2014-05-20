@@ -21,7 +21,7 @@ public class PlayerPanel extends Table {
         super(SankossGame.getInstance().getSkin());
 
         lblName = new Label(name, SankossGame.getInstance().getSkin());
-        imgNationality = new Image(new Texture(nationality.getPath()));
+        //imgNationality = new Image(new Texture(nationality.getPath()));
         turnLabel = new Label("", SankossGame.getInstance().getSkin());
 
         Pixmap pix = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
@@ -56,6 +56,15 @@ public class PlayerPanel extends Table {
         turnLabel.setText(text);
     }
 
+    public void setImgNationality(CorePlayer.Nationality nationality) {
+
+        imgNationality = new Image(new Texture(nationality.getPath()));
+        add(imgNationality);
+    }
+
+    public void setLblName(String name) {
+        lblName.setText(name);
+    }
 
     public enum Alignment{
         LEFT, RIGHT;

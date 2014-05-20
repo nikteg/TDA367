@@ -170,6 +170,16 @@ public class SankossClient {
                     return;
                 }
 
+                if (object instanceof PlayerChangedNat) {
+                    PlayerChangedNat msg = (PlayerChangedNat) object;
+
+                    for (ISankossClientListener listener : listeners) {
+                        listener.playerChangedName(msg.getPlayer());
+                    }
+
+                    return;
+                }
+
                 if (object instanceof RemovedRoom) {
                     RemovedRoom msg = (RemovedRoom) object;
 
@@ -282,6 +292,12 @@ public class SankossClient {
         if (client == null) return;
 
         client.sendTCP(new PlayerChangeName(name));
+    }
+
+    public void playerChangeNat(CorePlayer.Nationality nationality) {
+        if (client == null) return;
+
+        client.sendTCP(new PlayerChangeNat(nationality));
     }
 
     public void fetchRooms() {
