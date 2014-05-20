@@ -1,11 +1,8 @@
 package edu.chalmers.sankoss.java.models;
 
-import java.awt.List;
-
 import edu.chalmers.sankoss.core.CorePlayer;
 import edu.chalmers.sankoss.core.Fleet;
 import edu.chalmers.sankoss.core.Ship;
-import edu.chalmers.sankoss.java.SankossGame;
 
 /**
  * @author Daniel Eineving
@@ -18,6 +15,9 @@ public class PlacementModel extends AbstractModel {
 
 	public void setOpponentReady(boolean ready) {
 		this.opponentReady = ready;
+
+        setChanged();
+        notifyObservers("OpponentReady");
 	}
 
 	public boolean isOpponentReady() {
@@ -27,6 +27,10 @@ public class PlacementModel extends AbstractModel {
 	public void addShip(Ship ship) {
 		fleet.add(ship);
 	}
+
+    public void setFleet(Fleet fleet) {
+        this.fleet = fleet;
+    }
 
 	public Fleet getFleet() {
 		return fleet;
@@ -44,7 +48,15 @@ public class PlacementModel extends AbstractModel {
 	public boolean isUserReady(){
 		return userReady;
 	}
+
 	public void setUserReady(boolean ready){
 		this.userReady = ready;
+
+        setChanged();
+        notifyObservers("playerReady");
 	}
+
+    public boolean getUserReady() {
+        return userReady;
+    }
 }

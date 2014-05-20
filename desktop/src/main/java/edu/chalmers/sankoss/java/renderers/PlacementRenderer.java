@@ -8,19 +8,15 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-
 import edu.chalmers.sankoss.core.Coordinate;
 import edu.chalmers.sankoss.core.CorePlayer;
 import edu.chalmers.sankoss.core.Fleet;
 import edu.chalmers.sankoss.core.Ship;
-import edu.chalmers.sankoss.java.misc.PlayerPanel;
-
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-
 import edu.chalmers.sankoss.java.SankossGame;
-import edu.chalmers.sankoss.java.Screens;
+import edu.chalmers.sankoss.java.misc.PlayerPanel;
 import edu.chalmers.sankoss.java.models.PlacementModel;
 
 import java.util.Observable;
@@ -87,28 +83,46 @@ public class PlacementRenderer extends AbstractRenderer {
 			@Override
 			public void changed(ChangeEvent arg0, Actor arg1) {
 
-				// TODO Hard coding done here
-				Fleet temp = new Fleet();
-				try {
-					temp.add(new Ship(new Coordinate(1, 1), (new Coordinate(2,
-							1))));
-					temp.add(new Ship(new Coordinate(1, 2), (new Coordinate(3,
-							2))));
-					temp.add(new Ship(new Coordinate(1, 3), (new Coordinate(3,
-							3))));
-					temp.add(new Ship(new Coordinate(1, 4), (new Coordinate(4,
-							4))));
-					temp.add(new Ship(new Coordinate(1, 5), (new Coordinate(5,
-							5))));
+                // TODO Hard coding done here
+                Fleet temp = new Fleet();
+                try {
+                    temp.add(new Ship(new Coordinate(1, 1), (new Coordinate(2,
+                            1))));
+                    temp.add(new Ship(new Coordinate(1, 2), (new Coordinate(3,
+                            2))));
+                    temp.add(new Ship(new Coordinate(1, 3), (new Coordinate(3,
+                            3))));
+                    temp.add(new Ship(new Coordinate(1, 4), (new Coordinate(4,
+                            4))));
+                    temp.add(new Ship(new Coordinate(1, 5), (new Coordinate(5,
+                            5))));
 
-					SankossGame.getInstance().getClient().playerReady(temp);
-				} catch (Exception ignore) {
-				}
-				// TODO Remove this
-				Screens.GAME.show();
+                    SankossGame.getInstance().getClient().getPlayer().setFleet(temp);
+                    model.setFleet(temp);
+
+                    //SankossGame.getInstance().getClient().playerReady(temp);
+                } catch (Exception ignore) {
+
+                }
+
+                if(model.getFleet().getLength() == 5 && !model.getUserReady()) {
+                    model.setUserReady(true);
+                    SankossGame.getInstance().getClient().setReady(true);
+
+                    // Updates server and tells opponent you are ready
+                    SankossGame.getInstance().getClient().playerReady(model.getFleet());
+                }
+
+                // Sends you are ready to opponent. Put this after check, where
+                // We tell the own player his ready
+                //SankossGame.getInstance().getClient().playerReady(temp);
+                // TODO: Call setReady in screen
+
+
 
 			}
 		});
+
 		btnPreviousFlag.addListener(new ChangeListener() {
 			@Override
 			public void changed(ChangeEvent arg0, Actor arg1) {
@@ -197,6 +211,14 @@ public class PlacementRenderer extends AbstractRenderer {
 			flag.setDrawable(new TextureRegionDrawable(new TextureRegion(
 					new Texture(((PlacementModel) object).getNationality()
 							.getPath()))));
+		}
+
+        if (arg.equals("OpponentReady")) {
+			btnReady.setText("Enter Game");
+		}
+
+        if (arg.equals("playerReady")) {
+			btnReady.setDisabled(true);
 		}
 	}
 

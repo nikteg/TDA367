@@ -107,7 +107,6 @@ public class GameRenderer extends AbstractRenderer {
                 int gridY = (int)((crosshair.getY() - (grid1.getY() + grid1.getHeight())) / GRID_SQUARE) * (-1);
 
 
-                // KEEP BELOW
                 // sends shooting message and disables clicking
                 SankossGame.getInstance().getClient().fire(SankossGame.getInstance().getClient().getOpponents().get(0), new Coordinate(gridX, gridY));
                 grid1.setTouchable(Touchable.disabled);

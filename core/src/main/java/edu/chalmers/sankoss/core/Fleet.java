@@ -20,6 +20,10 @@ public class Fleet {
         this.numberOfShips = size;
     }
 
+    public int getLength() {
+        return ships.size();
+    }
+
     public boolean add(Ship ship) {
         return (((ships.size() + 1) <= numberOfShips) && validate(ship) && ships.add(ship));
     }

@@ -1,7 +1,6 @@
 package edu.chalmers.sankoss.java.screens;
 
 import com.badlogic.gdx.Gdx;
-
 import edu.chalmers.sankoss.core.CorePlayer;
 import edu.chalmers.sankoss.core.Ship;
 import edu.chalmers.sankoss.java.SankossGame;
@@ -25,9 +24,16 @@ public class PlacementScreen extends
 
 		SankossGame.getInstance().getClient()
 				.addListener(new SankossClientListener() {
+
+                    /**
+                     * Method runs when opponent is ready.
+                     * @param player the opponent.
+                     */
 					@Override
 					public void playerIsReady(CorePlayer player) {
-						getModel().setOpponentReady(true);
+                        if(player != null) {
+                            getModel().setOpponentReady(true);
+                        }
 					}
 
 					@Override
@@ -37,14 +43,22 @@ public class PlacementScreen extends
 
 					@Override
 					public void startedGame(Long ID) {
-						Gdx.app.postRunnable(new Runnable() {
 
-							@Override
-							public void run() {
-								Screens.GAME.show();
-							}
-						});
 					}
+
+                    @Override
+                    public void gameReady() {
+
+                        Gdx.app.postRunnable(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                // TODO: Check if ready to enter
+
+                                Screens.GAME.show();
+                            }
+                        });
+                    }
 
 				});
 	}
@@ -52,6 +66,22 @@ public class PlacementScreen extends
 	public void shipPlaced(Ship ship) {
 		getModel().addShip(ship);
 	}
+
+    /**
+     * Method for setting user as ready.
+     * If user has placed his five ships and isn't
+     * already ready, set as ready and notify server.
+     */
+    public void setReady() {
+
+        if(getModel().getFleet().getLength() == 5 && !getModel().getUserReady()) {
+            getModel().setUserReady(true);
+            SankossGame.getInstance().getClient().setReady(true);
+
+            // Updates server and tells opponent you are ready
+            SankossGame.getInstance().getClient().playerReady(getModel().getFleet());
+        }
+    }
 
 	@Override
 	public void update(float delta) {

@@ -46,6 +46,18 @@ public class WaitingScreen extends AbstractScreen<WaitingModel, WaitingRenderer>
                 });
             }
 
+            @Override
+            public void startedGame(Long gameID) {
+                Gdx.app.postRunnable(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        Screens.PLACEMENT.show();
+                    }
+                });
+            }
+
+
         });
     }
 
