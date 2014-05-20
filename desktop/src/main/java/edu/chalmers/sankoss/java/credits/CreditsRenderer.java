@@ -11,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import edu.chalmers.sankoss.java.SankossGame;
 import edu.chalmers.sankoss.java.mvc.AbstractRenderer;
-import edu.chalmers.sankoss.java.mvc.Screens;
 
 import java.util.Observable;
 
@@ -46,7 +45,7 @@ public class CreditsRenderer extends AbstractRenderer {
         btnBack.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Screens.MAIN_MENU.show();
+            	getProptertyChangeSupport().firePropertyChange("showMainMenu", true, false);
             }
         });
     }

@@ -16,7 +16,6 @@ import edu.chalmers.sankoss.core.Fleet;
 import edu.chalmers.sankoss.core.Ship;
 import edu.chalmers.sankoss.java.misc.PlayerPanel;
 import edu.chalmers.sankoss.java.mvc.AbstractRenderer;
-import edu.chalmers.sankoss.java.mvc.Screens;
 
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -105,7 +104,8 @@ public class PlacementRenderer extends AbstractRenderer {
 				} catch (Exception ignore) {
 				}
 				// TODO Remove this
-				Screens.GAME.show();
+				getProptertyChangeSupport().firePropertyChange("showMainMenu", true, false);
+				
 
 			}
 		});

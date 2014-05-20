@@ -12,7 +12,6 @@ import com.sun.org.apache.xpath.internal.SourceTree;
 import edu.chalmers.sankoss.java.SankossGame;
 import edu.chalmers.sankoss.java.client.SankossClient;
 import edu.chalmers.sankoss.java.mvc.AbstractRenderer;
-import edu.chalmers.sankoss.java.mvc.Screens;
 
 import java.util.Observable;
 
@@ -55,10 +54,7 @@ public class WaitingRenderer extends AbstractRenderer {
                 } else {
                     SankossGame.getInstance().getClient().leaveRoom();
                 }
-
-
-
-                Screens.LOBBY.show();
+                getProptertyChangeSupport().firePropertyChange("showLobby", true, false);
             }
         });
 

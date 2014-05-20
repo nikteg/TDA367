@@ -6,7 +6,6 @@ import edu.chalmers.sankoss.core.CorePlayer;
 import edu.chalmers.sankoss.java.SankossGame;
 import edu.chalmers.sankoss.java.client.SankossClientListener;
 import edu.chalmers.sankoss.java.mvc.AbstractScreen;
-import edu.chalmers.sankoss.java.mvc.Screens;
 
 /**
  * Screen to be placed in when hosting a game and
@@ -41,7 +40,7 @@ public class WaitingScreen extends AbstractScreen<WaitingModel, WaitingRenderer>
 
                     @Override
                     public void run() {
-                        Screens.LOBBY.show();
+                    	getProptertyChangeSupport().firePropertyChange("ShowLobby", true, false);
                     }
                 });
             }

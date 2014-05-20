@@ -29,11 +29,7 @@ public abstract class AbstractScreen<M extends AbstractModel, R extends Abstract
     private AbstractScreen() {
 
     }
-
-    public PropertyChangeSupport getProptertyChangeSupport() {
-		return pcs;
-	}
-
+    
 	public AbstractScreen(Class<M> model, Class<R> renderer) {
         try {
             setModel(model.newInstance());
@@ -44,6 +40,14 @@ public abstract class AbstractScreen<M extends AbstractModel, R extends Abstract
             e.getCause().printStackTrace();
         }
 
+    }
+    public PropertyChangeSupport getProptertyChangeSupport() {
+		return pcs;
+	}
+    
+    public void addPropertyChangeListener(PropertyChangeListener pcl){
+    	pcs.addPropertyChangeListener(pcl);
+    	getRenderer().addPropertyChangeListener(pcl);
     }
 
     public M getModel() {
@@ -180,9 +184,5 @@ public abstract class AbstractScreen<M extends AbstractModel, R extends Abstract
     public boolean scrolled(int amount) {
         renderer.getStage().scrolled(amount);
         return false;
-    }
-    
-    public void addPropertyChangeListener(PropertyChangeListener pcl){
-    	pcs.addPropertyChangeListener(pcl);
     }
 }

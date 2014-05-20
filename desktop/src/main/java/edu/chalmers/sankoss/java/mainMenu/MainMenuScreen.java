@@ -5,7 +5,6 @@ import com.badlogic.gdx.Input;
 import edu.chalmers.sankoss.java.SankossGame;
 import edu.chalmers.sankoss.java.client.SankossClientListener;
 import edu.chalmers.sankoss.java.mvc.AbstractScreen;
-import edu.chalmers.sankoss.java.mvc.Screens;
 
 /**
  * Screen used at the main menu.
@@ -38,8 +37,9 @@ public class MainMenuScreen extends AbstractScreen<MainMenuModel, MainMenuRender
     @Override
     public boolean keyDown(int keyCode) {
         super.keyDown(keyCode);
-        if (keyCode == Input.Keys.Q)
-            Screens.GAME.show();
+        if (keyCode == Input.Keys.Q){
+        	getProptertyChangeSupport().firePropertyChange("ShowGame", true, false);
+        }
         System.out.println("NU TRYCKTE DU PÅ EN KNAPP: " + keyCode);
 
         return true;

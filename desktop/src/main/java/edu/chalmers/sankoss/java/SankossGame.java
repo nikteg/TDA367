@@ -109,10 +109,11 @@ public class SankossGame extends Game implements PropertyChangeListener {
 		GAME (new GameScreen(GameModel.class, GameRenderer.class)), 
 		CREDITS (new CreditsScreen(CreditsModel.class, CreditsRenderer.class));
 
-		private Screen screen;
+		private AbstractScreen screen;
 
-		Screens(Screen screen) {
+		Screens(AbstractScreen screen) {
 			this.screen = screen;
+			this.screen.addPropertyChangeListener(SankossGame.getInstance());
 		}
 
 		public void show() {
@@ -123,6 +124,7 @@ public class SankossGame extends Game implements PropertyChangeListener {
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if(evt.getPropertyName().equals("showMainMenu")){
+			
 			Screens.MAIN_MENU.show();
 		}
 		else if(evt.getPropertyName().equals("showLobby")){
