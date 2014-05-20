@@ -1,9 +1,11 @@
-package edu.chalmers.sankoss.java.models;
+package edu.chalmers.sankoss.java.game;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+
 import edu.chalmers.sankoss.core.Coordinate;
 import edu.chalmers.sankoss.core.CorePlayer;
 import edu.chalmers.sankoss.java.misc.FlagImage;
+import edu.chalmers.sankoss.java.mvc.AbstractModel;
 
 import java.util.ArrayList;
 import java.util.HashMap;

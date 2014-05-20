@@ -1,4 +1,6 @@
-package edu.chalmers.sankoss.java.models;
+package edu.chalmers.sankoss.java.credits;
+
+import edu.chalmers.sankoss.java.mvc.AbstractModel;
 
 /**
  * Created by nikteg on 16/05/14.

@@ -1,12 +1,11 @@
-package edu.chalmers.sankoss.java.screens;
+package edu.chalmers.sankoss.java.waitingScreen;
 
 import com.badlogic.gdx.Gdx;
+
 import edu.chalmers.sankoss.core.CorePlayer;
 import edu.chalmers.sankoss.java.SankossGame;
-import edu.chalmers.sankoss.java.Screens;
 import edu.chalmers.sankoss.java.client.SankossClientListener;
-import edu.chalmers.sankoss.java.models.WaitingModel;
-import edu.chalmers.sankoss.java.renderers.WaitingRenderer;
+import edu.chalmers.sankoss.java.mvc.AbstractScreen;
 
 /**
  * Screen to be placed in when hosting a game and
@@ -41,7 +40,7 @@ public class WaitingScreen extends AbstractScreen<WaitingModel, WaitingRenderer>
 
                     @Override
                     public void run() {
-                        Screens.LOBBY.show();
+                    	getProptertyChangeSupport().firePropertyChange("ShowLobby", true, false);
                     }
                 });
             }
@@ -52,12 +51,10 @@ public class WaitingScreen extends AbstractScreen<WaitingModel, WaitingRenderer>
 
                     @Override
                     public void run() {
-                        Screens.PLACEMENT.show();
+                    	getProptertyChangeSupport().firePropertyChange("showPlacement", true, false);
                     }
                 });
             }
-
-
         });
     }
 

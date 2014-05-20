@@ -1,10 +1,12 @@
-package edu.chalmers.sankoss.java.renderers;
+package edu.chalmers.sankoss.java.mvc;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -20,12 +22,21 @@ public abstract class AbstractRenderer implements Observer {
     private Stage stage = new Stage(new ExtendViewport(800, 600)); // TODO Window size constant?
     private Table table = new Table();
     private SpriteBatch spriteBatch = new SpriteBatch();
+    
+    private PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 
     public AbstractRenderer(Observable observable) {
         observable.addObserver(this);
 
         table.setWidth(stage.getWidth());
         table.setHeight(stage.getHeight());
+    }
+    
+    public PropertyChangeSupport getProptertyChangeSupport() {
+		return pcs;
+	}
+    public void addPropertyChangeListener(PropertyChangeListener pcl){
+    	pcs.addPropertyChangeListener(pcl);
     }
 
     public Table getTable() {

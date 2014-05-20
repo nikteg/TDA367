@@ -1,4 +1,4 @@
-package edu.chalmers.sankoss.java.renderers;
+package edu.chalmers.sankoss.java.placement;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -17,7 +17,14 @@ import edu.chalmers.sankoss.core.Fleet;
 import edu.chalmers.sankoss.core.Ship;
 import edu.chalmers.sankoss.java.SankossGame;
 import edu.chalmers.sankoss.java.misc.PlayerPanel;
-import edu.chalmers.sankoss.java.models.PlacementModel;
+import edu.chalmers.sankoss.java.misc.PlayerPanel;
+import edu.chalmers.sankoss.java.mvc.AbstractRenderer;
+
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+
+import edu.chalmers.sankoss.java.SankossGame;
+
 
 import java.util.Observable;
 
@@ -112,9 +119,6 @@ public class PlacementRenderer extends AbstractRenderer {
                     // Updates server and tells opponent you are ready
                     SankossGame.getInstance().getClient().playerReady(model.getFleet());
                 }
-
-
-
 			}
 		});
 

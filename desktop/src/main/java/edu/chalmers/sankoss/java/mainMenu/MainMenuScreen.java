@@ -1,11 +1,10 @@
-package edu.chalmers.sankoss.java.screens;
+package edu.chalmers.sankoss.java.mainMenu;
 
 import com.badlogic.gdx.Input;
+
 import edu.chalmers.sankoss.java.SankossGame;
-import edu.chalmers.sankoss.java.Screens;
 import edu.chalmers.sankoss.java.client.SankossClientListener;
-import edu.chalmers.sankoss.java.models.MainMenuModel;
-import edu.chalmers.sankoss.java.renderers.MainMenuRenderer;
+import edu.chalmers.sankoss.java.mvc.AbstractScreen;
 
 /**
  * Screen used at the main menu.
@@ -38,10 +37,12 @@ public class MainMenuScreen extends AbstractScreen<MainMenuModel, MainMenuRender
     @Override
     public boolean keyDown(int keyCode) {
         super.keyDown(keyCode);
-        if (keyCode == Input.Keys.Q)
-            Screens.GAME.show();
-        if (keyCode == Input.Keys.W)
-            Screens.PLACEMENT.show();
+        if (keyCode == Input.Keys.Q){
+        	getProptertyChangeSupport().firePropertyChange("ShowGame", true, false);
+        }
+        if (keyCode == Input.Keys.W){
+        	getProptertyChangeSupport().firePropertyChange("ShowPlacement", true, false);
+        }
         System.out.println("NU TRYCKTE DU PÅ EN KNAPP: " + keyCode);
 
         return true;

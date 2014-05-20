@@ -1,14 +1,14 @@
-package edu.chalmers.sankoss.java.screens;
+package edu.chalmers.sankoss.java.game;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+
 import edu.chalmers.sankoss.core.Coordinate;
 import edu.chalmers.sankoss.core.CorePlayer;
 import edu.chalmers.sankoss.core.Ship;
 import edu.chalmers.sankoss.java.SankossGame;
 import edu.chalmers.sankoss.java.client.SankossClientListener;
 import edu.chalmers.sankoss.java.misc.GridImage;
-import edu.chalmers.sankoss.java.models.GameModel;
-import edu.chalmers.sankoss.java.renderers.GameRenderer;
+import edu.chalmers.sankoss.java.mvc.AbstractScreen;
 
 /**
  * Screen used when placing the ships.

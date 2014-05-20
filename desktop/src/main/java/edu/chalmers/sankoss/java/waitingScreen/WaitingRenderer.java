@@ -1,4 +1,4 @@
-package edu.chalmers.sankoss.java.renderers;
+package edu.chalmers.sankoss.java.waitingScreen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -8,10 +8,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.sun.org.apache.xpath.internal.SourceTree;
+
 import edu.chalmers.sankoss.java.SankossGame;
-import edu.chalmers.sankoss.java.Screens;
 import edu.chalmers.sankoss.java.client.SankossClient;
-import edu.chalmers.sankoss.java.models.WaitingModel;
+import edu.chalmers.sankoss.java.mvc.AbstractRenderer;
 
 import java.util.Observable;
 
@@ -54,10 +54,7 @@ public class WaitingRenderer extends AbstractRenderer {
                 } else {
                     SankossGame.getInstance().getClient().leaveRoom();
                 }
-
-
-
-                Screens.LOBBY.show();
+                getProptertyChangeSupport().firePropertyChange("showLobby", true, false);
             }
         });
 

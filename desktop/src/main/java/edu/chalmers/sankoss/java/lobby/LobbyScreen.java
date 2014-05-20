@@ -1,13 +1,12 @@
-package edu.chalmers.sankoss.java.screens;
+package edu.chalmers.sankoss.java.lobby;
 
 import com.badlogic.gdx.Gdx;
+
 import edu.chalmers.sankoss.core.CorePlayer;
 import edu.chalmers.sankoss.core.Room;
 import edu.chalmers.sankoss.java.SankossGame;
-import edu.chalmers.sankoss.java.Screens;
 import edu.chalmers.sankoss.java.client.SankossClientListener;
-import edu.chalmers.sankoss.java.models.LobbyModel;
-import edu.chalmers.sankoss.java.renderers.LobbyRenderer;
+import edu.chalmers.sankoss.java.mvc.AbstractScreen;
 
 import java.util.Map;
 
@@ -42,7 +41,7 @@ public class LobbyScreen extends AbstractScreen<LobbyModel, LobbyRenderer> {
 
                     @Override
                     public void run() {
-                        Screens.WAITING.show();
+                    	getProptertyChangeSupport().firePropertyChange("ShowWaiting", true, false);
                     }
                 });
             }
@@ -54,7 +53,7 @@ public class LobbyScreen extends AbstractScreen<LobbyModel, LobbyRenderer> {
 
                         @Override
                         public void run() {
-                            Screens.WAITING.show();
+                        	getProptertyChangeSupport().firePropertyChange("ShowWaiting", true, false);
                         }
                     });
                 }

@@ -1,4 +1,4 @@
-package edu.chalmers.sankoss.java.models;
+package edu.chalmers.sankoss.java.mvc;
 
 import java.util.Observable;
 

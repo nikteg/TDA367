@@ -1,6 +1,7 @@
-package edu.chalmers.sankoss.java.models;
+package edu.chalmers.sankoss.java.lobby;
 
 import edu.chalmers.sankoss.core.Room;
+import edu.chalmers.sankoss.java.mvc.AbstractModel;
 
 import java.util.HashMap;
 import java.util.Map;
