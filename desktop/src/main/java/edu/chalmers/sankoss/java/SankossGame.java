@@ -125,5 +125,20 @@ public class SankossGame extends Game implements PropertyChangeListener {
 		if(evt.getPropertyName().equals("showMainMenu")){
 			Screens.MAIN_MENU.show();
 		}
+		else if(evt.getPropertyName().equals("showLobby")){
+			Screens.LOBBY.show();
+		}
+		else if(evt.getPropertyName().equals("showWaiting")){
+			Screens.WAITING.show();
+		}
+		else if(evt.getPropertyName().equals("showPlacement")){
+			Screens.PLACEMENT.show();
+		}
+		else if(evt.getPropertyName().equals("showGame")){
+			Screens.GAME.show();
+		}
+		else if(evt.getPropertyName().equals("showCredits")){
+			Screens.CREDITS.show();
+		}
 	}
 }

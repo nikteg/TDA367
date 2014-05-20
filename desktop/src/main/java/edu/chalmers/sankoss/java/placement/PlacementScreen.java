@@ -7,7 +7,6 @@ import edu.chalmers.sankoss.core.Ship;
 import edu.chalmers.sankoss.java.SankossGame;
 import edu.chalmers.sankoss.java.client.SankossClientListener;
 import edu.chalmers.sankoss.java.mvc.AbstractScreen;
-import edu.chalmers.sankoss.java.mvc.Screens;
 
 /**
  * Screen used when placing the ships. Handles game logic when placing ships,
@@ -31,7 +30,7 @@ public class PlacementScreen extends
 
 					@Override
 					public void leftGame(CorePlayer player) {
-						Screens.LOBBY.show();
+						getProptertyChangeSupport().firePropertyChange("showLobby", false, true);
 					}
 
 					@Override
@@ -40,7 +39,7 @@ public class PlacementScreen extends
 
 							@Override
 							public void run() {
-								Screens.GAME.show();
+								getProptertyChangeSupport().firePropertyChange("showGame", false, true);
 							}
 						});
 					}
@@ -50,6 +49,7 @@ public class PlacementScreen extends
 
 	public void shipPlaced(Ship ship) {
 		getModel().addShip(ship);
+		
 	}
 
 	@Override

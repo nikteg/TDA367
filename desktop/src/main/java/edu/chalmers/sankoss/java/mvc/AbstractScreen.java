@@ -7,6 +7,8 @@ import com.badlogic.gdx.Screen;
 
 import edu.chalmers.sankoss.java.SankossGame;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Observable;
 
@@ -21,12 +23,18 @@ public abstract class AbstractScreen<M extends AbstractModel, R extends Abstract
 
     private M model;
     private R renderer;
+    
+    private PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 
     private AbstractScreen() {
 
     }
 
-    public AbstractScreen(Class<M> model, Class<R> renderer) {
+    public PropertyChangeSupport getProptertyChangeSupport() {
+		return pcs;
+	}
+
+	public AbstractScreen(Class<M> model, Class<R> renderer) {
         try {
             setModel(model.newInstance());
             setRenderer(renderer.getConstructor(Observable.class).newInstance(getModel()));
@@ -172,5 +180,9 @@ public abstract class AbstractScreen<M extends AbstractModel, R extends Abstract
     public boolean scrolled(int amount) {
         renderer.getStage().scrolled(amount);
         return false;
+    }
+    
+    public void addPropertyChangeListener(PropertyChangeListener pcl){
+    	pcs.addPropertyChangeListener(pcl);
     }
 }
