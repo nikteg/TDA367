@@ -17,6 +17,7 @@ public class PlayerPanel extends Table {
     private Image imgNationality;
     private Label turnLabel;
 
+
     public PlayerPanel(String name, CorePlayer.Nationality nationality, Alignment align) {
         super(SankossGame.getInstance().getSkin());
 
@@ -40,16 +41,17 @@ public class PlayerPanel extends Table {
             add(lblName).padRight(8f);
             add(imgNationality);
         }
-
-
-
-
         //debug();
 
     }
 
-    public Label getTurnLabel() {
-        return turnLabel;
+
+    public void setNationality(CorePlayer.Nationality nationality) {
+        this.imgNationality.setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture(nationality.getPath()))));
+    }
+
+    public void setName(String name) {
+        lblName.setText(name);
     }
 
     public void setTurnLabelText(String text) {

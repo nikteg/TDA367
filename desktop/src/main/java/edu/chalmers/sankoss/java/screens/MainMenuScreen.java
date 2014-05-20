@@ -40,6 +40,8 @@ public class MainMenuScreen extends AbstractScreen<MainMenuModel, MainMenuRender
         super.keyDown(keyCode);
         if (keyCode == Input.Keys.Q)
             Screens.GAME.show();
+        if (keyCode == Input.Keys.W)
+            Screens.PLACEMENT.show();
         System.out.println("NU TRYCKTE DU PÅ EN KNAPP: " + keyCode);
 
         return true;
