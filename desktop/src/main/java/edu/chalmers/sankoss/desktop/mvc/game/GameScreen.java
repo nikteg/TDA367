@@ -89,9 +89,12 @@ public class GameScreen extends AbstractScreen<GameModel, GameRenderer> {
                 // Determines if you were shot at
                 if (target.equals(SankossClient.getInstance().getPlayer())) {
                     //shotAtYou(coordinate, hit);
-
+                    getModel().setShootingAllowed(true);
                 } else {
                     //shotAtOpponent(hit);
+
+                    getModel().setShootingAllowed(false);
+
                 }
 
             }
@@ -108,7 +111,7 @@ public class GameScreen extends AbstractScreen<GameModel, GameRenderer> {
 
                 // Left click
                 if (button == 0) {
-                    SankossClient.getInstance().fire(getModel().getOpponent(), coord);
+                   SankossClient.getInstance().fire(coord);
                     getModel().addShot(coord);
 
                     getRenderer().getGrid1().setTouchable(Touchable.disabled);
@@ -149,6 +152,8 @@ public class GameScreen extends AbstractScreen<GameModel, GameRenderer> {
     @Override
     public void show() {
         super.show();
+
+        getRenderer().updateOpponentVisuals();
     }
 
     @Override

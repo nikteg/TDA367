@@ -83,18 +83,33 @@ public class GameRenderer extends AbstractRenderer<GameModel> {
         System.out.println("OPP NAT: " + SankossClient.getInstance().getOpponents().get(0).getNationality());
         ((PlayerPanel)opponentPanel).setImgNationality(SankossClient.getInstance().getOpponents().get(0).getNationality());
 
+
     }
 
-    public void updateYourTurn(GameModel model) {
+    public void disableYourTurn() {
+        // If opponent's turn
+
+        opponentPanel.setTurnLabelText("Opponent's turn!");
+        playerPanel.setTurnLabelText("");
+
+        disableShooting();
+    }
+
+    public void enableYourTurn() {
         // If your turn
-        ((PlayerPanel)opponentPanel).setTurnLabelText("");
-        ((PlayerPanel)playerPanel).setTurnLabelText("Your Turn!");
+
+        opponentPanel.setTurnLabelText("");
+        playerPanel.setTurnLabelText("Your Turn!");
 
         enableShooting();
     }
 
     public void enableShooting() {
         grid1.setTouchable(Touchable.enabled);
+    }
+
+    public void disableShooting() {
+        grid1.setTouchable(Touchable.disabled);
     }
 
     @Override
@@ -117,7 +132,12 @@ public class GameRenderer extends AbstractRenderer<GameModel> {
 
         // Changed to your turn
         if (arg.equals("shooting_allowed")) {
-            // TODO Turn
+
+            if(getModel().isShootingAllowed()) {
+                enableYourTurn();
+            } else {
+                disableYourTurn();
+            }
 
         }
 
