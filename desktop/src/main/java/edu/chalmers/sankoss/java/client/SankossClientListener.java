@@ -105,5 +105,10 @@ public class SankossClientListener implements ISankossClientListener {
 
     }
 
+    @Override
+    public void errorMsg(Object errorObject, String errorMessage) {
+
+    }
+
 
 }
