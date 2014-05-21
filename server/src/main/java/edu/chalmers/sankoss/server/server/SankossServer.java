@@ -3,21 +3,20 @@ package edu.chalmers.sankoss.server.server;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
-
 import edu.chalmers.sankoss.core.Network;
 import edu.chalmers.sankoss.core.core.CorePlayer;
 import edu.chalmers.sankoss.core.core.Room;
 import edu.chalmers.sankoss.core.core.Ship;
 import edu.chalmers.sankoss.core.protocol.*;
-import edu.chalmers.sankoss.server.web.WebServer;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 
 /**
@@ -331,6 +330,9 @@ public class SankossServer {
                  */
                 if (object instanceof Fire) {
                     Fire msg = (Fire) object;
+
+                    if (msg.getTarget() == null)
+                        return;
 
                     // A player can't shoot at him/herself
                     if (msg.getTarget().getID().equals(player.getCorePlayer().getID()))

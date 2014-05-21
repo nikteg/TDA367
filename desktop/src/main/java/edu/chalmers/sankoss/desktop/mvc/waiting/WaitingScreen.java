@@ -76,7 +76,8 @@ public class WaitingScreen extends AbstractScreen<WaitingModel, WaitingRenderer>
         getRenderer().getBtnStart().addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                changeScreen("game");
+                SankossGame.getInstance().getClient().startGame();
+                //changeScreen("game");
             }
         });
     }

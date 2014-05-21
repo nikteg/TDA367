@@ -37,12 +37,23 @@ public class PlacementScreen extends
 
 					@Override
 					public void leftGame(CorePlayer player) {
-                        changeScreen("lobby");
+                        Gdx.app.postRunnable(new Runnable() {
+                            @Override
+                            public void run() {
+                                changeScreen("lobby");
+                            }
+                        });
 					}
 
 					@Override
 					public void startedGame(Long ID) {
-                        changeScreen("game");
+                        Gdx.app.postRunnable(new Runnable() {
+                            @Override
+                            public void run() {
+                                changeScreen("placement");
+                            }
+                        });
+
 					}
 
 					@Override
