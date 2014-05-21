@@ -1,4 +1,4 @@
-package edu.chalmers.sankoss.java.mainMenu;
+package edu.chalmers.sankoss.java.mvc.mainMenu;
 
 import com.badlogic.gdx.Gdx;
 
