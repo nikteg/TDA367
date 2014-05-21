@@ -1,7 +1,11 @@
 package edu.chalmers.sankoss.core;
 
 import static org.junit.Assert.*;
+
 import org.junit.Test;
+
+import edu.chalmers.sankoss.core.core.Coordinate;
+import edu.chalmers.sankoss.core.core.Ship;
 import edu.chalmers.sankoss.core.exceptions.IllegalShipCoordinatesException;
 
 /**

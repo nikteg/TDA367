@@ -9,7 +9,9 @@ import java.util.LinkedList;
 
 import org.junit.Test;
 
-import edu.chalmers.sankoss.core.Ship.Rotation;
+import edu.chalmers.sankoss.core.core.Coordinate;
+import edu.chalmers.sankoss.core.core.Ship;
+import edu.chalmers.sankoss.core.core.Ship.Rotation;
 import edu.chalmers.sankoss.core.exceptions.IllegalShipCoordinatesException;
 
 /**
@@ -18,7 +20,7 @@ import edu.chalmers.sankoss.core.exceptions.IllegalShipCoordinatesException;
  */
 public class ShipTest {
 	/**
-	 * Test method for {@link edu.chalmers.sankoss.core.Ship#hashCode()}.
+	 * Test method for {@link edu.chalmers.sankoss.core.core.Ship#hashCode()}.
 	 */
 	@Test
 	public void testHashCode() {
@@ -34,7 +36,7 @@ public class ShipTest {
 	}
 
 	/**
-	 * Test method for {@link edu.chalmers.sankoss.core.Ship#Ship()}.
+	 * Test method for {@link edu.chalmers.sankoss.core.core.Ship#Ship()}.
 	 */
 	@Test
 	public void testShip() {
@@ -47,7 +49,7 @@ public class ShipTest {
 
 	/**
 	 * Test method for
-	 * {@link edu.chalmers.sankoss.core.Ship#Ship(edu.chalmers.sankoss.core.Coordinate, edu.chalmers.sankoss.core.Coordinate)}
+	 * {@link edu.chalmers.sankoss.core.core.Ship#Ship(edu.chalmers.sankoss.core.core.Coordinate, edu.chalmers.sankoss.core.core.Coordinate)}
 	 * .
 	 */
 	@Test
@@ -73,7 +75,7 @@ public class ShipTest {
 
 	/**
 	 * Test method for
-	 * {@link edu.chalmers.sankoss.core.Ship#setCoordinates(edu.chalmers.sankoss.core.Coordinate, edu.chalmers.sankoss.core.Coordinate)}
+	 * {@link edu.chalmers.sankoss.core.core.Ship#setCoordinates(edu.chalmers.sankoss.core.core.Coordinate, edu.chalmers.sankoss.core.core.Coordinate)}
 	 * .
 	 */
 	@Test
@@ -100,7 +102,7 @@ public class ShipTest {
 	}
 
 	/**
-	 * Test method for {@link edu.chalmers.sankoss.core.Ship#getFront()}.
+	 * Test method for {@link edu.chalmers.sankoss.core.core.Ship#getFront()}.
 	 */
 	@Test
 	public void testGetStart() {
@@ -114,7 +116,7 @@ public class ShipTest {
 	}
 
 	/**
-	 * Test method for {@link edu.chalmers.sankoss.core.Ship#getRear()}.
+	 * Test method for {@link edu.chalmers.sankoss.core.core.Ship#getRear()}.
 	 */
 	@Test
 	public void testGetEnd() {
@@ -127,7 +129,7 @@ public class ShipTest {
 	}
 
 	/**
-	 * Test method for {@link edu.chalmers.sankoss.core.Ship#getSize()}.
+	 * Test method for {@link edu.chalmers.sankoss.core.core.Ship#getSize()}.
 	 */
 	@Test
 	public void testGetSize() {
@@ -140,7 +142,7 @@ public class ShipTest {
 	}
 
 	/**
-	 * Test method for {@link edu.chalmers.sankoss.core.Ship#toString()}.
+	 * Test method for {@link edu.chalmers.sankoss.core.core.Ship#toString()}.
 	 */
 	@Test
 	public void testToString() {
@@ -148,7 +150,7 @@ public class ShipTest {
 	}
 
 	/**
-	 * Test method for {@link edu.chalmers.sankoss.core.Ship#getCoordinates()}.
+	 * Test method for {@link edu.chalmers.sankoss.core.core.Ship#getCoordinates()}.
 	 */
 	@Test
 	public void testGetCoordinates() {
@@ -169,7 +171,7 @@ public class ShipTest {
 
 	/**
 	 * Test method for
-	 * {@link edu.chalmers.sankoss.core.Ship#isShip(edu.chalmers.sankoss.core.Coordinate)}
+	 * {@link edu.chalmers.sankoss.core.core.Ship#isShip(edu.chalmers.sankoss.core.core.Coordinate)}
 	 * .
 	 */
 	@Test
@@ -187,7 +189,7 @@ public class ShipTest {
 	}
 
 	/**
-	 * Test method for {@link edu.chalmers.sankoss.core.Ship#getRotation()}.
+	 * Test method for {@link edu.chalmers.sankoss.core.core.Ship#getRotation()}.
 	 */
 	@Test
 	public void testGetRotation() {
@@ -209,7 +211,7 @@ public class ShipTest {
 	}
 
 	/**
-	 * Test method for {@link edu.chalmers.sankoss.core.Ship#shipHit()}.
+	 * Test method for {@link edu.chalmers.sankoss.core.core.Ship#shipHit()}.
 	 */
 	@Test
 	public void testShipHit() {
@@ -224,7 +226,7 @@ public class ShipTest {
 	}
 
 	/**
-	 * Test method for {@link edu.chalmers.sankoss.core.Ship#isDestroyed()}.
+	 * Test method for {@link edu.chalmers.sankoss.core.core.Ship#isDestroyed()}.
 	 */
 	@Test
 	public void testIsDestroyed() {
@@ -246,7 +248,7 @@ public class ShipTest {
 
 	/**
 	 * Test method for
-	 * {@link edu.chalmers.sankoss.core.Ship#equals(java.lang.Object)}.
+	 * {@link edu.chalmers.sankoss.core.core.Ship#equals(java.lang.Object)}.
 	 */
 	@Test
 	public void testEqualsObject() {

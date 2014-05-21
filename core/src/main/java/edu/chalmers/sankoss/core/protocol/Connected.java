@@ -1,6 +1,6 @@
 package edu.chalmers.sankoss.core.protocol;
 
-import edu.chalmers.sankoss.core.CorePlayer;
+import edu.chalmers.sankoss.core.core.CorePlayer;
 
 /**
  * @author Niklas Tegnander
