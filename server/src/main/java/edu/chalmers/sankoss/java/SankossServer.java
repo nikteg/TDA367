@@ -119,7 +119,7 @@ public class SankossServer {
                      */
                     for (Room room : RoomFactory.getRooms().values()) {
                         if (room.hasPlayerWithID(player.getID())) {
-                            connection.sendTCP(new CreatedRoom());
+                            connection.sendTCP(new ErrorMsg(new CreatedRoom(), "A client cannot sit in more than one room at a time"));
 
                             return;
                         }
@@ -130,7 +130,7 @@ public class SankossServer {
                         room = RoomFactory.createRoom(msg.getName(), msg.getPassword());
                         room.addPlayer(player.getCorePlayer());
                     } catch (RoomNotFoundException e) {
-                        connection.sendTCP(new CreatedRoom());
+                        connection.sendTCP(new ErrorMsg(new CreatedRoom(), "Room not found"));
 
                         return;
                     }
@@ -165,7 +165,7 @@ public class SankossServer {
                     try {
                         room = RoomFactory.getRoom(msg.getRoomID());
                     } catch (RoomNotFoundException e) {
-                        connection.sendTCP(new JoinRoom());
+                        connection.sendTCP(new ErrorMsg(new JoinRoom(), "Room not found"));
 
                         return;
                     }
@@ -173,7 +173,7 @@ public class SankossServer {
                     // A player cannot join the same room twice
                     for (CorePlayer roomPlayer : room.getPlayers()) {
                         if (roomPlayer.getID().equals(player.getID())) {
-                            connection.sendTCP(new JoinRoom());
+                            connection.sendTCP(new ErrorMsg(new JoinRoom(), "A player cannot join the same room twice"));
                             return;
                         }
                     }
@@ -181,10 +181,10 @@ public class SankossServer {
 
                     //TODO SEND ROOM IS FULL MESSAGE
                     /**
-                     * Only 2 player can join the same room
+                     * Only 2 players can join the same room
                      */
                     if (room.getPlayers().size() >= 2) {
-                        connection.sendTCP(new JoinRoom());
+                        connection.sendTCP(new ErrorMsg(new JoinRoom(), "Only 2 players can join the same room"));
                         return;
                     }
 
@@ -218,13 +218,17 @@ public class SankossServer {
                     try {
                         room = RoomFactory.getRoom(msg.getRoomID());
                     } catch (RoomNotFoundException e) {
-                        connection.sendTCP(new StartedGame());
+                        connection.sendTCP(new ErrorMsg(new StartedGame(), "Room not found"));
 
                         return;
                     }
 
+                    /**
+                     * Can only start a game if the room has more than one player
+                     */
+
                     if (room.getPlayers().size() <= 1) {
-                        connection.sendTCP(new StartedGame());
+                        connection.sendTCP(new ErrorMsg(new StartedGame(), "Can only start a game if the room has more than one player"));
 
                         return;
                     }
@@ -516,7 +520,7 @@ public class SankossServer {
 
                         pcs.firePropertyChange("playerChangedName", null, null);
                     } else {
-                        connection.sendTCP(new PlayerChangedName());
+                        connection.sendTCP(new ErrorMsg(new PlayerChangedName(), "Length of name can not greater than 16 characters"));
                     }
                     return;
                 }
