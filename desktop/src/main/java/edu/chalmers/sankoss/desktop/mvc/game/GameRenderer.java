@@ -6,9 +6,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+
 import edu.chalmers.sankoss.core.core.Coordinate;
 import edu.chalmers.sankoss.core.core.CorePlayer;
 import edu.chalmers.sankoss.desktop.SankossGame;
+import edu.chalmers.sankoss.desktop.client.SankossClient;
 import edu.chalmers.sankoss.desktop.misc.GridImage;
 import edu.chalmers.sankoss.desktop.mvc.AbstractRenderer;
 
@@ -75,11 +77,11 @@ public class GameRenderer extends AbstractRenderer<GameModel> {
     public void updateOpponentVisuals() {
 
         // Sets name
-        ((PlayerPanel)opponentPanel).setLblName(SankossGame.getInstance().getClient().getOpponents().get(0).getName());
+        ((PlayerPanel)opponentPanel).setLblName(SankossClient.getInstance().getOpponents().get(0).getName());
 
         // Sets Nationality
-        System.out.println("OPP NAT: " + SankossGame.getInstance().getClient().getOpponents().get(0).getNationality());
-        ((PlayerPanel)opponentPanel).setImgNationality(SankossGame.getInstance().getClient().getOpponents().get(0).getNationality());
+        System.out.println("OPP NAT: " + SankossClient.getInstance().getOpponents().get(0).getNationality());
+        ((PlayerPanel)opponentPanel).setImgNationality(SankossClient.getInstance().getOpponents().get(0).getNationality());
 
     }
 

@@ -18,9 +18,11 @@ import java.util.List;
 
 /**
  * @author Niklas Tegnander
- * @modified Fredrik Thune
+ * @modified Fredrik Thune, Daniel Einevi
  */
 public class SankossClient {
+	private static SankossClient instance;
+	
     private Client client;
     private SankossClientPlayer player;
 
@@ -32,19 +34,25 @@ public class SankossClient {
 
     private List<ISankossClientListener> listeners = new ArrayList<ISankossClientListener>();
 
-    public SankossClient() {
+    private SankossClient() {
         initialize();
+    }
+    public static SankossClient getInstance(){
+    	if(instance == null){
+    		instance = new SankossClient();
+    	}
+    	return instance;
     }
 
     public void setReady(boolean ready) {
-        this.ready = ready;
+       this.ready = ready;
     }
 
     public boolean getReady() {
         return ready;
     }
 
-    private void initialize() {
+    public void initialize() {
         client = new Client();
         new Thread(client).start();
 

@@ -4,8 +4,10 @@ import com.badlogic.gdx.Gdx;
 
 import edu.chalmers.sankoss.core.core.CorePlayer;
 import edu.chalmers.sankoss.desktop.SankossGame;
+import edu.chalmers.sankoss.desktop.client.SankossClient;
 import edu.chalmers.sankoss.desktop.client.SankossClientListener;
 import edu.chalmers.sankoss.desktop.mvc.AbstractScreen;
+
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
@@ -21,7 +23,7 @@ public class WaitingScreen extends AbstractScreen<WaitingModel, WaitingRenderer>
 
     public WaitingScreen() {
 
-        SankossGame.getInstance().getClient().addListener(new SankossClientListener() {
+        SankossClient.getInstance().addListener(new SankossClientListener() {
             /* DO STUFF */
 
             //TODO Create method in interface when YOU has successfully joined
@@ -61,12 +63,12 @@ public class WaitingScreen extends AbstractScreen<WaitingModel, WaitingRenderer>
         getRenderer().getBtnBack().addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if (SankossGame.getInstance().getClient().isHosting()) {
-                    SankossGame.getInstance().getClient().removeRoom(SankossGame.getInstance().getClient().getRoom().getID());
+                if (SankossClient.getInstance().isHosting()) {
+                    SankossClient.getInstance().removeRoom(SankossClient.getInstance().getRoom().getID());
 
                     Gdx.app.debug("WaitingRenderer", "Removing hosted room");
                 } else {
-                    SankossGame.getInstance().getClient().leaveRoom();
+                    SankossClient.getInstance().leaveRoom();
                 }
 
                 changeScreen("lobby");
@@ -91,7 +93,7 @@ public class WaitingScreen extends AbstractScreen<WaitingModel, WaitingRenderer>
     public void show() {
         super.show();
         getModel().resetPlayers();
-        getModel().setHosting(SankossGame.getInstance().getClient().isHosting());
-        System.out.println(SankossGame.getInstance().getClient().isHosting());
+        getModel().setHosting(SankossClient.getInstance().isHosting());
+        System.out.println(SankossClient.getInstance().isHosting());
     }
 }

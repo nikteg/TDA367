@@ -4,8 +4,10 @@ import edu.chalmers.sankoss.core.core.Coordinate;
 import edu.chalmers.sankoss.core.core.CorePlayer;
 import edu.chalmers.sankoss.core.core.Ship;
 import edu.chalmers.sankoss.desktop.SankossGame;
+import edu.chalmers.sankoss.desktop.client.SankossClient;
 import edu.chalmers.sankoss.desktop.client.SankossClientListener;
 import edu.chalmers.sankoss.desktop.mvc.AbstractScreen;
+
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -25,7 +27,7 @@ public class GameScreen extends AbstractScreen<GameModel, GameRenderer> {
         /**
          * Listener for GameScreen.
          */
-        SankossGame.getInstance().getClient().addListener(new SankossClientListener() {
+        SankossClient.getInstance().addListener(new SankossClientListener() {
 
             @Override
             public void playerChangedNat(CorePlayer player) {
@@ -85,7 +87,7 @@ public class GameScreen extends AbstractScreen<GameModel, GameRenderer> {
                 super.fireResult(target, coordinate, hit);
 
                 // Determines if you were shot at
-                if (target.equals(SankossGame.getInstance().getClient().getPlayer())) {
+                if (target.equals(SankossClient.getInstance().getPlayer())) {
                     //shotAtYou(coordinate, hit);
 
                 } else {
@@ -106,7 +108,7 @@ public class GameScreen extends AbstractScreen<GameModel, GameRenderer> {
 
                 // Left click
                 if (button == 0) {
-                    SankossGame.getInstance().getClient().fire(getModel().getOpponent(), coord);
+                    SankossClient.getInstance().fire(getModel().getOpponent(), coord);
                     getModel().addShot(coord);
 
                     getRenderer().getGrid1().setTouchable(Touchable.disabled);
