@@ -168,7 +168,7 @@ public class SankossServer {
                     }
 
 
-                    //TODO SEND ROOM IS FULL MESSAGE
+
                     /**
                      * Only 2 players can join the same room
                      */
@@ -500,12 +500,9 @@ public class SankossServer {
 
                     log.info(String.format("%s is now known as %s", player.getName(), msg.getName()));
 
-                    System.out.println("TRYING CHANGED NAME" + msg.getName());
-
                     String name = msg.getName();
 
-                    if (name.matches("^[\\p{L} .'-]+$")) {
-                        System.out.println("CHANGED NAME " + msg.getName());
+                    if (name.matches("^[\\p{ASCII} .'-]+$")) {
                         player.setName(msg.getName());
                         connection.sendTCP(new PlayerChangedName(player.getCorePlayer()));
 
@@ -513,6 +510,7 @@ public class SankossServer {
                     } else {
                         connection.sendTCP(new ErrorMsg(new PlayerChangedName(), "Invalid name"));
                     }
+
                     return;
                 }
 
@@ -522,11 +520,11 @@ public class SankossServer {
                     PlayerChangeNat msg = (PlayerChangeNat) object;
 
                     CorePlayer.Nationality nationality = msg.getNationality();
-                    System.out.println("CHANGED NATIONALITY" + msg.getNationality());
                     player.setNationality(msg.getNationality());
                     connection.sendTCP(new PlayerChangedNat(player.getCorePlayer()));
 
                     pcs.firePropertyChange("playerChangedNat", null, null);
+
                     return;
                 }
 

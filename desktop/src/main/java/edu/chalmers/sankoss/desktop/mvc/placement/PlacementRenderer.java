@@ -39,8 +39,8 @@ public class PlacementRenderer extends AbstractRenderer<PlacementModel> {
 	TextButton btnReady = new TextButton("Ready", Common.getSkin());
 	TextButton btnNextFlag = new TextButton(">", Common.getSkin());
 	TextButton btnPreviousFlag = new TextButton("<", Common.getSkin());
-	
-	Image grid = new Image(new Texture(Gdx.files.internal("textures/grid.png")));
+
+    PlacementGrid grid = new PlacementGrid();
 	Image flag = new Image();
 	Table bottomTable = new Table();
 
@@ -159,19 +159,6 @@ public class PlacementRenderer extends AbstractRenderer<PlacementModel> {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		Gdx.gl.glClearColor(0.09f, 0.58f, 0.2f, 1);
 
-		if (isOverlapping(container, grid))
-			container.setBackground(greenTextureBackground);
-		else
-			container.setBackground(redTextureBackground);
-
-		textureXOffset = ((int) container.getWidth() / 32) / 2 * 32;
-		textureYOffset = ((int) container.getHeight() / 32) / 2 * 32;
-
-		container.setX(((mouseOnGridX()) / 32) * 32 + grid.getX()
-				- textureXOffset);
-		container.setY((((int) grid.getHeight() - mouseOnGridY()) / 32) * 32
-				+ grid.getY() - textureYOffset);
-
 		getStage().act(delta);
 		getStage().draw();
 		Table.drawDebug(getStage());
@@ -192,38 +179,15 @@ public class PlacementRenderer extends AbstractRenderer<PlacementModel> {
         if (arg.equals("playerReady")) {
 			btnReady.setDisabled(true);
 		}
+
+        if (arg.equals("ship_add")) {
+
+        }
 	}
 
-	public boolean isOverlapping(Actor act1, Actor act2) {
-		int x1 = (int) act1.getX();
-		int y1 = (int) act1.getY();
-		int w1 = (int) act1.getWidth();
-		int h1 = (int) act1.getHeight();
+    public PlacementGrid getGrid() {
+        return grid;
+    }
 
-		int x2 = (int) act2.getX();
-		int y2 = (int) act2.getY();
-		int w2 = (int) act2.getWidth();
-		int h2 = (int) act2.getHeight();
-
-		int x1Max = x1 + w1;
-		int x2Max = x2 + w2;
-		int y1Max = y1 + h1;
-		int y2Max = y2 + h2;
-		if ((x2 >= x1 && x2Max <= x1Max) || (x1 >= x2 && x1Max <= x2Max)) {
-			if ((y2 >= y1 && y2Max <= y1Max) || (y1 >= y2 && y1Max <= y2Max)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public int mouseOnGridX() {
-		return Gdx.input.getX() - (int) grid.getX();
-	}
-
-	public int mouseOnGridY() {
-		return (Gdx.input.getY() - (int) (Gdx.graphics.getHeight()
-				- grid.getY() - grid.getHeight()));
-	}
 
 }

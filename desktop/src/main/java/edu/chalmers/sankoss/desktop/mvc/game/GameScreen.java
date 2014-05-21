@@ -3,6 +3,7 @@ package edu.chalmers.sankoss.desktop.mvc.game;
 import edu.chalmers.sankoss.core.core.Coordinate;
 import edu.chalmers.sankoss.core.core.CorePlayer;
 import edu.chalmers.sankoss.core.core.Ship;
+import edu.chalmers.sankoss.core.exceptions.IllegalShipCoordinatesException;
 import edu.chalmers.sankoss.desktop.SankossGame;
 import edu.chalmers.sankoss.desktop.client.SankossClient;
 import edu.chalmers.sankoss.desktop.client.SankossClientListener;
@@ -63,7 +64,7 @@ public class GameScreen extends AbstractScreen<GameModel, GameRenderer> {
 
             @Override
             public void destroyedShip(CorePlayer player, Ship ship) {
-                super.destroyedShip(player, ship);
+                //getRenderer().shipDestroyed();
             }
 
             /**
@@ -73,7 +74,6 @@ public class GameScreen extends AbstractScreen<GameModel, GameRenderer> {
             @Override
             public void turn() {
                 getModel().setShootingAllowed(true);
-
             }
 
             /**
@@ -88,15 +88,11 @@ public class GameScreen extends AbstractScreen<GameModel, GameRenderer> {
 
                 // Determines if you were shot at
                 if (target.equals(SankossClient.getInstance().getPlayer())) {
-                    //shotAtYou(coordinate, hit);
-                    getModel().setShootingAllowed(true);
+                    System.out.println("DU BLEV TRÄFFAD");
+                    getModel().addOpponentShot(new Shot(coordinate, hit ? Shot.State.HIT : Shot.State.MISS));
                 } else {
-                    //shotAtOpponent(hit);
-
-                    getModel().setShootingAllowed(false);
-
+                    getModel().addShot(new Shot(coordinate, hit ? Shot.State.HIT : Shot.State.MISS));
                 }
-
             }
         });
 
@@ -110,11 +106,9 @@ public class GameScreen extends AbstractScreen<GameModel, GameRenderer> {
                 Coordinate coord = getCoordinateFromGrid(x, y);
 
                 // Left click
-                if (button == 0) {
-                   SankossClient.getInstance().fire(coord);
-                    getModel().addShot(coord);
-
-                    getRenderer().getGrid1().setTouchable(Touchable.disabled);
+                if (button == 0 && getModel().isShootingAllowed()) {
+                    SankossClient.getInstance().fire(coord);
+                    getModel().setShootingAllowed(false);
                 } else if (button == 1) {
                     getRenderer().getGrid1().toggleFlag(coord);
                 }
@@ -133,7 +127,9 @@ public class GameScreen extends AbstractScreen<GameModel, GameRenderer> {
 
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                getRenderer().getGrid1().getCrosshair().setVisible(false);
+                if (pointer == -1) {
+                    getRenderer().getGrid1().getCrosshair().setVisible(false);
+                }
             }
 
             @Override
@@ -141,6 +137,8 @@ public class GameScreen extends AbstractScreen<GameModel, GameRenderer> {
                 getRenderer().getGrid1().getCrosshair().setVisible(true);
             }
         });
+
+        getModel().setShootingAllowed(false);
     }
 
     public Coordinate getCoordinateFromGrid(float mx, float my) {
@@ -153,7 +151,13 @@ public class GameScreen extends AbstractScreen<GameModel, GameRenderer> {
     public void show() {
         super.show();
 
-        getRenderer().updateOpponentVisuals();
+        getModel().setOpponent(SankossClient.getInstance().getOpponents().get(0));
+        getRenderer().getPlayerPanel().setLblName(SankossClient.getInstance().getPlayer().getName());
+        getRenderer().getPlayerPanel().setNationality(SankossClient.getInstance().getPlayer().getNationality());
+
+        for (Ship ship : SankossClient.getInstance().getPlayer().getFleet().getShips()) {
+            getModel().addShip(ship);
+        }
     }
 
     @Override

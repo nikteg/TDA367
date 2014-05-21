@@ -27,7 +27,5 @@ public class MainMenuModel extends AbstractModel {
 
         setChanged();
         notifyObservers("connected");
-
-        Gdx.app.debug("MainMenuModel", "Connected: " + connected);
     }
 }

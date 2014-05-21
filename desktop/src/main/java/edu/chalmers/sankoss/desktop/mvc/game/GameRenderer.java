@@ -31,13 +31,9 @@ public class GameRenderer extends AbstractRenderer<GameModel> {
     private GridImage grid1 = new GridImage();
     private GridImage grid2 = new GridImage();
     private Image crosshair = new Image(crosshairTexture);
-    private PlayerPanel opponentPanel = new PlayerPanel("Hans Gunter", CorePlayer.Nationality.GERMANY, PlayerPanel.Alignment.LEFT);
-    private PlayerPanel playerPanel = new PlayerPanel("T0ng", CorePlayer.Nationality.JAPAN, PlayerPanel.Alignment.RIGHT);
-    private Table container = new Table();
+    private PlayerPanel opponentPanel = new PlayerPanel(PlayerPanel.Alignment.LEFT);
+    private PlayerPanel playerPanel = new PlayerPanel(PlayerPanel.Alignment.RIGHT);
     private final float GRID_SQUARE = 32f;
-
-    private int textureXOffset;
-    private int textureYOffset;
 
     public GameRenderer(GameModel model) {
         super(model);
@@ -70,48 +66,6 @@ public class GameRenderer extends AbstractRenderer<GameModel> {
         grid1.setTouchable(Touchable.enabled);
     }
 
-    /**
-     * Method for updating the visuals of representing
-     * the opponent.
-     */
-    public void updateOpponentVisuals() {
-
-        // Sets name
-        ((PlayerPanel)opponentPanel).setLblName(SankossClient.getInstance().getOpponents().get(0).getName());
-
-        // Sets Nationality
-        System.out.println("OPP NAT: " + SankossClient.getInstance().getOpponents().get(0).getNationality());
-        ((PlayerPanel)opponentPanel).setImgNationality(SankossClient.getInstance().getOpponents().get(0).getNationality());
-
-
-    }
-
-    public void disableYourTurn() {
-        // If opponent's turn
-
-        opponentPanel.setTurnLabelText("Opponent's turn!");
-        playerPanel.setTurnLabelText("");
-
-        disableShooting();
-    }
-
-    public void enableYourTurn() {
-        // If your turn
-
-        opponentPanel.setTurnLabelText("");
-        playerPanel.setTurnLabelText("Your Turn!");
-
-        enableShooting();
-    }
-
-    public void enableShooting() {
-        grid1.setTouchable(Touchable.enabled);
-    }
-
-    public void disableShooting() {
-        grid1.setTouchable(Touchable.disabled);
-    }
-
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -126,24 +80,29 @@ public class GameRenderer extends AbstractRenderer<GameModel> {
     public void update(Observable object, Object arg) {
 
         if (arg.equals("opponent")) {
-            opponentPanel.setName(getModel().getOpponent().getName());
+            opponentPanel.setLblName(getModel().getOpponent().getName());
             opponentPanel.setNationality(getModel().getOpponent().getNationality());
         }
 
         // Changed to your turn
         if (arg.equals("shooting_allowed")) {
-
             if(getModel().isShootingAllowed()) {
-                enableYourTurn();
+                opponentPanel.setTurnLabelText("");
+                playerPanel.setTurnLabelText("Your Turn!");
             } else {
-                disableYourTurn();
+                opponentPanel.setTurnLabelText("Opponent's turn!");
+                playerPanel.setTurnLabelText("");
             }
 
         }
 
         // If you've shot at enemy
         if (arg.equals("shot")) {
-            grid1.add(new Image(new Texture("textures/explosion.png")), getModel().getShots().get(getModel().getShots().size() - 1));
+            grid1.addShot(getModel().getShots().get(getModel().getShots().size() - 1));
+        }
+
+        if (arg.equals("opponent_shot")) {
+            grid2.addShot(getModel().getOpponentShots().get(getModel().getOpponentShots().size() - 1));
         }
 
         if(arg.equals("flag")) {
@@ -176,13 +135,7 @@ public class GameRenderer extends AbstractRenderer<GameModel> {
         return grid2;
     }
 
-    public Texture getHitTexture() {
-        return hitTexture;
+    public PlayerPanel getPlayerPanel() {
+        return playerPanel;
     }
-
-    public Texture getMissTexture() {
-        return  missTexture;
-    }
-
-
 }

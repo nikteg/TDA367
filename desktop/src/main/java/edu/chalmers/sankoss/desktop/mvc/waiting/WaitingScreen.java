@@ -94,6 +94,5 @@ public class WaitingScreen extends AbstractScreen<WaitingModel, WaitingRenderer>
         super.show();
         getModel().resetPlayers();
         getModel().setHosting(SankossClient.getInstance().isHosting());
-        System.out.println(SankossClient.getInstance().isHosting());
     }
 }

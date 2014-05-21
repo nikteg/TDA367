@@ -95,51 +95,12 @@ public class Ship {
 	}
 
 	/**
-	 * Gets all the boats coordinates as a LinkedList
-	 * @return The coordinates of the boat.
-	 */
-	//TODO Do we need this?
-	public LinkedList<Coordinate> getCoordinates(){
-		LinkedList<Coordinate> coordinates = new LinkedList<Coordinate>();
-		if(size > 0){
-			coordinates.add(front);
-
-			if(front.getX()==rear.getX()){
-				if(front.getY()<rear.getX()){
-					for(int i=1;i<(size-1);i++){
-						coordinates.add(new Coordinate(front.getX(), front.getY()+i));
-					}
-				}
-				else{
-					for(int i=1;i<(size-1);i++){
-						coordinates.add(new Coordinate(front.getX(), front.getY()-i));
-					}
-				}
-			}
-			else{
-				if(front.getY()<rear.getX()){
-					for(int i=1;i<(size-1);i++){
-						coordinates.add(new Coordinate(front.getX()+i, front.getY()));
-					}
-				}
-				else{
-					for(int i=1;i<(size-1);i++){
-						coordinates.add(new Coordinate(front.getX()-i, front.getY()));
-					}
-				}
-			}
-			coordinates.add(rear);
-		}
-		return coordinates;
-	}
-
-	/**
 	 * Checks if a target is a part of the ship
 	 * @param target
 	 * @return True if the target coordinate is a part of the ship
 	 */
 	public boolean isShip(Coordinate target){
-		
+
 		switch (getRotation()) {
 		case WEST:
 			return (target.getY() == front.getY() && target.getX() >= front.getX() && target.getX() <= rear.getX());

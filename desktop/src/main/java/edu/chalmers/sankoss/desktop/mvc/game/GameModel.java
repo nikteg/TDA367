@@ -2,6 +2,7 @@ package edu.chalmers.sankoss.desktop.mvc.game;
 
 import edu.chalmers.sankoss.core.core.Coordinate;
 import edu.chalmers.sankoss.core.core.CorePlayer;
+import edu.chalmers.sankoss.core.core.Ship;
 import edu.chalmers.sankoss.desktop.mvc.AbstractModel;
 
 import java.util.ArrayList;
@@ -16,12 +17,25 @@ import java.util.List;
 public class GameModel extends AbstractModel {
     private boolean shootingAllowed = false;
     private State state = State.PLAYING;
-    private List<Coordinate> shots = new ArrayList<Coordinate>();
+    private List<Ship> ships = new ArrayList<Ship>();
+    private List<Shot> shots = new ArrayList<Shot>();
+    private List<Shot> opponentShots = new ArrayList<Shot>();
     private List<Coordinate> flags = new ArrayList<Coordinate>();
     private CorePlayer opponent;
 
     public GameModel() {
 
+    }
+
+    public void addOpponentShot(Shot shot) {
+        opponentShots.add(shot);
+
+        setChanged();
+        notifyObservers("opponent_shot");
+    }
+
+    public List<Shot> getOpponentShots() {
+        return opponentShots;
     }
 
     public enum State {
@@ -54,7 +68,6 @@ public class GameModel extends AbstractModel {
         this.shootingAllowed = shootingAllowed;
 
         setChanged();
-
         notifyObservers("shooting_allowed");
     }
 
@@ -62,18 +75,25 @@ public class GameModel extends AbstractModel {
         return shootingAllowed;
     }
 
+    public void addShip(Ship ship) {
+        ships.add(ship);
+
+        setChanged();
+        notifyObservers("ship");
+    }
+
     /**
      * Method for adding shots to model's shotList.
-     * @param coordinate position of shot.
+     * @param shot
      */
-    public void addShot(Coordinate coordinate) {
-        shots.add(coordinate);
+    public void addShot(Shot shot) {
+        shots.add(shot);
 
         setChanged();
         notifyObservers("shot");
     }
 
-    public List<Coordinate> getShots() {
+    public List<Shot> getShots() {
         return shots;
     }
 

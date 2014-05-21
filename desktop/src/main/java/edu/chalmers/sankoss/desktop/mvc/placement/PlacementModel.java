@@ -29,6 +29,9 @@ public class PlacementModel extends AbstractModel {
 
 	public void addShip(Ship ship) {
 		fleet.add(ship);
+
+        setChanged();
+        notifyObservers("ship");
 	}
 
     public void setFleet(Fleet fleet) {
