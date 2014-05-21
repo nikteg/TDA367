@@ -26,7 +26,7 @@ import java.util.Observable;
 public class LobbyRenderer extends AbstractRenderer<LobbyModel> {
     TextureRegionDrawable penTexture = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("textures/pen.png"))));
     TextureRegionDrawable checkTexture = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("textures/check.png"))));
-    private ImageButton btnEditName = new ImageButton(penTexture, null, checkTexture);
+    private ImageButton btnEditName = new ImageButton(penTexture, null);
 
     private Label infoLabel = new Label("Join or host a game", Common.getSkin());
     private TextField nameField;
@@ -78,13 +78,10 @@ public class LobbyRenderer extends AbstractRenderer<LobbyModel> {
                     nameField.setDisabled(false);
                     nameField.selectAll();
                     nameField.setRightAligned(false);
+                    btnEditName.getImage().setDrawable(checkTexture);
                 } else {
                     String name = nameField.getText();
-                    SankossGame.getInstance().getClient().getPlayer().setName(name);
                     SankossGame.getInstance().getClient().playerChangeName(name);
-                    nameField.setDisabled(true);
-                    getStage().unfocus(nameField);
-                    nameField.setRightAligned(true);
                 }
             }
         });
@@ -119,11 +116,14 @@ public class LobbyRenderer extends AbstractRenderer<LobbyModel> {
     @Override
     public void update(Observable object, Object arg) {
         if (arg.equals("rooms")) {
-
             Collection<Room> values = ((LobbyModel) object).getRooms().values();
             lstRooms.setItems(values.toArray(new Room[values.size()]));
         } else if (arg.equals("name")) {
+            btnEditName.getImage().setDrawable(penTexture);
             nameField.setText(((LobbyModel) object).getName());
+            nameField.setDisabled(true);
+            getStage().unfocus(nameField);
+            nameField.setRightAligned(true);
         }
     }
 }
