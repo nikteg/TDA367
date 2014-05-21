@@ -1,4 +1,4 @@
-package edu.chalmers.sankoss.java;
+package edu.chalmers.sankoss.java.web;
 
 import com.google.gson.Gson;
 import spark.ResponseTransformerRoute;
