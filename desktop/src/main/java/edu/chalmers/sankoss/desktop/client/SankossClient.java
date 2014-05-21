@@ -3,14 +3,12 @@ package edu.chalmers.sankoss.desktop.client;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-
-import edu.chalmers.sankoss.core.*;
+import edu.chalmers.sankoss.core.Network;
 import edu.chalmers.sankoss.core.core.Coordinate;
 import edu.chalmers.sankoss.core.core.CorePlayer;
 import edu.chalmers.sankoss.core.core.Fleet;
 import edu.chalmers.sankoss.core.core.Room;
 import edu.chalmers.sankoss.core.protocol.*;
-import edu.chalmers.sankoss.desktop.mvc.game.GameModel;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -322,10 +320,13 @@ public class SankossClient {
         client.sendTCP(new FetchRooms());
     }
 
-    public void fire(CorePlayer target, Coordinate coordinate) {
-        if (client == null) return;
+    public void fire(Coordinate coordinate) {
+        if (client == null || getOpponents() == null) return;
 
-        client.sendTCP(new Fire(gameID, target, coordinate));
+        System.out.println("Opponent: " + getOpponents());
+        System.out.println("Coordinates: " + coordinate.getX() + ", " + coordinate.getY());
+
+        client.sendTCP(new Fire(gameID, getOpponents().get(0), coordinate));
     }
 
     public void joinRoom(Long roomID) {

@@ -54,6 +54,7 @@ public class GameModel extends AbstractModel {
         this.shootingAllowed = shootingAllowed;
 
         setChanged();
+
         notifyObservers("shooting_allowed");
     }
 
