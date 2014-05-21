@@ -17,15 +17,15 @@ import edu.chalmers.sankoss.core.CorePlayer;
 import edu.chalmers.sankoss.core.Fleet;
 import edu.chalmers.sankoss.core.Ship;
 import edu.chalmers.sankoss.java.SankossGame;
-import edu.chalmers.sankoss.java.misc.PlayerPanel;
-import edu.chalmers.sankoss.java.misc.PlayerPanel;
 import edu.chalmers.sankoss.java.mvc.AbstractRenderer;
+import edu.chalmers.sankoss.java.mvc.game.PlayerPanel;
 import edu.chalmers.sankoss.java.utils.Common;
 
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import edu.chalmers.sankoss.java.SankossGame;
+
 
 
 
@@ -39,8 +39,6 @@ import java.util.Observable;
  * @author Daniel Eineving
  */
 public class PlacementRenderer extends AbstractRenderer {
-	private Actor playerPanel = new PlayerPanel("Name",
-			CorePlayer.Nationality.USA, PlayerPanel.Alignment.RIGHT);
 	private Table container = new Table();
 
 	private TextureRegionDrawable greenTextureBackground;

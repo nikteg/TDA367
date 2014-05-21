@@ -1,4 +1,4 @@
-package edu.chalmers.sankoss.java.misc;
+package edu.chalmers.sankoss.java.mvc.game;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
