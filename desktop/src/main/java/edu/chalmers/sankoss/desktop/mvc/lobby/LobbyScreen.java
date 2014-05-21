@@ -7,6 +7,8 @@ import edu.chalmers.sankoss.core.core.Room;
 import edu.chalmers.sankoss.desktop.SankossGame;
 import edu.chalmers.sankoss.desktop.client.SankossClientListener;
 import edu.chalmers.sankoss.desktop.mvc.AbstractScreen;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import java.util.Map;
 
@@ -20,8 +22,7 @@ import java.util.Map;
  */
 public class LobbyScreen extends AbstractScreen<LobbyModel, LobbyRenderer> {
 
-    public LobbyScreen(Class<LobbyModel> model, Class<LobbyRenderer> renderer) {
-        super(model, renderer);
+    public LobbyScreen() {
 
         SankossGame.getInstance().getClient().addListener(new SankossClientListener() {
             /* DO STUFF */
@@ -41,7 +42,7 @@ public class LobbyScreen extends AbstractScreen<LobbyModel, LobbyRenderer> {
 
                     @Override
                     public void run() {
-                    	getProptertyChangeSupport().firePropertyChange("ShowWaiting", true, false);
+                        changeScreen("waiting");
                     }
                 });
             }
@@ -53,10 +54,41 @@ public class LobbyScreen extends AbstractScreen<LobbyModel, LobbyRenderer> {
 
                         @Override
                         public void run() {
-                        	getProptertyChangeSupport().firePropertyChange("ShowWaiting", true, false);
+                            changeScreen("waiting");
                         }
                     });
                 }
+            }
+        });
+
+        getRenderer().getBtnBack().addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                changeScreen("mainmenu");
+            }
+        });
+
+        getRenderer().getBtnHost().addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                // HOST
+                SankossGame.getInstance().getClient().createRoom(SankossGame.getInstance().getClient().getPlayer().getName() + "'s room", "");
+
+            }
+        });
+
+        getRenderer().getBtnJoin().addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                // JOIN
+                Room room = getRenderer().getLstRooms().getSelected();
+
+                if (room == null)
+                    return;
+
+                Gdx.app.debug("LobbyRenderer", "Joining room '" + room.getName() + "'");
+
+                SankossGame.getInstance().getClient().joinRoom(room.getID());
             }
         });
     }

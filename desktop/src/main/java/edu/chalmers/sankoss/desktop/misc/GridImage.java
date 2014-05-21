@@ -5,10 +5,14 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import edu.chalmers.sankoss.core.core.Coordinate;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Description of class.
@@ -18,6 +22,10 @@ import edu.chalmers.sankoss.core.core.Coordinate;
  */
 public class GridImage extends Table {
 
+    private Map<Coordinate, Image> flags = new HashMap<Coordinate, Image>();
+    private Texture flagTexture = new Texture(Gdx.files.internal("textures/flag.png"));
+    private Image crosshair;
+
     public GridImage() {
         super();
 
@@ -26,6 +34,21 @@ public class GridImage extends Table {
 
         // Sets background
         this.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("textures/grid.png")))));
+    }
+
+    public void addCrosshair(Image crosshair) {
+        this.crosshair = crosshair;
+
+        /**
+         * Disable crosshair clicking. Needs to be done to be able to click the grid.
+         */
+        this.crosshair.setTouchable(Touchable.disabled);
+
+        addActor(crosshair);
+    }
+
+    public Image getCrosshair() {
+        return crosshair;
     }
 
 
@@ -45,8 +68,23 @@ public class GridImage extends Table {
 
     }
 
-    public void remove(Coordinate coordinate) {
-
+    public void toggleFlag(Coordinate coordinate) {
+        if (flags.containsKey(coordinate)) {
+            removeFlag(coordinate);
+        } else {
+            addFlag(coordinate);
+        }
     }
 
+    private void addFlag(Coordinate coordinate) {
+        Image flag = new Image(flagTexture);
+        flags.put(coordinate, flag);
+        add(flags.get(coordinate), coordinate);
+        crosshair.toFront();
+    }
+
+    private void removeFlag(Coordinate coordinate) {
+        removeActor(flags.get(coordinate));
+        flags.remove(coordinate);
+    }
 }

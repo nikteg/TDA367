@@ -24,7 +24,7 @@ public class LobbyModel extends AbstractModel {
         this.name = name;
 
         setChanged();
-        notifyObservers("nameChange");
+        notifyObservers("name");
     }
     private Map<Long, Room> rooms = new HashMap<Long, Room>();
 

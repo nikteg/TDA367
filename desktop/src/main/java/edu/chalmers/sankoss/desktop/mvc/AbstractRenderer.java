@@ -18,24 +18,32 @@ import java.util.Observer;
  * @author Mikael Malmqvist
  * @date 3/24/14
  */
-public abstract class AbstractRenderer implements Observer {
-    private Stage stage = new Stage(new ExtendViewport(800, 600)); // TODO Window size constant?
-    private Table table = new Table();
-    private SpriteBatch spriteBatch = new SpriteBatch();
+public abstract class AbstractRenderer<M extends AbstractModel> implements Observer {
+    private Stage stage;
+    private Table table;
+    private SpriteBatch spriteBatch;
+    private M model;
     
     private PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 
-    public AbstractRenderer(Observable observable) {
-        observable.addObserver(this);
+    public AbstractRenderer(M model) {
+        this.model = model;
+        this.model.addObserver(this);
+
+        stage = new Stage(new ExtendViewport(800, 600)); // TODO Window size constant?
+        table = new Table();
 
         table.setWidth(stage.getWidth());
         table.setHeight(stage.getHeight());
+
+        spriteBatch = new SpriteBatch();
     }
-    
-    public PropertyChangeSupport getProptertyChangeSupport() {
-		return pcs;
-	}
-    public void addPropertyChangeListener(PropertyChangeListener pcl){
+
+    public M getModel() {
+        return model;
+    }
+
+    public void addPcl(PropertyChangeListener pcl){
     	pcs.addPropertyChangeListener(pcl);
     }
 

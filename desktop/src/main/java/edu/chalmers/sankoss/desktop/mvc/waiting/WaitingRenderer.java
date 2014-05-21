@@ -2,15 +2,9 @@ package edu.chalmers.sankoss.desktop.mvc.waiting;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.sun.org.apache.xpath.internal.SourceTree;
-
-import edu.chalmers.sankoss.desktop.SankossGame;
-import edu.chalmers.sankoss.desktop.client.SankossClient;
 import edu.chalmers.sankoss.desktop.mvc.AbstractRenderer;
 import edu.chalmers.sankoss.desktop.utils.Common;
 
@@ -24,14 +18,14 @@ import java.util.Observable;
  * @modified Niklas Tegnander
  * @date 5/5/14
  */
-public class WaitingRenderer extends AbstractRenderer {
+public class WaitingRenderer extends AbstractRenderer<WaitingModel> {
 
     private Label lblWaiting = new Label("Loading...", Common.getSkin());
     private TextButton btnBack = new TextButton("Back", Common.getSkin());
     private TextButton btnStart = new TextButton("Start", Common.getSkin());
 
-    public WaitingRenderer(Observable observable) {
-        super(observable);
+    public WaitingRenderer(WaitingModel model) {
+        super(model);
 
         getTable().pad(8f);
 
@@ -44,27 +38,14 @@ public class WaitingRenderer extends AbstractRenderer {
         btnStart.setDisabled(true);
 
         getStage().addActor(getTable());
+    }
 
-        btnBack.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                if (SankossGame.getInstance().getClient().isHosting()) {
-                    SankossGame.getInstance().getClient().removeRoom(SankossGame.getInstance().getClient().getRoom().getID());
+    public TextButton getBtnBack() {
+        return btnBack;
+    }
 
-                    Gdx.app.debug("WaitingRenderer", "Removing hosted room");
-                } else {
-                    SankossGame.getInstance().getClient().leaveRoom();
-                }
-                getProptertyChangeSupport().firePropertyChange("showLobby", true, false);
-            }
-        });
-
-        btnStart.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                SankossGame.getInstance().getClient().startGame();
-            }
-        });
+    public TextButton getBtnStart() {
+        return btnStart;
     }
 
     @Override

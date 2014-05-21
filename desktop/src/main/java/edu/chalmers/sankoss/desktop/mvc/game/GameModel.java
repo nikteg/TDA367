@@ -1,16 +1,11 @@
 package edu.chalmers.sankoss.desktop.mvc.game;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-
 import edu.chalmers.sankoss.core.core.Coordinate;
 import edu.chalmers.sankoss.core.core.CorePlayer;
-import edu.chalmers.sankoss.desktop.misc.FlagImage;
 import edu.chalmers.sankoss.desktop.mvc.AbstractModel;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Model for GameScreen.
@@ -19,92 +14,84 @@ import java.util.Map;
  *
  */
 public class GameModel extends AbstractModel {
-    private boolean myTurn;
-    private boolean won;
-    private List<Coordinate> yourShots = new ArrayList<Coordinate>();
-    private Map<Coordinate, Image> flags = new HashMap<Coordinate, Image>();
+    private boolean shootingAllowed = false;
+    private State state = State.PLAYING;
+    private List<Coordinate> shots = new ArrayList<Coordinate>();
+    private List<Coordinate> flags = new ArrayList<Coordinate>();
     private CorePlayer opponent;
 
     public GameModel() {
-        myTurn = false;
+
+    }
+
+    public enum State {
+        PLAYING, WON, LOST;
+    }
+
+    public State getState() {
+        return state;
+    }
+
+    public void setState(State state) {
+        this.state = state;
+
+        setChanged();
+        notifyObservers("state");
     }
 
     public void setOpponent(CorePlayer opponent) {
         this.opponent = opponent;
+
+        setChanged();
+        notifyObservers("opponent");
     }
 
     public CorePlayer getOpponent() {
         return this.opponent;
     }
 
-    public void setMyTurn(boolean myTurn) {
-        this.myTurn = myTurn;
+    public void setShootingAllowed(boolean shootingAllowed) {
+        this.shootingAllowed = shootingAllowed;
 
         setChanged();
-        notifyObservers("turn");
+        notifyObservers("shooting_allowed");
+    }
+
+    public boolean isShootingAllowed() {
+        return shootingAllowed;
     }
 
     /**
      * Method for adding shots to model's shotList.
      * @param coordinate position of shot.
      */
-    public void addToYourShots(Coordinate coordinate) {
-        yourShots.add(coordinate);
+    public void addShot(Coordinate coordinate) {
+        shots.add(coordinate);
 
         setChanged();
-        notifyObservers("yourShots");
+        notifyObservers("shot");
+    }
+
+    public List<Coordinate> getShots() {
+        return shots;
     }
 
     /**
-     * Method for determine to remove or add flags.
+     * Toggle flag at given coordinate
      * @param coordinate position of flag.
      */
-    public void addOrRemoveFlags(Coordinate coordinate) {
-        if(flags.get(coordinate) == null) {
-            // Adding flag
-            System.out.println("Adding flag..");
-            addToYourFlags(coordinate);
-            flags.get(coordinate).setVisible(true);
-
-        } else {
-            // Removing flag
-            flags.get(coordinate).setVisible(false);
+    public void toggleFlag(Coordinate coordinate) {
+        if (flags.contains(coordinate)) {
             flags.remove(coordinate);
-        }
-    }
-
-    /**
-     * Method for adding flags to model's flagList.
-     * @param coordinate position of flag.
-     */
-    public void addToYourFlags(Coordinate coordinate) {
-        flags.put(coordinate, new FlagImage());
-
-        setChanged();
-        notifyObservers("addFlags");
-    }
-
-    public boolean getMyTurn() {
-        return myTurn;
-    }
-
-    public void setWon(boolean won) {
-        this.won = won;
-
-        setChanged();
-        if(won) {
-            notifyObservers("won");
         } else {
-            notifyObservers("lost");
+            flags.add(coordinate);
         }
+
+        setChanged();
+        notifyObservers("flag");
     }
 
-    public List<Coordinate> getYourShots () {
-        return yourShots;
-    }
-
-    public Map<Coordinate, Image> getFlags () {
+    public List<Coordinate> getFlags() {
         return flags;
     }
-
 }

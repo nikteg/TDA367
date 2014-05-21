@@ -11,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-
 import edu.chalmers.sankoss.core.core.Coordinate;
 import edu.chalmers.sankoss.core.core.CorePlayer;
 import edu.chalmers.sankoss.core.core.Fleet;
@@ -20,21 +19,6 @@ import edu.chalmers.sankoss.desktop.SankossGame;
 import edu.chalmers.sankoss.desktop.mvc.AbstractRenderer;
 import edu.chalmers.sankoss.desktop.mvc.game.PlayerPanel;
 import edu.chalmers.sankoss.desktop.utils.Common;
-
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-
-
-
-
-
-
-
-
-
-
-
-
 import java.util.Observable;
 
 /**
@@ -43,7 +27,9 @@ import java.util.Observable;
  * 
  * @author Daniel Eineving
  */
-public class PlacementRenderer extends AbstractRenderer {
+public class PlacementRenderer extends AbstractRenderer<PlacementModel> {
+	private Actor playerPanel = new PlayerPanel("Name",
+			CorePlayer.Nationality.USA, PlayerPanel.Alignment.RIGHT);
 	private Table container = new Table();
 
 	private TextureRegionDrawable greenTextureBackground;
@@ -60,12 +46,9 @@ public class PlacementRenderer extends AbstractRenderer {
 	Image grid = new Image(new Texture(Gdx.files.internal("textures/grid.png")));
 	Image flag = new Image();
 	Table bottomTable = new Table();
-	PlacementModel model;
 
-	public PlacementRenderer(Observable observable) {
-		super(observable);
-
-		model = (PlacementModel) observable;
+	public PlacementRenderer(PlacementModel model) {
+		super(model);
 
 		btnReady.pad(8f);
 		btnNextFlag.pad(8f);
@@ -110,19 +93,19 @@ public class PlacementRenderer extends AbstractRenderer {
                             5))));
 
                     SankossGame.getInstance().getClient().getPlayer().setFleet(temp);
-                    model.setFleet(temp);
+                    getModel().setFleet(temp);
 
                     //SankossGame.getInstance().getClient().playerReady(temp);
                 } catch (Exception ignore) {
 
                 }
 
-                if(model.getFleet().getLength() == 5 && !model.getUserReady()) {
-                    model.setUserReady(true);
+                if(getModel().getFleet().getLength() == 5 && !getModel().getUserReady()) {
+                    getModel().setUserReady(true);
                     SankossGame.getInstance().getClient().setReady(true);
 
                     // Updates server and tells opponent you are ready
-                    SankossGame.getInstance().getClient().playerReady(model.getFleet());
+                    SankossGame.getInstance().getClient().playerReady(getModel().getFleet());
                 }
 			}
 		});
@@ -137,7 +120,7 @@ public class PlacementRenderer extends AbstractRenderer {
 			@Override
 			public void changed(ChangeEvent arg0, Actor arg1) {
 
-                model.setNationality(model.getNationality().getLast());
+                getModel().setNationality(getModel().getNationality().getLast());
 
 			}
 		});
@@ -152,7 +135,7 @@ public class PlacementRenderer extends AbstractRenderer {
 			@Override
 			public void changed(ChangeEvent arg0, Actor arg1) {
 
-                model.setNationality(model.getNationality().getNext());
+                getModel().setNationality(getModel().getNationality().getNext());
 			}
 		});
 

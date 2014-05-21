@@ -1,16 +1,17 @@
 package edu.chalmers.sankoss.desktop.mvc.credits;
 
-import edu.chalmers.sankoss.desktop.SankossGame;
-import edu.chalmers.sankoss.desktop.client.SankossClientListener;
 import edu.chalmers.sankoss.desktop.mvc.AbstractScreen;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 public class CreditsScreen extends AbstractScreen<CreditsModel, CreditsRenderer> {
 
-    public CreditsScreen(Class<CreditsModel> model, Class<CreditsRenderer> renderer) {
-        super(model, renderer);
-
-        SankossGame.getInstance().getClient().addListener(new SankossClientListener() {
-            /* DO STUFF */
+    public CreditsScreen() {
+        getRenderer().getBtnBack().addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeListener.ChangeEvent event, Actor actor) {
+                changeScreen("mainmenu");
+            }
         });
     }
 
@@ -23,6 +24,9 @@ public class CreditsScreen extends AbstractScreen<CreditsModel, CreditsRenderer>
     public void show() {
         super.show();
 
+        /**
+         * Reset text position
+         */
         getModel().setCreditsTextPosition(-96f);
     }
 }

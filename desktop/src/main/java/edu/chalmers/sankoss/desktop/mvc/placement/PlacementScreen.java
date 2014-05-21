@@ -17,9 +17,7 @@ import edu.chalmers.sankoss.desktop.mvc.AbstractScreen;
 public class PlacementScreen extends
 		AbstractScreen<PlacementModel, PlacementRenderer> {
 
-	public PlacementScreen(Class<PlacementModel> model,
-			Class<PlacementRenderer> renderer) {
-		super(model, renderer);
+	public PlacementScreen() {
 
 		SankossGame.getInstance().getClient()
 				.addListener(new SankossClientListener() {
@@ -39,14 +37,12 @@ public class PlacementScreen extends
 
 					@Override
 					public void leftGame(CorePlayer player) {
-						getProptertyChangeSupport().firePropertyChange(
-								"showLobby", false, true);
+                        changeScreen("lobby");
 					}
 
 					@Override
 					public void startedGame(Long ID) {
-						getProptertyChangeSupport().firePropertyChange(
-								"showGame", false, true);
+                        changeScreen("game");
 					}
 
 					@Override
@@ -57,7 +53,7 @@ public class PlacementScreen extends
 							@Override
 							public void run() {
 								// TODO: Check if ready to enter
-								getProptertyChangeSupport().firePropertyChange("ShowGame", true, false);
+								changeScreen("game");
 							}
 						});
 					}

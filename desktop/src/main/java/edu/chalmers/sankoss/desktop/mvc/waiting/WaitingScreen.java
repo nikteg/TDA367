@@ -6,6 +6,8 @@ import edu.chalmers.sankoss.core.core.CorePlayer;
 import edu.chalmers.sankoss.desktop.SankossGame;
 import edu.chalmers.sankoss.desktop.client.SankossClientListener;
 import edu.chalmers.sankoss.desktop.mvc.AbstractScreen;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 /**
  * Screen to be placed in when hosting a game and
@@ -17,8 +19,7 @@ import edu.chalmers.sankoss.desktop.mvc.AbstractScreen;
  */
 public class WaitingScreen extends AbstractScreen<WaitingModel, WaitingRenderer> {
 
-    public WaitingScreen(Class<WaitingModel> model, Class<WaitingRenderer> renderer) {
-        super(model, renderer);
+    public WaitingScreen() {
 
         SankossGame.getInstance().getClient().addListener(new SankossClientListener() {
             /* DO STUFF */
@@ -40,7 +41,7 @@ public class WaitingScreen extends AbstractScreen<WaitingModel, WaitingRenderer>
 
                     @Override
                     public void run() {
-                    	getProptertyChangeSupport().firePropertyChange("ShowLobby", true, false);
+                        changeScreen("lobby");
                     }
                 });
             }
@@ -51,9 +52,31 @@ public class WaitingScreen extends AbstractScreen<WaitingModel, WaitingRenderer>
 
                     @Override
                     public void run() {
-                    	getProptertyChangeSupport().firePropertyChange("showPlacement", true, false);
+                        changeScreen("placement");
                     }
                 });
+            }
+        });
+
+        getRenderer().getBtnBack().addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (SankossGame.getInstance().getClient().isHosting()) {
+                    SankossGame.getInstance().getClient().removeRoom(SankossGame.getInstance().getClient().getRoom().getID());
+
+                    Gdx.app.debug("WaitingRenderer", "Removing hosted room");
+                } else {
+                    SankossGame.getInstance().getClient().leaveRoom();
+                }
+
+                changeScreen("lobby");
+            }
+        });
+
+        getRenderer().getBtnStart().addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                changeScreen("game");
             }
         });
     }
@@ -68,5 +91,6 @@ public class WaitingScreen extends AbstractScreen<WaitingModel, WaitingRenderer>
         super.show();
         getModel().resetPlayers();
         getModel().setHosting(SankossGame.getInstance().getClient().isHosting());
+        System.out.println(SankossGame.getInstance().getClient().isHosting());
     }
 }
