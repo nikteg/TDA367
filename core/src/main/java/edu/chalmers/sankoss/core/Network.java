@@ -3,6 +3,7 @@ package edu.chalmers.sankoss.core;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
 import edu.chalmers.sankoss.core.protocol.*;
+import edu.chalmers.sankoss.core.protocol.ErrorMsg;
 
 /**
  * 
@@ -24,6 +25,7 @@ public class Network {
         kryo.register(CreateRoom.class);
         kryo.register(DestroyedShip.class);
         kryo.register(Disconnect.class);
+        kryo.register(ErrorMsg.class);
         kryo.register(FetchedRooms.class);
         kryo.register(FetchRooms.class);
         kryo.register(Fire.class);
