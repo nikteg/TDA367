@@ -30,21 +30,15 @@ import java.util.Map;
  */
 public class SankossGame extends Game implements PropertyChangeListener {
 
-	private static SankossGame instance = new SankossGame();
 	private SankossClient client;
 
     private Map<String, AbstractScreen> screens = new HashMap<String, AbstractScreen>();
 
-	private SankossGame() {
+	public SankossGame() {
         /**
          * Do things in create instead...
          */
 	}
-
-	public static SankossGame getInstance() {
-		return instance;
-	}
-
 	public SankossClient getClient() {
 		return client;
 	}

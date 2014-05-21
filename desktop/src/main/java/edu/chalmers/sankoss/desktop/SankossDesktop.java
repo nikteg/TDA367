@@ -27,6 +27,6 @@ public class SankossDesktop {
         cfg.width = 800;
         cfg.height = 600;
         
-        LwjglApplication application = new LwjglApplication(SankossGame.getInstance(), cfg);
+        LwjglApplication application = new LwjglApplication(new SankossGame(), cfg);
     }
 }
