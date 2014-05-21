@@ -4,13 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
-
 import edu.chalmers.sankoss.java.SankossGame;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Observable;
+import java.lang.reflect.ParameterizedType;
 
 /**
  * Abstraction of Screen implementation.
@@ -23,31 +22,45 @@ public abstract class AbstractScreen<M extends AbstractModel, R extends Abstract
 
     private M model;
     private R renderer;
-    
+
     private PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 
-    private AbstractScreen() {
+    private Class<M> generateModel() {
+        ParameterizedType superclass = (ParameterizedType)
+                getClass().getGenericSuperclass();
 
+        return (Class<M>) superclass.getActualTypeArguments()[0];
     }
-    
-	public AbstractScreen(Class<M> model, Class<R> renderer) {
+
+    private Class<R> generateRenderer() {
+        ParameterizedType superclass = (ParameterizedType)
+                getClass().getGenericSuperclass();
+
+        return (Class<R>) superclass.getActualTypeArguments()[1];
+    }
+
+    public AbstractScreen() {
         try {
-            setModel(model.newInstance());
-            setRenderer(renderer.getConstructor(Observable.class).newInstance(getModel()));
+            setModel(generateModel().newInstance());
+            setRenderer(generateRenderer().getDeclaredConstructor(getModel().getClass()).newInstance(getModel()));
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
-            Gdx.app.debug("AbstractScreen", e.getMessage() );
-            //e.printStackTrace();
-            e.getCause().printStackTrace();
+            //Gdx.app.debug("AbstractScreen", e.getMessage() );
+            //System.out.println(e.getMessage());
+            //e.getCause().printStackTrace();
         }
-
     }
-    public PropertyChangeSupport getProptertyChangeSupport() {
+
+    public PropertyChangeSupport getPcs() {
 		return pcs;
 	}
     
-    public void addPropertyChangeListener(PropertyChangeListener pcl){
+    public void addPcl(PropertyChangeListener pcl){
     	pcs.addPropertyChangeListener(pcl);
-    	getRenderer().addPropertyChangeListener(pcl);
+    	//getRenderer().addPropertyChangeListener(pcl);
+    }
+
+    public void removePcl(PropertyChangeListener pcl) {
+        pcs.removePropertyChangeListener(pcl);
     }
 
     public M getModel() {
@@ -64,6 +77,14 @@ public abstract class AbstractScreen<M extends AbstractModel, R extends Abstract
 
     private void setRenderer(R renderer) {
         this.renderer = renderer;
+    }
+
+    public void changeScreen(String screen) {
+        pcs.firePropertyChange("changescreen", null, screen);
+    }
+
+    public void exitGame() {
+        pcs.firePropertyChange("exitgame", null, null);
     }
 
     /**

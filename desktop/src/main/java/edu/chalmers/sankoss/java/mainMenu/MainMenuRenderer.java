@@ -3,13 +3,9 @@ package edu.chalmers.sankoss.java.mainMenu;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-
 import edu.chalmers.sankoss.java.SankossGame;
 import edu.chalmers.sankoss.java.mvc.AbstractRenderer;
 
@@ -23,7 +19,7 @@ import java.util.Observable;
  * @modified Niklas Tegnander
  * @date 3/24/14
  */
-public class MainMenuRenderer extends AbstractRenderer {
+public class MainMenuRenderer extends AbstractRenderer<MainMenuModel> {
 
     Image logo = new Image(new Texture(Gdx.files.internal("logo.png")));
     TextButton btnMultiPlayer = new TextButton("Multiplayer", SankossGame.getInstance().getSkin());
@@ -31,8 +27,8 @@ public class MainMenuRenderer extends AbstractRenderer {
     TextButton btnCredits = new TextButton("Credits", SankossGame.getInstance().getSkin());
     TextButton btnExit = new TextButton("Exit", SankossGame.getInstance().getSkin());
 
-    public MainMenuRenderer(Observable observable) {
-        super(observable);
+    public MainMenuRenderer(MainMenuModel model) {
+        super(model);
 
         btnMultiPlayer.pad(8f);
         btnOptions.pad(8f);
@@ -52,43 +48,23 @@ public class MainMenuRenderer extends AbstractRenderer {
         //getTable().debug();
         getStage().addActor(getTable());
 
-        btnMultiPlayer.addListener(new ChangeListener() {
-
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-            	getProptertyChangeSupport().firePropertyChange("showLobby", true, false);
-            }
-        });
-        btnOptions.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                Dialog dialog = new Dialog("Message", SankossGame.getInstance().getSkin()) {
-
-                    {
-                        text("Not implemented yet");
-                        button("OK");
-                    }
-                };
-
-                dialog.setMovable(false);
-                dialog.show(getStage());
-            }
-        });
-        btnCredits.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-            	getProptertyChangeSupport().firePropertyChange("showCredits", true, false);
-            	System.out.println("Credits pressed @ mmRenederer");
-            }
-        });
-        btnExit.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                SankossGame.getInstance().exitApplication();
-            }
-        });
-
         btnMultiPlayer.setDisabled(true);
+    }
+
+    public TextButton getBtnMultiPlayer() {
+        return btnMultiPlayer;
+    }
+
+    public TextButton getBtnOptions() {
+        return btnOptions;
+    }
+
+    public TextButton getBtnCredits() {
+        return btnCredits;
+    }
+
+    public TextButton getBtnExit() {
+        return btnExit;
     }
 
     @Override

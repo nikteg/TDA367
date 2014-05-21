@@ -1,13 +1,14 @@
 package edu.chalmers.sankoss.java.game;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import edu.chalmers.sankoss.core.Coordinate;
 import edu.chalmers.sankoss.core.CorePlayer;
 import edu.chalmers.sankoss.core.Ship;
 import edu.chalmers.sankoss.java.SankossGame;
 import edu.chalmers.sankoss.java.client.SankossClientListener;
-import edu.chalmers.sankoss.java.misc.GridImage;
 import edu.chalmers.sankoss.java.mvc.AbstractScreen;
 
 /**
@@ -17,10 +18,10 @@ import edu.chalmers.sankoss.java.mvc.AbstractScreen;
  * @author Mikael Malmqvist
  */
 public class GameScreen extends AbstractScreen<GameModel, GameRenderer> {
+    private final float GRID_CELL_WIDTH = 32f;
+    private final int GRID_CELL_WIDTH_INT = (int)GRID_CELL_WIDTH;
 
-    public GameScreen(Class<GameModel> model, Class<GameRenderer> renderer) {
-        super(model, renderer);
-
+    public GameScreen() {
         /**
          * Listener for GameScreen.
          */
@@ -47,7 +48,7 @@ public class GameScreen extends AbstractScreen<GameModel, GameRenderer> {
              */
             @Override
             public void winner() {
-                getModel().setWon(true);
+                getModel().setState(GameModel.State.WON);
             }
 
             /**
@@ -55,7 +56,7 @@ public class GameScreen extends AbstractScreen<GameModel, GameRenderer> {
              */
             @Override
             public void looser() {
-                getModel().setWon(false);
+                getModel().setState(GameModel.State.LOST);
             }
 
             @Override
@@ -69,7 +70,7 @@ public class GameScreen extends AbstractScreen<GameModel, GameRenderer> {
              */
             @Override
             public void turn() {
-                getModel().setMyTurn(true);
+                getModel().setShootingAllowed(true);
 
             }
 
@@ -84,69 +85,68 @@ public class GameScreen extends AbstractScreen<GameModel, GameRenderer> {
                 super.fireResult(target, coordinate, hit);
 
                 // Determines if you were shot at
-                if(target.equals(SankossGame.getInstance().getClient().getPlayer())) {
-                    shotAtYou(coordinate, hit);
+                if (target.equals(SankossGame.getInstance().getClient().getPlayer())) {
+                    //shotAtYou(coordinate, hit);
 
                 } else {
-                    shotAtOpponent(hit);
+                    //shotAtOpponent(hit);
                 }
 
             }
         });
 
+        getRenderer().getGrid1().addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+
+                /**
+                 * Get coordinate from mouse position
+                 */
+                Coordinate coord = getCoordinateFromGrid(x, y);
+
+                // Left click
+                if (button == 0) {
+                    SankossGame.getInstance().getClient().fire(getModel().getOpponent(), coord);
+                    getModel().addShot(coord);
+
+                    getRenderer().getGrid1().setTouchable(Touchable.disabled);
+                } else if (button == 1) {
+                    getRenderer().getGrid1().toggleFlag(coord);
+                }
+
+                return false;
+
+            }
+
+            @Override
+            public boolean mouseMoved(InputEvent event, float x, float y) {
+                getRenderer().getGrid1().getCrosshair().setX(((int) x / GRID_CELL_WIDTH_INT) * GRID_CELL_WIDTH_INT);
+                getRenderer().getGrid1().getCrosshair().setY(((int) y / GRID_CELL_WIDTH_INT) * GRID_CELL_WIDTH_INT);
+
+                return false;
+            }
+
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                getRenderer().getGrid1().getCrosshair().setVisible(false);
+            }
+
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                getRenderer().getGrid1().getCrosshair().setVisible(true);
+            }
+        });
     }
 
-    public void updateOpponentVisuals() {
-
-        getRenderer().updateOpponentVisuals();
-    }
-
-    public void shotAtYou(Coordinate coordinate, boolean hit) {
-        if(hit) {
-            youWereHit(coordinate);
-        } else {
-            youWereMissed(coordinate);
-        }
-    }
-
-    public void shotAtOpponent(boolean hit) {
-        if(hit) {
-            opponentWereHit();
-        } else {
-            opponentWereMissed();
-        }
-    }
-
-    public void youWereHit(Coordinate coordinate) {
-
-        Image hit = new Image(getRenderer().getHitTexture());
-        ((GridImage)getRenderer().getGrid2()).add(hit, coordinate);
-
-    }
-
-    public void youWereMissed(Coordinate coordinate) {
-
-        Image miss = new Image(getRenderer().getMissTexture());
-        ((GridImage)getRenderer().getGrid2()).add(miss, coordinate);
-    }
-
-    public void opponentWereHit() {
-
-        Image hit = new Image(getRenderer().getHitTexture());
-        ((GridImage)getRenderer().getGrid1()).add(hit, getModel().getYourShots().get(getModel().getYourShots().size() - 1));
-    }
-
-    public void opponentWereMissed() {
-
-        Image miss = new Image(getRenderer().getHitTexture());
-        ((GridImage)getRenderer().getGrid1()).add(miss, getModel().getYourShots().get(getModel().getYourShots().size() - 1));
+    public Coordinate getCoordinateFromGrid(float mx, float my) {
+        int cX = (int)mx / GRID_CELL_WIDTH_INT + 1;
+        int cY = ((int)getRenderer().getGrid1().getHeight() - (int)my) / GRID_CELL_WIDTH_INT + 1;
+        return new Coordinate(cX, cY);
     }
 
     @Override
     public void show() {
         super.show();
-
-        updateOpponentVisuals();
     }
 
     @Override

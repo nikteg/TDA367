@@ -5,33 +5,20 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-
 import edu.chalmers.sankoss.java.client.SankossClient;
-import edu.chalmers.sankoss.java.credits.CreditsModel;
-import edu.chalmers.sankoss.java.credits.CreditsRenderer;
 import edu.chalmers.sankoss.java.credits.CreditsScreen;
-import edu.chalmers.sankoss.java.game.GameModel;
-import edu.chalmers.sankoss.java.game.GameRenderer;
 import edu.chalmers.sankoss.java.game.GameScreen;
-import edu.chalmers.sankoss.java.lobby.LobbyModel;
-import edu.chalmers.sankoss.java.lobby.LobbyRenderer;
 import edu.chalmers.sankoss.java.lobby.LobbyScreen;
-import edu.chalmers.sankoss.java.mainMenu.MainMenuModel;
-import edu.chalmers.sankoss.java.mainMenu.MainMenuRenderer;
 import edu.chalmers.sankoss.java.mainMenu.MainMenuScreen;
-import edu.chalmers.sankoss.java.mvc.AbstractModel;
-import edu.chalmers.sankoss.java.mvc.AbstractRenderer;
 import edu.chalmers.sankoss.java.mvc.AbstractScreen;
-import edu.chalmers.sankoss.java.placement.PlacementModel;
-import edu.chalmers.sankoss.java.placement.PlacementRenderer;
 import edu.chalmers.sankoss.java.placement.PlacementScreen;
-import edu.chalmers.sankoss.java.waitingScreen.WaitingModel;
-import edu.chalmers.sankoss.java.waitingScreen.WaitingRenderer;
 import edu.chalmers.sankoss.java.waitingScreen.WaitingScreen;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The Game. Upon creation the game will create a new Controller class and use
@@ -47,7 +34,12 @@ public class SankossGame extends Game implements PropertyChangeListener {
 	private SankossClient client;
 	private Skin skin;
 
+    private Map<String, AbstractScreen> screens = new HashMap<String, AbstractScreen>();
+
 	private SankossGame() {
+        /**
+         * Do things in create instead...
+         */
 	}
 
 	public static SankossGame getInstance() {
@@ -70,77 +62,67 @@ public class SankossGame extends Game implements PropertyChangeListener {
 	}
 
 	/**
-	 * Create method which is called automatically upon creation. The method
-	 * creates a new controller for the application.
+	 * Create method which is called automatically upon creation.
 	 * */
 	@Override
 	public void create() {
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 
 		client = new SankossClient();
-		skin = new Skin(Gdx.files.internal("uiskin.json"));
+		skin = new Skin(Gdx.files.internal("uiskin.json")); // TODO skall flyttas ut
 
-		Screens.MAIN_MENU.show();
+        /**
+         * Create screens
+         */
+        screens.put("credits", new CreditsScreen());
+        screens.put("game", new GameScreen());
+        screens.put("lobby", new LobbyScreen());
+        screens.put("mainmenu", new MainMenuScreen());
+        screens.put("placement", new PlacementScreen());
+        screens.put("waiting", new WaitingScreen());
+
+        /**
+         * Add the game as a listener to every screen
+         */
+        for (AbstractScreen screen : screens.values()) {
+            screen.addPcl(this);
+        }
+
+		setScreen(screens.get("mainmenu"));
 
 		try {
 			client.connect(Settings.HOSTNAME);
 		} catch (IOException e) {
-			Gdx.app.debug("SankossGame", "Could not connect to server");
+			Gdx.app.debug("SankossGame", "Could not connect to" + Settings.HOSTNAME + ":" + Settings.PORT);
 		} finally {
 			if (client.isConnected()) {
-				Gdx.app.debug("SankossGame", "Connected to localhost");
+				Gdx.app.debug("SankossGame", "Connected to " + Settings.HOSTNAME + ":" + Settings.PORT);
 			}
 		}
 	}
 
 	public void exitApplication() {
 		getClient().disconnect();
-		getScreen().dispose();
-		getSkin().dispose();
+
+        for (AbstractScreen screen : screens.values()) {
+            screen.dispose();
+        }
+
+        getSkin().dispose();
 
 		Gdx.app.exit();
 	}
 
-	private enum Screens {
-		MAIN_MENU (new MainMenuScreen(MainMenuModel.class, MainMenuRenderer.class)), 
-		LOBBY (new LobbyScreen(LobbyModel.class, LobbyRenderer.class)), 
-		WAITING (new WaitingScreen(WaitingModel.class, WaitingRenderer.class)), 
-		PLACEMENT (new PlacementScreen(PlacementModel.class, PlacementRenderer.class)), 
-		GAME (new GameScreen(GameModel.class, GameRenderer.class)), 
-		CREDITS (new CreditsScreen(CreditsModel.class, CreditsRenderer.class));
-
-		private AbstractScreen screen;
-
-		Screens(AbstractScreen screen) {
-			this.screen = screen;
-			this.screen.addPropertyChangeListener(SankossGame.getInstance());
-		}
-
-		public void show() {
-			SankossGame.getInstance().setScreen(screen);
-		}
-	}
-
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		if(evt.getPropertyName().equals("showMainMenu")){
-			
-			Screens.MAIN_MENU.show();
+		if (evt.getPropertyName().equals("changescreen")){
+            String screen = (String)evt.getNewValue();
+
+            setScreen(screens.get(screen));
 		}
-		else if(evt.getPropertyName().equals("showLobby")){
-			Screens.LOBBY.show();
-		}
-		else if(evt.getPropertyName().equals("showWaiting")){
-			Screens.WAITING.show();
-		}
-		else if(evt.getPropertyName().equals("showPlacement")){
-			Screens.PLACEMENT.show();
-		}
-		else if(evt.getPropertyName().equals("showGame")){
-			Screens.GAME.show();
-		}
-		else if(evt.getPropertyName().equals("showCredits")){
-			Screens.CREDITS.show();
-		}
+
+        if (evt.getPropertyName().equals("exitgame")) {
+            exitApplication();
+        }
 	}
 }
