@@ -27,4 +27,5 @@ public interface ISankossClientListener {
     public void removedRoom();
     public void looser();
     public void winner();
+    public void errorMsg(Object errorObject, String errorMessage);
 }

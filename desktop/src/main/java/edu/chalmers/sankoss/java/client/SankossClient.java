@@ -211,6 +211,16 @@ public class SankossClient {
                     return;
                 }
 
+                if (object instanceof ErrorMsg) {
+                    ErrorMsg msg = (ErrorMsg) object;
+
+                    for (ISankossClientListener listener : listeners) {
+                        listener.errorMsg(msg.getErrorObject(), msg.getErrorMessage());
+                    }
+
+                    return;
+                }
+
             }
 
             public void disconnected(Connection connection) {

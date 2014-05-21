@@ -12,4 +12,20 @@ public class ErrorMsg {
         this.errorObject = errorObject;
         this.errorMessage = errorMessage;
     }
+
+    public Object getErrorObject() {
+        return errorObject;
+    }
+
+    public void setErrorObject(Object errorObject) {
+        this.errorObject = errorObject;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
 }
