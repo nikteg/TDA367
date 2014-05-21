@@ -14,6 +14,7 @@ import edu.chalmers.sankoss.desktop.client.SankossClient;
 import edu.chalmers.sankoss.desktop.misc.GridImage;
 import edu.chalmers.sankoss.desktop.mvc.AbstractRenderer;
 
+import java.beans.PropertyChangeEvent;
 import java.util.Observable;
 
 /**
@@ -123,17 +124,17 @@ public class GameRenderer extends AbstractRenderer<GameModel> {
     }
 
     @Override
-    public void update(Observable object, Object arg) {
-
-        if (arg.equals("opponent")) {
-            opponentPanel.setName(getModel().getOpponent().getName());
-            opponentPanel.setNationality(getModel().getOpponent().getNationality());
+    public void propertyChange(PropertyChangeEvent evt) {
+        if (evt.getPropertyName().equals("opponent")) {
+            CorePlayer msg = (CorePlayer)evt.getNewValue();
+            opponentPanel.setName(msg.getName());
+            opponentPanel.setNationality(msg.getNationality());
         }
 
         // Changed to your turn
-        if (arg.equals("shooting_allowed")) {
-
-            if(getModel().isShootingAllowed()) {
+        if (evt.getPropertyName().equals("shooting_allowed")) {
+            Boolean msg = (Boolean)evt.getNewValue();
+            if(msg) {
                 enableYourTurn();
             } else {
                 disableYourTurn();
@@ -142,31 +143,34 @@ public class GameRenderer extends AbstractRenderer<GameModel> {
         }
 
         // If you've shot at enemy
-        if (arg.equals("shot")) {
-            grid1.add(new Image(new Texture("textures/explosion.png")), getModel().getShots().get(getModel().getShots().size() - 1));
+        if (evt.getPropertyName().equals("shot")) {
+            Coordinate msg = (Coordinate)evt.getNewValue();
+            grid1.add(new Image(new Texture("textures/explosion.png")), msg);
         }
 
-        if(arg.equals("flag")) {
-            for (Coordinate flagCoordinate : getModel().getFlags()) {
-                grid1.toggleFlag(flagCoordinate);
-            }
+        if(evt.getPropertyName().equals("flag")) {
+            Coordinate msg = (Coordinate)evt.getNewValue();
+            grid1.toggleFlag(msg);
         }
 
         // When game is over
-        if(arg.equals("state")) {
-            if (getModel().getState() == GameModel.State.WON) {
+        if(evt.getPropertyName().equals("state")) {
+            GameModel.State msg = (GameModel.State)evt.getNewValue();
+            if (msg == GameModel.State.WON) {
                 // TODO WINNING
 
                 grid1.setTouchable(Touchable.disabled);
             }
 
-            if (getModel().getState() == GameModel.State.LOST) {
+            if (msg == GameModel.State.LOST) {
                 // TODO LOST
 
                 grid1.setTouchable(Touchable.disabled);
             }
         }
     }
+
+
 
     public GridImage getGrid1() {
         return grid1;

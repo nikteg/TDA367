@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.Observable;
@@ -18,17 +19,15 @@ import java.util.Observer;
  * @author Mikael Malmqvist
  * @date 3/24/14
  */
-public abstract class AbstractRenderer<M extends AbstractModel> implements Observer {
+public abstract class AbstractRenderer<M extends AbstractModel> implements PropertyChangeListener {
     private Stage stage;
     private Table table;
     private SpriteBatch spriteBatch;
     private M model;
-    
-    private PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 
     public AbstractRenderer(M model) {
         this.model = model;
-        this.model.addObserver(this);
+        this.model.addPcl(this);
 
         stage = new Stage(new ExtendViewport(800, 600)); // TODO Window size constant?
         table = new Table();
@@ -41,10 +40,6 @@ public abstract class AbstractRenderer<M extends AbstractModel> implements Obser
 
     public M getModel() {
         return model;
-    }
-
-    public void addPcl(PropertyChangeListener pcl){
-    	pcs.addPropertyChangeListener(pcl);
     }
 
     public Table getTable() {
@@ -76,5 +71,5 @@ public abstract class AbstractRenderer<M extends AbstractModel> implements Obser
     }
 
     @Override
-    public abstract void update(Observable object, Object arg);
+    public abstract void propertyChange(PropertyChangeEvent evt);
 }

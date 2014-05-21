@@ -22,9 +22,7 @@ public class LobbyModel extends AbstractModel {
 
     public void setName(String name) {
         this.name = name;
-
-        setChanged();
-        notifyObservers("name");
+        fireChange("name", name);
     }
     private Map<Long, Room> rooms = new HashMap<Long, Room>();
 
@@ -34,8 +32,6 @@ public class LobbyModel extends AbstractModel {
 
     public void setRooms(Map<Long, Room> rooms) {
         this.rooms = rooms;
-
-        setChanged();
-        notifyObservers("rooms");
+        fireChange("rooms", rooms);
     }
 }

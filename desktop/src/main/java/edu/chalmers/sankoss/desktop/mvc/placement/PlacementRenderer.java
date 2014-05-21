@@ -12,12 +12,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import edu.chalmers.sankoss.core.core.Coordinate;
+import edu.chalmers.sankoss.core.core.CorePlayer;
 import edu.chalmers.sankoss.core.core.Fleet;
 import edu.chalmers.sankoss.core.core.Ship;
 import edu.chalmers.sankoss.desktop.client.SankossClient;
 import edu.chalmers.sankoss.desktop.mvc.AbstractRenderer;
 import edu.chalmers.sankoss.desktop.utils.Common;
 
+import java.beans.PropertyChangeEvent;
 import java.util.Observable;
 
 /**
@@ -177,22 +179,25 @@ public class PlacementRenderer extends AbstractRenderer<PlacementModel> {
 		Table.drawDebug(getStage());
 	}
 
-	@Override
-	public void update(Observable object, Object arg) {
-		if (arg.equals("NationalityChanged")) {
-			flag.setDrawable(new TextureRegionDrawable(new TextureRegion(
-					new Texture(((PlacementModel) object).getNationality()
-							.getPath()))));
-		}
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        if (evt.getPropertyName().equals("NationalityChanged")) {
+            CorePlayer.Nationality msg = (CorePlayer.Nationality)evt.getNewValue();
+            flag.setDrawable(new TextureRegionDrawable(new TextureRegion(
+                    new Texture((msg.getPath())))));
+        }
 
-        if (arg.equals("OpponentReady")) {
-			btnReady.setText("Enter Game");
-		}
+        if (evt.getPropertyName().equals("OpponentReady")) {
+            boolean msg = (boolean)evt.getNewValue();
+            btnReady.setText("Enter Game");
+        }
 
-        if (arg.equals("playerReady")) {
-			btnReady.setDisabled(true);
-		}
-	}
+        if (evt.getPropertyName().equals("playerReady")) {
+            boolean msg = (boolean)evt.getNewValue();
+            btnReady.setDisabled(true);
+        }
+    }
+
 
 	public boolean isOverlapping(Actor act1, Actor act2) {
 		int x1 = (int) act1.getX();

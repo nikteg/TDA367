@@ -18,9 +18,7 @@ public class PlacementModel extends AbstractModel {
 
 	public void setOpponentReady(boolean ready) {
 		this.opponentReady = ready;
-
-        setChanged();
-        notifyObservers("OpponentReady");
+        fireChange("OpponentReady", ready);
 	}
 
 	public boolean isOpponentReady() {
@@ -45,8 +43,7 @@ public class PlacementModel extends AbstractModel {
 
 	public void setNationality(CorePlayer.Nationality nationality) {
 		this.nationality = nationality;
-		setChanged();
-		notifyObservers("NationalityChanged");
+        fireChange("NationalityChanged", nationality);
 	}
 	public boolean isUserReady(){
 		return userReady;
@@ -56,9 +53,7 @@ public class PlacementModel extends AbstractModel {
 		this.userReady = ready;
 
         updateNationality();
-
-        setChanged();
-        notifyObservers("playerReady");
+        fireChange("playerReady", ready);
 	}
 
     /**

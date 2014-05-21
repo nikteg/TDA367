@@ -34,16 +34,12 @@ public class GameModel extends AbstractModel {
 
     public void setState(State state) {
         this.state = state;
-
-        setChanged();
-        notifyObservers("state");
+        fireChange("state", state);
     }
 
     public void setOpponent(CorePlayer opponent) {
         this.opponent = opponent;
-
-        setChanged();
-        notifyObservers("opponent");
+        fireChange("opponent", opponent);
     }
 
     public CorePlayer getOpponent() {
@@ -52,10 +48,7 @@ public class GameModel extends AbstractModel {
 
     public void setShootingAllowed(boolean shootingAllowed) {
         this.shootingAllowed = shootingAllowed;
-
-        setChanged();
-
-        notifyObservers("shooting_allowed");
+        fireChange("shooting_allowed", shootingAllowed);
     }
 
     public boolean isShootingAllowed() {
@@ -68,9 +61,7 @@ public class GameModel extends AbstractModel {
      */
     public void addShot(Coordinate coordinate) {
         shots.add(coordinate);
-
-        setChanged();
-        notifyObservers("shot");
+        fireChange("shot", coordinate);
     }
 
     public List<Coordinate> getShots() {
@@ -87,9 +78,7 @@ public class GameModel extends AbstractModel {
         } else {
             flags.add(coordinate);
         }
-
-        setChanged();
-        notifyObservers("flag");
+        fireChange("flag", coordinate);
     }
 
     public List<Coordinate> getFlags() {

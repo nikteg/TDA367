@@ -15,7 +15,9 @@ import edu.chalmers.sankoss.desktop.client.SankossClient;
 import edu.chalmers.sankoss.desktop.mvc.AbstractRenderer;
 import edu.chalmers.sankoss.desktop.utils.Common;
 
+import java.beans.PropertyChangeEvent;
 import java.util.Collection;
+import java.util.Map;
 import java.util.Observable;
 
 /**
@@ -117,16 +119,19 @@ public class LobbyRenderer extends AbstractRenderer<LobbyModel> {
     }
 
     @Override
-    public void update(Observable object, Object arg) {
-        if (arg.equals("rooms")) {
-            Collection<Room> values = ((LobbyModel) object).getRooms().values();
+    public void propertyChange(PropertyChangeEvent evt) {
+        if (evt.getPropertyName().equals("rooms")) {
+            Map<Long, Room> msg = (Map<Long, Room>)evt.getNewValue();
+            Collection<Room> values = msg.values();
             lstRooms.setItems(values.toArray(new Room[values.size()]));
-        } else if (arg.equals("name")) {
+        } else if (evt.getPropertyName().equals("name")) {
+            String msg = (String)evt.getNewValue();
             btnEditName.getImage().setDrawable(penTexture);
-            nameField.setText(((LobbyModel) object).getName());
+            nameField.setText(msg);
             nameField.setDisabled(true);
             getStage().unfocus(nameField);
             nameField.setRightAligned(true);
         }
     }
+
 }
