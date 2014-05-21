@@ -26,6 +26,7 @@ public class SankossDesktop {
         cfg.vSyncEnabled = true;
         cfg.width = 800;
         cfg.height = 600;
+        
         LwjglApplication application = new LwjglApplication(SankossGame.getInstance(), cfg);
     }
 }

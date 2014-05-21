@@ -63,7 +63,7 @@ public class SankossGame extends Game implements PropertyChangeListener {
 	public void create() {
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 
-		client = new SankossClient();
+		client = SankossClient.getInstance();
         /**
          * Create screens
          */

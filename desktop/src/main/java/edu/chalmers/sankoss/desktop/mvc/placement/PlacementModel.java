@@ -4,6 +4,7 @@ import edu.chalmers.sankoss.core.core.CorePlayer;
 import edu.chalmers.sankoss.core.core.Fleet;
 import edu.chalmers.sankoss.core.core.Ship;
 import edu.chalmers.sankoss.desktop.SankossGame;
+import edu.chalmers.sankoss.desktop.client.SankossClient;
 import edu.chalmers.sankoss.desktop.mvc.AbstractModel;
 
 /**
@@ -63,9 +64,11 @@ public class PlacementModel extends AbstractModel {
     /**
      * Updates the client's player instance with correct nationality based on model.
      */
+	
+	//TODO Remove, this should not be sent until the player is ready.
     public void updateNationality() {
-        SankossGame.getInstance().getClient().getPlayer().setNationality(nationality);
-        SankossGame.getInstance().getClient().playerChangeNat(nationality);
+    	SankossClient.getInstance().getPlayer().setNationality(nationality);
+    	SankossClient.getInstance().playerChangeNat(nationality);
     }
 
     public boolean getUserReady() {

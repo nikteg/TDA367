@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import edu.chalmers.sankoss.core.core.CorePlayer;
 import edu.chalmers.sankoss.core.core.Ship;
 import edu.chalmers.sankoss.desktop.SankossGame;
+import edu.chalmers.sankoss.desktop.client.SankossClient;
 import edu.chalmers.sankoss.desktop.client.SankossClientListener;
 import edu.chalmers.sankoss.desktop.mvc.AbstractScreen;
 
@@ -19,7 +20,7 @@ public class PlacementScreen extends
 
 	public PlacementScreen() {
 
-		SankossGame.getInstance().getClient()
+		SankossClient.getInstance()
 				.addListener(new SankossClientListener() {
 
 					/**
@@ -75,10 +76,10 @@ public class PlacementScreen extends
 		if (getModel().getFleet().getLength() == 5
 				&& !getModel().getUserReady()) {
 			getModel().setUserReady(true);
-			SankossGame.getInstance().getClient().setReady(true);
+			SankossClient.getInstance().setReady(true);
 
 			// Updates server and tells opponent you are ready
-			SankossGame.getInstance().getClient()
+			SankossClient.getInstance()
 					.playerReady(getModel().getFleet());
 		}
 	}

@@ -6,7 +6,9 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+
 import edu.chalmers.sankoss.desktop.SankossGame;
+import edu.chalmers.sankoss.desktop.client.SankossClient;
 import edu.chalmers.sankoss.desktop.client.SankossClientListener;
 import edu.chalmers.sankoss.desktop.mvc.AbstractScreen;
 import edu.chalmers.sankoss.desktop.utils.Common;
@@ -22,7 +24,7 @@ import edu.chalmers.sankoss.desktop.utils.Common;
 public class MainMenuScreen extends AbstractScreen<MainMenuModel, MainMenuRenderer> {
 
     public MainMenuScreen() {
-        SankossGame.getInstance().getClient().addListener(new SankossClientListener() {
+    	SankossClient.getInstance().addListener(new SankossClientListener() {
 
             @Override
             public void connected() {

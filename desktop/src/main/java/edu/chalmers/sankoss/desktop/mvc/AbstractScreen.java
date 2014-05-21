@@ -153,7 +153,7 @@ public abstract class AbstractScreen<M extends AbstractModel, R extends Abstract
         renderer.getStage().keyDown(keyCode);
 
         if (keyCode == Input.Keys.ESCAPE) {
-            SankossGame.getInstance().exitApplication();
+            exitGame();
         }
 
         return false;

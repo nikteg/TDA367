@@ -11,14 +11,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+
 import edu.chalmers.sankoss.core.core.Coordinate;
 import edu.chalmers.sankoss.core.core.CorePlayer;
 import edu.chalmers.sankoss.core.core.Fleet;
 import edu.chalmers.sankoss.core.core.Ship;
 import edu.chalmers.sankoss.desktop.SankossGame;
+import edu.chalmers.sankoss.desktop.client.SankossClient;
 import edu.chalmers.sankoss.desktop.mvc.AbstractRenderer;
 import edu.chalmers.sankoss.desktop.mvc.game.PlayerPanel;
 import edu.chalmers.sankoss.desktop.utils.Common;
+
 import java.util.Observable;
 
 /**
@@ -92,20 +95,20 @@ public class PlacementRenderer extends AbstractRenderer<PlacementModel> {
                     temp.add(new Ship(new Coordinate(1, 5), (new Coordinate(5,
                             5))));
 
-                    SankossGame.getInstance().getClient().getPlayer().setFleet(temp);
+                    SankossClient.getInstance().getPlayer().setFleet(temp);
                     getModel().setFleet(temp);
 
-                    //SankossGame.getInstance().getClient().playerReady(temp);
+                    //SankossClient.getInstance().playerReady(temp);
                 } catch (Exception ignore) {
 
                 }
 
                 if(getModel().getFleet().getLength() == 5 && !getModel().getUserReady()) {
                     getModel().setUserReady(true);
-                    SankossGame.getInstance().getClient().setReady(true);
+                    SankossClient.getInstance().setReady(true);
 
                     // Updates server and tells opponent you are ready
-                    SankossGame.getInstance().getClient().playerReady(getModel().getFleet());
+                    SankossClient.getInstance().playerReady(getModel().getFleet());
                 }
 			}
 		});

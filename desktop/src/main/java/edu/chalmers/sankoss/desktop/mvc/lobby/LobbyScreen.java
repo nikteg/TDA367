@@ -5,11 +5,14 @@ import com.badlogic.gdx.Gdx;
 import edu.chalmers.sankoss.core.core.CorePlayer;
 import edu.chalmers.sankoss.core.core.Room;
 import edu.chalmers.sankoss.desktop.SankossGame;
+import edu.chalmers.sankoss.desktop.client.SankossClient;
 import edu.chalmers.sankoss.desktop.client.SankossClientListener;
 import edu.chalmers.sankoss.desktop.mvc.AbstractScreen;
+
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+
 import edu.chalmers.sankoss.core.protocol.PlayerChangedName;
 import edu.chalmers.sankoss.desktop.utils.Common;
 
@@ -27,7 +30,7 @@ public class LobbyScreen extends AbstractScreen<LobbyModel, LobbyRenderer> {
 
     public LobbyScreen() {
 
-        SankossGame.getInstance().getClient().addListener(new SankossClientListener() {
+        SankossClient.getInstance().addListener(new SankossClientListener() {
             /* DO STUFF */
 
             @Override
@@ -79,7 +82,7 @@ public class LobbyScreen extends AbstractScreen<LobbyModel, LobbyRenderer> {
 
             @Override
             public void joinedRoom(CorePlayer player) {
-                if (player.getID().equals(SankossGame.getInstance().getClient().getPlayer().getID())) {
+                if (player.getID().equals(SankossClient.getInstance().getPlayer().getID())) {
                     Gdx.app.postRunnable(new Runnable() {
 
                         @Override
@@ -107,7 +110,7 @@ public class LobbyScreen extends AbstractScreen<LobbyModel, LobbyRenderer> {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 // HOST
-                SankossGame.getInstance().getClient().createRoom(SankossGame.getInstance().getClient().getPlayer().getName() + "'s room", "");
+                SankossClient.getInstance().createRoom(SankossClient.getInstance().getPlayer().getName() + "'s room", "");
 
             }
         });
@@ -123,7 +126,7 @@ public class LobbyScreen extends AbstractScreen<LobbyModel, LobbyRenderer> {
 
                 Gdx.app.debug("LobbyRenderer", "Joining room '" + room.getName() + "'");
 
-                SankossGame.getInstance().getClient().joinRoom(room.getID());
+                SankossClient.getInstance().joinRoom(room.getID());
             }
         });
     }
@@ -136,8 +139,8 @@ public class LobbyScreen extends AbstractScreen<LobbyModel, LobbyRenderer> {
     @Override
     public void show() {
         super.show();
-        getModel().setName(SankossGame.getInstance().getClient().getPlayer().getName());
+        getModel().setName(SankossClient.getInstance().getPlayer().getName());
         System.out.println("NAMNET: " + getModel().getName());
-        SankossGame.getInstance().getClient().fetchRooms();
+        SankossClient.getInstance().fetchRooms();
     }
 }
