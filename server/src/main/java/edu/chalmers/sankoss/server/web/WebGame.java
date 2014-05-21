@@ -1,4 +1,4 @@
-package edu.chalmers.sankoss.java.web;
+package edu.chalmers.sankoss.server.web;
 
 import java.util.ArrayList;
 import java.util.List;

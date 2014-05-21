@@ -1,4 +1,4 @@
-package edu.chalmers.sankoss.java;
+package edu.chalmers.sankoss.server.server;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;

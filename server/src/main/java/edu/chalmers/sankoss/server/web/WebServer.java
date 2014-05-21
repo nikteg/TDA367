@@ -1,6 +1,11 @@
-package edu.chalmers.sankoss.java.web;
+package edu.chalmers.sankoss.server.web;
 
-import edu.chalmers.sankoss.java.*;
+import edu.chalmers.sankoss.server.*;
+import edu.chalmers.sankoss.server.server.Game;
+import edu.chalmers.sankoss.server.server.GameFactory;
+import edu.chalmers.sankoss.server.server.Player;
+import edu.chalmers.sankoss.server.server.RoomFactory;
+import edu.chalmers.sankoss.server.server.SankossServer;
 import edu.chalmers.sankoss.core.model.CorePlayer;
 import edu.chalmers.sankoss.core.model.Room;
 import spark.Request;

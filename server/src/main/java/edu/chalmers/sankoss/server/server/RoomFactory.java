@@ -1,4 +1,4 @@
-package edu.chalmers.sankoss.java;
+package edu.chalmers.sankoss.server.server;
 
 import edu.chalmers.sankoss.core.model.Room;
 

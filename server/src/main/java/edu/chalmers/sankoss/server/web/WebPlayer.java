@@ -1,4 +1,4 @@
-package edu.chalmers.sankoss.java.web;
+package edu.chalmers.sankoss.server.web;
 
 /**
  * @author Niklas Tegnander

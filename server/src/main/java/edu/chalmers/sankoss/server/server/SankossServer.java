@@ -1,4 +1,4 @@
-package edu.chalmers.sankoss.java;
+package edu.chalmers.sankoss.server.server;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -9,7 +9,7 @@ import edu.chalmers.sankoss.core.model.CorePlayer;
 import edu.chalmers.sankoss.core.model.Room;
 import edu.chalmers.sankoss.core.model.Ship;
 import edu.chalmers.sankoss.core.protocol.*;
-import edu.chalmers.sankoss.java.web.WebServer;
+import edu.chalmers.sankoss.server.web.WebServer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,18 +38,6 @@ public class SankossServer {
     Logger log = LoggerFactory.getLogger(SankossServer.class);
 
     private PropertyChangeSupport pcs = new PropertyChangeSupport(this);
-
-    /**
-     * Constructor
-     * @param args
-     * @throws IOException if the server couldn't start and bind to an address
-     */
-    public static void main(String[] args) throws IOException {
-        SankossServer sankossServer = new SankossServer();
-        //sankossServer.startHTTPServer(8080);
-
-        new Thread(new WebServer(sankossServer)).start();
-    }
 
     /**
      * Start server
