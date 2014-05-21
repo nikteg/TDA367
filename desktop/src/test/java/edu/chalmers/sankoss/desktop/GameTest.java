@@ -1,6 +1,6 @@
 package edu.chalmers.sankoss.desktop;
 
-import edu.chalmers.sankoss.core.model.Coordinate;
+import edu.chalmers.sankoss.core.core.Coordinate;
 
 import org.junit.Test;
 

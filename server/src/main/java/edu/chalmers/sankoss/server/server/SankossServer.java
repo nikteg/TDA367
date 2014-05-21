@@ -5,9 +5,9 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 
 import edu.chalmers.sankoss.core.Network;
-import edu.chalmers.sankoss.core.model.CorePlayer;
-import edu.chalmers.sankoss.core.model.Room;
-import edu.chalmers.sankoss.core.model.Ship;
+import edu.chalmers.sankoss.core.core.CorePlayer;
+import edu.chalmers.sankoss.core.core.Room;
+import edu.chalmers.sankoss.core.core.Ship;
 import edu.chalmers.sankoss.core.protocol.*;
 import edu.chalmers.sankoss.server.web.WebServer;
 

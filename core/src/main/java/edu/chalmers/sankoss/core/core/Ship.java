@@ -1,4 +1,4 @@
-package edu.chalmers.sankoss.core.model;
+package edu.chalmers.sankoss.core.core;
 
 import java.util.LinkedList;
 

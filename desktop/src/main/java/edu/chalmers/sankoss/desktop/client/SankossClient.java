@@ -5,10 +5,10 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
 import edu.chalmers.sankoss.core.*;
-import edu.chalmers.sankoss.core.model.Coordinate;
-import edu.chalmers.sankoss.core.model.CorePlayer;
-import edu.chalmers.sankoss.core.model.Fleet;
-import edu.chalmers.sankoss.core.model.Room;
+import edu.chalmers.sankoss.core.core.Coordinate;
+import edu.chalmers.sankoss.core.core.CorePlayer;
+import edu.chalmers.sankoss.core.core.Fleet;
+import edu.chalmers.sankoss.core.core.Room;
 import edu.chalmers.sankoss.core.protocol.*;
 import edu.chalmers.sankoss.desktop.mvc.game.GameModel;
 

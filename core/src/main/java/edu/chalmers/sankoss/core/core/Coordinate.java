@@ -1,4 +1,4 @@
-package edu.chalmers.sankoss.core.model;
+package edu.chalmers.sankoss.core.core;
 
 /**
  * Represents a coordinate in the game grid

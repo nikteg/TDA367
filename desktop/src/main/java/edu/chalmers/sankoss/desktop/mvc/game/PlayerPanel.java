@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
-import edu.chalmers.sankoss.core.model.CorePlayer;
+import edu.chalmers.sankoss.core.core.CorePlayer;
 import edu.chalmers.sankoss.desktop.SankossGame;
 import edu.chalmers.sankoss.desktop.utils.Common;
 

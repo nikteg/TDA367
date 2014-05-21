@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
-import edu.chalmers.sankoss.core.model.Coordinate;
+import edu.chalmers.sankoss.core.core.Coordinate;
 
 /**
  * Description of class.

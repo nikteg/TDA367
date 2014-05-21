@@ -2,7 +2,7 @@ package edu.chalmers.sankoss.desktop.mvc.waiting;
 
 import com.badlogic.gdx.Gdx;
 
-import edu.chalmers.sankoss.core.model.CorePlayer;
+import edu.chalmers.sankoss.core.core.CorePlayer;
 import edu.chalmers.sankoss.desktop.mvc.AbstractModel;
 
 import java.util.ArrayList;

@@ -1,7 +1,7 @@
 package edu.chalmers.sankoss.server.server;
 
-import edu.chalmers.sankoss.core.model.Coordinate;
-import edu.chalmers.sankoss.core.model.Ship;
+import edu.chalmers.sankoss.core.core.Coordinate;
+import edu.chalmers.sankoss.core.core.Ship;
 
 import java.util.List;
 

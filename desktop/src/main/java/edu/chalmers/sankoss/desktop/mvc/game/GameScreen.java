@@ -2,9 +2,9 @@ package edu.chalmers.sankoss.desktop.mvc.game;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
-import edu.chalmers.sankoss.core.model.Coordinate;
-import edu.chalmers.sankoss.core.model.CorePlayer;
-import edu.chalmers.sankoss.core.model.Ship;
+import edu.chalmers.sankoss.core.core.Coordinate;
+import edu.chalmers.sankoss.core.core.CorePlayer;
+import edu.chalmers.sankoss.core.core.Ship;
 import edu.chalmers.sankoss.desktop.SankossGame;
 import edu.chalmers.sankoss.desktop.client.SankossClientListener;
 import edu.chalmers.sankoss.desktop.misc.GridImage;

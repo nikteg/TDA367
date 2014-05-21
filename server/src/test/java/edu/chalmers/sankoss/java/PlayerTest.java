@@ -4,9 +4,9 @@ import static org.junit.Assert.*;
 import java.util.LinkedList;
 import java.util.List;
 
-import edu.chalmers.sankoss.core.model.Coordinate;
-import edu.chalmers.sankoss.core.model.CorePlayer;
-import edu.chalmers.sankoss.core.model.Ship;
+import edu.chalmers.sankoss.core.core.Coordinate;
+import edu.chalmers.sankoss.core.core.CorePlayer;
+import edu.chalmers.sankoss.core.core.Ship;
 import edu.chalmers.sankoss.server.server.Player;
 
 import org.junit.Test;

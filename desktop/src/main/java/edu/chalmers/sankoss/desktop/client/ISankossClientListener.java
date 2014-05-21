@@ -1,10 +1,10 @@
 package edu.chalmers.sankoss.desktop.client;
 
 import edu.chalmers.sankoss.core.*;
-import edu.chalmers.sankoss.core.model.Coordinate;
-import edu.chalmers.sankoss.core.model.CorePlayer;
-import edu.chalmers.sankoss.core.model.Room;
-import edu.chalmers.sankoss.core.model.Ship;
+import edu.chalmers.sankoss.core.core.Coordinate;
+import edu.chalmers.sankoss.core.core.CorePlayer;
+import edu.chalmers.sankoss.core.core.Room;
+import edu.chalmers.sankoss.core.core.Ship;
 
 import java.util.Map;
 

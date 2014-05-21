@@ -1,8 +1,8 @@
 package edu.chalmers.sankoss.java;
 
+import edu.chalmers.sankoss.core.core.Coordinate;
+import edu.chalmers.sankoss.core.core.Ship;
 import edu.chalmers.sankoss.core.exceptions.IllegalShipCoordinatesException;
-import edu.chalmers.sankoss.core.model.Coordinate;
-import edu.chalmers.sankoss.core.model.Ship;
 import edu.chalmers.sankoss.server.server.Game;
 import edu.chalmers.sankoss.server.server.Player;
 import edu.chalmers.sankoss.server.server.UsedCoordinateException;

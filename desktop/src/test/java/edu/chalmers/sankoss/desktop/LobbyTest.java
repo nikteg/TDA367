@@ -1,6 +1,6 @@
 package edu.chalmers.sankoss.desktop;
 
-import edu.chalmers.sankoss.core.model.Room;
+import edu.chalmers.sankoss.core.core.Room;
 
 import org.junit.Test;
 
