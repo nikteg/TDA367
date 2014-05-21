@@ -8,6 +8,9 @@ public class ErrorMsg {
     private Object errorObject;
     private String errorMessage;
 
+    public ErrorMsg() {
+    }
+
     public ErrorMsg(Object errorObject, String errorMessage) {
         this.errorObject = errorObject;
         this.errorMessage = errorMessage;

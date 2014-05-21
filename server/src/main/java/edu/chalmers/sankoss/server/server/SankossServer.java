@@ -503,16 +503,15 @@ public class SankossServer {
                     System.out.println("TRYING CHANGED NAME" + msg.getName());
 
                     String name = msg.getName();
-                    // TODO Should be regex...
-                    //if (name.matches("\\w{1,16}")) {
-                    if (name.length() < 16) {
-                        System.out.println("CHANGED NAME" + msg.getName());
+
+                    if (name.matches("^[\\p{L} .'-]+$")) {
+                        System.out.println("CHANGED NAME " + msg.getName());
                         player.setName(msg.getName());
                         connection.sendTCP(new PlayerChangedName(player.getCorePlayer()));
 
                         pcs.firePropertyChange("playerChangedName", null, null);
                     } else {
-                        connection.sendTCP(new ErrorMsg(new PlayerChangedName(), "Length of name can not greater than 16 characters"));
+                        connection.sendTCP(new ErrorMsg(new PlayerChangedName(), "Invalid name"));
                     }
                     return;
                 }

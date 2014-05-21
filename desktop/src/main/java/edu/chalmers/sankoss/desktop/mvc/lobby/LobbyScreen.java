@@ -9,6 +9,9 @@ import edu.chalmers.sankoss.desktop.client.SankossClientListener;
 import edu.chalmers.sankoss.desktop.mvc.AbstractScreen;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import edu.chalmers.sankoss.core.protocol.PlayerChangedName;
+import edu.chalmers.sankoss.desktop.utils.Common;
 
 import java.util.Map;
 
@@ -26,6 +29,33 @@ public class LobbyScreen extends AbstractScreen<LobbyModel, LobbyRenderer> {
 
         SankossGame.getInstance().getClient().addListener(new SankossClientListener() {
             /* DO STUFF */
+
+            @Override
+            public void errorMsg(Object errorObject, String errorMessage) {
+
+                /**
+                 * A playerChangedName error
+                 */
+                if (errorObject instanceof PlayerChangedName) {
+                    Gdx.app.debug(errorObject.getClass().toString(), errorMessage);
+                    Gdx.app.postRunnable(new Runnable() {
+                        @Override
+                        public void run() {
+                            Dialog dialog = new Dialog("Message", Common.getSkin()) {
+
+                                {
+                                    text("Invalid name");
+                                    button("OK");
+                                }
+                            };
+                            dialog.setMovable(false);
+                            dialog.show(getRenderer().getStage());
+                        }
+                    });
+                }
+
+
+            }
 
             @Override
             public void fetchedRooms(Map<Long, Room> rooms) {
@@ -58,6 +88,11 @@ public class LobbyScreen extends AbstractScreen<LobbyModel, LobbyRenderer> {
                         }
                     });
                 }
+            }
+
+            @Override
+            public void playerChangedName(CorePlayer player) {
+                getModel().setName(player.getName());
             }
         });
 
@@ -102,6 +137,7 @@ public class LobbyScreen extends AbstractScreen<LobbyModel, LobbyRenderer> {
     public void show() {
         super.show();
         getModel().setName(SankossGame.getInstance().getClient().getPlayer().getName());
+        System.out.println("NAMNET: " + getModel().getName());
         SankossGame.getInstance().getClient().fetchRooms();
     }
 }

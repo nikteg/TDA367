@@ -16,7 +16,7 @@ public class CorePlayer {
 
     public CorePlayer(Long playerID) {
         this.playerID = playerID;
-        this.name = "Player #" + playerID;
+        this.name = "Player " + playerID;
     }
 
     public CorePlayer(Long playerID, String name) {
