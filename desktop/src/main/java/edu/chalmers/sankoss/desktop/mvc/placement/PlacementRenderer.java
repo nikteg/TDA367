@@ -11,15 +11,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-
 import edu.chalmers.sankoss.core.core.Coordinate;
-import edu.chalmers.sankoss.core.core.CorePlayer;
 import edu.chalmers.sankoss.core.core.Fleet;
 import edu.chalmers.sankoss.core.core.Ship;
-import edu.chalmers.sankoss.desktop.SankossGame;
 import edu.chalmers.sankoss.desktop.client.SankossClient;
 import edu.chalmers.sankoss.desktop.mvc.AbstractRenderer;
-import edu.chalmers.sankoss.desktop.mvc.game.PlayerPanel;
 import edu.chalmers.sankoss.desktop.utils.Common;
 
 import java.util.Observable;
@@ -31,8 +27,6 @@ import java.util.Observable;
  * @author Daniel Eineving
  */
 public class PlacementRenderer extends AbstractRenderer<PlacementModel> {
-	private Actor playerPanel = new PlayerPanel("Name",
-			CorePlayer.Nationality.USA, PlayerPanel.Alignment.RIGHT);
 	private Table container = new Table();
 
 	private TextureRegionDrawable greenTextureBackground;
