@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import edu.chalmers.sankoss.java.SankossGame;
 import edu.chalmers.sankoss.java.mvc.AbstractRenderer;
+import edu.chalmers.sankoss.java.utils.Common;
 
 import java.util.Observable;
 
@@ -26,10 +27,10 @@ import java.util.Observable;
 public class MainMenuRenderer extends AbstractRenderer {
 
     Image logo = new Image(new Texture(Gdx.files.internal("logo.png")));
-    TextButton btnMultiPlayer = new TextButton("Multiplayer", SankossGame.getInstance().getSkin());
-    TextButton btnOptions = new TextButton("Options", SankossGame.getInstance().getSkin());
-    TextButton btnCredits = new TextButton("Credits", SankossGame.getInstance().getSkin());
-    TextButton btnExit = new TextButton("Exit", SankossGame.getInstance().getSkin());
+    TextButton btnMultiPlayer = new TextButton("Multiplayer", Common.getSkin());
+    TextButton btnOptions = new TextButton("Options", Common.getSkin());
+    TextButton btnCredits = new TextButton("Credits", Common.getSkin());
+    TextButton btnExit = new TextButton("Exit", Common.getSkin());
 
     public MainMenuRenderer(Observable observable) {
         super(observable);
@@ -62,7 +63,7 @@ public class MainMenuRenderer extends AbstractRenderer {
         btnOptions.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Dialog dialog = new Dialog("Message", SankossGame.getInstance().getSkin()) {
+                Dialog dialog = new Dialog("Message", Common.getSkin()) {
 
                     {
                         text("Not implemented yet");

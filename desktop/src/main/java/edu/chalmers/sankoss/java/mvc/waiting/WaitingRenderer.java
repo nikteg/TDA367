@@ -12,6 +12,7 @@ import com.sun.org.apache.xpath.internal.SourceTree;
 import edu.chalmers.sankoss.java.SankossGame;
 import edu.chalmers.sankoss.java.client.SankossClient;
 import edu.chalmers.sankoss.java.mvc.AbstractRenderer;
+import edu.chalmers.sankoss.java.utils.Common;
 
 import java.util.Observable;
 
@@ -25,9 +26,9 @@ import java.util.Observable;
  */
 public class WaitingRenderer extends AbstractRenderer {
 
-    private Label lblWaiting = new Label("Loading...", SankossGame.getInstance().getSkin());
-    private TextButton btnBack = new TextButton("Back", SankossGame.getInstance().getSkin());
-    private TextButton btnStart = new TextButton("Start", SankossGame.getInstance().getSkin());
+    private Label lblWaiting = new Label("Loading...", Common.getSkin());
+    private TextButton btnBack = new TextButton("Back", Common.getSkin());
+    private TextButton btnStart = new TextButton("Start", Common.getSkin());
 
     public WaitingRenderer(Observable observable) {
         super(observable);

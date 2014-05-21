@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import edu.chalmers.sankoss.java.SankossGame;
 import edu.chalmers.sankoss.java.mvc.AbstractRenderer;
+import edu.chalmers.sankoss.java.utils.Common;
 
 import java.util.Observable;
 
@@ -24,8 +25,8 @@ public class CreditsRenderer extends AbstractRenderer {
 
     private final float scrollSpeed = 0.01f;
 
-    TextButton btnBack = new TextButton("Back", SankossGame.getInstance().getSkin());
-    Label lblCredits = new Label("", SankossGame.getInstance().getSkin());
+    TextButton btnBack = new TextButton("Back", Common.getSkin());
+    Label lblCredits = new Label("", Common.getSkin());
 
     public CreditsRenderer(Observable observable) {
         super(observable);

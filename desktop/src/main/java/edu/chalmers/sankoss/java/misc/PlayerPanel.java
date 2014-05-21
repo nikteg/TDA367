@@ -9,8 +9,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+
 import edu.chalmers.sankoss.core.CorePlayer;
 import edu.chalmers.sankoss.java.SankossGame;
+import edu.chalmers.sankoss.java.utils.Common;
 
 public class PlayerPanel extends Table {
     private Label lblName;
@@ -19,11 +21,11 @@ public class PlayerPanel extends Table {
 
 
     public PlayerPanel(String name, CorePlayer.Nationality nationality, Alignment align) {
-        super(SankossGame.getInstance().getSkin());
+        super(Common.getSkin());
 
-        lblName = new Label(name, SankossGame.getInstance().getSkin());
+        lblName = new Label(name, Common.getSkin());
         //imgNationality = new Image(new Texture(nationality.getPath()));
-        turnLabel = new Label("", SankossGame.getInstance().getSkin());
+        turnLabel = new Label("", Common.getSkin());
 
         Pixmap pix = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pix.setColor(Color.GRAY);

@@ -13,6 +13,7 @@ import edu.chalmers.sankoss.core.Room;
 import edu.chalmers.sankoss.java.SankossGame;
 import edu.chalmers.sankoss.java.mvc.AbstractRenderer;
 import edu.chalmers.sankoss.java.mvc.game.GameModel;
+import edu.chalmers.sankoss.java.utils.Common;
 
 import java.util.Collection;
 import java.util.Observable;
@@ -30,20 +31,20 @@ public class LobbyRenderer extends AbstractRenderer {
     TextureRegionDrawable checkTexture = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("textures/check.png"))));
     private ImageButton editBtn = new ImageButton(penTexture, null, checkTexture);
 
-    private Label infoLabel = new Label("Join or host a game", SankossGame.getInstance().getSkin());
+    private Label infoLabel = new Label("Join or host a game", Common.getSkin());
     private TextField nameField;
 
-    private List<Room> lstRooms = new List<Room>(SankossGame.getInstance().getSkin());
-    private TextButton btnHost = new TextButton("Host", SankossGame.getInstance().getSkin());
-    private TextButton btnJoin = new TextButton("Join", SankossGame.getInstance().getSkin());
-    private TextButton btnBack = new TextButton("Back", SankossGame.getInstance().getSkin());
+    private List<Room> lstRooms = new List<Room>(Common.getSkin());
+    private TextButton btnHost = new TextButton("Host", Common.getSkin());
+    private TextButton btnJoin = new TextButton("Join", Common.getSkin());
+    private TextButton btnBack = new TextButton("Back", Common.getSkin());
 
     public LobbyRenderer(Observable observable) {
         super(observable);
 
         getTable().pad(8f);
 
-        nameField = new TextField("", SankossGame.getInstance().getSkin());
+        nameField = new TextField("", Common.getSkin());
         nameField.setDisabled(true);
         nameField.setMaxLength(16);
         nameField.setRightAligned(true);

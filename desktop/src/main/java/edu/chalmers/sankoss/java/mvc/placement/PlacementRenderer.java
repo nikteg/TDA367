@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+
 import edu.chalmers.sankoss.core.Coordinate;
 import edu.chalmers.sankoss.core.CorePlayer;
 import edu.chalmers.sankoss.core.Fleet;
@@ -19,11 +20,14 @@ import edu.chalmers.sankoss.java.SankossGame;
 import edu.chalmers.sankoss.java.misc.PlayerPanel;
 import edu.chalmers.sankoss.java.misc.PlayerPanel;
 import edu.chalmers.sankoss.java.mvc.AbstractRenderer;
+import edu.chalmers.sankoss.java.utils.Common;
 
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 import edu.chalmers.sankoss.java.SankossGame;
+
+
 
 
 import java.util.Observable;
@@ -46,12 +50,10 @@ public class PlacementRenderer extends AbstractRenderer {
 	private int textureXOffset;
 	private int textureYOffset;
 
-	TextButton btnReady = new TextButton("Ready", SankossGame.getInstance()
-			.getSkin());
-	TextButton btnNextFlag = new TextButton(">", SankossGame.getInstance()
-			.getSkin());
-	TextButton btnPreviousFlag = new TextButton("<", SankossGame.getInstance()
-			.getSkin());
+	TextButton btnReady = new TextButton("Ready", Common.getSkin());
+	TextButton btnNextFlag = new TextButton(">", Common.getSkin());
+	TextButton btnPreviousFlag = new TextButton("<", Common.getSkin());
+	
 	Image grid = new Image(new Texture(Gdx.files.internal("textures/grid.png")));
 	Image flag = new Image();
 	Table bottomTable = new Table();

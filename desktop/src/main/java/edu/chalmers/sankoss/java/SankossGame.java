@@ -28,6 +28,7 @@ import edu.chalmers.sankoss.java.mvc.placement.PlacementScreen;
 import edu.chalmers.sankoss.java.mvc.waiting.WaitingModel;
 import edu.chalmers.sankoss.java.mvc.waiting.WaitingRenderer;
 import edu.chalmers.sankoss.java.mvc.waiting.WaitingScreen;
+import edu.chalmers.sankoss.java.utils.Common;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -45,7 +46,6 @@ public class SankossGame extends Game implements PropertyChangeListener {
 
 	private static SankossGame instance = new SankossGame();
 	private SankossClient client;
-	private Skin skin;
 
 	private SankossGame() {
 	}
@@ -56,10 +56,6 @@ public class SankossGame extends Game implements PropertyChangeListener {
 
 	public SankossClient getClient() {
 		return client;
-	}
-
-	public Skin getSkin() {
-		return skin;
 	}
 
 	@Override
@@ -78,7 +74,6 @@ public class SankossGame extends Game implements PropertyChangeListener {
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 
 		client = new SankossClient();
-		skin = new Skin(Gdx.files.internal("uiskin.json"));
 
 		Screens.MAIN_MENU.show();
 
@@ -96,7 +91,7 @@ public class SankossGame extends Game implements PropertyChangeListener {
 	public void exitApplication() {
 		getClient().disconnect();
 		getScreen().dispose();
-		getSkin().dispose();
+		Common.getSkin().dispose();
 
 		Gdx.app.exit();
 	}
