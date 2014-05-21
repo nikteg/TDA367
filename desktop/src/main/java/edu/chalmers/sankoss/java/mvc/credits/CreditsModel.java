@@ -1,4 +1,4 @@
-package edu.chalmers.sankoss.java.credits;
+package edu.chalmers.sankoss.java.mvc.credits;
 
 import edu.chalmers.sankoss.java.mvc.AbstractModel;
 

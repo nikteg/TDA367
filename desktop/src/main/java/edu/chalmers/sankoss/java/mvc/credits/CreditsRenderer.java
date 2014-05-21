@@ -1,4 +1,4 @@
-package edu.chalmers.sankoss.java.credits;
+package edu.chalmers.sankoss.java.mvc.credits;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;

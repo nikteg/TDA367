@@ -1,4 +1,4 @@
-package edu.chalmers.sankoss.java.lobby;
+package edu.chalmers.sankoss.java.mvc.lobby;
 
 import com.badlogic.gdx.Gdx;
 

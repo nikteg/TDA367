@@ -1,4 +1,4 @@
-package edu.chalmers.sankoss.java.waiting;
+package edu.chalmers.sankoss.java.mvc.waiting;
 
 import com.badlogic.gdx.Gdx;
 

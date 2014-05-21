@@ -6,7 +6,8 @@ import com.esotericsoftware.kryonet.Listener;
 
 import edu.chalmers.sankoss.core.*;
 import edu.chalmers.sankoss.core.protocol.*;
-import edu.chalmers.sankoss.java.game.GameModel;
+import edu.chalmers.sankoss.java.mvc.game.GameModel;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;

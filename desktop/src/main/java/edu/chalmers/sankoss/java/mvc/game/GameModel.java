@@ -1,4 +1,4 @@
-package edu.chalmers.sankoss.java.game;
+package edu.chalmers.sankoss.java.mvc.game;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 

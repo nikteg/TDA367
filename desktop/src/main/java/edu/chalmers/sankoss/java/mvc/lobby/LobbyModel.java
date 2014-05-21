@@ -1,4 +1,4 @@
-package edu.chalmers.sankoss.java.lobby;
+package edu.chalmers.sankoss.java.mvc.lobby;
 
 import edu.chalmers.sankoss.core.Room;
 import edu.chalmers.sankoss.java.mvc.AbstractModel;

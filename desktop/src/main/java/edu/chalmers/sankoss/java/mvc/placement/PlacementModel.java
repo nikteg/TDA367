@@ -1,4 +1,4 @@
-package edu.chalmers.sankoss.java.placement;
+package edu.chalmers.sankoss.java.mvc.placement;
 
 import edu.chalmers.sankoss.core.CorePlayer;
 import edu.chalmers.sankoss.core.Fleet;
