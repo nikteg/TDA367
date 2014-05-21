@@ -1,4 +1,4 @@
-package edu.chalmers.sankoss.core;
+package edu.chalmers.sankoss.core.model;
 
 import java.awt.geom.Line2D;
 import java.util.ArrayList;

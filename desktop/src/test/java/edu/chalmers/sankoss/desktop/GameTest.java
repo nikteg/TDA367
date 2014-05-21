@@ -1,6 +1,7 @@
 package edu.chalmers.sankoss.desktop;
 
-import edu.chalmers.sankoss.core.Coordinate;
+import edu.chalmers.sankoss.core.model.Coordinate;
+
 import org.junit.Test;
 
 import java.util.ArrayList;

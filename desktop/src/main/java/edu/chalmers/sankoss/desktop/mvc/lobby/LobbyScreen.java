@@ -2,8 +2,8 @@ package edu.chalmers.sankoss.desktop.mvc.lobby;
 
 import com.badlogic.gdx.Gdx;
 
-import edu.chalmers.sankoss.core.CorePlayer;
-import edu.chalmers.sankoss.core.Room;
+import edu.chalmers.sankoss.core.model.CorePlayer;
+import edu.chalmers.sankoss.core.model.Room;
 import edu.chalmers.sankoss.desktop.SankossGame;
 import edu.chalmers.sankoss.desktop.client.SankossClientListener;
 import edu.chalmers.sankoss.desktop.mvc.AbstractScreen;

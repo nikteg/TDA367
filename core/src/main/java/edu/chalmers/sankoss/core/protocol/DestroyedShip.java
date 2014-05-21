@@ -1,7 +1,7 @@
 package edu.chalmers.sankoss.core.protocol;
 
-import edu.chalmers.sankoss.core.CorePlayer;
-import edu.chalmers.sankoss.core.Ship;
+import edu.chalmers.sankoss.core.model.CorePlayer;
+import edu.chalmers.sankoss.core.model.Ship;
 
 /**
  *

@@ -3,12 +3,14 @@ package edu.chalmers.sankoss.java;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
-import edu.chalmers.sankoss.core.CorePlayer;
+
 import edu.chalmers.sankoss.core.Network;
-import edu.chalmers.sankoss.core.Room;
-import edu.chalmers.sankoss.core.Ship;
+import edu.chalmers.sankoss.core.model.CorePlayer;
+import edu.chalmers.sankoss.core.model.Room;
+import edu.chalmers.sankoss.core.model.Ship;
 import edu.chalmers.sankoss.core.protocol.*;
 import edu.chalmers.sankoss.java.web.WebServer;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

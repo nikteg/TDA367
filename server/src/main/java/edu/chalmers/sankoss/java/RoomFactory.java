@@ -1,6 +1,6 @@
 package edu.chalmers.sankoss.java;
 
-import edu.chalmers.sankoss.core.Room;
+import edu.chalmers.sankoss.core.model.Room;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;

@@ -2,8 +2,8 @@ package edu.chalmers.sankoss.desktop.mvc.game;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
-import edu.chalmers.sankoss.core.Coordinate;
-import edu.chalmers.sankoss.core.CorePlayer;
+import edu.chalmers.sankoss.core.model.Coordinate;
+import edu.chalmers.sankoss.core.model.CorePlayer;
 import edu.chalmers.sankoss.desktop.misc.FlagImage;
 import edu.chalmers.sankoss.desktop.mvc.AbstractModel;
 

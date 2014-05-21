@@ -1,7 +1,7 @@
 package edu.chalmers.sankoss.desktop.client;
 
-import edu.chalmers.sankoss.core.CorePlayer;
-import edu.chalmers.sankoss.core.Fleet;
+import edu.chalmers.sankoss.core.model.CorePlayer;
+import edu.chalmers.sankoss.core.model.Fleet;
 
 /**
  * @author Fredrik Thune

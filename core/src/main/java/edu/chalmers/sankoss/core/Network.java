@@ -2,6 +2,11 @@ package edu.chalmers.sankoss.core;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
+
+import edu.chalmers.sankoss.core.model.Coordinate;
+import edu.chalmers.sankoss.core.model.CorePlayer;
+import edu.chalmers.sankoss.core.model.Room;
+import edu.chalmers.sankoss.core.model.Ship;
 import edu.chalmers.sankoss.core.protocol.*;
 
 /**

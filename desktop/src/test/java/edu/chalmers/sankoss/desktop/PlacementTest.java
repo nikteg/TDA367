@@ -1,8 +1,9 @@
 package edu.chalmers.sankoss.desktop;
 
-import edu.chalmers.sankoss.core.CorePlayer;
-import edu.chalmers.sankoss.core.Fleet;
-import edu.chalmers.sankoss.core.Ship;
+import edu.chalmers.sankoss.core.model.CorePlayer;
+import edu.chalmers.sankoss.core.model.Fleet;
+import edu.chalmers.sankoss.core.model.Ship;
+
 import org.junit.Test;
 
 /**

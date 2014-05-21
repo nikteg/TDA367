@@ -1,9 +1,10 @@
 package edu.chalmers.sankoss.java;
 
 import edu.chalmers.sankoss.core.exceptions.IllegalShipCoordinatesException;
+import edu.chalmers.sankoss.core.model.Coordinate;
+import edu.chalmers.sankoss.core.model.Ship;
+
 import org.junit.Test;
-import edu.chalmers.sankoss.core.Coordinate;
-import edu.chalmers.sankoss.core.Ship;
 
 import java.util.ArrayList;
 import java.util.List;

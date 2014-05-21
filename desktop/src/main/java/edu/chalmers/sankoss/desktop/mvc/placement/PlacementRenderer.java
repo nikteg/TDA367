@@ -12,10 +12,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
-import edu.chalmers.sankoss.core.Coordinate;
-import edu.chalmers.sankoss.core.CorePlayer;
-import edu.chalmers.sankoss.core.Fleet;
-import edu.chalmers.sankoss.core.Ship;
+import edu.chalmers.sankoss.core.model.Coordinate;
+import edu.chalmers.sankoss.core.model.CorePlayer;
+import edu.chalmers.sankoss.core.model.Fleet;
+import edu.chalmers.sankoss.core.model.Ship;
 import edu.chalmers.sankoss.desktop.SankossGame;
 import edu.chalmers.sankoss.desktop.mvc.AbstractRenderer;
 import edu.chalmers.sankoss.desktop.mvc.game.PlayerPanel;
@@ -23,6 +23,7 @@ import edu.chalmers.sankoss.desktop.utils.Common;
 
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+
 
 
 

@@ -2,8 +2,8 @@ package edu.chalmers.sankoss.desktop.mvc.placement;
 
 import com.badlogic.gdx.Gdx;
 
-import edu.chalmers.sankoss.core.CorePlayer;
-import edu.chalmers.sankoss.core.Ship;
+import edu.chalmers.sankoss.core.model.CorePlayer;
+import edu.chalmers.sankoss.core.model.Ship;
 import edu.chalmers.sankoss.desktop.SankossGame;
 import edu.chalmers.sankoss.desktop.client.SankossClientListener;
 import edu.chalmers.sankoss.desktop.mvc.AbstractScreen;

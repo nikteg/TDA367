@@ -1,8 +1,12 @@
 package edu.chalmers.sankoss.core;
 
 import static org.junit.Assert.*;
+
 import org.junit.Test;
+
 import edu.chalmers.sankoss.core.exceptions.IllegalShipCoordinatesException;
+import edu.chalmers.sankoss.core.model.Coordinate;
+import edu.chalmers.sankoss.core.model.Ship;
 
 /**
  * @author Daniel Eineving
