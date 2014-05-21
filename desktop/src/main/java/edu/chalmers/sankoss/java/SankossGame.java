@@ -25,9 +25,9 @@ import edu.chalmers.sankoss.java.mvc.AbstractScreen;
 import edu.chalmers.sankoss.java.placement.PlacementModel;
 import edu.chalmers.sankoss.java.placement.PlacementRenderer;
 import edu.chalmers.sankoss.java.placement.PlacementScreen;
-import edu.chalmers.sankoss.java.waitingScreen.WaitingModel;
-import edu.chalmers.sankoss.java.waitingScreen.WaitingRenderer;
-import edu.chalmers.sankoss.java.waitingScreen.WaitingScreen;
+import edu.chalmers.sankoss.java.waiting.WaitingModel;
+import edu.chalmers.sankoss.java.waiting.WaitingRenderer;
+import edu.chalmers.sankoss.java.waiting.WaitingScreen;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
