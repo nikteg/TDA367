@@ -18,7 +18,7 @@ import java.beans.PropertyChangeEvent;
  */
 public class GameOverRenderer extends AbstractRenderer<GameOverModel> {
 
-    private Label statusLabel = new Label("", Common.getSkin());
+    private Label statusLabel = new Label("You Won!", Common.getSkin());
     private TextButton backBtn = new TextButton("Back to MainMenu", Common.getSkin());
 
     public GameOverRenderer(GameOverModel model) {
@@ -27,9 +27,9 @@ public class GameOverRenderer extends AbstractRenderer<GameOverModel> {
         getTable().pad(8f);
         getTable().add(statusLabel).expand().colspan(2);
         getTable().row();
-        getTable().add(backBtn);
+        getTable().add(backBtn).expand().bottom().left();
 
-        getTable().addActor(getTable());
+        getStage().addActor(getTable());
     }
 
     public TextButton getBackBtn() {
