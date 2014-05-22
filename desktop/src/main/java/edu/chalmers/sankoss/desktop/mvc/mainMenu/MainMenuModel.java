@@ -1,7 +1,5 @@
 package edu.chalmers.sankoss.desktop.mvc.mainMenu;
 
-import com.badlogic.gdx.Gdx;
-
 import edu.chalmers.sankoss.desktop.mvc.AbstractModel;
 
 /**
@@ -26,6 +24,6 @@ public class MainMenuModel extends AbstractModel {
         this.connected = connected;
         fireChange("connected", connected);
 
-        Gdx.app.debug("MainMenuModel", "Connected: " + connected);
+        // Gdx.app.debug("MainMenuModel", "Connected: " + connected);
     }
 }
