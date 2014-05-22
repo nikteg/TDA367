@@ -5,9 +5,11 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import edu.chalmers.sankoss.core.core.CorePlayer;
 import edu.chalmers.sankoss.desktop.mvc.AbstractRenderer;
 import edu.chalmers.sankoss.desktop.utils.Common;
 
+import java.beans.PropertyChangeEvent;
 import java.util.Observable;
 
 /**
@@ -59,27 +61,26 @@ public class WaitingRenderer extends AbstractRenderer<WaitingModel> {
     }
 
     @Override
-    public void update(Observable object, Object arg) {
-        WaitingModel model = (WaitingModel) object;
-
-        if (arg.equals("hosting")) {
-            if (model.isHosting()) {
+    public void propertyChange(PropertyChangeEvent evt) {
+        if (evt.getPropertyName().equals("hosting")) {
+            boolean msg = (boolean) evt.getNewValue();
+            if (msg) {
                 lblWaiting.setText("Waiting for players to join...");
             } else {
                 lblWaiting.setText("Waiting for the host to start the game...");
             }
         }
-        if (model.isHosting()) {
-            if (arg.equals("player_joined")) {
-                System.out.println("NUMBER OF PLAYER IN ROOMEN " + model.getPlayers().size());
+        if (getModel().isHosting()) {
+            if (evt.getPropertyName().equals("player_joined")) {
+                CorePlayer msg = (CorePlayer) evt.getNewValue();
+                System.out.println("NUMBER OF PLAYER IN ROOMEN " + getModel().getPlayers().size());
                 btnStart.setDisabled(false);
-                lblWaiting.setText(model.getPlayers().get(0).getName() + " has joined the room!");
-            } else if (arg.equals("player_left")) {
+                lblWaiting.setText(msg.getName() + " has joined the room!");
+            } else if (evt.getPropertyName().equals("player_left")) {
                 btnStart.setDisabled(true);
                 lblWaiting.setText("Player left. Waiting for players to join...");
             }
 
         }
-
     }
 }

@@ -20,8 +20,6 @@ public class CreditsModel extends AbstractModel {
 
     public void setCreditsTextPosition(float creditsTextPosition) {
         this.creditsTextPosition = creditsTextPosition;
-
-        setChanged();
-        notifyObservers("text_position");
+        fireChange("text_position", creditsTextPosition);
     }
 }

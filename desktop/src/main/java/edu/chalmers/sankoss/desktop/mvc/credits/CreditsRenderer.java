@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import edu.chalmers.sankoss.desktop.mvc.AbstractRenderer;
 import edu.chalmers.sankoss.desktop.utils.Common;
 
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeSupport;
 import java.util.Observable;
 
@@ -61,10 +62,13 @@ public class CreditsRenderer extends AbstractRenderer<CreditsModel> {
         Table.drawDebug(getStage());
     }
 
+
     @Override
-    public void update(Observable object, Object arg) {
-        if (arg.equals("text_position")) {
-            lblCredits.setY(getModel().getCreditsTextPosition());
+    public void propertyChange(PropertyChangeEvent evt) {
+        if (evt.getPropertyName().equals("text_position")) {
+            float msg = (float)evt.getNewValue();
+            lblCredits.setY(msg);
         }
     }
+
 }

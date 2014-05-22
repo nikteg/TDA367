@@ -6,9 +6,14 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.sun.org.apache.xpath.internal.operations.Bool;
+import edu.chalmers.sankoss.core.core.Room;
+import edu.chalmers.sankoss.core.protocol.Connected;
 import edu.chalmers.sankoss.desktop.mvc.AbstractRenderer;
 import edu.chalmers.sankoss.desktop.utils.Common;
 
+import java.beans.PropertyChangeEvent;
+import java.util.Map;
 import java.util.Observable;
 
 /**
@@ -78,9 +83,10 @@ public class MainMenuRenderer extends AbstractRenderer<MainMenuModel> {
     }
 
     @Override
-    public void update(Observable object, Object arg) {
-        if (arg.equals("connected")) {
+    public void propertyChange(PropertyChangeEvent evt) {
+        if (evt.getPropertyName().equals("connected")) {
             btnMultiPlayer.setDisabled(false);
         }
     }
+
 }

@@ -30,8 +30,8 @@ public class GameModel extends AbstractModel {
     public void addOpponentShot(Shot shot) {
         opponentShots.add(shot);
 
-        setChanged();
-        notifyObservers("opponent_shot");
+        //setChanged();
+        //notifyObservers("opponent_shot");
     }
 
     public List<Shot> getOpponentShots() {
@@ -48,16 +48,12 @@ public class GameModel extends AbstractModel {
 
     public void setState(State state) {
         this.state = state;
-
-        setChanged();
-        notifyObservers("state");
+        fireChange("state", state);
     }
 
     public void setOpponent(CorePlayer opponent) {
         this.opponent = opponent;
-
-        setChanged();
-        notifyObservers("opponent");
+        fireChange("opponent", opponent);
     }
 
     public CorePlayer getOpponent() {
@@ -66,9 +62,7 @@ public class GameModel extends AbstractModel {
 
     public void setShootingAllowed(boolean shootingAllowed) {
         this.shootingAllowed = shootingAllowed;
-
-        setChanged();
-        notifyObservers("shooting_allowed");
+        fireChange("shooting_allowed", shootingAllowed);
     }
 
     public boolean isShootingAllowed() {
@@ -78,8 +72,8 @@ public class GameModel extends AbstractModel {
     public void addShip(Ship ship) {
         ships.add(ship);
 
-        setChanged();
-        notifyObservers("ship");
+        //setChanged();
+        //notifyObservers("ship");
     }
 
     /**
@@ -87,10 +81,9 @@ public class GameModel extends AbstractModel {
      * @param shot
      */
     public void addShot(Shot shot) {
-        shots.add(shot);
 
-        setChanged();
-        notifyObservers("shot");
+        shots.add(shot);
+        fireChange("shot", shot);
     }
 
     public List<Shot> getShots() {
@@ -107,9 +100,7 @@ public class GameModel extends AbstractModel {
         } else {
             flags.add(coordinate);
         }
-
-        setChanged();
-        notifyObservers("flag");
+        fireChange("flag", coordinate);
     }
 
     public List<Coordinate> getFlags() {

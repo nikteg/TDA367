@@ -12,13 +12,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import edu.chalmers.sankoss.core.core.Coordinate;
+import edu.chalmers.sankoss.core.core.CorePlayer;
 import edu.chalmers.sankoss.core.core.Fleet;
 import edu.chalmers.sankoss.core.core.Ship;
 import edu.chalmers.sankoss.desktop.client.SankossClient;
+import edu.chalmers.sankoss.desktop.misc.ShipImage;
 import edu.chalmers.sankoss.desktop.mvc.AbstractRenderer;
 import edu.chalmers.sankoss.desktop.utils.Common;
 
-import java.util.Observable;
+import java.beans.PropertyChangeEvent;
 
 /**
  * AbstractRenderer for the placement of ships. This class will handle all
@@ -43,6 +45,13 @@ public class PlacementRenderer extends AbstractRenderer<PlacementModel> {
     PlacementGrid grid = new PlacementGrid();
 	Image flag = new Image();
 	Table bottomTable = new Table();
+    Table shipTable = new Table();
+
+    ShipImage ship2 = new ShipImage(2);
+    ShipImage ship3_1 =  new ShipImage(3);
+    ShipImage ship3_2 = new ShipImage(3);
+    ShipImage ship4 = new ShipImage(4);
+    ShipImage ship5 = new ShipImage(5);
 
 	public PlacementRenderer(PlacementModel model) {
 		super(model);
@@ -53,13 +62,14 @@ public class PlacementRenderer extends AbstractRenderer<PlacementModel> {
 
 		getTable().debug();
 
+        getTable().add(shipTable);
 		getTable().add(grid);
 		getTable().row();
 
 		flag.setDrawable(new TextureRegionDrawable(new TextureRegion(
 				new Texture(model.getNationality().getPath()))));
 
-		bottomTable.add(flag).pad(8f).colspan(2);
+		bottomTable.add(flag).pad(8f);
 
 		getTable().row();
 		bottomTable.add(btnPreviousFlag).pad(8f).fillX();
@@ -67,7 +77,17 @@ public class PlacementRenderer extends AbstractRenderer<PlacementModel> {
 
 		bottomTable.add(btnReady).fillX().pad(8f);
 
-		getTable().add(bottomTable).bottom().expand();
+        shipTable.add(ship2).pad(8f);
+        shipTable.row();
+        shipTable.add(ship3_1).pad(8f);
+        shipTable.row();
+        shipTable.add(ship3_2).pad(8f);
+        shipTable.row();
+        shipTable.add(ship4).pad(8f);
+        shipTable.row();
+        shipTable.add(ship5).pad(8f);
+
+		getTable().add(bottomTable).colspan(2).bottom().expand();
 		getStage().addActor(getTable());
 
 		btnReady.addListener(new ChangeListener() {
@@ -164,26 +184,24 @@ public class PlacementRenderer extends AbstractRenderer<PlacementModel> {
 		Table.drawDebug(getStage());
 	}
 
-	@Override
-	public void update(Observable object, Object arg) {
-		if (arg.equals("NationalityChanged")) {
-			flag.setDrawable(new TextureRegionDrawable(new TextureRegion(
-					new Texture(((PlacementModel) object).getNationality()
-							.getPath()))));
-		}
-
-        if (arg.equals("OpponentReady")) {
-			btnReady.setText("Enter Game");
-		}
-
-        if (arg.equals("playerReady")) {
-			btnReady.setDisabled(true);
-		}
-
-        if (arg.equals("ship_add")) {
-
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        if (evt.getPropertyName().equals("NationalityChanged")) {
+            CorePlayer.Nationality msg = (CorePlayer.Nationality)evt.getNewValue();
+            flag.setDrawable(new TextureRegionDrawable(new TextureRegion(
+                    new Texture((msg.getPath())))));
         }
-	}
+
+        if (evt.getPropertyName().equals("OpponentReady")) {
+            boolean msg = (boolean)evt.getNewValue();
+            btnReady.setText("Enter Game");
+        }
+
+        if (evt.getPropertyName().equals("playerReady")) {
+            boolean msg = (boolean)evt.getNewValue();
+            btnReady.setDisabled(true);
+        }
+    }
 
     public PlacementGrid getGrid() {
         return grid;
