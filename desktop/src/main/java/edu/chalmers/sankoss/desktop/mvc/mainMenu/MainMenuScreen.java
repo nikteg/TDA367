@@ -6,8 +6,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-
-import edu.chalmers.sankoss.desktop.SankossGame;
 import edu.chalmers.sankoss.desktop.client.SankossClient;
 import edu.chalmers.sankoss.desktop.client.SankossClientListener;
 import edu.chalmers.sankoss.desktop.mvc.AbstractScreen;
@@ -89,6 +87,10 @@ public class MainMenuScreen extends AbstractScreen<MainMenuModel, MainMenuRender
 
             if (keyCode == Input.Keys.NUM_2) {
                 changeScreen("placement");
+            }
+
+            if (keyCode == Input.Keys.NUM_3) {
+                changeScreen("gameover");
             }
         }
 

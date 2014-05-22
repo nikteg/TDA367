@@ -1,7 +1,5 @@
 package edu.chalmers.sankoss.desktop.mvc.waiting;
 
-import com.badlogic.gdx.Gdx;
-
 import edu.chalmers.sankoss.core.core.CorePlayer;
 import edu.chalmers.sankoss.desktop.mvc.AbstractModel;
 
@@ -26,12 +24,12 @@ public class WaitingModel extends AbstractModel {
         this.hosting = hosting;
         fireChange("hosting", hosting);
 
-        Gdx.app.debug("WaitingModel", "Hosting set to " + hosting);
+        //Gdx.app.debug("WaitingModel", "Hosting set to " + hosting);
     }
 
     public boolean addPlayer(CorePlayer player) {
         if (players.add(player)) {
-            Gdx.app.debug("WaitingModel", "Added player #" + player.getID());
+            //Gdx.app.debug("WaitingModel", "Added player #" + player.getID());
 
             fireChange("player_joined", player);
 
@@ -46,7 +44,7 @@ public class WaitingModel extends AbstractModel {
             if (removingPlayer.getID().equals(player.getID())) {
                 players.remove(removingPlayer);
 
-                Gdx.app.debug("WaitingModel", "Removed player #" + player.getID());
+                //Gdx.app.debug("WaitingModel", "Removed player #" + player.getID());
 
                 fireChange("player_left", player);
                 return true;

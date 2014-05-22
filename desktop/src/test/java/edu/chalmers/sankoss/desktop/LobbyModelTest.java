@@ -2,6 +2,7 @@ package edu.chalmers.sankoss.desktop;
 
 import edu.chalmers.sankoss.core.core.Room;
 
+import edu.chalmers.sankoss.desktop.mvc.lobby.LobbyModel;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -14,21 +15,27 @@ import java.util.Set;
  * More detailed description.
  *
  * @author Mikael Malmqvist
- * @group
- * @date 4/7/14
  */
-public class LobbyTest {
+public class LobbyModelTest {
+
     @Test
     public void testGetRoomByName() throws Exception {
+
+        LobbyModel testModel = new LobbyModel();
+
         Map<Long, Room> rooms = new HashMap<Long, Room>();
         Room newRoom = new Room();
         newRoom.setName("testroom");
         rooms.put(1l, newRoom);
+
+        testModel.setRooms(rooms);
+
         boolean found = false;
 
-        for(Room room : rooms.values()) {
-            if(room.getName().equals("testroom")) {
+        for(Room room : testModel.getRooms().values()) {
+            if(room.getName().equals(newRoom.getName())) {
                 found = true;
+                return;
             }
         }
 
@@ -37,14 +44,20 @@ public class LobbyTest {
 
     @Test
     public void testSetRoomMap() throws Exception {
-        Map<Long, Room> roomMap1 = new HashMap<Long, Room>();
-        Map<Long, Room> roomMap2 = roomMap1;
 
-        assert(roomMap1 == roomMap2);
+        LobbyModel testModel = new LobbyModel();
+
+        Map<Long, Room> roomMap = new HashMap<Long, Room>();
+        testModel.setRooms(roomMap);
+
+        assert(testModel.getRooms().equals(roomMap));
     }
 
     @Test
     public void testGetKeys() throws Exception {
+
+        LobbyModel testModel = new LobbyModel();
+
         Map<Long, Room> roomMap = new HashMap<Long, Room>();
         roomMap.put(1l, new Room());
         roomMap.put(2l, new Room());
@@ -57,59 +70,41 @@ public class LobbyTest {
         correctKeys.add(2l);
         correctKeys.add(3l);
 
-        assert(mapsKeys.equals(correctKeys));
+        testModel.setRooms(roomMap);
+
+        assert(testModel.getRooms().keySet().equals(correctKeys));
     }
 
     @Test
     public void testGetRooms() throws Exception {
 
+        LobbyModel testModel = new LobbyModel();
+
         Map<Long, Room> roomMap = new HashMap<Long, Room>();
-        roomMap.put(1l, new Room(1l, "Room1", ""));
-        roomMap.put(2l, new Room(2l, "Room2", ""));
+        testModel.setRooms(roomMap);
 
-        Object[] keys = {1l, 2l};
-        Room[] mapEntries = new Room[keys.length];
-
-        for(int i = 0; i < mapEntries.length; i++) {
-            mapEntries[i] = roomMap.get(keys[i]);
-        }
-
-        Room[] correctEntries = {new Room(1l, "Room1", ""), new Room(2l, "Room2", "")};
-
-        boolean same = true;
-
-        for(int i = 0; i < mapEntries.length; i++) {
-            if(!mapEntries[i].equals(correctEntries[i])) {
-                same = false;
-            }
-
-        }
-
-        assert(same);
+        assert(testModel.getRooms().equals(roomMap));
     }
 
     @Test
     public void testGetRoomNames() throws Exception {
+        LobbyModel testModel = new LobbyModel();
+
         Map<Long, Room> roomMap = new HashMap<Long, Room>();
         roomMap.put(1l, new Room(1l, "Room1", ""));
         roomMap.put(2l, new Room(2l, "Room2", ""));
         roomMap.put(3l, new Room(3l, "Room3", ""));
 
-        Object[] mapsRooms = roomMap.values().toArray();
-        String[] mapsNames = new String[mapsRooms.length];
-
-
-        for(int i = 0; i < mapsNames.length; i++) {
-            mapsNames[i] = ((Room) mapsRooms[i]).getName();
-        }
+        testModel.setRooms(roomMap);
 
         String[] correctNames = {"Room1", "Room2", "Room3"};
 
         boolean same = true;
 
-        for(int i = 0; i < mapsNames.length; i++) {
-            if(!mapsNames[i].equals(correctNames[i])) {
+        for(int i = 0; i < correctNames.length; i++) {
+            if(!testModel.getRooms().values().toArray()[i].equals(correctNames[i])) {
                 same = false;
+                return;
             }
         }
 
