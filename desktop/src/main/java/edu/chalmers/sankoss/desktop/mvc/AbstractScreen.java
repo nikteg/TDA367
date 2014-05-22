@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
-import edu.chalmers.sankoss.desktop.SankossGame;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
