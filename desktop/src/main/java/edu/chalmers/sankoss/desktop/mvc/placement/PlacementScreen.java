@@ -1,20 +1,16 @@
 package edu.chalmers.sankoss.desktop.mvc.placement;
 
 import com.badlogic.gdx.Gdx;
-
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import edu.chalmers.sankoss.core.core.Coordinate;
 import edu.chalmers.sankoss.core.core.CorePlayer;
 import edu.chalmers.sankoss.core.core.Ship;
 import edu.chalmers.sankoss.core.exceptions.IllegalShipCoordinatesException;
-import edu.chalmers.sankoss.desktop.SankossGame;
 import edu.chalmers.sankoss.desktop.client.SankossClient;
 import edu.chalmers.sankoss.desktop.client.SankossClientListener;
+import edu.chalmers.sankoss.desktop.misc.ShipImage;
 import edu.chalmers.sankoss.desktop.mvc.AbstractScreen;
 
 /**
@@ -84,21 +80,31 @@ public class PlacementScreen extends AbstractScreen<PlacementModel, PlacementRen
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                System.out.println(event.getTarget());
                 /**
                  * Get coordinate from mouse position
                  */
                 Coordinate coord = getCoordinateFromGrid(x, y);
 
+                System.out.println(event.getTarget().getClass());
+
                 // Left click
                 if (button == 0 && getRenderer().getGrid().hasFollower()) {
+                    int length = getRenderer().getGrid().getFollower().getLength();
+
                     try {
-                        getModel().addShip(new Ship(coord, new Coordinate(coord.getX()+1, coord.getY())));
+                        System.out.println("ROTATION" + event.getTarget().getRotation() / 90);
+                        System.out.println("ADDAR SHIP" + coord.getX() +":"+ coord.getY() + " " + (coord.getX() + length-1) +":"+ coord.getY());
+                        System.out.println("ADDAR SHIP" + coord.getX() +":"+ coord.getY() + " " + (coord.getX() + length-1) +":"+ coord.getY());
+                        getModel().addShip(new Ship(coord, new Coordinate(coord.getX() + length - 1, coord.getY())));
+                        getRenderer().getGrid().clearFollower();
                     } catch (IllegalShipCoordinatesException e) {
-                        e.printStackTrace();
+                        System.out.println("NU GICK NÅGOT FEL DU");
                     }
+
                 } else if (button == 1 && getRenderer().getGrid().hasFollower()) {
                     getRenderer().getGrid().rotateFollower();
+                } else if (button == 0 && event.getTarget() instanceof ShipImage) {
+                    getRenderer().getGrid().setFollower((ShipImage)event.getTarget());
                 }
 
                 return false;
@@ -108,7 +114,6 @@ public class PlacementScreen extends AbstractScreen<PlacementModel, PlacementRen
             @Override
             public boolean mouseMoved(InputEvent event, float x, float y) {
                 if (getRenderer().getGrid().hasFollower()) {
-                    System.out.println("FLYUTTAR");
                     getRenderer().getGrid().getFollower().setX(((int) x / GRID_CELL_WIDTH_INT) * GRID_CELL_WIDTH_INT);
                     getRenderer().getGrid().getFollower().setY(((int) y / GRID_CELL_WIDTH_INT) * GRID_CELL_WIDTH_INT);
                 }
@@ -129,8 +134,16 @@ public class PlacementScreen extends AbstractScreen<PlacementModel, PlacementRen
             }
         });
 
-        getRenderer().getGrid().setFollower(new Image(new Texture(Gdx.files.internal("textures/ship_small.png"))));
-	}
+        try {
+            getRenderer().getGrid().addShip(new Ship(new Coordinate(1, 1), new Coordinate(2, 1)));
+            getRenderer().getGrid().addShip(new Ship(new Coordinate(1, 2), new Coordinate(3, 2)));
+            getRenderer().getGrid().addShip(new Ship(new Coordinate(1, 3), new Coordinate(3, 3)));
+            getRenderer().getGrid().addShip(new Ship(new Coordinate(1, 4), new Coordinate(4, 4)));
+            getRenderer().getGrid().addShip(new Ship(new Coordinate(1, 5), new Coordinate(5, 5)));
+        } catch (IllegalShipCoordinatesException e) {
+            e.printStackTrace();
+        }
+    }
 
     public Coordinate getCoordinateFromGrid(float mx, float my) {
         int cX = (int)mx / GRID_CELL_WIDTH_INT + 1;

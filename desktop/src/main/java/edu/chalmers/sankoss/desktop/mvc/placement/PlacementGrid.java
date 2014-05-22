@@ -3,14 +3,12 @@ package edu.chalmers.sankoss.desktop.mvc.placement;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import edu.chalmers.sankoss.core.core.Coordinate;
 import edu.chalmers.sankoss.core.core.Ship;
-import edu.chalmers.sankoss.desktop.mvc.game.Shot;
+import edu.chalmers.sankoss.desktop.misc.ShipImage;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +20,7 @@ public class PlacementGrid extends Table {
 
     private Map<Ship, Image> flags = new HashMap<Ship, Image>();
     private Texture shipTexture = new Texture(Gdx.files.internal("textures/ship_small.png"));
-    private Actor follower = new Image();
+    private ShipImage follower;
 
     public PlacementGrid() {
         super();
@@ -35,23 +33,29 @@ public class PlacementGrid extends Table {
     }
 
     public void addShip(Ship ship) {
-        Image shipImage = new Image(shipTexture);
-        shipImage.setX((ship.getRear().getX() - 1) * 32);
-        shipImage.setY(this.getHeight() - ((ship.getRear().getY()) * 32));
+        Image shipImage = new ShipImage(ship.getSize());
+        System.out.println(ship.getFront().getX());
+        System.out.println(ship.getFront().getY());
+        shipImage.setX((ship.getFront().getX() - 1) * 32);
+        shipImage.setY(this.getHeight() - ((ship.getFront().getY()) * 32));
         //shipImage.setScaling(Scaling.stretch);
         //shipImage.setScaleX(ship.getSize());
         //shipImage.setSize(32f * ship.getSize(), 32f);
         addActor(shipImage);
     }
 
-    public void setFollower(Actor follower) {
+    public void removeShip(Ship ship) {
+
+    }
+
+    public void setFollower(ShipImage follower) {
         this.follower = follower;
-        this.follower.setTouchable(Touchable.disabled);
+        //this.follower.setTouchable(Touchable.disabled);
 
         addActor(this.follower);
     }
 
-    public Actor getFollower() {
+    public ShipImage getFollower() {
         return follower;
     }
 
@@ -60,8 +64,7 @@ public class PlacementGrid extends Table {
     }
 
     public void rotateFollower() {
-        System.out.println("JAG SNURRAR");
-        follower.rotateBy(90f);
+        follower.rotateShip();
     }
 
     public boolean hasFollower() {

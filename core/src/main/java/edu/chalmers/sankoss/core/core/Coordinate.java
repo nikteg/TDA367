@@ -1,5 +1,7 @@
 package edu.chalmers.sankoss.core.core;
 
+import edu.chalmers.sankoss.core.exceptions.IllegalShipCoordinatesException;
+
 /**
  * Represents a coordinate in the game grid
  * @author Daniel Eineving
@@ -18,11 +20,11 @@ public class Coordinate {
 	 * @param x 1-10
 	 * @param y 1-10
 	 */
-	public Coordinate(int x, int y){
+	public Coordinate(int x, int y) throws IllegalShipCoordinatesException {
 		//TODO Throw exception?
 		if(x<1 || 10<x || y<1 || 10<y){
             System.out.println("X: " + x + ", Y: " + y + " - INVALID COORDINATES.");
-			throw new IllegalArgumentException();
+			throw new IllegalShipCoordinatesException();
 		}
 		this.x=x;
 		this.y=y;

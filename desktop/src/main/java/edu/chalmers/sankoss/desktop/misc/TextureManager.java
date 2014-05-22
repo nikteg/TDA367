@@ -20,10 +20,10 @@ public class TextureManager {
     private Map<Integer, TextureRegionDrawable> shipTextureMap = new HashMap<Integer, TextureRegionDrawable>();
 
     public TextureManager() {
-        shipTextureMap.put(2, new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("textures/HORIZONTAL_ship_small_body.png")))));
-        shipTextureMap.put(3, new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("textures/HORIZONTAL_ship_medium_body.png")))));
-        shipTextureMap.put(4, new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("textures/HORIZONTAL_ship_medium_body.png")))));
-        shipTextureMap.put(5, new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("textures/HORIZONTAL_ship_large_body.png")))));
+        shipTextureMap.put(2, new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("textures/ship_small.png")))));
+        shipTextureMap.put(3, new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("textures/ship_medium.png")))));
+        shipTextureMap.put(4, new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("textures/ship_large.png")))));
+        shipTextureMap.put(5, new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("textures/ship_biggest.png")))));
 
     }
 

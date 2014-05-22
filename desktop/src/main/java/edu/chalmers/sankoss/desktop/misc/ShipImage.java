@@ -1,8 +1,8 @@
 package edu.chalmers.sankoss.desktop.misc;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import edu.chalmers.sankoss.core.core.Coordinate;
+import edu.chalmers.sankoss.core.core.Ship;
 
 /**
  * Button representing a ship visually.
@@ -11,44 +11,24 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
  */
 public class ShipImage extends Image {
     private int length;
-    Texture texture;
-    // private Direction direction;
-    // private static float lastPosition = 100;
-
-    public ShipImage() {
-        // direction = Direction.HORIZONTAL;
-
-
-    }
 
     public ShipImage(int length) {
-        super();
+        super(TextureManager.getInstance().getShipTextureMap().get(length));
         this.length = length;
 
-        setDrawable(getTextureFromLength());
-
-        // update();
-    }
-
-    /**
-     * Gets texture based on length.
-     * @return texture of ship.
-     */
-    public TextureRegionDrawable getTextureFromLength() {
-
-        return TextureManager.getInstance().getShipTextureMap().get(length);
-    }
-
-    public enum Direction {
-        HORIZONTAL, VERTICAL
-    }
-
-    public void setLength(int length) {
-        this.length = length;
-
+        setOrigin(16, 16);
     }
 
     public int getLength() {
         return length;
+    }
+
+    public Ship getShip() {
+        System.out.println(getRotation());
+        return new Ship(new Coordinate((int)getX(), (int)getY()), new Coordinate(1,1));
+    }
+
+    public void rotateShip() {
+        rotateBy(90f);
     }
 }

@@ -16,7 +16,6 @@ import edu.chalmers.sankoss.core.core.CorePlayer;
 import edu.chalmers.sankoss.core.core.Fleet;
 import edu.chalmers.sankoss.core.core.Ship;
 import edu.chalmers.sankoss.desktop.client.SankossClient;
-import edu.chalmers.sankoss.desktop.misc.ShipImage;
 import edu.chalmers.sankoss.desktop.mvc.AbstractRenderer;
 import edu.chalmers.sankoss.desktop.utils.Common;
 
@@ -45,13 +44,6 @@ public class PlacementRenderer extends AbstractRenderer<PlacementModel> {
     PlacementGrid grid = new PlacementGrid();
 	Image flag = new Image();
 	Table bottomTable = new Table();
-    Table shipTable = new Table();
-
-    ShipImage ship2 = new ShipImage(2);
-    ShipImage ship3_1 =  new ShipImage(3);
-    ShipImage ship3_2 = new ShipImage(3);
-    ShipImage ship4 = new ShipImage(4);
-    ShipImage ship5 = new ShipImage(5);
 
 	public PlacementRenderer(PlacementModel model) {
 		super(model);
@@ -62,8 +54,7 @@ public class PlacementRenderer extends AbstractRenderer<PlacementModel> {
 
 		getTable().debug();
 
-        getTable().add(shipTable);
-		getTable().add(grid);
+		getTable().add(grid).expand();
 		getTable().row();
 
 		flag.setDrawable(new TextureRegionDrawable(new TextureRegion(
@@ -77,17 +68,7 @@ public class PlacementRenderer extends AbstractRenderer<PlacementModel> {
 
 		bottomTable.add(btnReady).fillX().pad(8f);
 
-        shipTable.add(ship2).pad(8f);
-        shipTable.row();
-        shipTable.add(ship3_1).pad(8f);
-        shipTable.row();
-        shipTable.add(ship3_2).pad(8f);
-        shipTable.row();
-        shipTable.add(ship4).pad(8f);
-        shipTable.row();
-        shipTable.add(ship5).pad(8f);
-
-		getTable().add(bottomTable).colspan(2).bottom().expand();
+		getTable().add(bottomTable).bottom().expand();
 		getStage().addActor(getTable());
 
 		btnReady.addListener(new ChangeListener() {
@@ -201,11 +182,14 @@ public class PlacementRenderer extends AbstractRenderer<PlacementModel> {
             boolean msg = (boolean)evt.getNewValue();
             btnReady.setDisabled(true);
         }
+
+        if (evt.getPropertyName().equals("ship_added")) {
+            Ship ship = (Ship)evt.getNewValue();
+        }
     }
 
     public PlacementGrid getGrid() {
         return grid;
     }
-
 
 }
