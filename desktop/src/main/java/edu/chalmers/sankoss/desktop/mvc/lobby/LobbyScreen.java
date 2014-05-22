@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import edu.chalmers.sankoss.core.protocol.PlayerChangedName;
 import edu.chalmers.sankoss.desktop.utils.Common;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -29,7 +30,6 @@ import java.util.Map;
 public class LobbyScreen extends AbstractScreen<LobbyModel, LobbyRenderer> {
 
     public LobbyScreen() {
-
         SankossClient.getInstance().addListener(new SankossClientListener() {
             /* DO STUFF */
 
