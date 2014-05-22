@@ -2,7 +2,6 @@ package edu.chalmers.sankoss.desktop.mvc;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.util.Observable;
 
 /**
  * Abstraction of the game model.
@@ -27,6 +26,10 @@ public abstract class AbstractModel {
 
     public void addPcl(PropertyChangeListener pcl){
         pcs.addPropertyChangeListener(pcl);
+    }
+
+    public void fireChange(String msg) {
+        pcs.firePropertyChange(msg, null, null);
     }
 
     public void fireChange(String msg, Object value) {

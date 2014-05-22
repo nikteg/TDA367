@@ -9,7 +9,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
+import com.badlogic.gdx.utils.Scaling;
 import edu.chalmers.sankoss.core.core.Coordinate;
+import edu.chalmers.sankoss.core.core.Ship;
+import edu.chalmers.sankoss.desktop.mvc.game.Shot;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,6 +27,10 @@ public class GridImage extends Table {
 
     private Map<Coordinate, Image> flags = new HashMap<Coordinate, Image>();
     private Texture flagTexture = new Texture(Gdx.files.internal("textures/flag.png"));
+    private Texture hitTexture = new Texture(Gdx.files.internal("textures/explosion.png"));
+    private Texture missTexture = new Texture(Gdx.files.internal("textures/miss.png"));
+    private Texture shipTexture = new Texture(Gdx.files.internal("textures/ship_small.png"));
+
     private Image crosshair;
 
     public GridImage() {
@@ -66,6 +73,8 @@ public class GridImage extends Table {
         actor.setX((coordinate.getX() - 1) * 32);
         actor.setY(this.getHeight() - ((coordinate.getY()) * 32));
 
+        if (crosshair != null)
+            crosshair.toFront();
     }
 
     public void toggleFlag(Coordinate coordinate) {
@@ -80,11 +89,27 @@ public class GridImage extends Table {
         Image flag = new Image(flagTexture);
         flags.put(coordinate, flag);
         add(flags.get(coordinate), coordinate);
-        crosshair.toFront();
     }
 
     private void removeFlag(Coordinate coordinate) {
         removeActor(flags.get(coordinate));
         flags.remove(coordinate);
+    }
+
+    public void addShot(Shot shot) {
+        add(new Image(shot.getState() == Shot.State.HIT ? hitTexture : missTexture), shot.getCoordinate());
+    }
+
+    public void addShip(Ship ship) {
+        Image shipImage = new Image(shipTexture);
+        shipImage.setX((ship.getRear().getX() - 1) * 32);
+        shipImage.setY(this.getHeight() - ((ship.getRear().getY()) * 32));
+        //shipImage.setScaling(Scaling.stretch);
+        //shipImage.setScaleX(ship.getSize());
+        //shipImage.setSize(32f * ship.getSize(), 32f);
+        addActor(shipImage);
+
+        if (crosshair != null)
+            crosshair.toFront();
     }
 }

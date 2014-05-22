@@ -3,6 +3,7 @@ package edu.chalmers.sankoss.desktop;
 import edu.chalmers.sankoss.core.core.Coordinate;
 import edu.chalmers.sankoss.core.core.CorePlayer;
 import edu.chalmers.sankoss.desktop.mvc.game.GameModel;
+import edu.chalmers.sankoss.desktop.mvc.game.Shot;
 import org.junit.Test;
 
 /**
@@ -40,7 +41,7 @@ public class GameModelTest {
         GameModel testModel = new GameModel();
 
         Coordinate coordinate = new Coordinate(5, 5);
-        testModel.addShot(coordinate);
+        testModel.addShot(new Shot(coordinate, Shot.State.HIT));
 
         assert(testModel.getShots().contains(coordinate));
     }
@@ -51,7 +52,7 @@ public class GameModelTest {
         GameModel testModel = new GameModel();
 
         Coordinate coordinate = new Coordinate(2, 2);
-        testModel.addShot(coordinate);
+        testModel.addShot(new Shot(coordinate, Shot.State.HIT));
 
         assert(testModel.getShots().contains(coordinate));
     }

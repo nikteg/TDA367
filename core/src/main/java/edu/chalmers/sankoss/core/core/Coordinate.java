@@ -1,5 +1,7 @@
 package edu.chalmers.sankoss.core.core;
 
+import edu.chalmers.sankoss.core.exceptions.IllegalShipCoordinatesException;
+
 /**
  * Represents a coordinate in the game grid
  * @author Daniel Eineving
@@ -18,12 +20,7 @@ public class Coordinate {
 	 * @param x 1-10
 	 * @param y 1-10
 	 */
-	public Coordinate(int x, int y){
-		//TODO Throw exception?
-		if(x<1 || 10<x || y<1 || 10<y){
-            System.out.println("X: " + x + ", Y: " + y + " - INVALID COORDINATES.");
-			throw new IllegalArgumentException();
-		}
+	public Coordinate(int x, int y) {
 		this.x=x;
 		this.y=y;
 	}
@@ -44,8 +41,15 @@ public class Coordinate {
 		return y;
 	}
 
+    public void setX(int x) {
+        this.x = x;
+    }
 
-	@Override
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    @Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -57,16 +61,23 @@ public class Coordinate {
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
+            return true;
+        if (obj == null)
+            return false;
+
+        if (!(obj instanceof Coordinate))
 			return false;
 		Coordinate other = (Coordinate) obj;
-		if (x != other.x)
+        if (x != other.x)
 			return false;
 		if (y != other.y)
 			return false;
-		return true;
+
+        return true;
 	}
+
+    @Override
+    public String toString() {
+        return " (" + x + ", " + y + ") ";
+    }
 }

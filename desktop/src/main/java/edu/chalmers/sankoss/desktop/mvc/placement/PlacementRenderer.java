@@ -16,7 +16,6 @@ import edu.chalmers.sankoss.core.core.CorePlayer;
 import edu.chalmers.sankoss.core.core.Fleet;
 import edu.chalmers.sankoss.core.core.Ship;
 import edu.chalmers.sankoss.desktop.client.SankossClient;
-import edu.chalmers.sankoss.desktop.misc.ShipImage;
 import edu.chalmers.sankoss.desktop.mvc.AbstractRenderer;
 import edu.chalmers.sankoss.desktop.utils.Common;
 
@@ -41,17 +40,10 @@ public class PlacementRenderer extends AbstractRenderer<PlacementModel> {
 	TextButton btnReady = new TextButton("Ready", Common.getSkin());
 	TextButton btnNextFlag = new TextButton(">", Common.getSkin());
 	TextButton btnPreviousFlag = new TextButton("<", Common.getSkin());
-	
-	Image grid = new Image(new Texture(Gdx.files.internal("textures/grid.png")));
+
+    PlacementGrid grid = new PlacementGrid();
 	Image flag = new Image();
 	Table bottomTable = new Table();
-    Table shipTable = new Table();
-
-    ShipImage ship2 = new ShipImage(2);
-    ShipImage ship3_1 =  new ShipImage(3);
-    ShipImage ship3_2 = new ShipImage(3);
-    ShipImage ship4 = new ShipImage(4);
-    ShipImage ship5 = new ShipImage(5);
 
 	public PlacementRenderer(PlacementModel model) {
 		super(model);
@@ -60,10 +52,9 @@ public class PlacementRenderer extends AbstractRenderer<PlacementModel> {
 		btnNextFlag.pad(8f);
 		btnPreviousFlag.pad(8f);
 
-		getTable().debug();
+		//getTable().debug();
 
-        getTable().add(shipTable);
-		getTable().add(grid);
+		getTable().add(grid).expand();
 		getTable().row();
 
 		flag.setDrawable(new TextureRegionDrawable(new TextureRegion(
@@ -77,46 +68,13 @@ public class PlacementRenderer extends AbstractRenderer<PlacementModel> {
 
 		bottomTable.add(btnReady).fillX().pad(8f);
 
-        shipTable.add(ship2).pad(8f);
-        shipTable.row();
-        shipTable.add(ship3_1).pad(8f);
-        shipTable.row();
-        shipTable.add(ship3_2).pad(8f);
-        shipTable.row();
-        shipTable.add(ship4).pad(8f);
-        shipTable.row();
-        shipTable.add(ship5).pad(8f);
-
-		getTable().add(bottomTable).colspan(2).bottom().expand();
+		getTable().add(bottomTable).bottom().expand();
 		getStage().addActor(getTable());
 
 		btnReady.addListener(new ChangeListener() {
 
 			@Override
 			public void changed(ChangeEvent arg0, Actor arg1) {
-
-                // TODO Hard coding done here
-                Fleet temp = new Fleet();
-                try {
-                    temp.add(new Ship(new Coordinate(1, 1), (new Coordinate(2,
-                            1))));
-                    temp.add(new Ship(new Coordinate(1, 2), (new Coordinate(3,
-                            2))));
-                    temp.add(new Ship(new Coordinate(1, 3), (new Coordinate(3,
-                            3))));
-                    temp.add(new Ship(new Coordinate(1, 4), (new Coordinate(4,
-                            4))));
-                    temp.add(new Ship(new Coordinate(1, 5), (new Coordinate(5,
-                            5))));
-
-                    SankossClient.getInstance().getPlayer().setFleet(temp);
-                    getModel().setFleet(temp);
-
-                    //SankossClient.getInstance().playerReady(temp);
-                } catch (Exception ignore) {
-
-                }
-
                 if(getModel().getFleet().getLength() == 5 && !getModel().getUserReady()) {
                     getModel().setUserReady(true);
                     SankossClient.getInstance().setReady(true);
@@ -179,19 +137,6 @@ public class PlacementRenderer extends AbstractRenderer<PlacementModel> {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		Gdx.gl.glClearColor(0.09f, 0.58f, 0.2f, 1);
 
-		if (isOverlapping(container, grid))
-			container.setBackground(greenTextureBackground);
-		else
-			container.setBackground(redTextureBackground);
-
-		textureXOffset = ((int) container.getWidth() / 32) / 2 * 32;
-		textureYOffset = ((int) container.getHeight() / 32) / 2 * 32;
-
-		container.setX(((mouseOnGridX()) / 32) * 32 + grid.getX()
-                - textureXOffset);
-		container.setY((((int) grid.getHeight() - mouseOnGridY()) / 32) * 32
-                + grid.getY() - textureYOffset);
-
 		getStage().act(delta);
 		getStage().draw();
 		Table.drawDebug(getStage());
@@ -214,39 +159,14 @@ public class PlacementRenderer extends AbstractRenderer<PlacementModel> {
             boolean msg = (boolean)evt.getNewValue();
             btnReady.setDisabled(true);
         }
+
+        if (evt.getPropertyName().equals("ship_added")) {
+            Ship ship = (Ship)evt.getNewValue();
+        }
     }
 
-
-	public boolean isOverlapping(Actor act1, Actor act2) {
-		int x1 = (int) act1.getX();
-		int y1 = (int) act1.getY();
-		int w1 = (int) act1.getWidth();
-		int h1 = (int) act1.getHeight();
-
-		int x2 = (int) act2.getX();
-		int y2 = (int) act2.getY();
-		int w2 = (int) act2.getWidth();
-		int h2 = (int) act2.getHeight();
-
-		int x1Max = x1 + w1;
-		int x2Max = x2 + w2;
-		int y1Max = y1 + h1;
-		int y2Max = y2 + h2;
-		if ((x2 >= x1 && x2Max <= x1Max) || (x1 >= x2 && x1Max <= x2Max)) {
-			if ((y2 >= y1 && y2Max <= y1Max) || (y1 >= y2 && y1Max <= y2Max)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public int mouseOnGridX() {
-		return Gdx.input.getX() - (int) grid.getX();
-	}
-
-	public int mouseOnGridY() {
-		return (Gdx.input.getY() - (int) (Gdx.graphics.getHeight()
-				- grid.getY() - grid.getHeight()));
-	}
+    public PlacementGrid getGrid() {
+        return grid;
+    }
 
 }

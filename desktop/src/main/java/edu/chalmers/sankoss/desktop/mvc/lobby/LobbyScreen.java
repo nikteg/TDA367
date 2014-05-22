@@ -116,7 +116,8 @@ public class LobbyScreen extends AbstractScreen<LobbyModel, LobbyRenderer> {
 
             @Override
             public void playerChangedName(CorePlayer player) {
-                getModel().setName(player.getName());
+                SankossClient.getInstance().getPlayer().setName(player.getName());
+                getModel().setName(SankossClient.getInstance().getPlayer().getName());
             }
         });
 
@@ -160,8 +161,8 @@ public class LobbyScreen extends AbstractScreen<LobbyModel, LobbyRenderer> {
     @Override
     public void show() {
         super.show();
+
         getModel().setName(SankossClient.getInstance().getPlayer().getName());
-        System.out.println("NAMNET: " + getModel().getName());
         SankossClient.getInstance().fetchRooms();
     }
 }

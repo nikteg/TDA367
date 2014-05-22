@@ -42,7 +42,6 @@ public class ShipTest {
 	public void testShip() {
 		Ship ship = new Ship();
 		assertTrue(ship.getSize() == 0);
-		assertTrue(ship.getCoordinates().size() == 0);
 		assertTrue(ship.getFront() == null);
 		assertTrue(ship.getRear() == null);
 	}
@@ -150,26 +149,6 @@ public class ShipTest {
 	}
 
 	/**
-	 * Test method for {@link edu.chalmers.sankoss.core.core.Ship#getCoordinates()}.
-	 */
-	@Test
-	public void testGetCoordinates() {
-
-		try {
-			Ship ship = new Ship(new Coordinate(2, 2), new Coordinate(2, 4));
-
-			LinkedList<Coordinate> list = new LinkedList<Coordinate>();
-			list.add(new Coordinate(2, 2));
-			list.add(new Coordinate(2, 3));
-			list.add(new Coordinate(2, 4));
-
-			assertTrue(ship.getCoordinates().equals(list));
-		} catch (IllegalShipCoordinatesException e) {
-			fail("Should not throw exception");
-		}
-	}
-
-	/**
 	 * Test method for
 	 * {@link edu.chalmers.sankoss.core.core.Ship#isShip(edu.chalmers.sankoss.core.core.Coordinate)}
 	 * .
@@ -182,7 +161,7 @@ public class ShipTest {
 			for (int i = 0; i < 3; i++) {
 				assertTrue(ship.isShip(new Coordinate(2, i + 2)));
 			}
-			assertFalse(ship.getCoordinates().contains(new Coordinate(3, 3)));
+
 		} catch (IllegalShipCoordinatesException e) {
 			fail("Should not throw exception");
 		}

@@ -3,7 +3,6 @@ package edu.chalmers.sankoss.desktop.mvc.placement;
 import edu.chalmers.sankoss.core.core.CorePlayer;
 import edu.chalmers.sankoss.core.core.Fleet;
 import edu.chalmers.sankoss.core.core.Ship;
-import edu.chalmers.sankoss.desktop.SankossGame;
 import edu.chalmers.sankoss.desktop.client.SankossClient;
 import edu.chalmers.sankoss.desktop.mvc.AbstractModel;
 
@@ -25,9 +24,15 @@ public class PlacementModel extends AbstractModel {
 		return opponentReady;
 	}
 
-	public void addShip(Ship ship) {
-		fleet.add(ship);
-	}
+	public boolean addShip(Ship ship) {
+        fireChange("ship_added", ship);
+        return fleet.add(ship);
+    }
+
+    public void removeShip(Ship ship) {
+        fireChange("ship_removed", ship);
+        fleet.remove(ship);
+    }
 
     public void setFleet(Fleet fleet) {
         this.fleet = fleet;

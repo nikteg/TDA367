@@ -20,11 +20,11 @@ public class PlayerPanel extends Table {
     private Label turnLabel;
 
 
-    public PlayerPanel(String name, CorePlayer.Nationality nationality, Alignment align) {
+    public PlayerPanel(Alignment align) {
         super(Common.getSkin());
 
-        lblName = new Label(name, Common.getSkin());
-        //imgNationality = new Image(new Texture(nationality.getPath()));
+        lblName = new Label("", Common.getSkin());
+        imgNationality = new Image();
         turnLabel = new Label("", Common.getSkin());
 
         Pixmap pix = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
@@ -52,27 +52,15 @@ public class PlayerPanel extends Table {
         this.imgNationality.setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture(nationality.getPath()))));
     }
 
-    public void setName(String name) {
-        lblName.setText(name);
-    }
-
     public void setTurnLabelText(String text) {
         turnLabel.setText(text);
-    }
-
-    public void setImgNationality(CorePlayer.Nationality nationality) {
-
-        imgNationality = new Image(new Texture(nationality.getPath()));
-        add(imgNationality);
     }
 
     public void setLblName(String name) {
         lblName.setText(name);
     }
 
-    public enum Alignment{
-        LEFT, RIGHT;
-    };
-
-
+    public enum Alignment {
+        LEFT, RIGHT
+    }
 }

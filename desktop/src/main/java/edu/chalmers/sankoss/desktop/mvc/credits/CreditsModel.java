@@ -9,8 +9,8 @@ public class CreditsModel extends AbstractModel {
     private float creditsTextPosition = 0f;
 
     public String getCreditsText() {
-        String creditsText = "Sankoss\n\nDaniel Eineving\nMikael Malmqvist\n" +
-                "Niklas Tegnander\nFredrik Thune\n\nChalmers University of Technology\n\nSpring 2014";
+        String creditsText = "Sankoss\n\nDaniel 'Eineving' Eineving\nMikael 'Laxen' Malmqvist\n" +
+                "Niklas 'Bipshark' Tegnander\nFredrik 'Thune' Thune\n\nChalmers University of Technology\n\nSpring 2014";
         return creditsText;
     }
 
