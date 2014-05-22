@@ -41,6 +41,8 @@ public class LobbyRenderer extends AbstractRenderer<LobbyModel> {
     private TextButton btnJoin = new TextButton("Join", Common.getSkin());
     private TextButton btnBack = new TextButton("Back", Common.getSkin());
 
+    private ScrollPane scrollRooms= new ScrollPane(lstRooms, Common.getSkin());
+    
     public LobbyRenderer(LobbyModel model) {
         super(model);
 
@@ -56,8 +58,9 @@ public class LobbyRenderer extends AbstractRenderer<LobbyModel> {
         getTable().add(btnEditName).right().fillX().top().width(32f).height(32f).padLeft(4f);
 
         getTable().row();
-
-        getTable().add(lstRooms).colspan(3).expand().fill().padTop(8).padBottom(8);
+        
+        scrollRooms.setFadeScrollBars(false);
+        getTable().add(scrollRooms).colspan(3).expand().fill().padTop(8).padBottom(8);
 
         getTable().row();
 
