@@ -10,25 +10,25 @@ import edu.chalmers.sankoss.core.core.Ship;
  * @author Mikael Malmqvist
  */
 public class ShipImage extends Image {
-    private int length;
+    private Ship ship;
 
     public ShipImage(int length) {
         super(TextureManager.getInstance().getShipTextureMap().get(length));
-        this.length = length;
-
+        ship = new Ship(new Coordinate(1,1), new Coordinate(length, 1));
         setOrigin(16, 16);
     }
 
-    public int getLength() {
-        return length;
-    }
-
     public Ship getShip() {
-        System.out.println(getRotation());
-        return new Ship(new Coordinate((int)getX(), (int)getY()), new Coordinate(1,1));
+       ship.setLocation(new Coordinate((int)getX()/32 + 1, 10 - (int)getY()/32));
+       return ship;
     }
 
     public void rotateShip() {
-        rotateBy(90f);
+        ship.rotateLeft();
+        setRotation(ship.getRotation().asFloat());
+    }
+
+    public int getLength() {
+        return ship.getSize();
     }
 }

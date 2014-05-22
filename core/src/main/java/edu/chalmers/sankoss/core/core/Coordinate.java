@@ -20,12 +20,7 @@ public class Coordinate {
 	 * @param x 1-10
 	 * @param y 1-10
 	 */
-	public Coordinate(int x, int y) throws IllegalShipCoordinatesException {
-		//TODO Throw exception?
-		if(x<1 || 10<x || y<1 || 10<y){
-            System.out.println("X: " + x + ", Y: " + y + " - INVALID COORDINATES.");
-			throw new IllegalShipCoordinatesException();
-		}
+	public Coordinate(int x, int y) {
 		this.x=x;
 		this.y=y;
 	}
@@ -46,8 +41,15 @@ public class Coordinate {
 		return y;
 	}
 
+    public void setX(int x) {
+        this.x = x;
+    }
 
-	@Override
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    @Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -71,4 +73,9 @@ public class Coordinate {
 			return false;
 		return true;
 	}
+
+    @Override
+    public String toString() {
+        return " (" + x + ", " + y + ") ";
+    }
 }

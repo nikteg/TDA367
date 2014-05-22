@@ -24,10 +24,10 @@ public class PlacementModel extends AbstractModel {
 		return opponentReady;
 	}
 
-	public void addShip(Ship ship) {
+	public boolean addShip(Ship ship) {
         fireChange("ship_added", ship);
 
-        fleet.add(ship);
+        return fleet.add(ship);
 	}
 
     public void removeShip(Ship ship) {

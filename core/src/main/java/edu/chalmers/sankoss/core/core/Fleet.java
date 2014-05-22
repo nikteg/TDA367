@@ -41,6 +41,14 @@ public class Fleet {
     }
 
     private boolean validate(Ship ship) {
+        if ((ship.getFront().getX() < 1 || ship.getFront().getX() > 10)
+                || (ship.getFront().getY() < 1 || ship.getFront().getY() > 10))
+            return false;
+
+        if ((ship.getRear().getX() < 1 || ship.getRear().getX() > 10)
+                || (ship.getRear().getY() < 1 || ship.getRear().getY() > 10))
+            return false;
+
 
         Line2D shipLine = new Line2D.Double(ship.getFront().getX(), ship.getFront().getY(),
                                             ship.getRear().getX(), ship.getRear().getY());

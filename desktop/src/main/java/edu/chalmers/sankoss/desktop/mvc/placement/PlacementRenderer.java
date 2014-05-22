@@ -52,7 +52,7 @@ public class PlacementRenderer extends AbstractRenderer<PlacementModel> {
 		btnNextFlag.pad(8f);
 		btnPreviousFlag.pad(8f);
 
-		getTable().debug();
+		//getTable().debug();
 
 		getTable().add(grid).expand();
 		getTable().row();

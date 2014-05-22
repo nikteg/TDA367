@@ -85,20 +85,16 @@ public class PlacementScreen extends AbstractScreen<PlacementModel, PlacementRen
                  */
                 Coordinate coord = getCoordinateFromGrid(x, y);
 
-                System.out.println(event.getTarget().getClass());
 
                 // Left click
                 if (button == 0 && getRenderer().getGrid().hasFollower()) {
-                    int length = getRenderer().getGrid().getFollower().getLength();
-
                     try {
-                        System.out.println("ROTATION" + event.getTarget().getRotation() / 90);
-                        System.out.println("ADDAR SHIP" + coord.getX() +":"+ coord.getY() + " " + (coord.getX() + length-1) +":"+ coord.getY());
-                        System.out.println("ADDAR SHIP" + coord.getX() +":"+ coord.getY() + " " + (coord.getX() + length-1) +":"+ coord.getY());
-                        getModel().addShip(new Ship(coord, new Coordinate(coord.getX() + length - 1, coord.getY())));
-                        getRenderer().getGrid().clearFollower();
+                        if (getModel().addShip(getRenderer().getGrid().getFollower().getShip())) {
+                            getRenderer().getGrid().clearFollower();
+                            System.out.println("Dropping boat");
+                        }
                     } catch (IllegalShipCoordinatesException e) {
-                        System.out.println("NU GICK NÅGOT FEL DU");
+                        System.out.println(e.getCause());
                     }
 
                 } else if (button == 1 && getRenderer().getGrid().hasFollower()) {
@@ -135,11 +131,11 @@ public class PlacementScreen extends AbstractScreen<PlacementModel, PlacementRen
         });
 
         try {
-            getRenderer().getGrid().addShip(new Ship(new Coordinate(1, 1), new Coordinate(2, 1)));
-            getRenderer().getGrid().addShip(new Ship(new Coordinate(1, 2), new Coordinate(3, 2)));
-            getRenderer().getGrid().addShip(new Ship(new Coordinate(1, 3), new Coordinate(3, 3)));
-            getRenderer().getGrid().addShip(new Ship(new Coordinate(1, 4), new Coordinate(4, 4)));
-            getRenderer().getGrid().addShip(new Ship(new Coordinate(1, 5), new Coordinate(5, 5)));
+            getRenderer().getGrid().addShip(new Ship(new Coordinate(2, 1), new Coordinate(1, 1)));
+            getRenderer().getGrid().addShip(new Ship(new Coordinate(3, 2), new Coordinate(1, 2)));
+            getRenderer().getGrid().addShip(new Ship(new Coordinate(3, 3), new Coordinate(1, 3)));
+            getRenderer().getGrid().addShip(new Ship(new Coordinate(4, 4), new Coordinate(1, 4)));
+            getRenderer().getGrid().addShip(new Ship(new Coordinate(5, 5), new Coordinate(1, 5)));
         } catch (IllegalShipCoordinatesException e) {
             e.printStackTrace();
         }
