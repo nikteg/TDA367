@@ -53,6 +53,7 @@ public class Network {
         kryo.register(RemoveRoom.class);
         kryo.register(RemovedRoom.class);
         kryo.register(Ship.class);
+        kryo.register(Ship.Rotation.class);
         kryo.register(StartedGame.class);
         kryo.register(StartGame.class);
         kryo.register(Turn.class);

@@ -26,13 +26,11 @@ public class PlacementModel extends AbstractModel {
 
 	public boolean addShip(Ship ship) {
         fireChange("ship_added", ship);
-
         return fleet.add(ship);
-	}
+    }
 
     public void removeShip(Ship ship) {
         fireChange("ship_removed", ship);
-
         fleet.remove(ship);
     }
 

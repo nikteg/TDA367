@@ -75,29 +75,6 @@ public class PlacementRenderer extends AbstractRenderer<PlacementModel> {
 
 			@Override
 			public void changed(ChangeEvent arg0, Actor arg1) {
-
-                // TODO Hard coding done here
-                Fleet temp = new Fleet();
-                try {
-                    temp.add(new Ship(new Coordinate(1, 1), (new Coordinate(2,
-                            1))));
-                    temp.add(new Ship(new Coordinate(1, 2), (new Coordinate(3,
-                            2))));
-                    temp.add(new Ship(new Coordinate(1, 3), (new Coordinate(3,
-                            3))));
-                    temp.add(new Ship(new Coordinate(1, 4), (new Coordinate(4,
-                            4))));
-                    temp.add(new Ship(new Coordinate(1, 5), (new Coordinate(5,
-                            5))));
-
-                    SankossClient.getInstance().getPlayer().setFleet(temp);
-                    getModel().setFleet(temp);
-
-                    //SankossClient.getInstance().playerReady(temp);
-                } catch (Exception ignore) {
-
-                }
-
                 if(getModel().getFleet().getLength() == 5 && !getModel().getUserReady()) {
                     getModel().setUserReady(true);
                     SankossClient.getInstance().setReady(true);

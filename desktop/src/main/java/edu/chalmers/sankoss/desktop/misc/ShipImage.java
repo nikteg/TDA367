@@ -12,9 +12,10 @@ import edu.chalmers.sankoss.core.core.Ship;
 public class ShipImage extends Image {
     private Ship ship;
 
-    public ShipImage(int length) {
-        super(TextureManager.getInstance().getShipTextureMap().get(length));
-        ship = new Ship(new Coordinate(1,1), new Coordinate(length, 1));
+    public ShipImage(Ship ship) {
+        super(TextureManager.getInstance().getShipTextureMap().get(ship.getSize()));
+        System.out.println("EN SHIPimage har skapats!" + ship.getRear() + ship.getFront());
+        this.ship = ship;
         setOrigin(16, 16);
     }
 
@@ -22,6 +23,7 @@ public class ShipImage extends Image {
        ship.setLocation(new Coordinate((int)getX()/32 + 1, 10 - (int)getY()/32));
        return ship;
     }
+
 
     public void rotateShip() {
         ship.rotateLeft();

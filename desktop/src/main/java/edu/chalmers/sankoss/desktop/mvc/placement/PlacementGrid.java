@@ -33,14 +33,11 @@ public class PlacementGrid extends Table {
     }
 
     public void addShip(Ship ship) {
-        Image shipImage = new ShipImage(ship.getSize());
+        Image shipImage = new ShipImage(ship);
         System.out.println(ship.getFront().getX());
         System.out.println(ship.getFront().getY());
-        shipImage.setX((ship.getFront().getX() - 1) * 32);
-        shipImage.setY(this.getHeight() - ((ship.getFront().getY()) * 32));
-        //shipImage.setScaling(Scaling.stretch);
-        //shipImage.setScaleX(ship.getSize());
-        //shipImage.setSize(32f * ship.getSize(), 32f);
+        shipImage.setX((ship.getRear().getX() - 1) * 32);
+        shipImage.setY(this.getHeight() - ((ship.getRear().getY()) * 32));
         addActor(shipImage);
     }
 

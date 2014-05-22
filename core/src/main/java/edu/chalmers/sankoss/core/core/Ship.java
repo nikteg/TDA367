@@ -193,12 +193,7 @@ public class Ship {
 		if (getClass() != obj.getClass())
 			return false;
 
-		//TODO does now return false if no rotated the same direction
 		Ship other = (Ship) obj;
-
-		if(front.equals(other.front) && rear.equals(other.rear) && hits == other.hits && size == other.size){
-			return true;
-		}
-		return false;
+		return (front.equals(other.front) && rear.equals(other.rear) && hits == other.hits && size == other.size);
 	}
 }
