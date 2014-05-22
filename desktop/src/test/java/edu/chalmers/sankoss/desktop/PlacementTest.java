@@ -1,5 +1,6 @@
 package edu.chalmers.sankoss.desktop;
 
+import edu.chalmers.sankoss.core.core.Coordinate;
 import edu.chalmers.sankoss.core.core.CorePlayer;
 import edu.chalmers.sankoss.core.core.Fleet;
 import edu.chalmers.sankoss.core.core.Ship;
@@ -29,11 +30,12 @@ public class PlacementTest {
 
     @Test
     public void testAddShip() throws Exception {
-        Fleet fleet = new Fleet();
-        Ship ship = new Ship();
-        System.out.println(fleet.add(ship));
+        Fleet myFleet = new Fleet();
+        Ship myShip = new Ship(new Coordinate(2,2), new Coordinate(2,5));
 
-        assert(fleet.getShip(0).equals(ship));
+        myFleet.add(myShip);
+
+        assert(myFleet.getShip(0).equals(myShip));
     }
 
     @Test
