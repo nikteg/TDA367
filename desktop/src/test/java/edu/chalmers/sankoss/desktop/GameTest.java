@@ -15,6 +15,7 @@ import java.util.List;
  * @date 5/19/14
  */
 public class GameTest {
+
     @Test
     public void testSetMyTurn() throws Exception {
         boolean turn = true;
