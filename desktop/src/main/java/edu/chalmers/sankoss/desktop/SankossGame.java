@@ -8,6 +8,7 @@ import edu.chalmers.sankoss.desktop.client.SankossClient;
 import edu.chalmers.sankoss.desktop.mvc.AbstractScreen;
 import edu.chalmers.sankoss.desktop.mvc.credits.CreditsScreen;
 import edu.chalmers.sankoss.desktop.mvc.game.GameScreen;
+import edu.chalmers.sankoss.desktop.mvc.gameover.GameOverScreen;
 import edu.chalmers.sankoss.desktop.mvc.lobby.LobbyScreen;
 import edu.chalmers.sankoss.desktop.mvc.mainMenu.MainMenuScreen;
 import edu.chalmers.sankoss.desktop.mvc.placement.PlacementScreen;
@@ -67,6 +68,7 @@ public class SankossGame extends Game implements PropertyChangeListener {
         screens.put("mainmenu", new MainMenuScreen());
         screens.put("placement", new PlacementScreen());
         screens.put("waiting", new WaitingScreen());
+        screens.put("gameover", new GameOverScreen());
 
         /**
          * Add the game as a listener to every screen
