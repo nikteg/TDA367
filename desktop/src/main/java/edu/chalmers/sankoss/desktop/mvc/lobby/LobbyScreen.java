@@ -2,6 +2,8 @@ package edu.chalmers.sankoss.desktop.mvc.lobby;
 
 import com.badlogic.gdx.Gdx;
 
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import edu.chalmers.sankoss.core.core.CorePlayer;
 import edu.chalmers.sankoss.core.core.Room;
 import edu.chalmers.sankoss.desktop.SankossGame;
@@ -34,7 +36,7 @@ public class LobbyScreen extends AbstractScreen<LobbyModel, LobbyRenderer> {
             /* DO STUFF */
 
             @Override
-            public void errorMsg(Object errorObject, String errorMessage) {
+            public void errorMsg(Object errorObject, final String errorMessage) {
 
                 /**
                  * A playerChangedName error
@@ -44,15 +46,34 @@ public class LobbyScreen extends AbstractScreen<LobbyModel, LobbyRenderer> {
                     Gdx.app.postRunnable(new Runnable() {
                         @Override
                         public void run() {
-                            Dialog dialog = new Dialog("Message", Common.getSkin()) {
+                            final Dialog dialog = new Dialog("Message", Common.getSkin()) {
 
                                 {
-                                    text("Invalid name");
+                                    text(errorMessage);
                                     button("OK");
                                 }
                             };
+
                             dialog.setMovable(false);
                             dialog.show(getRenderer().getStage());
+
+                            /**
+                             * If invalid name then you will go in to edit mode in the text box
+                             */
+                            getRenderer().getBtnEditName().setChecked(true);
+                            
+                            /**
+                             * When errorMessege is closed the nameField will be selected
+                             */
+                            dialog.addListener(new InputListener() {
+                                @Override
+                                public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                                    dialog.remove();
+                                    getRenderer().getStage().setKeyboardFocus(getRenderer().getNameField());
+                                    getRenderer().getNameField().selectAll();
+                                    return false;
+                                }
+                            });
                         }
                     });
                 }
