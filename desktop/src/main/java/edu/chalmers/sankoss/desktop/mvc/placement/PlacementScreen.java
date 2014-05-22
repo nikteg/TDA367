@@ -91,7 +91,6 @@ public class PlacementScreen extends AbstractScreen<PlacementModel, PlacementRen
                     try {
                         if (getModel().addShip(getRenderer().getGrid().getFollower().getShip())) {
                             getRenderer().getGrid().clearFollower();
-                            System.out.println("Dropping boat");
                         }
                     } catch (IllegalShipCoordinatesException e) {
                         System.out.println(e.getCause());
