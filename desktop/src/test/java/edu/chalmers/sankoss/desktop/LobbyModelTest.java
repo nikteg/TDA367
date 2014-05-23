@@ -19,97 +19,89 @@ import java.util.Set;
  */
 public class LobbyModelTest {
 
-    @Test
-    public void testGetRoomByName() throws Exception {
+	@Test
+	public void testGetRoomByName() throws Exception {
 
-        LobbyModel testModel = new LobbyModel();
+		LobbyModel testModel = new LobbyModel();
 
-        Map<Long, Room> rooms = new HashMap<Long, Room>();
-        Room newRoom = new Room();
-        newRoom.setName("testroom");
-        rooms.put(1l, newRoom);
+		Map<Long, Room> rooms = new HashMap<Long, Room>();
+		Room newRoom = new Room();
+		newRoom.setName("testroom");
+		rooms.put(1l, newRoom);
 
-        testModel.setRooms(rooms);
+		testModel.setRooms(rooms);
 
-        boolean found = false;
+		boolean found = false;
 
-        for(Room room : testModel.getRooms().values()) {
-            if(room.getName().equals(newRoom.getName())) {
-                found = true;
-                return;
-            }
-        }
+		for(Room room : testModel.getRooms().values()) {
+			if(room.getName().equals(newRoom.getName())) {
+				found = true;
+				return;
+			}
+		}
 
-        assertTrue(found);
-    }
+		assertTrue(found);
+	}
 
-    @Test
-    public void testSetRoomMap() throws Exception {
+	@Test
+	public void testSetRoomMap() throws Exception {
 
-        LobbyModel testModel = new LobbyModel();
+		LobbyModel testModel = new LobbyModel();
 
-        Map<Long, Room> roomMap = new HashMap<Long, Room>();
-        testModel.setRooms(roomMap);
+		Map<Long, Room> roomMap = new HashMap<Long, Room>();
+		testModel.setRooms(roomMap);
 
-        assertTrue(testModel.getRooms().equals(roomMap));
-    }
+		assertTrue(testModel.getRooms().equals(roomMap));
+	}
 
-    @Test
-    public void testGetKeys() throws Exception {
+	@Test
+	public void testGetKeys() throws Exception {
 
-        LobbyModel testModel = new LobbyModel();
+		LobbyModel testModel = new LobbyModel();
 
-        Map<Long, Room> roomMap = new HashMap<Long, Room>();
-        roomMap.put(1l, new Room());
-        roomMap.put(2l, new Room());
-        roomMap.put(3l, new Room());
+		Map<Long, Room> roomMap = new HashMap<Long, Room>();
+		roomMap.put(1l, new Room());
+		roomMap.put(2l, new Room());
+		roomMap.put(3l, new Room());
 
-        Set<Long> mapsKeys = roomMap.keySet();
+		Set<Long> mapsKeys = roomMap.keySet();
 
-        Set<Long> correctKeys = new HashSet<Long>();
-        correctKeys.add(1l);
-        correctKeys.add(2l);
-        correctKeys.add(3l);
+		Set<Long> correctKeys = new HashSet<Long>();
+		correctKeys.add(1l);
+		correctKeys.add(2l);
+		correctKeys.add(3l);
 
-        testModel.setRooms(roomMap);
+		testModel.setRooms(roomMap);
 
-        assertTrue(testModel.getRooms().keySet().equals(correctKeys));
-    }
+		assertTrue(testModel.getRooms().keySet().equals(correctKeys));
+	}
 
-    @Test
-    public void testGetRooms() throws Exception {
+	@Test
+	public void testGetRooms() throws Exception {
 
-        LobbyModel testModel = new LobbyModel();
+		LobbyModel testModel = new LobbyModel();
 
-        Map<Long, Room> roomMap = new HashMap<Long, Room>();
-        testModel.setRooms(roomMap);
+		Map<Long, Room> roomMap = new HashMap<Long, Room>();
+		testModel.setRooms(roomMap);
 
-        assertTrue(testModel.getRooms().equals(roomMap));
-    }
+		assertTrue(testModel.getRooms().equals(roomMap));
+	}
 
-    @Test
-    public void testGetRoomNames() throws Exception {
-        LobbyModel testModel = new LobbyModel();
+	@Test
+	public void testGetRoomNames() throws Exception {
+		LobbyModel testModel = new LobbyModel();
 
-        Map<Long, Room> roomMap = new HashMap<Long, Room>();
-        roomMap.put(1l, new Room(1l, "Room1", ""));
-        roomMap.put(2l, new Room(2l, "Room2", ""));
-        roomMap.put(3l, new Room(3l, "Room3", ""));
+		Map<Long, Room> roomMap = new HashMap<Long, Room>();
+		roomMap.put(1l, new Room(1l, "Room1", ""));
+		roomMap.put(2l, new Room(2l, "Room2", ""));
+		roomMap.put(3l, new Room(3l, "Room3", ""));
 
-        testModel.setRooms(roomMap);
+		testModel.setRooms(roomMap);
 
-        String[] correctNames = {"Room1", "Room2", "Room3"};
-
-        boolean same = true;
-
-        for(int i = 0; i < correctNames.length; i++) {
-            if(!testModel.getRooms().values().toArray()[i].equals(correctNames[i])) {
-                same = false;
-                return;
-            }
-        }
-
-        assertTrue(same);
-    }
+		assertTrue(testModel.getRooms().get(1l).getName().equals("Room1"));
+		assertTrue(testModel.getRooms().get(2l).getName().equals("Room2"));
+		assertTrue(testModel.getRooms().get(3l).getName().equals("Room3"));
+		
+	}
 
 }
