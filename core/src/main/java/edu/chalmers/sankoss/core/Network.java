@@ -25,7 +25,6 @@ public class Network {
         kryo.register(CorePlayer.Nationality.class);
         kryo.register(Connected.class);
         kryo.register(Coordinate.class);
-        kryo.register(CreateAI.class);
         kryo.register(CreatedRoom.class);
         kryo.register(CreateRoom.class);
         kryo.register(DestroyedShip.class);
