@@ -44,7 +44,8 @@ local.properties
 .LSOverride
 
 # Icon must ends with two \r.
-Icon
+Icon
+
 
 # Thumbnails
 ._*
@@ -129,5 +130,8 @@ pom.xml.tag
 pom.xml.releaseBackup
 pom.xml.next
 release.properties
+
+# Ignore settings file
+settings.ini
 
 
