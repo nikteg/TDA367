@@ -63,10 +63,10 @@ public class WaitingRenderer extends AbstractRenderer<WaitingModel> {
     public void propertyChange(PropertyChangeEvent evt) {
 
         if (evt.getPropertyName().equals("reset")) {
-            lblWaiting = new Label("Loading...", Common.getSkin());
-            btnBack = new TextButton("Back", Common.getSkin());
-            btnStart = new TextButton("Start", Common.getSkin());
+            lblWaiting.setText("Loading...");
+            btnStart.setText("Start");
             btnStart.setDisabled(true);
+
 
         }
 

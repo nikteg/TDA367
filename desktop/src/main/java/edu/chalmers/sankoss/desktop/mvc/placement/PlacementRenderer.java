@@ -149,9 +149,9 @@ public class PlacementRenderer extends AbstractRenderer<PlacementModel> {
         }
 
         if (evt.getPropertyName().equals("reset")) {
-            System.out.println("NU BLEV PLACEMENTRENDERER RESETAD");
-            btnReady = new TextButton("Ready", Common.getSkin());
+            btnReady.setText("Ready");
             btnReady.setDisabled(false);
+
         }
 
         if (evt.getPropertyName().equals("OpponentReady")) {

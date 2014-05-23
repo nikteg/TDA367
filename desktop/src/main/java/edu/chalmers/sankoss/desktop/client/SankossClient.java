@@ -44,7 +44,7 @@ public class SankossClient {
 
     public void reset() {
         opponents.clear();
-        ready = false;
+        setReady(false);
         hosting = false;
 
     }
