@@ -13,17 +13,6 @@ import static org.junit.Assert.assertTrue;
  */
 public class WaitingModelTest {
 
-    @Test
-    public void testIsHosting() throws Exception {
-
-        WaitingModel testModel = new WaitingModel();
-
-        testModel.setHosting(true);
-
-        assertTrue(testModel.isHosting());
-
-    }
-
 
     @Test
     public void testAddPlayer() throws Exception {

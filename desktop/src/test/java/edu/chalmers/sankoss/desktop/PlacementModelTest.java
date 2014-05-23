@@ -17,16 +17,6 @@ public class PlacementModelTest {
 
 
     @Test
-    public void testIsOpponentReady() throws Exception {
-
-        PlacementModel testModel = new PlacementModel();
-
-        testModel.setOpponentReady(true);
-
-        assertTrue(testModel.isOpponentReady());
-    }
-
-    @Test
     public void testAddShip() throws Exception {
 
         PlacementModel testModel = new PlacementModel();
