@@ -73,7 +73,6 @@ public class WaitingRenderer extends AbstractRenderer<WaitingModel> {
         if (getModel().isHosting()) {
             if (evt.getPropertyName().equals("player_joined")) {
                 CorePlayer msg = (CorePlayer) evt.getNewValue();
-                System.out.println("NUMBER OF PLAYER IN ROOMEN " + getModel().getPlayers().size());
                 btnStart.setDisabled(false);
                 lblWaiting.setText(msg.getName() + " has joined the room!");
             } else if (evt.getPropertyName().equals("player_left")) {

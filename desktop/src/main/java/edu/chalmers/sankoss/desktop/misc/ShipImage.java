@@ -14,7 +14,6 @@ public class ShipImage extends Image {
 
     public ShipImage(Ship ship) {
         super(TextureManager.getInstance().getShipTextureMap().get(ship.getSize()));
-        System.out.println("EN SHIPimage har skapats!" + ship.getRear() + ship.getFront());
         this.ship = ship;
         setOrigin(16, 16);
     }
