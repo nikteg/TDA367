@@ -1,7 +1,9 @@
 package edu.chalmers.sankoss.desktop;
 
+import static org.junit.Assert.*;
 import edu.chalmers.sankoss.core.core.CorePlayer;
 import edu.chalmers.sankoss.desktop.mvc.waiting.WaitingModel;
+
 import org.junit.Test;
 
 /**
@@ -18,7 +20,7 @@ public class WaitingModelTest {
 
         testModel.setHosting(true);
 
-        assert(testModel.isHosting());
+        assertTrue(testModel.isHosting());
 
     }
 
@@ -29,7 +31,7 @@ public class WaitingModelTest {
 
         testModel.setHosting(true);
 
-        assert(testModel.isHosting());
+        assertTrue(testModel.isHosting());
     }
 
     @Test
@@ -51,7 +53,7 @@ public class WaitingModelTest {
             }
         }
 
-        assert (testModel.getPlayers().get(0).equals(player));
+        assertTrue (testModel.getPlayers().get(0).equals(player));
 
     }
 
@@ -73,7 +75,7 @@ public class WaitingModelTest {
             }
         }
 
-        assert (!testModel.getPlayers().get(0).equals(player));
+        assertTrue (!testModel.getPlayers().get(0).equals(player));
     }
 
     @Test
@@ -81,7 +83,7 @@ public class WaitingModelTest {
 
         WaitingModel testModel = new WaitingModel();
 
-        assert (testModel.getPlayers() != null);
+        assertTrue (testModel.getPlayers() != null);
     }
 
 }

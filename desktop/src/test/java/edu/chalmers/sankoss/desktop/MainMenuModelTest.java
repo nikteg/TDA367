@@ -1,6 +1,8 @@
 package edu.chalmers.sankoss.desktop;
 
+import static org.junit.Assert.*;
 import edu.chalmers.sankoss.desktop.mvc.mainMenu.MainMenuModel;
+
 import org.junit.Test;
 
 /**
@@ -17,7 +19,7 @@ public class MainMenuModelTest {
 
         testModel.setConnected(true);
 
-        assert (testModel.isConnected());
+        assertTrue(testModel.isConnected());
     }
 
     @Test
@@ -26,6 +28,6 @@ public class MainMenuModelTest {
 
         testModel.setConnected(false);
 
-        assert (!testModel.isConnected());
+        assertTrue(!testModel.isConnected());
     }
 }
