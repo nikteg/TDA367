@@ -39,7 +39,7 @@ public class CreditsRenderer extends AbstractRenderer<CreditsModel> {
         //lblCredits.setY(-500);
 
         getTable().pad(8f);
-        getTable().add(btnBack).expand().bottom().left();
+        getTable().add(btnBack.pad(8f)).expand().bottom().left().width(160);
         //getTable().debug();
 
         getStage().addActor(lblCredits);
