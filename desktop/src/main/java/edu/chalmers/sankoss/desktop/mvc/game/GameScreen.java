@@ -160,6 +160,7 @@ public class GameScreen extends AbstractScreen<GameModel, GameRenderer> {
         super.show();
 
         getModel().setOpponent(SankossClient.getInstance().getOpponents().get(0));
+        getRenderer().getOpponentPanel().setLblName(SankossClient.getInstance().getOpponents().get(0).getName());
         getRenderer().getPlayerPanel().setLblName(SankossClient.getInstance().getPlayer().getName());
         getRenderer().getPlayerPanel().setNationality(SankossClient.getInstance().getPlayer().getNationality());
 

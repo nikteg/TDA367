@@ -147,4 +147,8 @@ public class GameRenderer extends AbstractRenderer<GameModel> {
     public PlayerPanel getPlayerPanel() {
         return playerPanel;
     }
+
+    public PlayerPanel getOpponentPanel() {
+        return opponentPanel;
+    }
 }
