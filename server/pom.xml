@@ -13,7 +13,7 @@
 	<name>Sankoss server</name>
 
 	<properties>
-		<mainClass>edu.chalmers.sankoss.java.SankossServer</mainClass>
+		<mainClass>edu.chalmers.sankoss.server.ServerStarter</mainClass>
 	</properties>
 
 	<dependencies>
