@@ -43,16 +43,6 @@ public class LobbyModelTest {
         assertTrue(found);
     }
 
-    @Test
-    public void testSetRoomMap() throws Exception {
-
-        LobbyModel testModel = new LobbyModel();
-
-        Map<Long, Room> roomMap = new HashMap<Long, Room>();
-        testModel.setRooms(roomMap);
-
-        assertTrue(testModel.getRooms().equals(roomMap));
-    }
 
     @Test
     public void testGetKeys() throws Exception {
@@ -76,33 +66,5 @@ public class LobbyModelTest {
         assertTrue(testModel.getRooms().keySet().equals(correctKeys));
     }
 
-    @Test
-    public void testGetRooms() throws Exception {
-
-        LobbyModel testModel = new LobbyModel();
-
-        Map<Long, Room> roomMap = new HashMap<Long, Room>();
-        testModel.setRooms(roomMap);
-
-        assertTrue(testModel.getRooms().equals(roomMap));
-    }
-
-    @Test
-    public void testGetRoomNames() throws Exception {
-        LobbyModel testModel = new LobbyModel();
-
-        Map<Long, Room> roomMap = new HashMap<Long, Room>();
-
-        roomMap.put(2l, new Room(2l, "Room2", ""));
-        roomMap.put(3l, new Room(3l, "Room3", ""));
-        roomMap.put(4l, new Room(4l, "Room4", ""));
-
-        testModel.setRooms(roomMap);
-
-        assertTrue(testModel.getRooms().get(1l).getName().equals("Room2"));
-        assertTrue(testModel.getRooms().get(2l).getName().equals("Room3"));
-        assertTrue(testModel.getRooms().get(3l).getName().equals("Room4"));
-
-    }
 
 }

@@ -1,9 +1,9 @@
 package edu.chalmers.sankoss.desktop;
 
-import static org.junit.Assert.*;
 import edu.chalmers.sankoss.desktop.mvc.mainMenu.MainMenuModel;
-
 import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * Description of class.
@@ -22,12 +22,4 @@ public class MainMenuModelTest {
         assertTrue(testModel.isConnected());
     }
 
-    @Test
-    public void testSetConnected() {
-        MainMenuModel testModel = new MainMenuModel();
-
-        testModel.setConnected(false);
-
-        assertTrue(!testModel.isConnected());
-    }
 }

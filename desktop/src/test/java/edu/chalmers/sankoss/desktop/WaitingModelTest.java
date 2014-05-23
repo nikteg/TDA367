@@ -1,10 +1,10 @@
 package edu.chalmers.sankoss.desktop;
 
-import static org.junit.Assert.*;
 import edu.chalmers.sankoss.core.core.CorePlayer;
 import edu.chalmers.sankoss.desktop.mvc.waiting.WaitingModel;
-
 import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * Test class for WaitingModel.
@@ -24,15 +24,6 @@ public class WaitingModelTest {
 
     }
 
-    @Test
-    public void testSetHosting() throws Exception {
-
-        WaitingModel testModel = new WaitingModel();
-
-        testModel.setHosting(true);
-
-        assertTrue(testModel.isHosting());
-    }
 
     @Test
     public void testAddPlayer() throws Exception {
@@ -78,12 +69,5 @@ public class WaitingModelTest {
         assertTrue (!testModel.getPlayers().get(0).equals(player));
     }
 
-    @Test
-    public void testGetPlayers() throws Exception {
-
-        WaitingModel testModel = new WaitingModel();
-
-        assertTrue (testModel.getPlayers() != null);
-    }
 
 }
