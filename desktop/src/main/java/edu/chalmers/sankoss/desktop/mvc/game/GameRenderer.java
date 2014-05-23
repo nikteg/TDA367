@@ -6,15 +6,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-
 import edu.chalmers.sankoss.core.core.Coordinate;
 import edu.chalmers.sankoss.core.core.CorePlayer;
-import edu.chalmers.sankoss.desktop.SankossGame;
-import edu.chalmers.sankoss.desktop.client.SankossClient;
 import edu.chalmers.sankoss.desktop.mvc.AbstractRenderer;
 
 import java.beans.PropertyChangeEvent;
-import java.util.Observable;
 
 /**
  * Renderer for Game Screen.
@@ -88,7 +84,8 @@ public class GameRenderer extends AbstractRenderer<GameModel> {
         if (evt.getPropertyName().equals("shooting_allowed")) {
             Boolean msg = (Boolean)evt.getNewValue();
             if(msg) {
-                //enableYourTurn();
+                opponentPanel.setTurnLabelText("");
+                playerPanel.setTurnLabelText("Your turn!");
             } else {
                 opponentPanel.setTurnLabelText("Opponent's turn!");
                 playerPanel.setTurnLabelText("");
@@ -97,8 +94,8 @@ public class GameRenderer extends AbstractRenderer<GameModel> {
         }
 
         if (evt.getPropertyName().equals("shot")) {
-            Coordinate msg = (Coordinate)evt.getNewValue();
-            grid1.add(new Image(new Texture("textures/explosion.png")), msg);
+            Shot msg = (Shot)evt.getNewValue();
+            grid1.addShot(msg);
         }
 
         if(evt.getPropertyName().equals("flag")) {

@@ -1,18 +1,14 @@
 package edu.chalmers.sankoss.desktop.mvc.game;
 
-import edu.chalmers.sankoss.core.core.Coordinate;
-import edu.chalmers.sankoss.core.core.CorePlayer;
-import edu.chalmers.sankoss.core.core.Ship;
-import edu.chalmers.sankoss.core.exceptions.IllegalShipCoordinatesException;
-import edu.chalmers.sankoss.desktop.SankossGame;
-import edu.chalmers.sankoss.desktop.client.SankossClient;
-import edu.chalmers.sankoss.desktop.client.SankossClientListener;
-import edu.chalmers.sankoss.desktop.mvc.AbstractScreen;
-
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
+import edu.chalmers.sankoss.core.core.Coordinate;
+import edu.chalmers.sankoss.core.core.CorePlayer;
+import edu.chalmers.sankoss.core.core.Ship;
+import edu.chalmers.sankoss.desktop.client.SankossClient;
+import edu.chalmers.sankoss.desktop.client.SankossClientListener;
+import edu.chalmers.sankoss.desktop.mvc.AbstractScreen;
 
 /**
  * Screen used when placing the ships.
@@ -88,7 +84,7 @@ public class GameScreen extends AbstractScreen<GameModel, GameRenderer> {
 
                 // Determines if you were shot at
                 if (target.equals(SankossClient.getInstance().getPlayer())) {
-                    System.out.println("DU BLEV TRÄFFAD");
+                    System.out.println("DU BLEV SKJUTEN");
                     getModel().addOpponentShot(new Shot(coordinate, hit ? Shot.State.HIT : Shot.State.MISS));
                 } else {
                     getModel().addShot(new Shot(coordinate, hit ? Shot.State.HIT : Shot.State.MISS));
