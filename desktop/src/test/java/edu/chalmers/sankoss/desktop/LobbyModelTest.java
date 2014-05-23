@@ -1,8 +1,9 @@
 package edu.chalmers.sankoss.desktop;
 
+import static org.junit.Assert.*;
 import edu.chalmers.sankoss.core.core.Room;
-
 import edu.chalmers.sankoss.desktop.mvc.lobby.LobbyModel;
+
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -39,7 +40,7 @@ public class LobbyModelTest {
             }
         }
 
-        assert(found);
+        assertTrue(found);
     }
 
     @Test
@@ -50,7 +51,7 @@ public class LobbyModelTest {
         Map<Long, Room> roomMap = new HashMap<Long, Room>();
         testModel.setRooms(roomMap);
 
-        assert(testModel.getRooms().equals(roomMap));
+        assertTrue(testModel.getRooms().equals(roomMap));
     }
 
     @Test
@@ -72,7 +73,7 @@ public class LobbyModelTest {
 
         testModel.setRooms(roomMap);
 
-        assert(testModel.getRooms().keySet().equals(correctKeys));
+        assertTrue(testModel.getRooms().keySet().equals(correctKeys));
     }
 
     @Test
@@ -83,7 +84,7 @@ public class LobbyModelTest {
         Map<Long, Room> roomMap = new HashMap<Long, Room>();
         testModel.setRooms(roomMap);
 
-        assert(testModel.getRooms().equals(roomMap));
+        assertTrue(testModel.getRooms().equals(roomMap));
     }
 
     @Test
@@ -108,7 +109,7 @@ public class LobbyModelTest {
             }
         }
 
-        assert(same);
+        assertTrue(same);
     }
 
 }

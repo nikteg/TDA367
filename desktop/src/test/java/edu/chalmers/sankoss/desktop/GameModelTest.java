@@ -1,9 +1,11 @@
 package edu.chalmers.sankoss.desktop;
 
+import static org.junit.Assert.*;
 import edu.chalmers.sankoss.core.core.Coordinate;
 import edu.chalmers.sankoss.core.core.CorePlayer;
 import edu.chalmers.sankoss.desktop.mvc.game.GameModel;
 import edu.chalmers.sankoss.desktop.mvc.game.Shot;
+
 import org.junit.Test;
 
 /**
@@ -22,7 +24,7 @@ public class GameModelTest {
 
         testModel.setShootingAllowed(true);
 
-        assert(testModel.isShootingAllowed());
+        assertTrue(testModel.isShootingAllowed());
 
     }
 
@@ -32,7 +34,7 @@ public class GameModelTest {
 
         testModel.setShootingAllowed(true);
 
-        assert(testModel.isShootingAllowed());
+        assertTrue(testModel.isShootingAllowed());
     }
 
     @Test
@@ -43,7 +45,7 @@ public class GameModelTest {
         Coordinate coordinate = new Coordinate(5, 5);
         testModel.addShot(new Shot(coordinate, Shot.State.HIT));
 
-        assert(testModel.getShots().contains(coordinate));
+        assertTrue(testModel.getShots().contains(coordinate));
     }
 
     @Test
@@ -54,7 +56,7 @@ public class GameModelTest {
         Coordinate coordinate = new Coordinate(2, 2);
         testModel.addShot(new Shot(coordinate, Shot.State.HIT));
 
-        assert(testModel.getShots().contains(coordinate));
+        assertTrue(testModel.getShots().contains(coordinate));
     }
 
     @Test
@@ -64,7 +66,7 @@ public class GameModelTest {
 
         testModel.setState(GameModel.State.LOST);
 
-        assert(testModel.getState().equals(GameModel.State.LOST));
+        assertTrue(testModel.getState().equals(GameModel.State.LOST));
     }
 
     @Test
@@ -74,7 +76,7 @@ public class GameModelTest {
 
         testModel.setState(GameModel.State.WON);
 
-        assert(testModel.getState().equals(GameModel.State.WON));
+        assertTrue(testModel.getState().equals(GameModel.State.WON));
     }
 
     @Test
@@ -85,7 +87,7 @@ public class GameModelTest {
         CorePlayer opponent = new CorePlayer(32l);
         testModel.setOpponent(opponent);
 
-        assert(testModel.getOpponent().equals(opponent));
+        assertTrue(testModel.getOpponent().equals(opponent));
     }
 
     @Test
@@ -96,7 +98,7 @@ public class GameModelTest {
         CorePlayer opponent = new CorePlayer(32l);
         testModel.setOpponent(opponent);
 
-        assert(testModel.getOpponent().equals(opponent));
+        assertTrue(testModel.getOpponent().equals(opponent));
     }
 
     @Test
@@ -107,7 +109,7 @@ public class GameModelTest {
         Coordinate coordinate = new Coordinate(1,3);
         testModel.toggleFlag(coordinate);
 
-        assert (testModel.getFlags().contains(coordinate));
+        assertTrue (testModel.getFlags().contains(coordinate));
     }
 
     @Test
@@ -118,7 +120,7 @@ public class GameModelTest {
         Coordinate coordinate = new Coordinate(8,2);
         testModel.toggleFlag(coordinate);
 
-        assert (testModel.getFlags().contains(coordinate));
+        assertTrue (testModel.getFlags().contains(coordinate));
     }
 
 }

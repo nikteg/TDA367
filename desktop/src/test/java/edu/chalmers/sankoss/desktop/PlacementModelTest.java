@@ -1,9 +1,11 @@
 package edu.chalmers.sankoss.desktop;
 
+import static org.junit.Assert.*;
 import edu.chalmers.sankoss.core.core.Coordinate;
 import edu.chalmers.sankoss.core.core.CorePlayer;
 import edu.chalmers.sankoss.core.core.Ship;
 import edu.chalmers.sankoss.desktop.mvc.placement.PlacementModel;
+
 import org.junit.Test;
 
 /**
@@ -20,7 +22,7 @@ public class PlacementModelTest {
 
         testModel.setOpponentReady(true);
 
-        assert(testModel.isOpponentReady());
+        assertTrue(testModel.isOpponentReady());
     }
 
     @Test
@@ -30,7 +32,7 @@ public class PlacementModelTest {
 
         testModel.setOpponentReady(true);
 
-        assert(testModel.isOpponentReady());
+        assertTrue(testModel.isOpponentReady());
     }
 
     @Test
@@ -41,7 +43,7 @@ public class PlacementModelTest {
         Ship myShip = new Ship(new Coordinate(2,2), new Coordinate(2,5));
         testModel.addShip(myShip);
 
-        assert(testModel.getFleet().getShip(0).equals(myShip));
+        assertTrue(testModel.getFleet().getShip(0).equals(myShip));
     }
 
     @Test
@@ -54,7 +56,7 @@ public class PlacementModelTest {
 
         testModel.setNationality(player.getNationality());
 
-        assert (testModel.getNationality().getPath().equals("textures/USA.png"));
+        assertTrue (testModel.getNationality().getPath().equals("textures/USA.png"));
 
     }
 
@@ -67,6 +69,6 @@ public class PlacementModelTest {
 
         testModel.setNationality(player.getNationality());
 
-        assert (testModel.getNationality().equals(CorePlayer.Nationality.USA));
+        assertTrue (testModel.getNationality().equals(CorePlayer.Nationality.USA));
     }
 }
