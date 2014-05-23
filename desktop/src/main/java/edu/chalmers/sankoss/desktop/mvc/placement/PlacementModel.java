@@ -6,6 +6,8 @@ import edu.chalmers.sankoss.core.core.Ship;
 import edu.chalmers.sankoss.desktop.client.SankossClient;
 import edu.chalmers.sankoss.desktop.mvc.AbstractModel;
 
+import java.awt.geom.Line2D;
+
 /**
  * @author Daniel Eineving
  */
@@ -26,7 +28,33 @@ public class PlacementModel extends AbstractModel {
 
 	public boolean addShip(Ship ship) {
         fireChange("ship_added", ship);
+        if (!validate(ship))
+            return false;
         return fleet.add(ship);
+    }
+
+    private boolean validate(Ship ship) {
+
+        if ((ship.getFront().getX() < 1 || ship.getFront().getX() > 10)
+                || (ship.getFront().getY() < 1 || ship.getFront().getY() > 10))
+            return false;
+
+
+        if ((ship.getRear().getX() < 1 || ship.getRear().getX() > 10)
+                || (ship.getRear().getY() < 1 || ship.getRear().getY() > 10))
+            return false;
+
+        Line2D shipLine = new Line2D.Double(ship.getFront().getX(), ship.getFront().getY(),
+                ship.getRear().getX(), ship.getRear().getY());
+
+        for (Ship otherShip : getFleet().getShips()) {
+            Line2D otherShipLine = new Line2D.Double(otherShip.getFront().getX(), otherShip.getFront().getY(),
+                    otherShip.getRear().getX(), otherShip.getRear().getY());
+            if(otherShipLine.intersectsLine(shipLine))
+                return false;
+
+        }
+        return true;
     }
 
     public void removeShip(Ship ship) {
