@@ -1,4 +1,4 @@
-package edu.chalmers.sankoss.desktop.misc;
+package edu.chalmers.sankoss.desktop.mvc.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -8,11 +8,10 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-
 import com.badlogic.gdx.utils.Scaling;
+
 import edu.chalmers.sankoss.core.core.Coordinate;
 import edu.chalmers.sankoss.core.core.Ship;
-import edu.chalmers.sankoss.desktop.mvc.game.Shot;
 
 import java.util.HashMap;
 import java.util.Map;

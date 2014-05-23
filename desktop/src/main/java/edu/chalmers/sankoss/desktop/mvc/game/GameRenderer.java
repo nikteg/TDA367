@@ -11,7 +11,6 @@ import edu.chalmers.sankoss.core.core.Coordinate;
 import edu.chalmers.sankoss.core.core.CorePlayer;
 import edu.chalmers.sankoss.desktop.SankossGame;
 import edu.chalmers.sankoss.desktop.client.SankossClient;
-import edu.chalmers.sankoss.desktop.misc.GridImage;
 import edu.chalmers.sankoss.desktop.mvc.AbstractRenderer;
 
 import java.beans.PropertyChangeEvent;
