@@ -1,5 +1,7 @@
 package edu.chalmers.sankoss.desktop.mvc;
 
+import edu.chalmers.sankoss.desktop.client.SankossClient;
+
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
@@ -14,6 +16,12 @@ public abstract class AbstractModel {
     private PropertyChangeSupport pcs = new PropertyChangeSupport(this);
     public AbstractModel() {
 
+    }
+
+    public void reset(){
+        // Tells renderers to reset
+        SankossClient.getInstance().reset();
+        fireChange("reset");
     }
 
     public void dispose() {

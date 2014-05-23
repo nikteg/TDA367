@@ -102,4 +102,11 @@ public class PlacementModel extends AbstractModel {
     public boolean getUserReady() {
         return userReady;
     }
+
+    @Override
+    public void reset() {
+        super.reset();
+        setFleet(new Fleet());
+        userReady = false;
+    }
 }

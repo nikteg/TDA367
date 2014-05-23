@@ -10,7 +10,6 @@ import edu.chalmers.sankoss.desktop.mvc.AbstractRenderer;
 import edu.chalmers.sankoss.desktop.utils.Common;
 
 import java.beans.PropertyChangeEvent;
-import java.util.Observable;
 
 /**
  * AbstractRenderer for WaitingScreen.
@@ -62,6 +61,15 @@ public class WaitingRenderer extends AbstractRenderer<WaitingModel> {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+
+        if (evt.getPropertyName().equals("reset")) {
+            lblWaiting.setText("Loading...");
+            btnStart.setText("Start");
+            btnStart.setDisabled(true);
+
+
+        }
+
         if (evt.getPropertyName().equals("hosting")) {
             boolean msg = (boolean) evt.getNewValue();
             if (msg) {

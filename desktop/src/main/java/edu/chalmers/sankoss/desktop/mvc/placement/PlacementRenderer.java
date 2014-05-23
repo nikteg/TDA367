@@ -11,9 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import edu.chalmers.sankoss.core.core.Coordinate;
 import edu.chalmers.sankoss.core.core.CorePlayer;
-import edu.chalmers.sankoss.core.core.Fleet;
 import edu.chalmers.sankoss.core.core.Ship;
 import edu.chalmers.sankoss.desktop.client.SankossClient;
 import edu.chalmers.sankoss.desktop.mvc.AbstractRenderer;
@@ -148,6 +146,12 @@ public class PlacementRenderer extends AbstractRenderer<PlacementModel> {
             CorePlayer.Nationality msg = (CorePlayer.Nationality)evt.getNewValue();
             flag.setDrawable(new TextureRegionDrawable(new TextureRegion(
                     new Texture((msg.getPath())))));
+        }
+
+        if (evt.getPropertyName().equals("reset")) {
+            btnReady.setText("Ready");
+            btnReady.setDisabled(false);
+
         }
 
         if (evt.getPropertyName().equals("OpponentReady")) {
