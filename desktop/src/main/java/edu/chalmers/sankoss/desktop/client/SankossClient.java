@@ -42,6 +42,13 @@ public class SankossClient {
     	return instance;
     }
 
+    public void reset() {
+        opponents.clear();
+        ready = false;
+        hosting = false;
+
+    }
+
     public void setReady(boolean ready) {
        this.ready = ready;
     }
@@ -227,6 +234,24 @@ public class SankossClient {
 
                     for (ISankossClientListener listener : listeners) {
                         listener.errorMsg(msg.getErrorObject(), msg.getErrorMessage());
+                    }
+
+                    return;
+                }
+
+                if(object instanceof Winner) {
+
+                    for(ISankossClientListener listener : listeners) {
+                        listener.winner();
+                    }
+
+                    return;
+                }
+
+                if(object instanceof Looser) {
+
+                    for(ISankossClientListener listener : listeners) {
+                        listener.looser();
                     }
 
                     return;

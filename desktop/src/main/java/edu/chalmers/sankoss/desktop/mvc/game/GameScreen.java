@@ -1,5 +1,6 @@
 package edu.chalmers.sankoss.desktop.mvc.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -47,7 +48,13 @@ public class GameScreen extends AbstractScreen<GameModel, GameRenderer> {
              */
             @Override
             public void winner() {
-                getModel().setState(GameModel.State.WON);
+
+                Gdx.app.postRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        changeScreen("gameover");
+                    }
+                });
             }
 
             /**
@@ -55,7 +62,12 @@ public class GameScreen extends AbstractScreen<GameModel, GameRenderer> {
              */
             @Override
             public void looser() {
-                getModel().setState(GameModel.State.LOST);
+                Gdx.app.postRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        changeScreen("gameover");
+                    }
+                });
             }
 
             @Override

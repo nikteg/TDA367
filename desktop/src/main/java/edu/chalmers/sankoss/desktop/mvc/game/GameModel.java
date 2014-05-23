@@ -27,11 +27,22 @@ public class GameModel extends AbstractModel {
 
     }
 
+    @Override
+    public void reset() {
+        super.reset();
+        shootingAllowed = false;
+        state = State.PLAYING;
+        ships = new ArrayList<Ship>();
+        shots = new ArrayList<Shot>();
+        opponentShots = new ArrayList<Shot>();
+        flags = new ArrayList<Coordinate>();
+    }
+
     public void addOpponentShot(Shot shot) {
         opponentShots.add(shot);
 
         //setChanged();
-        //notifyObservers("opponent_shot");
+        fireChange("opponent_shot",shot);
     }
 
     public List<Shot> getOpponentShots() {

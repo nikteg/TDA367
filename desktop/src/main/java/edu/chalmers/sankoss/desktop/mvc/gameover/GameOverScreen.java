@@ -18,6 +18,22 @@ public class GameOverScreen extends AbstractScreen<GameOverModel, GameOverRender
 
         SankossClient.getInstance().addListener(new SankossClientListener(){
 
+            /**
+             * Method to run if player has won.
+             */
+            @Override
+            public void winner() {
+                getModel().setState(GameOverModel.State.WON);
+            }
+
+            /**
+             * Method to run if player has lost.
+             */
+            @Override
+            public void looser() {
+                getModel().setState(GameOverModel.State.LOST);
+            }
+
         });
 
         getRenderer().getBackBtn().addListener(new ChangeListener() {
@@ -34,6 +50,12 @@ public class GameOverScreen extends AbstractScreen<GameOverModel, GameOverRender
                 changeScreen("mainmenu");
             }
         });
+    }
+
+    @Override
+    public void show() {
+        super.show();
+        reset();
     }
 
     @Override

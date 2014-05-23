@@ -112,5 +112,11 @@ public class SankossGame extends Game implements PropertyChangeListener {
         if (evt.getPropertyName().equals("exitgame")) {
             exitApplication();
         }
+
+        if (evt.getPropertyName().equals("reset")) {
+            for(AbstractScreen screen : screens.values()) {
+                screen.getModel().reset();
+            }
+        }
 	}
 }

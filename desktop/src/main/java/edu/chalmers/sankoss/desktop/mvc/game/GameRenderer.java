@@ -74,6 +74,15 @@ public class GameRenderer extends AbstractRenderer<GameModel> {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+
+        if (evt.getPropertyName().equals("reset")) {
+            grid1 = new GridImage();
+            grid2 = new GridImage();
+
+            grid1.addCrosshair(crosshair);
+            grid1.setTouchable(Touchable.enabled);
+        }
+
         if (evt.getPropertyName().equals("opponent")) {
             CorePlayer msg = (CorePlayer)evt.getNewValue();
             opponentPanel.setName(msg.getName());
@@ -98,6 +107,11 @@ public class GameRenderer extends AbstractRenderer<GameModel> {
             grid1.addShot(msg);
         }
 
+        if (evt.getPropertyName().equals("opponent_shot")) {
+            Shot msg = (Shot)evt.getNewValue();
+            grid2.addShot(msg);
+        }
+
         if(evt.getPropertyName().equals("flag")) {
             Coordinate msg = (Coordinate)evt.getNewValue();
             grid1.toggleFlag(msg);
@@ -106,14 +120,14 @@ public class GameRenderer extends AbstractRenderer<GameModel> {
         // When game is over
         if(evt.getPropertyName().equals("state")) {
             GameModel.State msg = (GameModel.State)evt.getNewValue();
+
+            // If player won
             if (msg == GameModel.State.WON) {
-                // TODO WINNING
 
                 grid1.setTouchable(Touchable.disabled);
             }
 
             if (msg == GameModel.State.LOST) {
-                // TODO LOST
 
                 grid1.setTouchable(Touchable.disabled);
             }

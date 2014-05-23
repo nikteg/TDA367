@@ -61,7 +61,16 @@ public class GameOverRenderer extends AbstractRenderer<GameOverModel> {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
 
-        // If you won
+        if(evt.getPropertyName().equals("state")) {
+            // setStatusLabelText("You Won!");
+            if (getModel().getState().equals(GameOverModel.State.WON)) {
+                setStatusLabelText("You Won!");
+            } else {
+                setStatusLabelText("You Lost!");
+            }
+        }
+
+        /*// If you won
         if(evt.getPropertyName().equals("won")) {
             setStatusLabelText("You Won!");
         }
@@ -69,6 +78,6 @@ public class GameOverRenderer extends AbstractRenderer<GameOverModel> {
         // If you lost
         if(evt.getPropertyName().equals("lost")) {
             setStatusLabelText("You Lost!");
-        }
+        }*/
     }
 }

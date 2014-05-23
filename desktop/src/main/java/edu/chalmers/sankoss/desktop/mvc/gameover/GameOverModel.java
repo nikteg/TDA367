@@ -9,6 +9,21 @@ import edu.chalmers.sankoss.desktop.mvc.AbstractModel;
  * @author Mikael Malmqvist
  */
 public class GameOverModel extends AbstractModel {
+    private State state = State.WON;
+
+    public enum State {
+        WON, LOST;
+    }
+
+    public State getState() {
+        return state;
+    }
+
+    public void setState(State state) {
+        this.state = state;
+        fireChange("state", state);
+    }
+
     public GameOverModel() {
         super();
     }

@@ -78,6 +78,13 @@ public abstract class AbstractScreen<M extends AbstractModel, R extends Abstract
         this.renderer = renderer;
     }
 
+    /**
+     * Method for reseting game models.
+     */
+    public void reset() {
+        pcs.firePropertyChange("reset", null, null);
+    }
+
     public void changeScreen(String screen) {
         pcs.firePropertyChange("changescreen", null, screen);
     }
