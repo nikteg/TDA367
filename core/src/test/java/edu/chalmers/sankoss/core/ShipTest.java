@@ -141,14 +141,6 @@ public class ShipTest {
 	}
 
 	/**
-	 * Test method for {@link edu.chalmers.sankoss.core.core.Ship#toString()}.
-	 */
-	@Test
-	public void testToString() {
-		fail("Not yet implemented");
-	}
-
-	/**
 	 * Test method for
 	 * {@link edu.chalmers.sankoss.core.core.Ship#isShip(edu.chalmers.sankoss.core.core.Coordinate)}
 	 * .
