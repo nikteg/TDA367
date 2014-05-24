@@ -77,6 +77,9 @@ public class PlacementRenderer extends AbstractRenderer<PlacementModel> {
                     getModel().setUserReady(true);
                     SankossClient.getInstance().setReady(true);
 
+                    //Set your fleet on client
+                    SankossClient.getInstance().getPlayer().setFleet(getModel().getFleet());
+
                     // Updates server and tells opponent you are ready
                     SankossClient.getInstance().playerReady(getModel().getFleet());
                 }

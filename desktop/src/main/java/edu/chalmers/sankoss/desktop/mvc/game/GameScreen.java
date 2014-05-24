@@ -72,7 +72,8 @@ public class GameScreen extends AbstractScreen<GameModel, GameRenderer> {
 
             @Override
             public void destroyedShip(CorePlayer player, Ship ship) {
-                //getRenderer().shipDestroyed();
+                if (!player.getID().equals(SankossClient.getInstance().getPlayer().getID()))
+                    getRenderer().getGrid1().addShip(ship);
             }
 
             /**
@@ -96,7 +97,6 @@ public class GameScreen extends AbstractScreen<GameModel, GameRenderer> {
 
                 // Determines if you were shot at
                 if (target.equals(SankossClient.getInstance().getPlayer())) {
-                    System.out.println("DU BLEV SKJUTEN");
                     getModel().addOpponentShot(new Shot(coordinate, hit ? Shot.State.HIT : Shot.State.MISS));
                 } else {
                     getModel().addShot(new Shot(coordinate, hit ? Shot.State.HIT : Shot.State.MISS));
@@ -166,6 +166,7 @@ public class GameScreen extends AbstractScreen<GameModel, GameRenderer> {
 
         for (Ship ship : SankossClient.getInstance().getPlayer().getFleet().getShips()) {
             getModel().addShip(ship);
+            getRenderer().getGrid2().addShip(ship);
         }
     }
 

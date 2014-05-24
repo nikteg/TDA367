@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Scaling;
 
 import edu.chalmers.sankoss.core.core.Coordinate;
 import edu.chalmers.sankoss.core.core.Ship;
+import edu.chalmers.sankoss.desktop.misc.ShipImage;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,7 +29,6 @@ public class GridImage extends Table {
     private Texture flagTexture = new Texture(Gdx.files.internal("textures/flag.png"));
     private Texture hitTexture = new Texture(Gdx.files.internal("textures/explosion.png"));
     private Texture missTexture = new Texture(Gdx.files.internal("textures/miss.png"));
-    private Texture shipTexture = new Texture(Gdx.files.internal("textures/ship_small.png"));
 
     private Image crosshair;
 
@@ -100,14 +100,12 @@ public class GridImage extends Table {
     }
 
     public void addShip(Ship ship) {
-        Image shipImage = new Image(shipTexture);
+        Image shipImage = new ShipImage(ship);
         shipImage.setX((ship.getRear().getX() - 1) * 32);
         shipImage.setY(this.getHeight() - ((ship.getRear().getY()) * 32));
-        //shipImage.setScaling(Scaling.stretch);
-        //shipImage.setScaleX(ship.getSize());
-        //shipImage.setSize(32f * ship.getSize(), 32f);
+        shipImage.rotateBy(ship.getRotation().asFloat());
         addActor(shipImage);
-
+        shipImage.toBack();
         if (crosshair != null)
             crosshair.toFront();
     }

@@ -356,9 +356,6 @@ public class SankossClient {
     public void fire(Coordinate coordinate) {
         if (client == null || getOpponents() == null) return;
 
-        System.out.println("Opponent: " + getOpponents());
-        System.out.println("Coordinates: " + coordinate.getX() + ", " + coordinate.getY());
-
         client.sendTCP(new Fire(gameID, getOpponents().get(0), coordinate));
     }
 

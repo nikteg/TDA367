@@ -19,7 +19,6 @@ import java.util.Map;
 public class PlacementGrid extends Table {
 
     private Map<Ship, Image> flags = new HashMap<Ship, Image>();
-    private Texture shipTexture = new Texture(Gdx.files.internal("textures/ship_small.png"));
     private ShipImage follower;
 
     public PlacementGrid() {
