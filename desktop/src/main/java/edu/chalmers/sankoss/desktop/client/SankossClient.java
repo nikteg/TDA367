@@ -27,11 +27,14 @@ public class SankossClient {
     private List<CorePlayer> opponents = new ArrayList<CorePlayer>();
     private Long gameID;
     private Room room;
-    private boolean ready = false;
-    private boolean hosting = false;
-    private boolean gameOver = false;
 
     private List<ISankossClientListener> listeners = new ArrayList<ISankossClientListener>();
+
+    public void reset() {
+        opponents.clear();
+        room = null;
+        gameID = null;
+    }
 
     private SankossClient() {
         initialize();
@@ -41,28 +44,6 @@ public class SankossClient {
     		instance = new SankossClient();
     	}
     	return instance;
-    }
-
-    public void reset() {
-        setReady(false);
-        hosting = false;
-
-    }
-
-    public void setGameOver(boolean gameOver) {
-        this.gameOver = gameOver;
-    }
-
-    public boolean getGameOver() {
-        return gameOver;
-    }
-
-    public void setReady(boolean ready) {
-       this.ready = ready;
-    }
-
-    public boolean getReady() {
-        return ready;
     }
 
     public void initialize() {
@@ -105,7 +86,6 @@ public class SankossClient {
 
 
                     room = msg.getRoom();
-                    hosting = true;
 
                     for (ISankossClientListener listener : listeners) {
                         listener.createdRoom(room);
@@ -129,8 +109,6 @@ public class SankossClient {
                 if (object instanceof StartedGame) {
                     StartedGame msg = (StartedGame) object;
                     gameID = msg.getGameID();
-
-                    hosting = false;
 
                     for (ISankossClientListener listener : listeners) {
                         listener.startedGame(gameID);
@@ -351,6 +329,8 @@ public class SankossClient {
     public void playerChangeNat(CorePlayer.Nationality nationality) {
         if (client == null) return;
 
+        player.setNationality(nationality);
+
         client.sendTCP(new PlayerChangeNat(nationality));
     }
 
@@ -372,10 +352,10 @@ public class SankossClient {
         client.sendTCP(new JoinRoom(roomID));
     }
 
-    public void playerReady(Fleet fleet) {
+    public void playerReady() {
         if (client == null) return;
 
-        client.sendTCP(new PlayerReady(gameID, fleet.getShips()));
+        client.sendTCP(new PlayerReady(gameID, player.getFleet().getShips()));
     }
 
     public void startGame() {
