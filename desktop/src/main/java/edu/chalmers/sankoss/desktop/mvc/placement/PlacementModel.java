@@ -85,8 +85,10 @@ public class PlacementModel extends AbstractModel {
 	public void setUserReady(boolean ready){
 		this.userReady = ready;
 
-        updateNationality();
-        fireChange("playerReady", ready);
+        if(ready) {
+            updateNationality();
+            fireChange("playerReady", ready);
+        }
 	}
 
     /**
@@ -106,7 +108,8 @@ public class PlacementModel extends AbstractModel {
     @Override
     public void reset() {
         super.reset();
-        setFleet(new Fleet());
-        userReady = false;
+        SankossClient.getInstance().setReady(false);
+        setUserReady(false);
+        opponentReady = false;
     }
 }

@@ -29,6 +29,7 @@ public class SankossClient {
     private Room room;
     private boolean ready = false;
     private boolean hosting = false;
+    private boolean gameOver = false;
 
     private List<ISankossClientListener> listeners = new ArrayList<ISankossClientListener>();
 
@@ -43,10 +44,17 @@ public class SankossClient {
     }
 
     public void reset() {
-        opponents.clear();
         setReady(false);
         hosting = false;
 
+    }
+
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
+    }
+
+    public boolean getGameOver() {
+        return gameOver;
     }
 
     public void setReady(boolean ready) {
@@ -141,7 +149,6 @@ public class SankossClient {
 
                 if (object instanceof PlayerIsReady) {
                     PlayerIsReady msg = (PlayerIsReady) object;
-
                     opponents.add(msg.getPlayer());
 
                     for (ISankossClientListener listener : listeners) {

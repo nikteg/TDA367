@@ -48,6 +48,7 @@ public class GameScreen extends AbstractScreen<GameModel, GameRenderer> {
              */
             @Override
             public void winner() {
+                SankossClient.getInstance().setGameOver(true);
 
                 Gdx.app.postRunnable(new Runnable() {
                     @Override
@@ -62,6 +63,8 @@ public class GameScreen extends AbstractScreen<GameModel, GameRenderer> {
              */
             @Override
             public void looser() {
+                SankossClient.getInstance().setGameOver(true);
+
                 Gdx.app.postRunnable(new Runnable() {
                     @Override
                     public void run() {
@@ -159,7 +162,12 @@ public class GameScreen extends AbstractScreen<GameModel, GameRenderer> {
     public void show() {
         super.show();
 
-        getModel().setOpponent(SankossClient.getInstance().getOpponents().get(0));
+        try {
+            getModel().setOpponent(SankossClient.getInstance().getOpponents().get(0));
+        } catch(IndexOutOfBoundsException e) {
+            e.getStackTrace();
+        }
+
         getRenderer().getOpponentPanel().setLblName(SankossClient.getInstance().getOpponents().get(0).getName());
         getRenderer().getPlayerPanel().setLblName(SankossClient.getInstance().getPlayer().getName());
         getRenderer().getPlayerPanel().setNationality(SankossClient.getInstance().getPlayer().getNationality());

@@ -45,9 +45,11 @@ public class GameOverScreen extends AbstractScreen<GameOverModel, GameOverRender
              */
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
-                SankossClient.getInstance().leaveGame();
-
                 changeScreen("mainmenu");
+
+                // Last of all clears opponent and sets game over as false
+                SankossClient.getInstance().getOpponents().clear();
+                SankossClient.getInstance().setGameOver(false);
             }
         });
     }
@@ -56,6 +58,8 @@ public class GameOverScreen extends AbstractScreen<GameOverModel, GameOverRender
     public void show() {
         super.show();
         reset();
+        SankossClient.getInstance().leaveGame();
+
     }
 
     @Override

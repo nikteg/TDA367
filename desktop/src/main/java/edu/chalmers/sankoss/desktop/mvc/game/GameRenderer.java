@@ -3,6 +3,7 @@ package edu.chalmers.sankoss.desktop.mvc.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -76,11 +77,23 @@ public class GameRenderer extends AbstractRenderer<GameModel> {
     public void propertyChange(PropertyChangeEvent evt) {
 
         if (evt.getPropertyName().equals("reset")) {
-            grid1 = new GridImage();
-            grid2 = new GridImage();
+            // Removes all ships before adding new ones
 
-            grid1.addCrosshair(crosshair);
-            grid1.setTouchable(Touchable.enabled);
+            for(Actor actor : getGrid1().getChildren()) {
+                getGrid1().removeActor(actor);
+            }
+
+            for(Actor actor : getGrid2().getChildren()) {
+                getGrid2().removeActor(actor);
+            }
+
+            getGrid1().clear();
+            getGrid2().clear();
+            getGrid1().clearChildren();
+            getGrid2().clearChildren();
+
+            getGrid1().addCrosshair(crosshair);
+            getGrid1().setTouchable(Touchable.enabled);
         }
 
         if (evt.getPropertyName().equals("opponent")) {

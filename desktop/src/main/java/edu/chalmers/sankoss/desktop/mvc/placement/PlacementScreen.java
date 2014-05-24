@@ -45,7 +45,9 @@ public class PlacementScreen extends AbstractScreen<PlacementModel, PlacementRen
                 Gdx.app.postRunnable(new Runnable() {
                     @Override
                     public void run() {
-                        changeScreen("lobby");
+                        if(!SankossClient.getInstance().getGameOver()) {
+                            changeScreen("lobby");
+                        }
                     }
                 });
             }
@@ -68,8 +70,9 @@ public class PlacementScreen extends AbstractScreen<PlacementModel, PlacementRen
 
                     @Override
                     public void run() {
-                        // TODO: Check if ready to enter
-                        changeScreen("game");
+                        if(SankossClient.getInstance().getReady()) {
+                            changeScreen("game");
+                        }
                     }
                 });
             }

@@ -14,9 +14,7 @@ import org.slf4j.LoggerFactory;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 
 /**
@@ -449,6 +447,7 @@ public class SankossServer {
                     LeaveGame msg = (LeaveGame) object;
                     Game game = null;
 
+
                     try {
                         game = GameFactory.getGame(msg.getGameID());
                     } catch (GameNotFoundException e) {
@@ -458,11 +457,30 @@ public class SankossServer {
                     if (game != null) {
                         log.info("Player #" + player.getID() + " has left game #" + game.getID());
 
-                        game.removePlayerWithID(player.getID());
+                        Collection<Game> games = GameFactory.getGames().values();
 
-                        for (Player gamePlayer : game.getPlayers()) {
-                            getPlayerConnectionFromID(gamePlayer.getID()).sendTCP(new LeftGame(gamePlayer.getCorePlayer()));
+                        game.removePlayerWithID(player.getID());
+                        player.setReady(false);
+
+                        for(Game gameToRemove : games) {
+                            if (gameToRemove.getPlayers().size() < 1) {
+
+                                try {
+                                    GameFactory.removeGame(gameToRemove.getID());
+                                } catch (GameNotFoundException e) {
+                                    e.getStackTrace();
+                                }
+                            } else {
+                                for (Player gamePlayer : game.getPlayers()) {
+                                    getPlayerConnectionFromID(gamePlayer.getID()).sendTCP(new LeftGame(gamePlayer.getCorePlayer()));
+                                }
+                            }
                         }
+
+
+
+
+
 
                     }
 

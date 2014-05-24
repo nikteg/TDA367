@@ -1,15 +1,12 @@
 package edu.chalmers.sankoss.desktop.mvc.waiting;
 
 import com.badlogic.gdx.Gdx;
-
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import edu.chalmers.sankoss.core.core.CorePlayer;
-import edu.chalmers.sankoss.desktop.SankossGame;
 import edu.chalmers.sankoss.desktop.client.SankossClient;
 import edu.chalmers.sankoss.desktop.client.SankossClientListener;
 import edu.chalmers.sankoss.desktop.mvc.AbstractScreen;
-
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 
 /**
  * Screen to be placed in when hosting a game and
@@ -79,7 +76,6 @@ public class WaitingScreen extends AbstractScreen<WaitingModel, WaitingRenderer>
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 SankossClient.getInstance().startGame();
-                //changeScreen("game");
             }
         });
     }
