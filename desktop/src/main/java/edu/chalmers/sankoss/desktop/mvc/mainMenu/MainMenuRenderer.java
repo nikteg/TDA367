@@ -44,8 +44,8 @@ public class MainMenuRenderer extends AbstractRenderer<MainMenuModel> {
         getTable().row();
         getTable().add(btnMultiPlayer).fillX().pad(8f);
         getTable().row();
-        getTable().add(btnOptions).fillX().pad(8f);
-        getTable().row();
+        //getTable().add(btnOptions).fillX().pad(8f);
+        //getTable().row();
         getTable().add(btnCredits).fillX().pad(8f);
         getTable().row();
         getTable().add(btnExit).fillX().pad(8f);
