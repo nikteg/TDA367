@@ -11,7 +11,7 @@ import java.io.IOException;
  * Created by nikteg on 14/04/14.
  */
 public class Settings {
-    public static String HOSTNAME = "localhost";
+    public static String HOSTNAME = "sodapop.se";
     public static int PORT = Network.PORT; // TODO Should not be in network?
     private static Ini iniInstance = new Ini();
 
