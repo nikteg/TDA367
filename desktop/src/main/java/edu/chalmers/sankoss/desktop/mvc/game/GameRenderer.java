@@ -3,7 +3,6 @@ package edu.chalmers.sankoss.desktop.mvc.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -79,16 +78,8 @@ public class GameRenderer extends AbstractRenderer<GameModel> {
         if (evt.getPropertyName().equals("reset")) {
             // Removes all ships before adding new ones
 
-            for(Actor actor : getGrid1().getChildren()) {
-                getGrid1().removeActor(actor);
-            }
-
-            for(Actor actor : getGrid2().getChildren()) {
-                getGrid2().removeActor(actor);
-            }
-
-            getGrid1().clear();
-            getGrid2().clear();
+            getGrid1().clearActions();
+            getGrid2().clearActions();
             getGrid1().clearChildren();
             getGrid2().clearChildren();
 
