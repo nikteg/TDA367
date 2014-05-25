@@ -21,6 +21,7 @@ public class Ship {
     /**
 	 * Enum that describes in what way a ship is directed.
 	 * @author Daniel Eineving
+     * @modified Fredrik Thune
 	 * @date 2014-04-07
 	 *
 	 */
@@ -39,9 +40,6 @@ public class Ship {
             return rotation;
         }
 
-        public void setRotation(float rotation) {
-            this.rotation = rotation;
-        }
     }
 
 	/**

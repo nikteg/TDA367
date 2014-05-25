@@ -4,6 +4,7 @@
 package edu.chalmers.sankoss.core;
 
 import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import java.util.LinkedList;
 
@@ -60,8 +61,8 @@ public class ShipTest {
 			fail("Should not throw exception");
 		}
 
-		assertTrue(ship.getFront().equals(new Coordinate(2, 2)));
-		assertTrue(ship.getRear().equals(new Coordinate(2, 4)));
+		assertTrue(ship.getRear().equals(new Coordinate(2, 2)));
+		assertTrue(ship.getFront().equals(new Coordinate(2, 4)));
 
 		try {
 			Ship illegalShip = new Ship(new Coordinate(1, 1), new Coordinate(3,
@@ -108,7 +109,7 @@ public class ShipTest {
 
 		try {
 			Ship ship = new Ship(new Coordinate(2, 2), new Coordinate(2, 4));
-			assertTrue(ship.getFront().equals(new Coordinate(2, 2)));
+			assertTrue(ship.getRear().equals(new Coordinate(2, 2)));
 		} catch (IllegalShipCoordinatesException e) {
 			fail("Should not throw exception");
 		}
@@ -121,7 +122,7 @@ public class ShipTest {
 	public void testGetEnd() {
 		try {
 			Ship ship = new Ship(new Coordinate(2, 2), new Coordinate(2, 4));
-			assertTrue(ship.getRear().equals(new Coordinate(2, 4)));
+			assertTrue(ship.getFront().equals(new Coordinate(2, 4)));
 		} catch (IllegalShipCoordinatesException e) {
 			fail("Should not throw exception");
 		}
@@ -148,11 +149,17 @@ public class ShipTest {
 	@Test
 	public void testIsShip() {
 		try {
-			Ship ship = new Ship(new Coordinate(2, 2), new Coordinate(2, 4));
+            Ship shipWest = new Ship(new Coordinate(4, 2), new Coordinate(2, 2));
+            Ship shipEast = new Ship(new Coordinate(2, 2), new Coordinate(4, 2));
+            Ship shipNorth = new Ship(new Coordinate(2, 4),
+                    new Coordinate(2, 2));
+            Ship shipSouth = new Ship(new Coordinate(2, 2),
+                    new Coordinate(2, 4));
 
-			for (int i = 0; i < 3; i++) {
-				assertTrue(ship.isShip(new Coordinate(2, i + 2)));
-			}
+            assertTrue(shipWest.isShip(new Coordinate(2,2)));
+            assertTrue(shipEast.isShip(new Coordinate(2,2)));
+            assertTrue(shipNorth.isShip(new Coordinate(2,2)));
+            assertTrue(shipSouth.isShip(new Coordinate(2,2)));
 
 		} catch (IllegalShipCoordinatesException e) {
 			fail("Should not throw exception");
@@ -165,17 +172,32 @@ public class ShipTest {
 	@Test
 	public void testGetRotation() {
 		try {
-			Ship shipWest = new Ship(new Coordinate(2, 2), new Coordinate(4, 2));
-			Ship shipEast = new Ship(new Coordinate(4, 2), new Coordinate(2, 2));
-			Ship shipNorth = new Ship(new Coordinate(2, 2),
-					new Coordinate(2, 4));
-			Ship shipSouth = new Ship(new Coordinate(2, 4),
+			Ship shipWest = new Ship(new Coordinate(4, 2), new Coordinate(2, 2));
+			Ship shipEast = new Ship(new Coordinate(2, 2), new Coordinate(4, 2));
+			Ship shipNorth = new Ship(new Coordinate(2, 4),
 					new Coordinate(2, 2));
+			Ship shipSouth = new Ship(new Coordinate(2, 2),
+					new Coordinate(2, 4));
 
 			assertTrue(shipWest.getRotation() == Rotation.WEST);
 			assertTrue(shipEast.getRotation() == Rotation.EAST);
 			assertTrue(shipNorth.getRotation() == Rotation.NORTH);
 			assertTrue(shipSouth.getRotation() == Rotation.SOUTH);
+
+			assertTrue(shipSouth.getRotation().asFloat() == Rotation.SOUTH.asFloat());
+            assertTrue(shipEast.getRotation().asFloat() == Rotation.EAST.asFloat());
+            assertTrue(shipNorth.getRotation().asFloat() == Rotation.NORTH.asFloat());
+            assertTrue(shipSouth.getRotation().asFloat() == Rotation.SOUTH.asFloat());
+
+            shipNorth.rotateLeft();
+            assertTrue(shipNorth.getRotation() == Rotation.WEST);
+            shipNorth.rotateLeft();
+            assertTrue(shipNorth.getRotation() == Rotation.SOUTH);
+            shipNorth.rotateLeft();
+            assertTrue(shipNorth.getRotation() == Rotation.EAST);
+            shipNorth.rotateLeft();
+            assertTrue(shipNorth.getRotation() == Rotation.NORTH);
+
 		} catch (IllegalShipCoordinatesException e) {
 			fail("Should not throw exception");
 		}
@@ -234,7 +256,7 @@ public class ShipTest {
 			assertTrue(ship1.equals(ship1));
 
 			assertFalse(ship1.equals(ship3));
-
+			assertFalse(ship1.equals(null));
 			assertFalse(ship1.equals("Ship"));
 		} catch (IllegalShipCoordinatesException e) {
 			fail("Should not throw exception");
