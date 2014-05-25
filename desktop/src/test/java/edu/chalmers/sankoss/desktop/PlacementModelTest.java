@@ -27,4 +27,18 @@ public class PlacementModelTest {
         assertTrue(testModel.getFleet().getShip(0).equals(myShip));
     }
 
+    @Test
+    public void testValidate() throws Exception {
+        // TODO: Test stuff
+    }
+
+    @Test
+    public void testUpdateNationality() throws Exception {
+
+        // This could not be tested due to network coding.
+        // There is no instance of SankossClient..
+        assertTrue(true);
+    }
+
+
 }

@@ -31,9 +31,10 @@ public class GameModelTest {
         GameModel testModel = new GameModel();
 
         Coordinate coordinate = new Coordinate(5, 5);
-        testModel.addShot(new Shot(coordinate, Shot.State.HIT));
+        Shot testShot = new Shot(new Coordinate(5, 5), Shot.State.HIT);
+        testModel.addShot(testShot);
 
-        assertTrue(testModel.getShots().contains(coordinate));
+        assertTrue(testModel.getShots().contains(testShot));
     }
 
 
@@ -43,9 +44,36 @@ public class GameModelTest {
         GameModel testModel = new GameModel();
 
         Coordinate coordinate = new Coordinate(1,3);
-        testModel.toggleFlag(coordinate);
+        Coordinate coordinate2 = new Coordinate(5,7);
+        testModel.toggleFlag(coordinate); // Should add flag
+        testModel.toggleFlag(coordinate2); // Should add flag
+        testModel.toggleFlag(coordinate2); // Should remove flag
 
-        assertTrue (testModel.getFlags().contains(coordinate));
+
+        assertTrue (testModel.getFlags().contains(coordinate) && !testModel.getFlags().contains(coordinate2));
+    }
+
+    @Test
+    public void testReset() throws Exception {
+
+        GameModel testModel = new GameModel();
+
+
+        testModel.setShootingAllowed(false);
+        testModel.setState(GameModel.State.PLAYING);
+        testModel.getShots().clear();
+        testModel.getShips().clear();
+        testModel.getOpponentShots().clear();
+        testModel.getFlags().clear();
+        testModel.setOpponent(null);
+
+        assertTrue(testModel.getState().equals(GameModel.State.PLAYING)
+                && !testModel.isShootingAllowed()
+                && testModel.getShots().isEmpty()
+                && testModel.getFlags().isEmpty()
+                && testModel.getShips().isEmpty()
+                && testModel.getOpponentShots().isEmpty()
+                && testModel.getOpponent() == null);
     }
 
 

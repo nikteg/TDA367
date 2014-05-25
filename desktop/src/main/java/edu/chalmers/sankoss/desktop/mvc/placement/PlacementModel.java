@@ -93,8 +93,6 @@ public class PlacementModel extends AbstractModel {
     /**
      * Updates the client's player instance with correct nationality based on model.
      */
-	
-	//TODO Remove, this should not be sent until the player is ready.
     public void updateNationality() {
     	SankossClient.getInstance().getPlayer().setNationality(nationality);
     	SankossClient.getInstance().playerChangeNat(nationality);
@@ -106,7 +104,6 @@ public class PlacementModel extends AbstractModel {
 
     @Override
     public void reset() {
-        //super.reset();
         setUserReady(false);
         setFleet(new Fleet());
         opponentReady = false;

@@ -24,12 +24,10 @@ public class WaitingModel extends AbstractModel {
         this.hosting = hosting;
         fireChange("hosting", hosting);
 
-        //Gdx.app.debug("WaitingModel", "Hosting set to " + hosting);
     }
 
     public boolean addPlayer(CorePlayer player) {
         if (players.add(player)) {
-            //Gdx.app.debug("WaitingModel", "Added player #" + player.getID());
 
             fireChange("player_joined", player);
 
@@ -44,7 +42,6 @@ public class WaitingModel extends AbstractModel {
             if (removingPlayer.getID().equals(player.getID())) {
                 players.remove(removingPlayer);
 
-                //Gdx.app.debug("WaitingModel", "Removed player #" + player.getID());
 
                 fireChange("player_left", player);
                 return true;
@@ -66,7 +63,6 @@ public class WaitingModel extends AbstractModel {
 
     @Override
     public void reset() {
-        //super.reset();
         setHosting(false);
         resetPlayers();
     }

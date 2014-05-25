@@ -18,20 +18,9 @@ public class WaitingModelTest {
     public void testAddPlayer() throws Exception {
 
         WaitingModel testModel = new WaitingModel();
-
         CorePlayer player = new CorePlayer(1l);
-        CorePlayer player2 = new CorePlayer(2l);
 
         testModel.addPlayer(player);
-        testModel.addPlayer(player2);
-
-
-        for(CorePlayer corePlayer : testModel.getPlayers()) {
-            if(corePlayer.getID().equals(player2.getID())) {
-                testModel.removePlayer(corePlayer);
-                return;
-            }
-        }
 
         assertTrue (testModel.getPlayers().get(0).equals(player));
 
@@ -55,7 +44,18 @@ public class WaitingModelTest {
             }
         }
 
-        assertTrue (!testModel.getPlayers().get(0).equals(player));
+        assertTrue (!testModel.getPlayers().get(0).equals(player)
+                && !testModel.removePlayer(player));
+    }
+
+    @Test
+    public void testResetPlayers() throws Exception {
+
+        WaitingModel testModel = new WaitingModel();
+
+        testModel.resetPlayers();
+
+        assertTrue(testModel.getPlayers().isEmpty());
     }
 
 
