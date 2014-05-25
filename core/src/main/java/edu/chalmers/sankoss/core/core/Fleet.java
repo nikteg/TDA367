@@ -1,6 +1,5 @@
 package edu.chalmers.sankoss.core.core;
 
-import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,13 +10,13 @@ import java.util.List;
  */
 public class Fleet {
     private ArrayList<Ship> ships = new ArrayList<Ship>();
-    private int numberOfShips = 5;
+    private int maxNumberOfShips = 5;
 
     public Fleet() {
     }
 
     public Fleet(int size) {
-        this.numberOfShips = size;
+        this.maxNumberOfShips = size;
     }
 
     public int getLength() {
@@ -25,7 +24,7 @@ public class Fleet {
     }
 
     public boolean add(Ship ship) {
-        return ((ships.size() + 1 <= numberOfShips) && ships.add(ship));
+        return ((ships.size() + 1 <= maxNumberOfShips) && ships.add(ship));
     }
 
     public boolean remove(Ship ship) {
@@ -48,6 +47,7 @@ public class Fleet {
         return ships.get(index);
     }
 
-
-
+    public int getMaxNumberOfShips() {
+        return maxNumberOfShips;
+    }
 }
