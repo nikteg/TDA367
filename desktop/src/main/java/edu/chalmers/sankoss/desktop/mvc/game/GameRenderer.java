@@ -68,7 +68,13 @@ public class GameRenderer extends AbstractRenderer<GameModel> {
         Gdx.gl.glClearColor(0.663f, 0.663f, 0.663f, 1);
 
         getStage().act(delta);
-        getStage().draw();
+
+        try {
+            getStage().draw();
+        } catch (StringIndexOutOfBoundsException e) {
+            e.getStackTrace();
+        }
+
         Table.drawDebug(getStage());
     }
 

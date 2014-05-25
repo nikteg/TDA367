@@ -3,16 +3,12 @@ package edu.chalmers.sankoss.desktop.mvc.placement;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import edu.chalmers.sankoss.core.core.Ship;
 import edu.chalmers.sankoss.desktop.misc.ShipImage;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by nikteg on 2014-05-21.
@@ -66,9 +62,12 @@ public class PlacementGrid extends Table {
     }
 
     public void resetShips() {
-        for (Actor actor : getChildren()) {
+        /*for (Actor actor : getChildren()) {
             System.out.println("Removed: " + actor.getClass());
             removeActor(actor);
-        }
+        }*/
+
+        clearChildren();
+        clearFollower();
     }
 }

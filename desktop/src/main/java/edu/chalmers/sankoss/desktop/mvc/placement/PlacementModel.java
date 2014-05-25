@@ -111,5 +111,7 @@ public class PlacementModel extends AbstractModel {
         setFleet(new Fleet());
         opponentReady = false;
         setNationality(CorePlayer.Nationality.USA);
+
+        fireChange("reset");
     }
 }
