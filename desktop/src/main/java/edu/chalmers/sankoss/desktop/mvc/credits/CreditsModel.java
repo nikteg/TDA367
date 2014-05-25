@@ -22,4 +22,9 @@ public class CreditsModel extends AbstractModel {
         this.creditsTextPosition = creditsTextPosition;
         fireChange("text_position", creditsTextPosition);
     }
+
+    @Override
+    public void reset() {
+
+    }
 }

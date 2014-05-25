@@ -26,4 +26,11 @@ public class MainMenuModel extends AbstractModel {
 
         // Gdx.app.debug("MainMenuModel", "Connected: " + connected);
     }
+
+    @Override
+    public void reset() {
+        // Connection should not reset
+
+        fireChange("reset");
+    }
 }

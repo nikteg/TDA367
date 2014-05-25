@@ -34,6 +34,7 @@ public class SankossClient {
         opponents.clear();
         room = null;
         gameID = null;
+        player = new SankossClientPlayer(player.getID(), player.getName());
     }
 
     private SankossClient() {
@@ -167,6 +168,8 @@ public class SankossClient {
                 if (object instanceof PlayerChangedName) {
                     PlayerChangedName msg = (PlayerChangedName) object;
 
+                    player.setName(msg.getPlayer().getName());
+
                     for (ISankossClientListener listener : listeners) {
                         listener.playerChangedName(msg.getPlayer());
                     }
@@ -176,6 +179,8 @@ public class SankossClient {
 
                 if (object instanceof PlayerChangedNat) {
                     PlayerChangedNat msg = (PlayerChangedNat) object;
+
+                    player.setNationality(msg.getPlayer().getNationality());
 
                     for (ISankossClientListener listener : listeners) {
                         listener.playerChangedName(msg.getPlayer());
@@ -328,8 +333,6 @@ public class SankossClient {
 
     public void playerChangeNat(CorePlayer.Nationality nationality) {
         if (client == null) return;
-
-        player.setNationality(nationality);
 
         client.sendTCP(new PlayerChangeNat(nationality));
     }

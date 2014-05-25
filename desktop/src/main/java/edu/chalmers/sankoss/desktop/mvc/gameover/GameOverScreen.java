@@ -45,7 +45,7 @@ public class GameOverScreen extends AbstractScreen<GameOverModel, GameOverRender
              */
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
-                changeScreen("mainmenu");
+                changeScreen("lobby");
             }
         });
     }

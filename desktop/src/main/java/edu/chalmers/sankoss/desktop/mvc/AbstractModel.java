@@ -18,9 +18,7 @@ public abstract class AbstractModel {
 
     }
 
-    public void reset() {
-        fireChange("reset");
-    }
+    public abstract void reset();
 
     public void dispose() {
 

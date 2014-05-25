@@ -19,7 +19,7 @@ import java.beans.PropertyChangeEvent;
 public class GameOverRenderer extends AbstractRenderer<GameOverModel> {
 
     private Label statusLabel = new Label("You Won!", Common.getSkin());
-    private TextButton backBtn = new TextButton("Back to MainMenu", Common.getSkin());
+    private TextButton backBtn = new TextButton("Back to Lobby", Common.getSkin());
 
     public GameOverRenderer(GameOverModel model) {
         super(model);
@@ -27,7 +27,7 @@ public class GameOverRenderer extends AbstractRenderer<GameOverModel> {
         getTable().pad(8f);
         getTable().add(statusLabel).expand().colspan(2);
         getTable().row();
-        getTable().add(backBtn).expand().bottom().left();
+        getTable().add(backBtn.pad(8f)).expand().bottom().left().width(160f);
 
         getStage().addActor(getTable());
     }
