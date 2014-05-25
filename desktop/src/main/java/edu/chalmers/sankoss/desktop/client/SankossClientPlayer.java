@@ -16,6 +16,11 @@ public class SankossClientPlayer extends CorePlayer {
         super(playerID);
     }
 
+    public SankossClientPlayer(Long playerID, String name) {
+        super(playerID);
+        setName(name);
+    }
+
     public SankossClientPlayer(CorePlayer player) {
         super(player.getID(), player.getName());
     }

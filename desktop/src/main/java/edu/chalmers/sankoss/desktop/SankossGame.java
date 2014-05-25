@@ -117,6 +117,8 @@ public class SankossGame extends Game implements PropertyChangeListener {
             for(AbstractScreen screen : screens.values()) {
                 screen.getModel().reset();
             }
+
+            SankossClient.getInstance().reset();
         }
 	}
 }

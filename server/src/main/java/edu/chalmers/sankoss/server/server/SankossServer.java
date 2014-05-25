@@ -181,8 +181,6 @@ public class SankossServer {
 
                     JoinedRoom joinedRoom = new JoinedRoom(room, player.getCorePlayer());
 
-                    System.out.println(joinedRoom.getPlayer().getName());
-
                     // Should be one player in the room, but doing it this way will support more players
                     for (CorePlayer roomPlayer : room.getPlayers()) {
                         getPlayerConnectionFromID(roomPlayer.getID()).sendTCP(joinedRoom);
@@ -383,7 +381,16 @@ public class SankossServer {
                             else
                                 getPlayerConnectionFromID(gamePlayer.getID()).sendTCP(new Winner());
 
+                            getPlayerConnectionFromID(gamePlayer.getID()).setPlayer(new Player(gamePlayer.getID(), gamePlayer.getName()));
                         }
+
+                        try {
+                            GameFactory.removeGame(game);
+                        } catch (GameNotFoundException e) {
+                            log.info("Could not remove game #" + game.getID());
+                        }
+
+                        return;
                     }
 
 
@@ -451,7 +458,7 @@ public class SankossServer {
                     try {
                         game = GameFactory.getGame(msg.getGameID());
                     } catch (GameNotFoundException e) {
-                        e.printStackTrace();
+                        //e.printStackTrace();
                     }
 
                     if (game != null) {
@@ -476,12 +483,6 @@ public class SankossServer {
                                 }
                             }
                         }
-
-
-
-
-
-
                     }
 
                     return;
@@ -568,7 +569,7 @@ public class SankossServer {
                             try {
                                 RoomFactory.removeRoom(room);
                             } catch (RoomNotFoundException e) {
-                                System.out.println(e.getMessage());
+                                //System.out.println(e.getMessage());
                             }
                         }
 
@@ -589,7 +590,7 @@ public class SankossServer {
                             try {
                                 GameFactory.removeGame(game);
                             } catch (GameNotFoundException e) {
-                                System.out.println(e.getMessage());
+                                //System.out.println(e.getMessage());
                             }
                         }
 

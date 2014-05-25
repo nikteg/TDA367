@@ -65,7 +65,7 @@ public class GridImage extends Table {
      * @param coordinate position to add actor.
      */
     public void add(Actor actor, Coordinate coordinate) {
-        this.addActor(actor);
+        addActor(actor);
         actor.setWidth(32);
         actor.setHeight(32);
 
@@ -96,7 +96,18 @@ public class GridImage extends Table {
     }
 
     public void addShot(Shot shot) {
-        add(new Image(shot.getState() == Shot.State.HIT ? hitTexture : missTexture), shot.getCoordinate());
+        Image image = new Image(shot.getState() == Shot.State.HIT ? hitTexture : missTexture);
+        if (crosshair != null) {
+            addActor(image);
+            image.setX(crosshair.getX());
+            image.setY(crosshair.getY());
+            image.setWidth(32f);
+            image.setHeight(32f);
+
+            crosshair.toFront();
+        } else {
+            add(image, shot.getCoordinate());
+        }
     }
 
     public void addShip(Ship ship) {
@@ -108,5 +119,17 @@ public class GridImage extends Table {
         shipImage.toBack();
         if (crosshair != null)
             crosshair.toFront();
+    }
+
+    public void resetShips() {
+        for (Actor actor : getChildren()) {
+            if (actor.getClass().equals(ShipImage.class) ) {
+                removeActor(actor);
+            }
+        }
+
+        for (Image image : flags.values()) {
+            removeActor(image);
+        }
     }
 }

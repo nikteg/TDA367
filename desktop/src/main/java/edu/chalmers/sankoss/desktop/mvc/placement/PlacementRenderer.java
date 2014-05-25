@@ -26,15 +26,6 @@ import java.beans.PropertyChangeEvent;
  * @author Daniel Eineving
  */
 public class PlacementRenderer extends AbstractRenderer<PlacementModel> {
-	private Table container = new Table();
-
-	private TextureRegionDrawable greenTextureBackground;
-	private TextureRegionDrawable redTextureBackground;
-
-	// Offset for texture to follow cursor
-	private int textureXOffset;
-	private int textureYOffset;
-
 	TextButton btnReady = new TextButton("Ready", Common.getSkin());
 	TextButton btnNextFlag = new TextButton(">", Common.getSkin());
 	TextButton btnPreviousFlag = new TextButton("<", Common.getSkin());
@@ -68,72 +59,21 @@ public class PlacementRenderer extends AbstractRenderer<PlacementModel> {
 
 		getTable().add(bottomTable).bottom().expand();
 		getStage().addActor(getTable());
-
-		btnReady.addListener(new ChangeListener() {
-
-			@Override
-			public void changed(ChangeEvent arg0, Actor arg1) {
-                if(getModel().getFleet().getLength() == 5 && !getModel().getUserReady()) {
-                    getModel().setUserReady(true);
-                    SankossClient.getInstance().setReady(true);
-
-                    //Set your fleet on client
-                    SankossClient.getInstance().getPlayer().setFleet(getModel().getFleet());
-
-                    // Updates server and tells opponent you are ready
-                    SankossClient.getInstance().playerReady(getModel().getFleet());
-                }
-			}
-		});
-
-		btnPreviousFlag.addListener(new ChangeListener() {
-
-            /**
-             * Switches to previous flag.
-             * @param arg0
-             * @param arg1
-             */
-			@Override
-			public void changed(ChangeEvent arg0, Actor arg1) {
-
-                getModel().setNationality(getModel().getNationality().getLast());
-
-			}
-		});
-
-		btnNextFlag.addListener(new ChangeListener() {
-
-            /**
-             * Switches to next flag.
-             * @param arg0
-             * @param arg1
-             */
-			@Override
-			public void changed(ChangeEvent arg0, Actor arg1) {
-
-                getModel().setNationality(getModel().getNationality().getNext());
-			}
-		});
-
-		Pixmap pix = new Pixmap(32, 32, Pixmap.Format.RGBA8888);
-
-		pix.setColor(0, 1f, 0.2f, 0.5f);
-		pix.fill();
-		greenTextureBackground = new TextureRegionDrawable(new TextureRegion(
-				new Texture(pix)));
-
-		pix.setColor(0.8f, 0, 0f, 0.5f);
-		pix.fill();
-		redTextureBackground = new TextureRegionDrawable(new TextureRegion(
-				new Texture(pix)));
-
-		container.setWidth(1 * 32f);
-		container.setHeight(3 * 32f);
-		container.setX(50f);
-		container.setY(50f);
 	}
 
-	@Override
+    public TextButton getBtnReady() {
+        return btnReady;
+    }
+
+    public TextButton getBtnNextFlag() {
+        return btnNextFlag;
+    }
+
+    public TextButton getBtnPreviousFlag() {
+        return btnPreviousFlag;
+    }
+
+    @Override
 	public void render(float delta) {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		Gdx.gl.glClearColor(0.663f, 0.663f, 0.663f, 1);
@@ -154,7 +94,7 @@ public class PlacementRenderer extends AbstractRenderer<PlacementModel> {
         if (evt.getPropertyName().equals("reset")) {
             btnReady.setText("Ready");
             btnReady.setDisabled(false);
-
+            getGrid().resetShips();
         }
 
         if (evt.getPropertyName().equals("OpponentReady")) {
@@ -165,10 +105,6 @@ public class PlacementRenderer extends AbstractRenderer<PlacementModel> {
         if (evt.getPropertyName().equals("playerReady")) {
             boolean msg = (boolean)evt.getNewValue();
             btnReady.setDisabled(true);
-        }
-
-        if (evt.getPropertyName().equals("ship_added")) {
-            Ship ship = (Ship)evt.getNewValue();
         }
     }
 

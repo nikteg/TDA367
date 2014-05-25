@@ -86,7 +86,6 @@ public class PlacementModel extends AbstractModel {
 		this.userReady = ready;
 
         if(ready) {
-            updateNationality();
             fireChange("playerReady", ready);
         }
 	}
@@ -108,8 +107,9 @@ public class PlacementModel extends AbstractModel {
     @Override
     public void reset() {
         super.reset();
-        SankossClient.getInstance().setReady(false);
         setUserReady(false);
+        setFleet(new Fleet());
         opponentReady = false;
+        setNationality(CorePlayer.Nationality.USA);
     }
 }
