@@ -136,7 +136,7 @@ public class PlacementRenderer extends AbstractRenderer<PlacementModel> {
 	@Override
 	public void render(float delta) {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		Gdx.gl.glClearColor(0.09f, 0.58f, 0.2f, 1);
+		Gdx.gl.glClearColor(0.663f, 0.663f, 0.663f, 1);
 
 		getStage().act(delta);
 		getStage().draw();

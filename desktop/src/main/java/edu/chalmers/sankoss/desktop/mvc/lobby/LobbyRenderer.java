@@ -8,9 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-
 import edu.chalmers.sankoss.core.core.Room;
-import edu.chalmers.sankoss.desktop.SankossGame;
 import edu.chalmers.sankoss.desktop.client.SankossClient;
 import edu.chalmers.sankoss.desktop.mvc.AbstractRenderer;
 import edu.chalmers.sankoss.desktop.utils.Common;
@@ -18,7 +16,6 @@ import edu.chalmers.sankoss.desktop.utils.Common;
 import java.beans.PropertyChangeEvent;
 import java.util.Collection;
 import java.util.Map;
-import java.util.Observable;
 
 /**
  * Description of class.
@@ -120,7 +117,7 @@ public class LobbyRenderer extends AbstractRenderer<LobbyModel> {
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        Gdx.gl.glClearColor(0.09f, 0.58f, 0.2f, 1);
+        Gdx.gl.glClearColor(0.663f, 0.663f, 0.663f, 1);
 
         getStage().act(delta);
         getStage().draw();

@@ -7,13 +7,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
-
 import edu.chalmers.sankoss.desktop.mvc.AbstractRenderer;
 import edu.chalmers.sankoss.desktop.utils.Common;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeSupport;
-import java.util.Observable;
 
 /**
  * AbstractRenderer for the Credit text
@@ -53,7 +51,7 @@ public class CreditsRenderer extends AbstractRenderer<CreditsModel> {
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        Gdx.gl.glClearColor(0.09f, 0.58f, 0.2f, 1);
+        Gdx.gl.glClearColor(0.663f, 0.663f, 0.663f, 1);
 
         lblCredits.setY(lblCredits.getY() + scrollSpeed / delta);
 

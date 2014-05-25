@@ -6,15 +6,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.sun.org.apache.xpath.internal.operations.Bool;
-import edu.chalmers.sankoss.core.core.Room;
-import edu.chalmers.sankoss.core.protocol.Connected;
 import edu.chalmers.sankoss.desktop.mvc.AbstractRenderer;
 import edu.chalmers.sankoss.desktop.utils.Common;
 
 import java.beans.PropertyChangeEvent;
-import java.util.Map;
-import java.util.Observable;
 
 /**
  * Description of class.
@@ -75,7 +70,7 @@ public class MainMenuRenderer extends AbstractRenderer<MainMenuModel> {
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        Gdx.gl.glClearColor(0.09f, 0.28f, 0.2f, 1);
+        Gdx.gl.glClearColor(0.663f, 0.663f, 0.663f, 1);
 
         getStage().act(delta);
         getStage().draw();
