@@ -66,7 +66,7 @@ public class WaitingModel extends AbstractModel {
 
     @Override
     public void reset() {
-        super.reset();
+        //super.reset();
         setHosting(false);
         resetPlayers();
     }

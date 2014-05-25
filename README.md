@@ -2,7 +2,7 @@
 
 ###Sänkoss Project for TDA367 @ Chalmers University of Technology
 
-![Main Menu](https://lh5.googleusercontent.com/-ogts5s-NSHM/U4DGSsvRMOI/AAAAAAAALWo/nmGA7MoTo-0/w800-h600-no/MainMenu.png)
+![Main Menu](https://github.com/Bipshark/TDA367/screenshots/mainmenu.png)
 
 ### Documentation
 Requirements and Analysis Document (RAD) and Software design description (SDD), as well as the UI Mockup can be found in the root of the repository in the folder [documentation](https://github.com/Bipshark/TDA367/tree/master/documentation).

@@ -106,7 +106,7 @@ public class PlacementModel extends AbstractModel {
 
     @Override
     public void reset() {
-        super.reset();
+        //super.reset();
         setUserReady(false);
         setFleet(new Fleet());
         opponentReady = false;
