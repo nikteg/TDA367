@@ -13,7 +13,7 @@
 	<name>Sankoss desktop</name>
 
 	<properties>
-		<mainClass>edu.chalmers.sankoss.java.SankossDesktop</mainClass>
+		<mainClass>edu.chalmers.sankoss.desktop.SankossDesktop</mainClass>
 	</properties>
 
 	<dependencies>
@@ -52,7 +52,7 @@
 	<build>
 		<resources>
 			<resource>
-				<directory>../assets</directory>
+				<directory>assets</directory>
 			</resource>
 		</resources>
 

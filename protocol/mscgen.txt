@@ -8,8 +8,7 @@ msc {
   A box B [label="CONNECT TO SERVER", textbgcolour="#7fff7f"];
   |||;
 
-  A=>B    [label="Connect"];
-  A<<B    [label="Connected(playerID)"];
+  A<<B    [label="Connected(player)"];
   |||;
 
   A box B [label="FETCHING ROOMS", textbgcolour="#7fff7f"];
@@ -23,21 +22,21 @@ msc {
   |||;
   
   A=>B    [label="CreateRoom(name, password)"];
-  A<<B    [label="CreatedRoom(roomID)"];
+  A<<B    [label="CreatedRoom(room)"];
   |||;
 
   A box B [label="JOINING ROOM", textbgcolour="#7fff7f"];
   |||;
   
   A=>B    [label="JoinRoom(roomID)"];
-  A<<B    [label="JoinedRoom(player)", ID="*" ];
+  A<<B    [label="JoinedRoom(room, player)", ID="*" ];
   |||;
 
   A box B [label="START GAME", textbgcolour="#7fff7f"];
   |||;
   
   A=>B    [label="StartGame(roomID)"];
-  A<<B    [label="StartedGame(gameID, players)", ID="*"];
+  A<<B    [label="StartedGame(gameID)", ID="*"];
   A<<B    [label="Turn"];
   |||;
 
@@ -61,4 +60,45 @@ msc {
   |||;
 
   A<<B    [label="Disconnect(player)", ID="*"];
+  
+  A box B [label="PLAYER RENAME", textbgcolour="#7fff7f"];
+  |||;
+
+  A=>B    [label="PlayerChangeName(name)"];
+  A=>B    [label="PlayerChangedName(player)", ID="*"];
+  
+  A box B [label="PLAYER CHANGE NATIONALITY", textbgcolour="#7fff7f"];
+  |||;
+
+  A=>B    [label="PlayerChangeNat(nationality)"];
+  A=>B    [label="PlayerChangedNat(player)", ID="*"];
+  
+  A box B [label="WINNING OR LOSING", textbgcolour="#7fff7f"];
+  |||;
+
+  A<=B    [label="Winner()"];
+  A<=B    [label="Loser()"];
+  
+  A box B [label="LEAVING GAME", textbgcolour="#7fff7f"];
+  |||;
+
+  A=>B    [label="LeaveGame(gameID)"];
+  A<<B    [label="LeftGame(player)", ID="*"];
+  
+  A box B [label="LEAVING ROOM", textbgcolour="#7fff7f"];
+  |||;
+
+  A=>B    [label="LeaveRoom(roomID)"];
+  A<<B    [label="LeftRoom(player)", ID="*"];
+  
+  A box B [label="ERROR MESSAGE", textbgcolour="#7fff7f"];
+  |||;
+
+  A<<B    [label="ErrorMsg(errorObject, message)", ID="*"];
+  
+  A box B [label="REMOVE ROOM", textbgcolour="#7fff7f"];
+  |||;
+
+  A=>B    [label="RemoveRoom(roomID)"];
+  A<<B    [label="RemovedRoom()"];
 }

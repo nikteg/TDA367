@@ -1,11 +1,17 @@
 package edu.chalmers.sankoss.java;
 
+import edu.chalmers.sankoss.core.core.Coordinate;
+import edu.chalmers.sankoss.core.core.Ship;
 import edu.chalmers.sankoss.core.exceptions.IllegalShipCoordinatesException;
+import edu.chalmers.sankoss.core.protocol.GameReady;
+import edu.chalmers.sankoss.server.server.Game;
+import edu.chalmers.sankoss.server.server.Player;
+import edu.chalmers.sankoss.server.server.UsedCoordinateException;
+
 import org.junit.Test;
-import edu.chalmers.sankoss.core.Coordinate;
-import edu.chalmers.sankoss.core.Ship;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.Assert.assertFalse;
@@ -112,4 +118,91 @@ public class GameTest {
 
     }
 
+    @Test
+    public void testWinning() {
+        Player player1 = new Player(new Long(1), "player1");
+        Player player2 = new Player(new Long(2), "player2");
+
+        List<Ship> fleet = new ArrayList<Ship>();
+        try {
+            fleet.add(new Ship(new Coordinate(1,1), new Coordinate(1,3)));
+            fleet.add(new Ship(new Coordinate(2,1), new Coordinate(2,4)));
+        }
+        catch (IllegalShipCoordinatesException ignore) {
+            fail("Should not throw exception");
+        }
+        player1.setFleet(fleet);
+
+        List<Player> list = new ArrayList<Player>();
+        list.add(player1);
+        list.add(player2);
+
+        Game game = new Game(new Long(3), list);
+
+        game.setAttacker(player2);
+
+        try {
+            game.fire(player1, new Coordinate(1,1));
+            game.fire(player1, new Coordinate(1,2));
+            game.fire(player1, new Coordinate(1,3));
+
+            assertFalse(player1.fleetIsDestoyed());
+
+            game.fire(player1, new Coordinate(2,1));
+            game.fire(player1, new Coordinate(2,2));
+            game.fire(player1, new Coordinate(2,3));
+            game.fire(player1, new Coordinate(2,4));
+
+            assertTrue(player1.fleetIsDestoyed());
+        } catch (UsedCoordinateException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testHasPlayerWithID(){
+    	Player player1 = new Player((long) 5245324);
+    	Player player2 = new Player((long) 523324);
+    	
+    	List list = new LinkedList<Player>();
+    	
+    	list.add(player1);
+    	list.add(player2);
+    	
+    	Game game = new Game((long) 774883, list );
+    	assertTrue(game.hasPlayerWithID((long) 5245324) && 
+    			!game.hasPlayerWithID((long) 1337));
+    	
+    }
+    @Test
+    public void testIsPlayerWithIDHost(){
+    	Player player1 = new Player((long) 5245324);
+    	Player player2 = new Player((long) 523324);
+    	
+    	List list = new LinkedList<Player>();
+    	
+    	list.add(player1);
+    	list.add(player2);
+    	
+    	Game game = new Game((long) 774883, list );
+
+    	assertTrue(game.isPlayerWithIDHost((long) 5245324) && 
+    			!game.isPlayerWithIDHost((long) 523324));
+    }
+    @Test
+    public void testRemovePlayerWithID(){
+    	Player player1 = new Player((long) 5245324);
+    	Player player2 = new Player((long) 523324);
+    	
+    	List list = new LinkedList<Player>();
+    	
+    	list.add(player1);
+    	list.add(player2);
+    	
+    	Game game = new Game((long) 774883, list );
+
+    	game.removePlayerWithID((long) 523324);
+    	
+    	assertFalse(game.hasPlayerWithID((long) 523324));
+    }
 }

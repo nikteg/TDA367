@@ -6,7 +6,7 @@ package edu.chalmers.sankoss.core.exceptions;
  * @author Daniel Eineving
  * @date 2014-04-08
  */
-public class IllegalShipCoordinatesException extends Exception {
+public class IllegalShipCoordinatesException extends RuntimeException {
 
 	/** {@inheritDoc} */
 	public IllegalShipCoordinatesException() {

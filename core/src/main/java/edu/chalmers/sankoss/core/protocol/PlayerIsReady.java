@@ -1,6 +1,6 @@
 package edu.chalmers.sankoss.core.protocol;
 
-import edu.chalmers.sankoss.core.BasePlayer;
+import edu.chalmers.sankoss.core.core.CorePlayer;
 
 /**
  * 
@@ -8,21 +8,21 @@ import edu.chalmers.sankoss.core.BasePlayer;
  * 
  */
 public class PlayerIsReady {
-    private BasePlayer player;
+    private CorePlayer player;
 
 	public PlayerIsReady() {
 
 	}
 
-    public PlayerIsReady(BasePlayer player) {
+    public PlayerIsReady(CorePlayer player) {
         this.player = player;
     }
 
-    public BasePlayer getPlayer() {
+    public CorePlayer getPlayer() {
         return player;
     }
 
-    public void setPlayer(BasePlayer player) {
+    public void setPlayer(CorePlayer player) {
         this.player = player;
     }
 }

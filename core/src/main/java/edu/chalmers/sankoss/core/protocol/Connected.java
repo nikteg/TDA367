@@ -1,24 +1,26 @@
 package edu.chalmers.sankoss.core.protocol;
 
+import edu.chalmers.sankoss.core.core.CorePlayer;
+
 /**
  * @author Niklas Tegnander
  */
 public class Connected {
-    private Long playerID;
+    private CorePlayer player;
 
     public Connected() {
     }
 
-    public Connected(Long playerID) {
-        this.playerID = playerID;
+    public Connected(CorePlayer player) {
+        this.player = player;
     }
 
-    public Long getPlayerID() {
-        return playerID;
+    public CorePlayer getPlayer() {
+        return player;
     }
 
-    public void setPlayerID(Long playerID) {
-        this.playerID = playerID;
+    public void setPlayer(CorePlayer player) {
+        this.player = player;
     }
 }
 

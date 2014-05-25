@@ -1,6 +1,7 @@
 package edu.chalmers.sankoss.core.protocol;
 
-import edu.chalmers.sankoss.core.BasePlayer;
+import edu.chalmers.sankoss.core.core.CorePlayer;
+import edu.chalmers.sankoss.core.core.Room;
 
 /**
  * 
@@ -8,21 +9,31 @@ import edu.chalmers.sankoss.core.BasePlayer;
  * 
  */
 public class JoinedRoom {
-    private BasePlayer player;
+    private Room room;
+    private CorePlayer player;
 
     public JoinedRoom() {
 
     }
 
-    public JoinedRoom(BasePlayer player) {
+    public JoinedRoom(Room room, CorePlayer player) {
+        this.room = room;
         this.player = player;
     }
 
-    public BasePlayer getPlayer() {
+    public Room getRoom() {
+        return room;
+    }
+
+    public void setRoom(Room room) {
+        this.room = room;
+    }
+
+    public CorePlayer getPlayer() {
         return player;
     }
 
-    public void setPlayer(BasePlayer player) {
+    public void setPlayer(CorePlayer player) {
         this.player = player;
     }
 }

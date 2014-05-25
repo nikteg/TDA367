@@ -13,7 +13,7 @@
 	<name>Sankoss server</name>
 
 	<properties>
-		<mainClass>edu.chalmers.sankoss.java.SankossServer</mainClass>
+		<mainClass>edu.chalmers.sankoss.server.ServerStarter</mainClass>
 	</properties>
 
 	<dependencies>
@@ -31,6 +31,16 @@
             <groupId>com.sparkjava</groupId>
             <artifactId>spark-core</artifactId>
             <version>1.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.6.4</version>
         </dependency>
 	</dependencies>
 
