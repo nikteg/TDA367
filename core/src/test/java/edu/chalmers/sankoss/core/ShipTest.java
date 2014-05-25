@@ -262,5 +262,24 @@ public class ShipTest {
 			fail("Should not throw exception");
 		}
 	}
+	
+	@Test
+	public void testSetLocation() {
+		Ship ship = null;
+		try {
+			ship = new Ship(new Coordinate(1, 1), new Coordinate(1, 3));
+		} catch (IllegalShipCoordinatesException e) {
+			fail("Should not throw exception");
+		}
+		
+		assertNotNull(ship);
+		ship.setLocation(new Coordinate(3, 3));
+		
+		assertEquals(ship.getRear().getX(), 3);
+		assertEquals(ship.getRear().getY(), 3);
+		assertEquals(ship.getFront().getX(), 3);
+		assertEquals(ship.getFront().getY(), 5);
+
+	}
 
 }
