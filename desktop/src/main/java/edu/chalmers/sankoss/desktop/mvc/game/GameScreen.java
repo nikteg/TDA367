@@ -110,7 +110,8 @@ public class GameScreen extends AbstractScreen<GameModel, GameRenderer> {
                 /**
                  * Get coordinate from mouse position
                  */
-                Coordinate coord = getCoordinateFromGrid(x, y);
+                //Coordinate coord = getCoordinateFromGrid(x, y);
+                Coordinate coord = getCoordinateFromGrid(getRenderer().getGrid1().getCrosshair().getX(), getRenderer().getGrid1().getCrosshair().getX());
 
                 // Left click
                 if (button == 0 && getModel().isShootingAllowed()) {
