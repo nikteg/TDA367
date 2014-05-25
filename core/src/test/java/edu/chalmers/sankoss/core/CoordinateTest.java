@@ -2,6 +2,7 @@ package edu.chalmers.sankoss.core;
 
 import static org.junit.Assert.*;
 
+import edu.chalmers.sankoss.core.core.CorePlayer;
 import org.junit.Test;
 
 import edu.chalmers.sankoss.core.core.Coordinate;
@@ -56,11 +57,13 @@ public class CoordinateTest {
 		
 		assertFalse(cor1.equals(cor3));
 		assertFalse(cor3.equals(cor1));
-		
+		assertFalse(cor3.equals(null));
+		assertFalse(cor3.equals(new CorePlayer()));
+
 		try {
 			assertFalse(cor1.equals(new Ship(new Coordinate (2,2), new Coordinate(2,4))));
 		} catch (IllegalShipCoordinatesException ignored) {
-			
+			fail();
 		}
 	}
 
