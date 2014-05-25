@@ -27,4 +27,9 @@ public class GameOverModel extends AbstractModel {
     public GameOverModel() {
         super();
     }
+
+    @Override
+    public void reset() {
+        fireChange("reset");
+    }
 }

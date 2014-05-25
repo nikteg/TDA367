@@ -15,6 +15,7 @@ import java.util.Map;
  */
 public class LobbyModel extends AbstractModel {
     private String name;
+    private Map<Long, Room> rooms = new HashMap<Long, Room>();
 
     public String getName() {
         return name;
@@ -24,7 +25,6 @@ public class LobbyModel extends AbstractModel {
         this.name = name;
         fireChange("name", name);
     }
-    private Map<Long, Room> rooms = new HashMap<Long, Room>();
 
     public Map<Long, Room> getRooms() {
         return rooms;
@@ -33,5 +33,13 @@ public class LobbyModel extends AbstractModel {
     public void setRooms(Map<Long, Room> rooms) {
         this.rooms = rooms;
         fireChange("rooms", rooms);
+    }
+
+    @Override
+    public void reset() {
+        name = null;
+        rooms.clear();
+
+        fireChange("reset");
     }
 }

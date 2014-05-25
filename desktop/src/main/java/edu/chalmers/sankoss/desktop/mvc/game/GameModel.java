@@ -27,17 +27,6 @@ public class GameModel extends AbstractModel {
 
     }
 
-    @Override
-    public void reset() {
-        super.reset();
-        shootingAllowed = false;
-        state = State.PLAYING;
-        ships = new ArrayList<Ship>();
-        shots = new ArrayList<Shot>();
-        opponentShots = new ArrayList<Shot>();
-        flags = new ArrayList<Coordinate>();
-    }
-
     public void addOpponentShot(Shot shot) {
         opponentShots.add(shot);
 
@@ -116,5 +105,19 @@ public class GameModel extends AbstractModel {
 
     public List<Coordinate> getFlags() {
         return flags;
+    }
+
+
+    @Override
+    public void reset() {
+        shootingAllowed = false;
+        state = State.PLAYING;
+        ships.clear();
+        shots.clear();
+        opponentShots.clear();
+        flags.clear();
+        opponent = null;
+
+        fireChange("reset");
     }
 }

@@ -48,8 +48,6 @@ public class GameScreen extends AbstractScreen<GameModel, GameRenderer> {
              */
             @Override
             public void winner() {
-                SankossClient.getInstance().setGameOver(true);
-
                 Gdx.app.postRunnable(new Runnable() {
                     @Override
                     public void run() {
@@ -63,8 +61,6 @@ public class GameScreen extends AbstractScreen<GameModel, GameRenderer> {
              */
             @Override
             public void looser() {
-                SankossClient.getInstance().setGameOver(true);
-
                 Gdx.app.postRunnable(new Runnable() {
                     @Override
                     public void run() {
@@ -173,8 +169,8 @@ public class GameScreen extends AbstractScreen<GameModel, GameRenderer> {
         getRenderer().getPlayerPanel().setNationality(SankossClient.getInstance().getPlayer().getNationality());
 
         // Removes all ships before adding new ones
-        getRenderer().getGrid1().reset();
-        getRenderer().getGrid2().reset();
+        getRenderer().getGrid1().resetShips();
+        getRenderer().getGrid2().resetShips();
         
         // Adding ships
         for (Ship ship : SankossClient.getInstance().getPlayer().getFleet().getShips()) {

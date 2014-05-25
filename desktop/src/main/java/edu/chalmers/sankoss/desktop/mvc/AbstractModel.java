@@ -18,11 +18,7 @@ public abstract class AbstractModel {
 
     }
 
-    public void reset(){
-        // Tells renderers to reset
-        SankossClient.getInstance().reset();
-        fireChange("reset");
-    }
+    public abstract void reset();
 
     public void dispose() {
 

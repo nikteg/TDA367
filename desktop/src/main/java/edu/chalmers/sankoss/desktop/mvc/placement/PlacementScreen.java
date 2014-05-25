@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import edu.chalmers.sankoss.core.core.Coordinate;
 import edu.chalmers.sankoss.core.core.CorePlayer;
 import edu.chalmers.sankoss.core.core.Ship;
@@ -45,22 +46,9 @@ public class PlacementScreen extends AbstractScreen<PlacementModel, PlacementRen
                 Gdx.app.postRunnable(new Runnable() {
                     @Override
                     public void run() {
-                        if(!SankossClient.getInstance().getGameOver()) {
-                            changeScreen("lobby");
-                        }
+                        changeScreen("lobby");
                     }
                 });
-            }
-
-            @Override
-            public void startedGame(Long ID) {
-                Gdx.app.postRunnable(new Runnable() {
-                    @Override
-                    public void run() {
-                        changeScreen("placement");
-                    }
-                });
-
             }
 
             @Override
@@ -70,9 +58,7 @@ public class PlacementScreen extends AbstractScreen<PlacementModel, PlacementRen
 
                     @Override
                     public void run() {
-                        if(SankossClient.getInstance().getReady()) {
-                            changeScreen("game");
-                        }
+                        changeScreen("game");
                     }
                 });
             }
@@ -119,23 +105,73 @@ public class PlacementScreen extends AbstractScreen<PlacementModel, PlacementRen
 
                 return false;
             }
+        });
+
+        getRenderer().getBtnReady().addListener(new ChangeListener() {
 
             @Override
-            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                if (pointer == -1) {
-                    //getRenderer().getGrid1().getCrosshair().setVisible(false);
+            public void changed(ChangeEvent arg0, Actor arg1) {
+                if (getModel().getFleet().getLength() == 5 && !getModel().getUserReady()) {
+                    getModel().setUserReady(true);
+
+                    SankossClient.getInstance().playerChangeNat(getModel().getNationality());
+
+                    //Set your fleet on client
+                    SankossClient.getInstance().getPlayer().setFleet(getModel().getFleet());
+
+                    // Updates server and tells opponent you are ready
+                    SankossClient.getInstance().playerReady();
                 }
-            }
-
-            @Override
-            public void enter(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                //getRenderer().getGrid1().getCrosshair().setVisible(true);
             }
         });
 
-        /**
-         * The boats are placed at start positions on the grid and model
-         */
+        getRenderer().getBtnPreviousFlag().addListener(new ChangeListener() {
+
+            /**
+             * Switches to previous flag.
+             * @param arg0
+             * @param arg1
+             */
+            @Override
+            public void changed(ChangeEvent arg0, Actor arg1) {
+
+                getModel().setNationality(getModel().getNationality().getLast());
+
+            }
+        });
+
+        getRenderer().getBtnNextFlag().addListener(new ChangeListener() {
+
+            /**
+             * Switches to next flag.
+             * @param arg0
+             * @param arg1
+             */
+            @Override
+            public void changed(ChangeEvent arg0, Actor arg1) {
+
+                getModel().setNationality(getModel().getNationality().getNext());
+            }
+        });
+    }
+
+    public Coordinate getCoordinateFromGrid(float mx, float my) {
+        int cX = (int)mx / GRID_CELL_WIDTH_INT + 1;
+        int cY = ((int)getRenderer().getGrid().getHeight() - (int)my) / GRID_CELL_WIDTH_INT + 1;
+        return new Coordinate(cX, cY);
+    }
+
+    @Override
+    public void show() {
+        super.show();
+
+        /*
+        try {
+            shipPlaced(new Ship(new Coordinate(1, 1), new Coordinate(1, 2)));
+        } catch (IllegalShipCoordinatesException e) {
+            e.printStackTrace();
+        }*/
+
         try {
             for (int i=1; i<=5; i++) {
                 int j = i < 3 ? i + 1 : i;
@@ -146,45 +182,9 @@ public class PlacementScreen extends AbstractScreen<PlacementModel, PlacementRen
         } catch (IllegalShipCoordinatesException e) {
             e.printStackTrace();
         }
+
+        System.out.println("ADDED SHIPS");
     }
-
-    public Coordinate getCoordinateFromGrid(float mx, float my) {
-        int cX = (int)mx / GRID_CELL_WIDTH_INT + 1;
-        int cY = ((int)getRenderer().getGrid().getHeight() - (int)my) / GRID_CELL_WIDTH_INT + 1;
-        return new Coordinate(cX, cY);
-    }
-
-	public void shipPlaced(Ship ship) {
-		getModel().addShip(ship);
-	}
-
-    @Override
-    public void show() {
-        super.show();
-
-        try {
-            shipPlaced(new Ship(new Coordinate(1, 1), new Coordinate(1, 2)));
-        } catch (IllegalShipCoordinatesException e) {
-            e.printStackTrace();
-        }
-    }
-
-	/**
-	 * Method for setting user as ready. If user has placed his five ships and
-	 * isn't already ready, set as ready and notify server.
-	 */
-	public void setReady() {
-
-		if (getModel().getFleet().getLength() == 5
-				&& !getModel().getUserReady()) {
-			getModel().setUserReady(true);
-			SankossClient.getInstance().setReady(true);
-
-			// Updates server and tells opponent you are ready
-			SankossClient.getInstance()
-					.playerReady(getModel().getFleet());
-		}
-	}
 
 	@Override
 	public void update(float delta) {
