@@ -69,11 +69,7 @@ public class GameRenderer extends AbstractRenderer<GameModel> {
 
         getStage().act(delta);
 
-        try {
-            getStage().draw();
-        } catch (StringIndexOutOfBoundsException e) {
-            e.getStackTrace();
-        }
+        getStage().draw();
 
         Table.drawDebug(getStage());
     }

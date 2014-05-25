@@ -25,4 +25,8 @@ public class Shot {
     public enum State {
         HIT, MISS
     }
+
+    public boolean equals(Shot shot) {
+        return(coordinate.equals(shot.getCoordinate()));
+    }
 }

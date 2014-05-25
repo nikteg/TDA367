@@ -113,8 +113,11 @@ public class GameScreen extends AbstractScreen<GameModel, GameRenderer> {
                 //Coordinate coord = getCoordinateFromGrid(x, y);
                 Coordinate coord = getCoordinateFromGrid(getRenderer().getGrid1().getCrosshair().getX(), getRenderer().getGrid1().getCrosshair().getY());
 
+                Boolean freeSpot = checkMyShots(coord);
+                System.out.println("FREE SPOT: " + freeSpot);
+
                 // Left click
-                if (button == 0 && getModel().isShootingAllowed()) {
+                if (button == 0 && getModel().isShootingAllowed() && freeSpot) {
                     SankossClient.getInstance().fire(coord);
                     getModel().setShootingAllowed(false);
                 } else if (button == 1) {
@@ -147,6 +150,23 @@ public class GameScreen extends AbstractScreen<GameModel, GameRenderer> {
         });
 
         getModel().setShootingAllowed(false);
+    }
+
+    /**
+     * Method for checking if spot is free.
+     * @param coordinate coordinate to check.
+     * @return true, if no shot is placed at coordinate.
+     */
+    public boolean checkMyShots(Coordinate coordinate) {
+        Object[] shots = getModel().getShots().toArray();
+
+        for(Object shot : shots) {
+            if(((Shot)shot).getCoordinate().equals(coordinate)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public Coordinate getCoordinateFromGrid(float mx, float my) {
