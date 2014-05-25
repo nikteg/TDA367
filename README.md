@@ -8,7 +8,7 @@
 Requirements and Analysis Document (RAD) and Software design description (SDD), as well as the UI Mockup can be found in the root of the repository in the folder [documentation](documentation).
 
 ### Settings
-Settings can be loaded through an external INI-file ([settings.ini](settings.ini)) located in the root of the application.
+Settings can be loaded through an external INI-file ([settings.ini](desktop/settings.ini)) located in the root of the application. This file will be auto generated first time the application is run.
 
 #####Contents of settings.ini
 * hostname - domain where server application is run
@@ -27,4 +27,4 @@ Getters, setters and similar methods (e.g is-methods) has not been tested.
 ### License
 The project is licensed under [The MIT license](http://opensource.org/licenses/MIT), which means that you may, without limitation, use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the software, free of charge.
 
-All downloaded graphics is licensed under the [CC-BY 3.0](https://creativecommons.org/licenses/by/3.0/) license. Sources can be found in APPENDIX of the [RAD](documentation/RAD).
+All downloaded sprites is licensed under the [CC-BY 3.0](https://creativecommons.org/licenses/by/3.0/) license. Sources can be found in APPENDIX of the [RAD](documentation/RAD).
