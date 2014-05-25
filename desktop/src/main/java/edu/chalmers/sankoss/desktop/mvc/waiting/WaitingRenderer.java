@@ -32,8 +32,8 @@ public class WaitingRenderer extends AbstractRenderer<WaitingModel> {
 
         getTable().add(lblWaiting).expand().colspan(2);
         getTable().row();
-        getTable().add(btnBack);
-        getTable().add(btnStart);
+        getTable().add(btnBack.pad(8f)).left().bottom().width(160f);
+        getTable().add(btnStart.pad(8f)).right().bottom().width(160f);
         //getTable().debug();
 
         btnStart.setDisabled(true);
