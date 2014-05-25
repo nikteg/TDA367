@@ -66,5 +66,17 @@ public class LobbyModelTest {
         assertTrue(testModel.getRooms().keySet().equals(correctKeys));
     }
 
+    @Test
+    public void testReset() throws Exception {
+
+        LobbyModel testModel = new LobbyModel();
+
+        testModel.setName(null);
+        testModel.getRooms().clear();
+
+        assert(testModel.getName() == null
+                && testModel.getRooms().isEmpty());
+    }
+
 
 }

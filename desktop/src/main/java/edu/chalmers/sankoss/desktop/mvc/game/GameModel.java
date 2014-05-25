@@ -71,9 +71,10 @@ public class GameModel extends AbstractModel {
 
     public void addShip(Ship ship) {
         ships.add(ship);
+    }
 
-        //setChanged();
-        //notifyObservers("ship");
+    public List<Ship> getShips() {
+        return ships;
     }
 
     /**
