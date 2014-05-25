@@ -121,6 +121,20 @@ public class LobbyScreen extends AbstractScreen<LobbyModel, LobbyRenderer> {
             }
         });
 
+        getRenderer().getBtnEditName().addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent changeEvent, Actor actor) {
+                if (getRenderer().getBtnEditName().isChecked()) {
+                    getRenderer().getStage().setKeyboardFocus(getRenderer().getNameField());
+                    getRenderer().getNameField().setDisabled(false);
+                    getRenderer().getNameField().selectAll();
+                    getRenderer().getNameField().setRightAligned(false);
+                } else {
+                    SankossClient.getInstance().playerChangeName(getRenderer().getNameField().getText());
+                }
+            }
+        });
+
         getRenderer().getBtnBack().addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {

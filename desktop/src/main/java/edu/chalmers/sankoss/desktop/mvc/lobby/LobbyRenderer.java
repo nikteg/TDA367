@@ -75,19 +75,6 @@ public class LobbyRenderer extends AbstractRenderer<LobbyModel> {
 
         getStage().addActor(getTable());
 
-        btnEditName.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent changeEvent, Actor actor) {
-                if (btnEditName.isChecked()) {
-                    getStage().setKeyboardFocus(nameField);
-                    nameField.setDisabled(false);
-                    nameField.selectAll();
-                    nameField.setRightAligned(false);
-                } else {
-                    SankossClient.getInstance().playerChangeName(nameField.getText());
-                }
-            }
-        });
     }
 
     public TextButton getBtnBack() {
