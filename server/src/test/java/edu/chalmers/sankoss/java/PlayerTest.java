@@ -16,29 +16,9 @@ import org.junit.Test;
  * jUnitTest class for the class Player
  * 
  * @author Daniel Eineving
- * @date 2014-05-04
+ * @date 2014-05-25
  */
 public class PlayerTest {
-
-	@Test
-	public void testHashCode() {
-		Player player1 = new Player((long) 314158979);
-		Player player2 = new Player((long) 314158979);
-		Player player3 = new Player((long) 133713372);
-		Player player4 = new Player();
-
-		assertTrue(player1.hashCode() == player2.hashCode());
-		assertTrue(player2.hashCode() == player1.hashCode());
-
-		assertFalse(player1.hashCode() == player3.hashCode());
-		assertFalse(player1.hashCode() == player4.hashCode());
-		assertFalse(player4.hashCode() == player3.hashCode());
-	}
-
-	@Test
-	public void testPlayer() {
-		fail("Not yet implemented");
-	}
 
 	@Test
 	public void testPlayerLong() {
@@ -48,7 +28,7 @@ public class PlayerTest {
 
 		assertTrue(player1.getID() == 314158979);
 		assertTrue(player2.getID() == 133713372);
-		assertTrue(player3.getID() == null);
+		assertTrue(player3.getID() == (long) -1);
 	}
 
 	@Test
@@ -188,45 +168,4 @@ public class PlayerTest {
 		player.setReady(false);
 		assertFalse(player.isReady());
 	}
-
-	@Test
-	public void testSetReady() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testGetUsedCoordinates() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testAddUsedCoordiante() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testSetUsedCoordinates() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testEqualsObject() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testToString() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testWrite() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testRead() {
-		fail("Not yet implemented");
-	}
-
 }
