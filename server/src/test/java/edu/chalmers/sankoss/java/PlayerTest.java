@@ -181,7 +181,12 @@ public class PlayerTest {
 
 	@Test
 	public void testIsReady() {
-		fail("Not yet implemented");
+		Player player = new Player();
+		player.setReady(true);
+		assertTrue(player.isReady());
+		
+		player.setReady(false);
+		assertFalse(player.isReady());
 	}
 
 	@Test
