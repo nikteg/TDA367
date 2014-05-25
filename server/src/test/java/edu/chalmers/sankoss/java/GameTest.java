@@ -3,6 +3,7 @@ package edu.chalmers.sankoss.java;
 import edu.chalmers.sankoss.core.core.Coordinate;
 import edu.chalmers.sankoss.core.core.Ship;
 import edu.chalmers.sankoss.core.exceptions.IllegalShipCoordinatesException;
+import edu.chalmers.sankoss.core.protocol.GameReady;
 import edu.chalmers.sankoss.server.server.Game;
 import edu.chalmers.sankoss.server.server.Player;
 import edu.chalmers.sankoss.server.server.UsedCoordinateException;
@@ -10,6 +11,7 @@ import edu.chalmers.sankoss.server.server.UsedCoordinateException;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.Assert.assertFalse;
@@ -155,8 +157,52 @@ public class GameTest {
         } catch (UsedCoordinateException e) {
             e.printStackTrace();
         }
-
-
     }
 
+    @Test
+    public void testHasPlayerWithID(){
+    	Player player1 = new Player((long) 5245324);
+    	Player player2 = new Player((long) 523324);
+    	
+    	List list = new LinkedList<Player>();
+    	
+    	list.add(player1);
+    	list.add(player2);
+    	
+    	Game game = new Game((long) 774883, list );
+    	assertTrue(game.hasPlayerWithID((long) 5245324) && 
+    			!game.hasPlayerWithID((long) 1337));
+    	
+    }
+    @Test
+    public void testIsPlayerWithIDHost(){
+    	Player player1 = new Player((long) 5245324);
+    	Player player2 = new Player((long) 523324);
+    	
+    	List list = new LinkedList<Player>();
+    	
+    	list.add(player1);
+    	list.add(player2);
+    	
+    	Game game = new Game((long) 774883, list );
+
+    	assertTrue(game.isPlayerWithIDHost((long) 5245324) && 
+    			!game.isPlayerWithIDHost((long) 523324));
+    }
+    @Test
+    public void testRemovePlayerWithID(){
+    	Player player1 = new Player((long) 5245324);
+    	Player player2 = new Player((long) 523324);
+    	
+    	List list = new LinkedList<Player>();
+    	
+    	list.add(player1);
+    	list.add(player2);
+    	
+    	Game game = new Game((long) 774883, list );
+
+    	game.removePlayerWithID((long) 523324);
+    	
+    	assertFalse(game.hasPlayerWithID((long) 523324));
+    }
 }
